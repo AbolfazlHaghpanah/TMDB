@@ -21,20 +21,59 @@ data class TMDBType(
         fontSize = 20.sp
     ),
 
-    val body1: TextStyle = TextStyle(
+    val subtitle1: TextStyle = TextStyle(
         fontFamily = montserratFont,
-        fontWeight = FontWeight.Bold,
-        fontSize = 20.sp
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp
     ),
 
-    val body2 : TextStyle = TextStyle(
+    val subtitle2: TextStyle = TextStyle(
         fontFamily = montserratFont,
-        fontWeight = FontWeight.Bold,
-        fontSize = 20.sp
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp
+    ),
+
+    val body1: TextStyle = TextStyle(
+        fontFamily = montserratFont,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp
+    ),
+
+    val body2: TextStyle = TextStyle(
+        fontFamily = montserratFont,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 12.sp
+    ),
+
+    val button: TextStyle = TextStyle(
+        fontFamily = montserratFont,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp
+    ),
+
+    val caption: TextStyle = TextStyle(
+        fontFamily = montserratFont,
+        fontWeight = FontWeight.Medium,
+        fontSize = 12.sp
+    ),
+
+    val overLine: TextStyle = TextStyle(
+        fontFamily = montserratFont,
+        fontWeight = FontWeight.Medium,
+        fontSize = 10.sp
     )
-){
+) {
     @Composable
-    fun toTypography() : Typography {
-        return MaterialTheme.typography.copy()
+    fun toTypography(): Typography {
+        return MaterialTheme.typography.copy(
+            h6 = h6,
+            subtitle1 = subtitle1,
+            subtitle2 = subtitle2,
+            body1 = body1,
+            body2 = body2,
+            button = button,
+            caption = caption,
+            overline = overLine
+        )
     }
 }
