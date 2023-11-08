@@ -16,8 +16,8 @@ class TMDBColors(
     background: Color,
     surface: Color,
     error: Color,
-    onBackground: Color,
-    onSurface: Color,
+    white: Color,
+    gray: Color,
 ) {
     var primary by mutableStateOf(primary)
         private set
@@ -34,10 +34,10 @@ class TMDBColors(
     var error by mutableStateOf(error)
         private set
 
-    var onBackground by mutableStateOf(onBackground)
+    var white by mutableStateOf(white)
         private set
 
-    var onSurface by mutableStateOf(onSurface)
+    var gray by mutableStateOf(gray)
         private set
 
     @Composable
@@ -46,12 +46,12 @@ class TMDBColors(
             primary = primary,
             secondary = secondary,
             surface = surface,
-            onBackground = onBackground,
-            onSurface = onSurface,
+            onBackground = white,
+            onSurface = gray,
             background = background,
             error = error,
-            onPrimary = onBackground,
-            onSecondary = onBackground
+            onPrimary = white,
+            onSecondary = white
         )
     }
 }
