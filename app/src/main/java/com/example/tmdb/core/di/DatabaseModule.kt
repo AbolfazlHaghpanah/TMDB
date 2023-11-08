@@ -16,7 +16,7 @@ internal abstract class DatabaseModule {
     companion object {
         @Provides
         @Singleton
-        internal fun provideRoom(@ApplicationContext context: Context): AppDatabase {
+        internal fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
             return Room.databaseBuilder(
                 context,
                 AppDatabase::class.java,
