@@ -1,11 +1,7 @@
-package com.example.tmdb.core.ui.theme
+package com.example.tmdb.core.ui.theme.designsystem
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
-import com.example.tmdb.core.ui.theme.tmdbtheme.TMDBColors
-import com.example.tmdb.core.ui.theme.tmdbtheme.TMDBIcons
-import com.example.tmdb.core.ui.theme.tmdbtheme.TMDBShapes
-import com.example.tmdb.core.ui.theme.tmdbtheme.TMDBType
 
 object TMDBTheme {
     val colors: TMDBColors

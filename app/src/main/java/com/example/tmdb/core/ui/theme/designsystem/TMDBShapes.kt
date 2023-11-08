@@ -1,4 +1,4 @@
-package com.example.tmdb.core.ui.theme.tmdbtheme
+package com.example.tmdb.core.ui.theme.designsystem
 
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape

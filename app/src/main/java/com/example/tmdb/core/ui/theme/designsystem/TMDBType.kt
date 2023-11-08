@@ -1,4 +1,4 @@
-package com.example.tmdb.core.ui.theme.tmdbtheme
+package com.example.tmdb.core.ui.theme.designsystem
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Typography

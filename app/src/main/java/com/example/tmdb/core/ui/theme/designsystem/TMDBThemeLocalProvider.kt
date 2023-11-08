@@ -1,10 +1,6 @@
-package com.example.tmdb.core.ui.theme
+package com.example.tmdb.core.ui.theme.designsystem
 
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.example.tmdb.core.ui.theme.tmdbtheme.TMDBIcons
-import com.example.tmdb.core.ui.theme.tmdbtheme.TMDBShapes
-import com.example.tmdb.core.ui.theme.tmdbtheme.TMDBType
-import com.example.tmdb.core.ui.theme.tmdbtheme.darkColors
 
 
 val LocalColors = staticCompositionLocalOf {
