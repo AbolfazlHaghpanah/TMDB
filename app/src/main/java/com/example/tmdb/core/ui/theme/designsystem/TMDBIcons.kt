@@ -1,4 +1,4 @@
-package com.example.tmdb.core.ui.theme.tmdbtheme
+package com.example.tmdb.core.ui.theme.designsystem
 
 import androidx.compose.runtime.Immutable
 import com.example.tmdb.R
