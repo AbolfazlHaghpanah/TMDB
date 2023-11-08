@@ -62,14 +62,14 @@ fun darkColors(
     background: Color = Color(0xFF1F1D2B),
     surface: Color = Color(0xFF252836),
     error: Color = Color(0xFFFB4141),
-    onBackground: Color = Color(0xFFFFFFFF),
-    onSurface: Color = Color(0xFF92929D),
+    white: Color = Color(0xFFFFFFFF),
+    gray: Color = Color(0xFF92929D),
 ): TMDBColors = TMDBColors(
     primary,
     secondary,
     background,
     surface,
     error,
-    onBackground,
-    onSurface,
+    white,
+    gray
 )

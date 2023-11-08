@@ -23,5 +23,4 @@ object TMDBTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalShape.current
-
 }
