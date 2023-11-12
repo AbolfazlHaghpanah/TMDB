@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">TMDB</string>
+    <string name="overview">Overview</string>
+    <string name="cast_and_crew">Cast and Crew</string>
+    <string name="similar_movies">Similar Movies</string>
     <string name="most_popular">Most Popular</string>
     <string name="top_rated">Top Rated</string>
     <string name="favorites">Favorites</string>
