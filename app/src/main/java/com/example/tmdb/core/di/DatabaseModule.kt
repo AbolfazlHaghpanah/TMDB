@@ -12,16 +12,16 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class DatabaseModule {
-    companion object {
-        @Provides
-        @Singleton
-        internal fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
-            return Room.databaseBuilder(
-                context,
-                AppDatabase::class.java,
-                "tmdb-db"
-            ).build()
-        }
+class DatabaseModule {
+
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "tmdb-db"
+        ).build()
     }
+
 }

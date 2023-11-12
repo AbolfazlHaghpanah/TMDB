@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.org.jetbrains.kotlin.kapt)
     alias(libs.plugins.hilt)
-
+    alias(libs.plugins.kotlinSerialization)
 }
 
 
@@ -58,7 +58,6 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.activity.compose)
-    implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
@@ -66,7 +65,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
@@ -85,17 +83,20 @@ dependencies {
 
     //network
     implementation(libs.retrofit)
+    implementation(libs.okhttpInterceptor)
+    implementation(libs.kotlinSerialization)
+    implementation(libs.kotlinSerialization.convertor)
+
+    //room
     implementation(libs.room)
     implementation(libs.roomKtx)
-    implementation(libs.okhttpInterceptor)
-    implementation(libs.gson)
-    implementation(libs.moshi)
-    implementation(libs.gsonConvertor)
+    kapt(libs.roomCompiler)
 
     //hilt
     implementation(libs.hilt)
     implementation(libs.composeHiltNavigation)
     kapt(libs.hilt.android.compiler)
 
-
+    //coil
+    implementation(libs.coil)
 }
