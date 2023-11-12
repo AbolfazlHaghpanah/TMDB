@@ -18,6 +18,7 @@ class TMDBColors(
     error: Color,
     white: Color,
     gray: Color,
+    whiteGray: Color
 ) {
     var primary by mutableStateOf(primary)
         private set
@@ -40,6 +41,9 @@ class TMDBColors(
     var gray by mutableStateOf(gray)
         private set
 
+    var whiteGray by mutableStateOf(whiteGray)
+        private set
+
     @Composable
     fun toColor(): Colors {
         return MaterialTheme.colors.copy(
@@ -47,11 +51,12 @@ class TMDBColors(
             secondary = secondary,
             surface = surface,
             onBackground = white,
-            onSurface = gray,
+            onSurface = white,
             background = background,
             error = error,
             onPrimary = white,
-            onSecondary = white
+            onSecondary = white,
+            primaryVariant = whiteGray
         )
     }
 }
@@ -64,6 +69,7 @@ fun darkColors(
     error: Color = Color(0xFFFB4141),
     white: Color = Color(0xFFFFFFFF),
     gray: Color = Color(0xFF92929D),
+    whiteGray: Color = Color(0xFFEBEBEF)
 ): TMDBColors = TMDBColors(
     primary,
     secondary,
@@ -71,5 +77,6 @@ fun darkColors(
     surface,
     error,
     white,
-    gray
+    gray,
+    whiteGray
 )

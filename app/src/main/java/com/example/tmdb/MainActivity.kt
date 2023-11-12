@@ -18,11 +18,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.light(
-                scrim = Color.Transparent.toArgb(), darkScrim = Color.Transparent.toArgb()
+            statusBarStyle = SystemBarStyle.dark(
+                scrim = Color.Transparent.toArgb()
             ),
-            navigationBarStyle = SystemBarStyle.light(
-                scrim = Color.Transparent.toArgb(), darkScrim = Color.Transparent.toArgb()
+            navigationBarStyle = SystemBarStyle.dark(
+                scrim = Color.Transparent.toArgb()
             )
         )
         super.onCreate(savedInstanceState)
