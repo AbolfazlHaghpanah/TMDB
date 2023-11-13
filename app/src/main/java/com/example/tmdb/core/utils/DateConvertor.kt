@@ -1,4 +1,4 @@
-package com.example.tmdb.core.utile
+package com.example.tmdb.core.utils
 
 import java.text.SimpleDateFormat
 import java.util.Locale

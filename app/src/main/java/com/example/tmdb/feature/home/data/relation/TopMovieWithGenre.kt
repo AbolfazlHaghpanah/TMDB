@@ -4,17 +4,16 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 import com.example.tmdb.feature.home.data.genre.entity.GenreEntity
-import com.example.tmdb.feature.home.data.movie.entity.PopularMovieEntity
-import com.example.tmdb.feature.home.data.relation.crossref.PopularMovieGenreCrossRef
+import com.example.tmdb.feature.home.data.movie.entity.TopMovieEntity
+import com.example.tmdb.feature.home.data.relation.crossref.TopMovieGenreCrossRef
 
-data class PopularMovieWithGenre(
-    @Embedded val movie: PopularMovieEntity,
+data class TopMovieWithGenre(
+    @Embedded val movie: TopMovieEntity,
     @Relation(
         parentColumn = "movieId",
         entity = GenreEntity::class,
         entityColumn = "genreId",
-        associateBy = Junction(PopularMovieGenreCrossRef::class)
+        associateBy = Junction(TopMovieGenreCrossRef::class)
     )
     val genres: List<GenreEntity>
 )
-

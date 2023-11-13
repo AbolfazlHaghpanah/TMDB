@@ -1,6 +1,8 @@
 package com.example.tmdb.feature.home.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,9 +38,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.feature.home.data.nowplaying.NowPlayingEntity
-import com.example.tmdb.feature.home.data.popularmovies.PopularMovieEntity
-import com.example.tmdb.feature.home.data.topmovies.TopMovieEntity
+import com.example.tmdb.feature.home.data.movie.entity.NowPlayingEntity
+import com.example.tmdb.feature.home.data.relation.PopularMovieWithGenre
+import com.example.tmdb.feature.home.data.relation.TopMovieWithGenre
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -63,9 +65,9 @@ private fun HomeScreen(
     val pagerState = rememberPagerState()
 
     HomeScreen(
-        nowPlayingMovies = nowPlayingMovies ?: emptyList(),
-        popularMovies = popularMovies ?: emptyList(),
-        topMovies = topRated ?: emptyList(),
+        nowPlayingMovies = nowPlayingMovies,
+        popularMovies = popularMovies,
+        topMovies = topRated,
         pagerState = pagerState
     )
 }
@@ -74,8 +76,8 @@ private fun HomeScreen(
 @Composable
 private fun HomeScreen(
     nowPlayingMovies: List<NowPlayingEntity>,
-    popularMovies: List<PopularMovieEntity>,
-    topMovies: List<TopMovieEntity>,
+    popularMovies: List<PopularMovieWithGenre>,
+    topMovies: List<TopMovieWithGenre>,
     pagerState: PagerState
 ) {
     Scaffold { scaffoldPadding ->
@@ -115,7 +117,12 @@ private fun HomeScreen(
                     contentPadding = PaddingValues(10.dp)
                 ) {
                     items(popularMovies) {
-                        MovieCard(it.title, it.posterPath, it.releaseDate, String.format("%.1f", it.voteAverage))
+                        MovieCard(
+                            it.movie.title,
+                            it.movie.posterPath,
+                            it.genres.joinToString(separator = "|") { it.genre },
+                            String.format("%.1f", it.movie.voteAverage)
+                        )
                     }
                 }
             }
@@ -133,7 +140,12 @@ private fun HomeScreen(
                     contentPadding = PaddingValues(10.dp)
                 ) {
                     items(topMovies) {
-                        MovieCard(it.title, it.posterPath, it.releaseDate, String.format("%.1f", it.voteAverage))
+                        MovieCard(
+                            it.movie.title,
+                            it.movie.posterPath,
+                            it.genres.joinToString(separator = "|") { it.genre },
+                            String.format("%.1f", it.movie.voteAverage)
+                        )
                     }
                 }
             }
@@ -141,6 +153,7 @@ private fun HomeScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MovieCard(
 
@@ -208,7 +221,8 @@ private fun MovieCard(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
+                .basicMarquee(),
             text = dis,
             style = TMDBTheme.typography.overLine,
             maxLines = 1,

@@ -23,5 +23,4 @@ class DatabaseModule {
             "tmdb-db"
         ).build()
     }
-
 }
