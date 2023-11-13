@@ -48,13 +48,15 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 
 @Composable
 fun DetailScreen(
-    navController: NavController
+    navController: NavController,
+    detailViewModel: DetailViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
 
