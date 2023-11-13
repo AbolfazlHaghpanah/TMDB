@@ -35,7 +35,7 @@ class HomeViewModel @Inject constructor(
     private val _topMovies = MutableStateFlow<List<TopMovieEntity>>(emptyList())
     val topMovies = _topMovies.asStateFlow()
 
-    private val _result = MutableStateFlow<Result>(Result.Idle)
+        private val _result = MutableStateFlow<Result>(Result.Idle)
     val result = _result.asStateFlow()
 
     init {
