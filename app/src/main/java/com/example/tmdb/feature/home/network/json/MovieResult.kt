@@ -1,0 +1,51 @@
+package com.example.tmdb.feature.home.network.json
+
+import com.example.tmdb.core.utils.dateConvertor
+import com.example.tmdb.feature.home.data.movie.entity.NowPlayingEntity
+import com.example.tmdb.feature.home.data.movie.entity.PopularMovieEntity
+import com.example.tmdb.feature.home.data.movie.entity.TopMovieEntity
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class MovieResult(
+    val title: String,
+    val id: Int,
+    @SerialName("release_date")
+    val releaseDate: String,
+    @SerialName("backdrop_path")
+    val backdropPath: String,
+    @SerialName("poster_path")
+    val posterPath: String,
+    @SerialName("genre_ids")
+    val genreIds: List<Int>,
+    @SerialName("vote_average")
+    val voteAverage: Double
+) {
+    fun toPopularMovieEntity(): PopularMovieEntity {
+        return PopularMovieEntity(
+            movieId = id,
+            title = title,
+            posterPath = posterPath,
+            voteAverage = voteAverage
+        )
+    }
+
+    fun toTopPlayingEntity(): TopMovieEntity {
+        return TopMovieEntity(
+            movieId = id,
+            title = title,
+            posterPath = posterPath,
+            voteAverage = voteAverage
+        )
+    }
+
+    fun toNowPlayingEntity(): NowPlayingEntity {
+        return NowPlayingEntity(
+            movieId = id,
+            title = title,
+            releaseDate = dateConvertor(releaseDate),
+            backdropPath = backdropPath
+        )
+    }
+}

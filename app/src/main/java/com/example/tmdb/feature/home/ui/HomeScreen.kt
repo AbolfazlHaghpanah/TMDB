@@ -1,46 +1,38 @@
 package com.example.tmdb.feature.home.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.basicMarquee
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.data.movie.entity.NowPlayingEntity
-import com.example.tmdb.feature.home.data.relation.PopularMovieWithGenre
-import com.example.tmdb.feature.home.data.relation.TopMovieWithGenre
+import com.example.tmdb.feature.home.ui.component.MovieRow
+import com.example.tmdb.feature.home.ui.component.PagerMovieItem
+import com.example.tmdb.feature.home.ui.component.TMDBPagerIndicator
+import com.example.tmdb.navigation.AppScreens
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -50,7 +42,10 @@ import com.google.accompanist.pager.rememberPagerState
 fun HomeScreen(
     navController: NavController
 ) {
-    HomeScreen(navController = navController, viewModel = hiltViewModel())
+    HomeScreen(
+        navController = navController,
+        viewModel = hiltViewModel()
+    )
 }
 
 @OptIn(ExperimentalPagerApi::class)
@@ -59,16 +54,25 @@ private fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel
 ) {
+    val onNavigation: (String) -> Unit = remember {
+        { route ->
+            navController.navigate(route)
+        }
+    }
+
     val nowPlayingMovies by viewModel.nowPlayingMovies.collectAsState()
     val popularMovies by viewModel.popularMovies.collectAsState()
     val topRated by viewModel.topMovies.collectAsState()
     val pagerState = rememberPagerState()
+    val result by viewModel.result.collectAsState()
 
     HomeScreen(
         nowPlayingMovies = nowPlayingMovies,
         popularMovies = popularMovies,
         topMovies = topRated,
-        pagerState = pagerState
+        pagerState = pagerState,
+        result = result,
+        onNavigation = onNavigation
     )
 }
 
@@ -76,209 +80,99 @@ private fun HomeScreen(
 @Composable
 private fun HomeScreen(
     nowPlayingMovies: List<NowPlayingEntity>,
-    popularMovies: List<PopularMovieWithGenre>,
-    topMovies: List<TopMovieWithGenre>,
-    pagerState: PagerState
+    popularMovies: List<MovieWithGenreDatabaseWrapper>,
+    topMovies: List<MovieWithGenreDatabaseWrapper>,
+    pagerState: PagerState,
+    result: Result,
+    onNavigation: (String) -> Unit
 ) {
     Scaffold { scaffoldPadding ->
-        LazyColumn(
-            modifier = Modifier.padding(scaffoldPadding),
-            contentPadding = PaddingValues(16.dp)
-        ) {
-            item {
-                HorizontalPager(
-                    state = pagerState,
-                    count = if (nowPlayingMovies.isEmpty()) 0 else 5,
-                ) { page ->
-                    Card(
-                        shape = TMDBTheme.shapes.medium,
-                        elevation = 10.dp
-                    ) {
-                        PagerItem(
-                            nowPlayingMovies[page].title,
-                            nowPlayingMovies[page].backdropPath,
-                            nowPlayingMovies[page].releaseDate
-                        )
-                    }
-                }
-            }
 
-            item {
-                Text(
+        if (result == Result.Loading) {
+
+            Box(modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator(
                     modifier = Modifier
-                        .padding(16.dp),
-                    text = "Most popular",
-                    style = TMDBTheme.typography.subtitle1
+                        .size(50.dp)
+                        .align(Alignment.Center),
+                    strokeCap = StrokeCap.Round,
+                    strokeWidth = 6.dp,
                 )
             }
+        } else {
 
-            item {
-                LazyRow(
-                    contentPadding = PaddingValues(10.dp)
-                ) {
-                    items(popularMovies) {
-                        MovieCard(
-                            it.movie.title,
-                            it.movie.posterPath,
-                            it.genres.joinToString(separator = "|") { it.genre },
-                            String.format("%.1f", it.movie.voteAverage)
-                        )
-                    }
-                }
-            }
-            item {
-                Text(
-                    modifier = Modifier
-                        .padding(16.dp),
-                    text = "Top Rated",
-                    style = TMDBTheme.typography.subtitle1
-                )
-            }
-
-            item {
-                LazyRow(
-                    contentPadding = PaddingValues(10.dp)
-                ) {
-                    items(topMovies) {
-                        MovieCard(
-                            it.movie.title,
-                            it.movie.posterPath,
-                            it.genres.joinToString(separator = "|") { it.genre },
-                            String.format("%.1f", it.movie.voteAverage)
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-private fun MovieCard(
-
-    title: String,
-    image: String,
-    dis: String,
-    vote: String
-) {
-    Column(
-        modifier = Modifier
-            .padding(end = 14.dp)
-            .clip(TMDBTheme.shapes.medium)
-            .background(
-                TMDBTheme.colors.surface,
-                TMDBTheme.shapes.medium
-            )
-            .width(140.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(178.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+            LazyColumn(
                 modifier = Modifier
-                    .zIndex(1f)
-                    .padding(8.dp)
-                    .align(Alignment.TopEnd)
-                    .clip(TMDBTheme.shapes.small)
-                    .background(Color.Black.copy(alpha = 0.5f))
-                    .padding(8.dp, 4.dp)
-
+                    .systemBarsPadding()
+                    .padding(scaffoldPadding),
+                contentPadding = PaddingValues(bottom = 24.dp)
             ) {
-                Icon(
-                    modifier = Modifier
-                        .size(16.dp),
-                    painter = painterResource(id = TMDBTheme.icons.star),
-                    contentDescription = null,
-                    tint = TMDBTheme.colors.secondary
-                )
+                item {
 
-                Text(
-                    text = vote,
-                    style = TMDBTheme.typography.body2,
-                    color = TMDBTheme.colors.secondary
-                )
-            }
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxSize(),
-                model = "https://tmdb-api.samentic.com/image/t/p/w500/$image",
-                contentScale = ContentScale.Crop,
-                contentDescription = null
-            )
-        }
-        Text(
-            modifier = Modifier
-                .padding(top = 12.dp, start = 8.dp, end = 8.dp, bottom = 4.dp),
-            text = title,
-            style = TMDBTheme.typography.body1,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
-                .basicMarquee(),
-            text = dis,
-            style = TMDBTheme.typography.overLine,
-            maxLines = 1,
-            color = TMDBTheme.colors.gray
-        )
-    }
-}
+                    HorizontalPager(
+                        modifier = Modifier
+                            .padding(top = 24.dp)
+                            .height(180.dp),
+                        state = pagerState,
+                        count = if (nowPlayingMovies.isEmpty()) 0 else 5,
+                        itemSpacing = 12.dp,
+                        contentPadding = PaddingValues(horizontal = 40.dp)
+                    ) { page ->
 
-@Composable
-fun PagerItem(
-    title: String,
-    image: String,
-    date: String
-) {
-    Box(
-        modifier = Modifier
-            .width(300.dp)
-            .height(180.dp)
-    ) {
+                        val pagerSize = animateDpAsState(
+                            targetValue = if (page == pagerState.currentPage) 180.dp else 160.dp,
+                            label = ""
+                        )
 
-        AsyncImage(
-            modifier = Modifier
-                .zIndex(-1f)
-                .fillMaxSize(),
-            model = "https://tmdb-api.samentic.com/image/t/p/w500/$image",
-            contentScale = ContentScale.Crop,
-            contentDescription = null,
-        )
-        Box(
-            modifier = Modifier
-                .zIndex(0f)
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, Color.Transparent, Color.Black),
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                            PagerMovieItem(
+                                modifier = Modifier
+                                    .clip(TMDBTheme.shapes.large)
+                                    .clickable {
+                                        onNavigation(AppScreens.Detail.route)
+                                    }
+                                    .height(pagerSize.value),
+                                title = nowPlayingMovies[page].title,
+                                image = nowPlayingMovies[page].backdropPath,
+                                date = nowPlayingMovies[page].releaseDate
+                            )
+                        }
+                    }
+                }
+
+                item {
+                    TMDBPagerIndicator(
+                        modifier = Modifier,
+                        pageCount = pagerState.pageCount,
+                        selectedPage = pagerState.currentPage
                     )
-                )
-        )
-        Column(
-            modifier = Modifier
-                .zIndex(1f)
-                .align(Alignment.BottomStart)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Text(
-                text = title,
-                style = TMDBTheme.typography.h6,
-                color = TMDBTheme.colors.white
-            )
+                }
 
-            Text(
-                text = date,
-                style = TMDBTheme.typography.caption,
-                color = TMDBTheme.colors.white
-            )
+                item {
+                    MovieRow(
+                        onClick = { onNavigation(AppScreens.Detail.route) },
+                        title = "Most Popular",
+                        movies = popularMovies
+                    )
+                }
+
+                item {
+                    MovieRow(
+                        onClick = { onNavigation(AppScreens.Detail.route) },
+                        title = "Top Rated",
+                        movies = topMovies
+                    )
+                }
+            }
         }
     }
 }
+
+
+
+
+
