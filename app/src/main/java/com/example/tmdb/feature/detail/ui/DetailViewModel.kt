@@ -54,9 +54,6 @@ class DetailViewModel @Inject constructor(
                 },
                 onDataReady = {
                     _genres.value = it
-//                    _genres.value = it.filter { genre ->
-//                        _movieDetail.value?.similar.results?.contains(genre) ?:
-//                    }
                 }
             )
         }

@@ -1,17 +1,23 @@
 package com.example.tmdb.feature.detail.network.json
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class MovieDetail(
-    val original_title: String,
+    @SerialName("original_title")
+    val originalTitle: String,
     val overview: String,
-    val vote_average: Float,
-    val poster_path: String,
-    val release_date: String,
+    @SerialName("vote_average")
+    val voteAverage: Float,
+    @SerialName("poster_path")
+    val posterPath: String,
+    @SerialName("release_date")
+    val releaseDate: String,
     val runtime: Int,
     val genres: List<Genre>,
-    val external_ids: ExternalIds?,
+    @SerialName("external_ids")
+    val externalIds: ExternalIds?,
     val credits: CastWithCrew,
     val similar: SimilarResults
 )
@@ -24,9 +30,12 @@ data class Genre(
 
 @Serializable
 data class ExternalIds(
-    val imdb_id: String?,
-    val instagram_id: String?,
-    val twitter_id: String?
+    @SerialName("imdb_id")
+    val imdbId: String?,
+    @SerialName("instagram_id")
+    val instagramId: String?,
+    @SerialName("twitter_id")
+    val twitterId: String?
 )
 
 @Serializable
@@ -39,7 +48,8 @@ data class CastWithCrew(
 @Serializable
 data class CastOrCrew(
     val name: String,
-    val profile_path: String?,
+    @SerialName("profile_path")
+    val profilePath: String?,
     val job: String? = null
 )
 
@@ -50,8 +60,12 @@ data class SimilarResults(
 
 @Serializable
 data class SimilarMovieResult(
-    val genre_ids: List<Int>,
-    val original_title: String,
-    val vote_average: Float,
-    val poster_path: String
+    @SerialName("genre_ids")
+    val genreIds: List<Int>,
+    @SerialName("original_title")
+    val originalTitle: String,
+    @SerialName("vote_average")
+    val voteAverage: Float,
+    @SerialName("poster_path")
+    val posterPath: String
 )
