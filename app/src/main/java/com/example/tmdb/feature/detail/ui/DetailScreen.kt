@@ -57,25 +57,47 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.example.tmdb.feature.detail.network.json.MovieDetail
+import java.math.RoundingMode
 
 val imageUrl = "https://tmdb-api.samentic.com/image/t/p/w500"
+
+@Composable
+fun DetailsScreen(navController: NavController) {
+    DetailScreen(
+        navController = navController,
+        detailViewModel = hiltViewModel()
+    )
+}
+
+@Composable
+fun DetailScreen(
+    navController: NavController,
+    detailViewModel: DetailViewModel
+) {
+
+    val movieDetail = detailViewModel.movieDetail.collectAsState().value
+    DetailScreen(
+        movieDetail = movieDetail,
+        onBackArrowClick = { navController.navigateUp() }
+    )
+
+}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DetailScreen(
-    navController: NavController,
-    detailViewModel: DetailViewModel = hiltViewModel()
+    movieDetail: MovieDetail?,
+    onBackArrowClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-
-    val detailMovie = detailViewModel.movieDetail.collectAsState().value
 
     Scaffold(
         contentColor = TMDBTheme.colors.background.copy(alpha = 1f),
         backgroundColor = TMDBTheme.colors.background.copy(alpha = 1f),
         modifier = Modifier.background(TMDBTheme.colors.background)
     ) { paddingValues ->
-        detailMovie?.let { detailMovie ->
+        movieDetail?.let { movieDetail ->
             Column(
                 modifier = Modifier
                     .background(TMDBTheme.colors.background)
@@ -95,7 +117,7 @@ fun DetailScreen(
                         .fillMaxSize()
                 ) {
                     AsyncImage(
-                        model = "$imageUrl${detailMovie.poster_path}",
+                        model = "$imageUrl${movieDetail.posterPath}",
                         contentDescription = null,
                         Modifier
                             .fillMaxSize()
@@ -106,7 +128,7 @@ fun DetailScreen(
                                 }
                             },
                         contentScale = ContentScale.Crop,
-                        error = painterResource(id = R.drawable.testimage)
+                        error = painterResource(id = R.drawable.videoimageerror)
                     )
 
                     Column(
@@ -121,7 +143,7 @@ fun DetailScreen(
                                 .padding(vertical = 12.dp, horizontal = 24.dp)
                         ) {
                             IconButton(
-                                onClick = { /*TODO*/ },
+                                onClick = onBackArrowClick,
                                 Modifier
                                     .clip(TMDBTheme.shapes.rounded)
                                     .background(TMDBTheme.colors.surface)
@@ -136,7 +158,7 @@ fun DetailScreen(
                             }
 
                             Text(
-                                text = detailMovie.original_title,
+                                text = movieDetail.originalTitle,
                                 style = TMDBTheme.typography.subtitle1,
                                 color = TMDBTheme.colors.white,
                                 textAlign = TextAlign.Start,
@@ -178,7 +200,7 @@ fun DetailScreen(
                             modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
                         ) {
                             AsyncImage(
-                                model = "$imageUrl${detailMovie.poster_path}",
+                                model = "$imageUrl${movieDetail.posterPath}",
                                 contentDescription = null,
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -186,7 +208,7 @@ fun DetailScreen(
                                     .padding(start = 85.dp, end = 85.dp)
                                     .clip(TMDBTheme.shapes.medium),
                                 contentScale = ContentScale.Crop,
-                                error = painterResource(id = R.drawable.testimage)
+                                error = painterResource(id = R.drawable.profileerror)
                             )
                         }
                         Row(
@@ -196,7 +218,7 @@ fun DetailScreen(
                         ) {
                             RowWithIconAndText(
                                 iconId = R.drawable.calender,
-                                text = detailMovie.release_date.split("-")[0]
+                                text = movieDetail.releaseDate.split("-")[0]
                             )
                             Divider(
                                 color = TMDBTheme.colors.gray,
@@ -207,7 +229,7 @@ fun DetailScreen(
                             )
                             RowWithIconAndText(
                                 iconId = R.drawable.clock,
-                                text = "${detailMovie.runtime} Minutes"
+                                text = "${movieDetail.runtime} Minutes"
                             )
                             Divider(
                                 color = TMDBTheme.colors.gray,
@@ -218,7 +240,7 @@ fun DetailScreen(
                             )
                             RowWithIconAndText(
                                 iconId = R.drawable.film,
-                                text = detailMovie.genres[0].name
+                                text = movieDetail.genres[0].name
                             )
                         }
                         Row(
@@ -226,8 +248,10 @@ fun DetailScreen(
                                 .padding(top = 8.dp)
                                 .padding(horizontal = 8.dp)
                         ) {
+                            val roundedVote = movieDetail.voteAverage.toBigDecimal()
+                                .setScale(1, RoundingMode.FLOOR).toDouble()
                             RowWithIconAndText(
-                                text = detailMovie.vote_average.toString(),
+                                text = roundedVote.toString(),
                                 iconId = R.drawable.star,
                                 iconColor = TMDBTheme.colors.secondary,
                                 textColor = TMDBTheme.colors.secondary
@@ -249,7 +273,7 @@ fun DetailScreen(
 
 
                 Text(
-                    text = detailMovie.overview,
+                    text = movieDetail.overview,
                     color = TMDBTheme.colors.whiteGray,
                     style = TMDBTheme.typography.subtitle2,
                     modifier = Modifier.padding(horizontal = 24.dp)
@@ -266,8 +290,8 @@ fun DetailScreen(
                             start = 24.dp
                         )
                 )
-                val castAndCrewCombinedList = detailMovie.credits.cast.toMutableList()
-                castAndCrewCombinedList.addAll(detailMovie.credits.crew)
+                val castAndCrewCombinedList = movieDetail.credits.cast.toMutableList()
+                castAndCrewCombinedList.addAll(movieDetail.credits.crew)
                 if (castAndCrewCombinedList.size > 0) {
                     LazyRow(
                         contentPadding = PaddingValues(
@@ -281,13 +305,13 @@ fun DetailScreen(
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 AsyncImage(
-                                    model = "$imageUrl${castOrCrew.profile_path}",
+                                    model = "$imageUrl${castOrCrew.profilePath}",
                                     contentDescription = null,
                                     contentScale = ContentScale.FillBounds,
                                     modifier = Modifier
                                         .size(40.dp)
                                         .clip(TMDBTheme.shapes.rounded),
-                                    error = painterResource(id = R.drawable.testprofile)
+                                    error = painterResource(id = R.drawable.profileerror)
                                 )
                                 Column(
                                     modifier = Modifier.padding(end = 12.dp)
@@ -310,7 +334,7 @@ fun DetailScreen(
                         }
                     }
                 }
-                if (detailMovie.similar.results.isNotEmpty()) {
+                if (movieDetail.similar.results.isNotEmpty()) {
                     Text(
                         text = stringResource(R.string.similar_movies),
                         style = TMDBTheme.typography.subtitle1,
@@ -329,11 +353,11 @@ fun DetailScreen(
                             top = 16.dp
                         )
                     ) {
-                        items(detailMovie.similar.results) { similarMovie ->
+                        items(movieDetail.similar.results) { similarMovie ->
                             Column {
                                 Box {
                                     AsyncImage(
-                                        model = "$imageUrl${similarMovie.poster_path}",
+                                        model = "$imageUrl${similarMovie.posterPath}",
                                         contentDescription = null,
                                         contentScale = ContentScale.Fit,
                                         modifier = Modifier
@@ -345,7 +369,7 @@ fun DetailScreen(
                                             )
                                             .width(135.dp)
                                             .aspectRatio(0.7f),
-                                        error = painterResource(id = R.drawable.spidermantestimage)
+                                        error = painterResource(id = R.drawable.profileerror)
                                     )
                                     Row(
                                         modifier = Modifier
@@ -354,8 +378,10 @@ fun DetailScreen(
                                             .clip(TMDBTheme.shapes.small)
                                             .background(TMDBTheme.colors.surface.copy(alpha = 0.7f))
                                     ) {
+                                        val roundedVote = similarMovie.voteAverage.toBigDecimal()
+                                            .setScale(1, RoundingMode.FLOOR).toDouble()
                                         RowWithIconAndText(
-                                            text = similarMovie.vote_average.toString(),
+                                            text = roundedVote.toString(),
                                             iconId = R.drawable.star,
                                             iconColor = TMDBTheme.colors.secondary,
                                             textColor = TMDBTheme.colors.secondary
@@ -363,7 +389,7 @@ fun DetailScreen(
                                     }
                                 }
                                 Text(
-                                    text = similarMovie.original_title,
+                                    text = similarMovie.originalTitle,
                                     style = TMDBTheme.typography.body1,
                                     color = TMDBTheme.colors.white,
                                     modifier = Modifier
@@ -373,7 +399,7 @@ fun DetailScreen(
                                         .basicMarquee()
                                 )
                                 Text(
-                                    text = similarMovie.genre_ids[0].toString(),
+                                    text = similarMovie.genreIds[0].toString(),
                                     style = TMDBTheme.typography.overLine,
                                     color = TMDBTheme.colors.gray,
                                     modifier = Modifier.padding(start = 8.dp)
