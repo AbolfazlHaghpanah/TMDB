@@ -1,8 +1,9 @@
 package com.example.tmdb.feature.detail.ui
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +20,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.verticalScroll
@@ -32,6 +35,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,9 +54,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 
+val imageUrl = "https://tmdb-api.samentic.com/image/t/p/w500"
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DetailScreen(
     navController: NavController,
@@ -60,303 +68,318 @@ fun DetailScreen(
 ) {
     val scrollState = rememberScrollState()
 
+    val detailMovie = detailViewModel.movieDetail.collectAsState().value
+
     Scaffold(
         contentColor = TMDBTheme.colors.background.copy(alpha = 1f),
         backgroundColor = TMDBTheme.colors.background.copy(alpha = 1f),
         modifier = Modifier.background(TMDBTheme.colors.background)
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .background(TMDBTheme.colors.background)
-                .navigationBarsPadding()
-                .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(scrollState)
-        ) {
-            val gradient = Brush.verticalGradient(
-                colors = listOf(
-                    TMDBTheme.colors.background.copy(alpha = 0.57f),
-                    TMDBTheme.colors.background.copy(alpha = 1f)
-                )
-            )
-            Box(
+        detailMovie?.let { detailMovie ->
+            Column(
                 modifier = Modifier
+                    .background(TMDBTheme.colors.background)
+                    .navigationBarsPadding()
                     .fillMaxSize()
-
+                    .padding(paddingValues)
+                    .verticalScroll(scrollState)
             ) {
-
-                Image(
-                    painter = painterResource(id = R.drawable.testimage),
-                    contentDescription = null,
-                    Modifier
-                        .fillMaxSize()
-                        .drawWithCache {
-                            onDrawWithContent {
-                                drawContent()
-                                drawRect(gradient, blendMode = BlendMode.Multiply)
-                            }
-                        },
-                    contentScale = ContentScale.Crop
+                val gradient = Brush.verticalGradient(
+                    colors = listOf(
+                        TMDBTheme.colors.background.copy(alpha = 0.57f),
+                        TMDBTheme.colors.background.copy(alpha = 1f)
+                    )
                 )
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
+                    AsyncImage(
+                        model = "$imageUrl${detailMovie.poster_path}",
+                        contentDescription = null,
+                        Modifier
+                            .fillMaxSize()
+                            .drawWithCache {
+                                onDrawWithContent {
+                                    drawContent()
+                                    drawRect(gradient, blendMode = BlendMode.Multiply)
+                                }
+                            },
+                        contentScale = ContentScale.Crop,
+                        error = painterResource(id = R.drawable.testimage)
+                    )
 
-                    Box(
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .statusBarsPadding()
-                            .padding(vertical = 12.dp, horizontal = 24.dp)
+                            .fillMaxSize()
                     ) {
-                        IconButton(
-                            onClick = { /*TODO*/ },
-                            Modifier
-                                .clip(TMDBTheme.shapes.rounded)
-                                .background(TMDBTheme.colors.surface)
-
-                                .align(Alignment.CenterStart),
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.arrowback),
-                                contentDescription = null,
-                                tint = TMDBTheme.colors.white
-                            )
-                        }
-
-                        Text(
-                            text = "Riverdale",
-                            style = TMDBTheme.typography.subtitle1,
-                            color = TMDBTheme.colors.white,
-                            textAlign = TextAlign.Start,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-
-                        Row(
-                            modifier = Modifier.align(Alignment.CenterEnd),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            IconButton(
-                                onClick = { /*TODO*/ },
-                                Modifier
-                                    .clip(TMDBTheme.shapes.rounded)
-                                    .background(TMDBTheme.colors.surface),
-                            ) {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.heart),
-                                    contentDescription = null,
-                                    tint = TMDBTheme.colors.error
-                                )
-                            }
-
-                            IconButton(
-                                onClick = { /*TODO*/ },
-                                Modifier
-                                    .clip(TMDBTheme.shapes.rounded)
-                                    .background(TMDBTheme.colors.surface),
-                            ) {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.share),
-                                    contentDescription = null,
-                                    tint = TMDBTheme.colors.primary
-                                )
-                            }
-                        }
-                    }
-                    Row(
-                        modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.testimage),
-                            contentDescription = null,
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .aspectRatio(1.1f)
-                                .padding(start = 85.dp, end = 85.dp)
-                                .clip(TMDBTheme.shapes.medium),
-                            contentScale = ContentScale.Crop
-                        )
-                    }
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp, vertical = 8.dp)
-                    ) {
-                        RowWithIconAndText(
-                            iconId = R.drawable.calender,
-                            text = "2021"
-                        )
-                        Divider(
-                            color = TMDBTheme.colors.gray,
-                            modifier = Modifier
-                                .width(1.dp)
-                                .height(16.dp)
-                                .align(Alignment.CenterVertically)
-                        )
-                        RowWithIconAndText(
-                            iconId = R.drawable.clock,
-                            text = "148 Minutes"
-                        )
-                        Divider(
-                            color = TMDBTheme.colors.gray,
-                            modifier = Modifier
-                                .width(1.dp)
-                                .height(16.dp)
-                                .align(Alignment.CenterVertically)
-                        )
-                        RowWithIconAndText(
-                            iconId = R.drawable.film,
-                            text = "Action"
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .padding(top = 8.dp)
-                            .padding(horizontal = 8.dp)
-                    ) {
-                        RowWithIconAndText(
-                            text = "4.5",
-                            iconId = R.drawable.star,
-                            iconColor = TMDBTheme.colors.secondary,
-                            textColor = TMDBTheme.colors.secondary
-                        )
-                    }
-
-
-                    Text(
-                        text = stringResource(R.string.overview),
-                        color = TMDBTheme.colors.white,
-                        style = TMDBTheme.typography.subtitle1,
-                        modifier = Modifier
-                            .align(Alignment.Start)
-                            .padding(bottom = 8.dp, top = 24.dp, start = 24.dp)
-                    )
-                }
-            }
-
-
-
-            Text(
-                text = "Originally a story from Archie Comics which started in 1941, Riverdale centres around a group of high school students who are shocked by the death of classmate, Jason Blossom. Together theyunravel the secrets of Riverdale and who",
-                color = TMDBTheme.colors.whiteGray,
-                style = TMDBTheme.typography.subtitle2,
-                modifier = Modifier.padding(horizontal = 24.dp)
-            )
-
-            Text(
-                text = stringResource(R.string.cast_and_crew),
-                style = TMDBTheme.typography.subtitle1,
-                color = TMDBTheme.colors.white,
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(
-                        top = 24.dp,
-                        start = 24.dp
-                    )
-            )
-            LazyRow(
-                contentPadding = PaddingValues(
-                    start = 24.dp,
-                    top = 16.dp
-                )
-            ) {
-                items(5) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.testprofile),
-                            contentDescription = null,
-                            contentScale = ContentScale.FillBounds,
-                            modifier = Modifier
-                                .size(40.dp)
-                                .clip(TMDBTheme.shapes.rounded)
-                        )
-                        Column(
-                            modifier = Modifier.padding(end = 12.dp)
+                                .statusBarsPadding()
+                                .padding(vertical = 12.dp, horizontal = 24.dp)
                         ) {
+                            IconButton(
+                                onClick = { /*TODO*/ },
+                                Modifier
+                                    .clip(TMDBTheme.shapes.rounded)
+                                    .background(TMDBTheme.colors.surface)
+
+                                    .align(Alignment.CenterStart),
+                            ) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.arrowback),
+                                    contentDescription = null,
+                                    tint = TMDBTheme.colors.white
+                                )
+                            }
+
                             Text(
-                                text = "Jon Watts",
-                                style = TMDBTheme.typography.body1,
-                                color = TMDBTheme.colors.white
+                                text = detailMovie.original_title,
+                                style = TMDBTheme.typography.subtitle1,
+                                color = TMDBTheme.colors.white,
+                                textAlign = TextAlign.Start,
+                                modifier = Modifier.align(Alignment.Center)
                             )
-                            Text(
-                                text = "Directors",
-                                style = TMDBTheme.typography.overLine,
-                                color = TMDBTheme.colors.gray
+
+                            Row(
+                                modifier = Modifier.align(Alignment.CenterEnd),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                IconButton(
+                                    onClick = { /*TODO*/ },
+                                    Modifier
+                                        .clip(TMDBTheme.shapes.rounded)
+                                        .background(TMDBTheme.colors.surface),
+                                ) {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.heart),
+                                        contentDescription = null,
+                                        tint = TMDBTheme.colors.error
+                                    )
+                                }
+
+                                IconButton(
+                                    onClick = { /*TODO*/ },
+                                    Modifier
+                                        .clip(TMDBTheme.shapes.rounded)
+                                        .background(TMDBTheme.colors.surface),
+                                ) {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.share),
+                                        contentDescription = null,
+                                        tint = TMDBTheme.colors.primary
+                                    )
+                                }
+                            }
+                        }
+                        Row(
+                            modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
+                        ) {
+                            AsyncImage(
+                                model = "$imageUrl${detailMovie.poster_path}",
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .aspectRatio(1.1f)
+                                    .padding(start = 85.dp, end = 85.dp)
+                                    .clip(TMDBTheme.shapes.medium),
+                                contentScale = ContentScale.Crop,
+                                error = painterResource(id = R.drawable.testimage)
                             )
+                        }
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp, vertical = 8.dp)
+                        ) {
+                            RowWithIconAndText(
+                                iconId = R.drawable.calender,
+                                text = detailMovie.release_date.split("-")[0]
+                            )
+                            Divider(
+                                color = TMDBTheme.colors.gray,
+                                modifier = Modifier
+                                    .width(1.dp)
+                                    .height(16.dp)
+                                    .align(Alignment.CenterVertically)
+                            )
+                            RowWithIconAndText(
+                                iconId = R.drawable.clock,
+                                text = "${detailMovie.runtime} Minutes"
+                            )
+                            Divider(
+                                color = TMDBTheme.colors.gray,
+                                modifier = Modifier
+                                    .width(1.dp)
+                                    .height(16.dp)
+                                    .align(Alignment.CenterVertically)
+                            )
+                            RowWithIconAndText(
+                                iconId = R.drawable.film,
+                                text = detailMovie.genres[0].name
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .padding(top = 8.dp)
+                                .padding(horizontal = 8.dp)
+                        ) {
+                            RowWithIconAndText(
+                                text = detailMovie.vote_average.toString(),
+                                iconId = R.drawable.star,
+                                iconColor = TMDBTheme.colors.secondary,
+                                textColor = TMDBTheme.colors.secondary
+                            )
+                        }
+
+
+                        Text(
+                            text = stringResource(R.string.overview),
+                            color = TMDBTheme.colors.white,
+                            style = TMDBTheme.typography.subtitle1,
+                            modifier = Modifier
+                                .align(Alignment.Start)
+                                .padding(bottom = 8.dp, top = 24.dp, start = 24.dp)
+                        )
+                    }
+                }
+
+
+
+                Text(
+                    text = detailMovie.overview,
+                    color = TMDBTheme.colors.whiteGray,
+                    style = TMDBTheme.typography.subtitle2,
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                )
+
+                Text(
+                    text = stringResource(R.string.cast_and_crew),
+                    style = TMDBTheme.typography.subtitle1,
+                    color = TMDBTheme.colors.white,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(
+                            top = 24.dp,
+                            start = 24.dp
+                        )
+                )
+                val castAndCrewCombinedList = detailMovie.credits.cast.toMutableList()
+                castAndCrewCombinedList.addAll(detailMovie.credits.crew)
+                if (castAndCrewCombinedList.size > 0) {
+                    LazyRow(
+                        contentPadding = PaddingValues(
+                            start = 24.dp,
+                            top = 16.dp
+                        )
+                    ) {
+                        items(castAndCrewCombinedList) { castOrCrew ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                AsyncImage(
+                                    model = "$imageUrl${castOrCrew.profile_path}",
+                                    contentDescription = null,
+                                    contentScale = ContentScale.FillBounds,
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .clip(TMDBTheme.shapes.rounded),
+                                    error = painterResource(id = R.drawable.testprofile)
+                                )
+                                Column(
+                                    modifier = Modifier.padding(end = 12.dp)
+                                ) {
+                                    Text(
+                                        text = castOrCrew.name,
+                                        style = TMDBTheme.typography.body1,
+                                        color = TMDBTheme.colors.white,
+                                        modifier = Modifier
+                                            .widthIn(60.dp, 112.dp)
+                                            .basicMarquee()
+                                    )
+                                    Text(
+                                        text = castOrCrew.job ?: stringResource(R.string.actor),
+                                        style = TMDBTheme.typography.overLine,
+                                        color = TMDBTheme.colors.gray
+                                    )
+                                }
+                            }
                         }
                     }
                 }
-            }
-
-            Text(
-                text = stringResource(R.string.similar_movies),
-                style = TMDBTheme.typography.subtitle1,
-                color = TMDBTheme.colors.white,
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(
-                        top = 24.dp,
-                        start = 24.dp
-                    )
-            )
-
-            LazyRow(
-                contentPadding = PaddingValues(
-                    start = 24.dp,
-                    top = 16.dp
-                )
-            ) {
-                items(5) {
-                    Column {
-                        Box {
-                            Image(
-                                painter = painterResource(id = R.drawable.spidermantestimage),
-                                contentDescription = null,
-                                contentScale = ContentScale.Fit,
-                                modifier = Modifier
-                                    .clip(
-                                        TMDBTheme.shapes.medium.copy(
-                                            bottomEnd = CornerSize(0.dp),
-                                            bottomStart = CornerSize(0.dp)
-                                        )
-                                    )
-                                    .width(135.dp)
-                                    .aspectRatio(0.7f)
+                if (detailMovie.similar.results.isNotEmpty()) {
+                    Text(
+                        text = stringResource(R.string.similar_movies),
+                        style = TMDBTheme.typography.subtitle1,
+                        color = TMDBTheme.colors.white,
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .padding(
+                                top = 24.dp,
+                                start = 24.dp
                             )
-                            Row(
-                                modifier = Modifier
-                                    .align(Alignment.TopEnd)
-                                    .padding(8.dp)
-                                    .clip(TMDBTheme.shapes.small)
-                                    .background(TMDBTheme.colors.surface.copy(alpha = 0.7f))
-                            ) {
-                                RowWithIconAndText(
-                                    text = "4.5",
-                                    iconId = R.drawable.star,
-                                    iconColor = TMDBTheme.colors.secondary,
-                                    textColor = TMDBTheme.colors.secondary
+                    )
+
+                    LazyRow(
+                        contentPadding = PaddingValues(
+                            start = 24.dp,
+                            top = 16.dp
+                        )
+                    ) {
+                        items(detailMovie.similar.results) { similarMovie ->
+                            Column {
+                                Box {
+                                    AsyncImage(
+                                        model = "$imageUrl${similarMovie.poster_path}",
+                                        contentDescription = null,
+                                        contentScale = ContentScale.Fit,
+                                        modifier = Modifier
+                                            .clip(
+                                                TMDBTheme.shapes.medium.copy(
+                                                    bottomEnd = CornerSize(0.dp),
+                                                    bottomStart = CornerSize(0.dp)
+                                                )
+                                            )
+                                            .width(135.dp)
+                                            .aspectRatio(0.7f),
+                                        error = painterResource(id = R.drawable.spidermantestimage)
+                                    )
+                                    Row(
+                                        modifier = Modifier
+                                            .align(Alignment.TopEnd)
+                                            .padding(8.dp)
+                                            .clip(TMDBTheme.shapes.small)
+                                            .background(TMDBTheme.colors.surface.copy(alpha = 0.7f))
+                                    ) {
+                                        RowWithIconAndText(
+                                            text = similarMovie.vote_average.toString(),
+                                            iconId = R.drawable.star,
+                                            iconColor = TMDBTheme.colors.secondary,
+                                            textColor = TMDBTheme.colors.secondary
+                                        )
+                                    }
+                                }
+                                Text(
+                                    text = similarMovie.original_title,
+                                    style = TMDBTheme.typography.body1,
+                                    color = TMDBTheme.colors.white,
+                                    modifier = Modifier
+                                        .widthIn(60.dp, 135.dp)
+                                        .padding(horizontal = 8.dp)
+                                        .padding(top = 12.dp, bottom = 4.dp)
+                                        .basicMarquee()
+                                )
+                                Text(
+                                    text = similarMovie.genre_ids[0].toString(),
+                                    style = TMDBTheme.typography.overLine,
+                                    color = TMDBTheme.colors.gray,
+                                    modifier = Modifier.padding(start = 8.dp)
                                 )
                             }
                         }
-                        Text(
-                            text = "Spider-Man No..",
-                            style = TMDBTheme.typography.body1,
-                            color = TMDBTheme.colors.white,
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                                .padding(top = 12.dp, bottom = 4.dp)
-                        )
-                        Text(
-                            text = "Action",
-                            style = TMDBTheme.typography.overLine,
-                            color = TMDBTheme.colors.gray,
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
                     }
                 }
             }
@@ -379,7 +402,7 @@ private fun RowWithIconAndText(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Icon(
-                painter = painterResource(id = iconId),
+                imageVector = ImageVector.vectorResource(id = iconId),
                 contentDescription = null,
                 tint = iconColor ?: TMDBTheme.colors.gray,
             )
