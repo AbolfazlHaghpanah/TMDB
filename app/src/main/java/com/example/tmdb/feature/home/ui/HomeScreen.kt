@@ -28,7 +28,6 @@ import androidx.navigation.NavController
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
-import com.example.tmdb.feature.home.data.movie.entity.NowPlayingEntity
 import com.example.tmdb.feature.home.ui.component.MovieRow
 import com.example.tmdb.feature.home.ui.component.PagerMovieItem
 import com.example.tmdb.feature.home.ui.component.TMDBPagerIndicator
@@ -79,7 +78,7 @@ private fun HomeScreen(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun HomeScreen(
-    nowPlayingMovies: List<NowPlayingEntity>,
+    nowPlayingMovies: List<MovieWithGenreDatabaseWrapper>,
     popularMovies: List<MovieWithGenreDatabaseWrapper>,
     topMovies: List<MovieWithGenreDatabaseWrapper>,
     pagerState: PagerState,
@@ -136,9 +135,9 @@ private fun HomeScreen(
                                         onNavigation(AppScreens.Detail.route)
                                     }
                                     .height(pagerSize.value),
-                                title = nowPlayingMovies[page].title,
-                                image = nowPlayingMovies[page].backdropPath,
-                                date = nowPlayingMovies[page].releaseDate
+                                title = nowPlayingMovies[page].movie.title,
+                                image = nowPlayingMovies[page].movie.backdropPath,
+                                date = nowPlayingMovies[page].movie.releaseDate
                             )
                         }
                     }
