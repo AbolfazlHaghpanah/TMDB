@@ -10,15 +10,16 @@ data class MovieDetail(
     val poster_path: String,
     val release_date: String,
     val runtime: Int,
-    val genres: List<Genres>,
+    val genres: List<Genre>,
     val external_ids: ExternalIds?,
     val credits: CastWithCrew,
     val similar: SimilarResults
 )
 
 @Serializable
-data class Genres(
-    val name: String
+data class Genre(
+    val name: String,
+    val id: Int
 )
 
 @Serializable
