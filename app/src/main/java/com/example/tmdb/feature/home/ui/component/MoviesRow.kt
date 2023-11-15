@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.tmdb.core.ui.shimmer.fakeMovie
+import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 
@@ -23,7 +25,8 @@ fun MovieRow(
     Column {
         Text(
             modifier = Modifier
-                .padding(start = 24.dp, top = 16.dp),
+                .padding(start = 24.dp, top = 16.dp)
+                .ifShimmerActive(movies.isEmpty()),
             text = title,
             style = TMDBTheme.typography.subtitle1
         )
@@ -33,13 +36,14 @@ fun MovieRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(movies) {
+            items(items = movies.ifEmpty { fakeMovie }) {
                 MovieCard(
                     onClick = onClick,
                     title = it.movie.title,
                     image = it.movie.posterPath,
                     genres = it.genres.joinToString(separator = "|") { it.genre },
-                    vote = String.format("%.1f", it.movie.voteAverage)
+                    vote = String.format("%.1f", it.movie.voteAverage),
+                    isShimmer = movies.isEmpty()
                 )
             }
         }

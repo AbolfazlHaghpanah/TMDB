@@ -27,6 +27,7 @@ moshi = "1.14.0"
 kotlinSerialization = "1.6.0"
 kotlinSerialization-convertor = "1.0.0"
 coil = "2.5.0"
+shimmer = "1.2.0"
 
 
 [libraries]
@@ -61,6 +62,7 @@ roomKtx = { module = "androidx.room:room-ktx", version.ref = "room" }
 roomCompiler = {module = "androidx.room:room-compiler", version.ref = "room"}
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.ref = "shimmer" }
 kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 kotlinSerialization-convertor = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "kotlinSerialization-convertor" }
 

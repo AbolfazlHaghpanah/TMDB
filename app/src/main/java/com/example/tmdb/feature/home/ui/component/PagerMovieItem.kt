@@ -19,14 +19,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
+import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.example.tmdb.feature.home.data.common.MovieDatabaseWrapper
 
 @Composable
 fun PagerMovieItem(
     modifier: Modifier = Modifier,
-    title: String,
-    image: String,
-    date: String
+    movie: MovieDatabaseWrapper,
+    isLoading: Boolean = false
 ) {
     Card(
         modifier = modifier,
@@ -43,7 +44,7 @@ fun PagerMovieItem(
                 modifier = Modifier
                     .zIndex(-1f)
                     .fillMaxSize(),
-                model = "https://tmdb-api.samentic.com/image/t/p/w500/$image",
+                model = "https://tmdb-api.samentic.com/image/t/p/w500/${movie.backdropPath}",
                 contentScale = ContentScale.FillBounds,
                 contentDescription = null,
             )
@@ -51,14 +52,20 @@ fun PagerMovieItem(
                 modifier = Modifier
                     .zIndex(0f)
                     .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                Color.Transparent,
-                                Color.Black.copy(alpha = 0.8f)
-                            ),
-                        )
+                    .then(
+                        if (isLoading) {
+                            Modifier.background(TMDBTheme.colors.surface)
+                        } else {
+                            Modifier.background(
+                                Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color.Transparent,
+                                        Color.Transparent,
+                                        Color.Black.copy(alpha = 0.8f)
+                                    ),
+                                )
+                            )
+                        }
                     )
             )
             Column(
@@ -69,13 +76,15 @@ fun PagerMovieItem(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = title,
+                    modifier = Modifier.ifShimmerActive(isLoading),
+                    text = movie.title,
                     style = TMDBTheme.typography.subtitle1,
                     color = TMDBTheme.colors.white
                 )
 
                 Text(
-                    text = date,
+                    modifier = Modifier.ifShimmerActive(isLoading),
+                    text = movie.releaseDate,
                     style = TMDBTheme.typography.caption,
                     color = TMDBTheme.colors.white
                 )

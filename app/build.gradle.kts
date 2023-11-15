@@ -99,4 +99,7 @@ dependencies {
 
     //coil
     implementation(libs.coil)
+
+    //shimmer
+    implementation(libs.shimmer)
 }

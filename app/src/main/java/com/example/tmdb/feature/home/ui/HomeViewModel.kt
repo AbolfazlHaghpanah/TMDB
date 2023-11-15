@@ -49,6 +49,7 @@ class HomeViewModel @Inject constructor(
 
     private val _genreResult = MutableStateFlow<Result>(Result.Idle)
     val genreResult = _genreResult.asStateFlow()
+
     init {
         getGenre()
         observeTopMovies()

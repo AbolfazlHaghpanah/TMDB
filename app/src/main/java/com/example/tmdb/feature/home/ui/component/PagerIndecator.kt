@@ -29,12 +29,13 @@ fun TMDBPagerIndicator(
             .padding(vertical = 14.dp)
     ) {
         Row(
-            modifier = modifier
-                .align(Alignment.Center),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .then(modifier),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            for (page in 0..pageCount - 1) {
+            for (page in 0 until  pageCount ) {
 
                 val activeSize by animateDpAsState(
                     targetValue = if (page == selectedPage) 24.dp else 10.dp,

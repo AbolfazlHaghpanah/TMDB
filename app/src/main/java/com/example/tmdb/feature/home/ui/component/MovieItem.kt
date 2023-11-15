@@ -18,10 +18,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.tmdb.core.ui.component.VoteIcon
+import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 
 @Composable
 fun MovieCard(
+    modifier: Modifier = Modifier,
+    isShimmer: Boolean = false,
     onClick: () -> Unit,
     title: String,
     image: String,
@@ -29,7 +32,7 @@ fun MovieCard(
     vote: String
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .clip(TMDBTheme.shapes.medium)
             .clickable { onClick() }
             .background(
@@ -44,7 +47,11 @@ fun MovieCard(
                 .height(178.dp)
         ) {
 
-            VoteIcon(vote = vote)
+            VoteIcon(
+                modifier = Modifier
+                    .ifShimmerActive(isShimmer),
+                vote = vote
+            )
 
             AsyncImage(
                 modifier = Modifier
@@ -57,7 +64,8 @@ fun MovieCard(
 
         Text(
             modifier = Modifier
-                .padding(top = 12.dp, start = 8.dp, end = 8.dp, bottom = 4.dp),
+                .padding(top = 12.dp, start = 8.dp, end = 8.dp, bottom = 4.dp)
+                .ifShimmerActive(isShimmer),
             text = title,
             style = TMDBTheme.typography.body1,
             maxLines = 1,
@@ -67,7 +75,8 @@ fun MovieCard(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
+                .ifShimmerActive(isShimmer),
             text = genres,
             style = TMDBTheme.typography.overLine,
             maxLines = 1,

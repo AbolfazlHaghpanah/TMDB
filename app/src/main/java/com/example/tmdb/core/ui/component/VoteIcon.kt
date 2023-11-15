@@ -25,9 +25,10 @@ fun BoxScope.VoteIcon(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = modifier
+        modifier = Modifier
             .zIndex(1f)
             .padding(8.dp)
+            .then(modifier)
             .align(Alignment.TopEnd)
             .clip(TMDBTheme.shapes.small)
             .background(TMDBTheme.colors.surface.copy(alpha = 0.7f))
