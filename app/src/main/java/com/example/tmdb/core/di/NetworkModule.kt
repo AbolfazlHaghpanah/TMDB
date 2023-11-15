@@ -1,5 +1,6 @@
 package com.example.tmdb.core.di
 
+import com.example.tmdb.core.utils.apiVersion
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -37,7 +38,7 @@ internal object NetworkModule {
             .build()
 
     @Provides
-    fun provideBaseUrl(): String = "https://api.themoviedb.org/"
+    fun provideBaseUrl(): String = "https://api.themoviedb.org/$apiVersion/"
 
     @Provides
     fun provideJson(): Json = Json {

@@ -20,6 +20,7 @@ import coil.compose.AsyncImage
 import com.example.tmdb.core.ui.component.VoteIcon
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.example.tmdb.core.utils.imageUrl
 
 @Composable
 fun MovieCard(
@@ -34,7 +35,7 @@ fun MovieCard(
     Column(
         modifier = modifier
             .clip(TMDBTheme.shapes.medium)
-            .clickable { onClick() }
+            .clickable(onClick = onClick)
             .background(
                 TMDBTheme.colors.surface,
                 TMDBTheme.shapes.medium
@@ -56,7 +57,7 @@ fun MovieCard(
             AsyncImage(
                 modifier = Modifier
                     .fillMaxSize(),
-                model = "https://tmdb-api.samentic.com/image/t/p/w500/$image",
+                model = imageUrl + image,
                 contentScale = ContentScale.Crop,
                 contentDescription = null
             )

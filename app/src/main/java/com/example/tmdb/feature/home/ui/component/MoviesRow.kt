@@ -41,7 +41,7 @@ fun MovieRow(
                     onClick = onClick,
                     title = it.movie.title,
                     image = it.movie.posterPath,
-                    genres = it.genres.joinToString(separator = "|") { it.genre },
+                    genres = it.genres.joinToString(separator = "|") { it.genreName },
                     vote = String.format("%.1f", it.movie.voteAverage),
                     isShimmer = movies.isEmpty()
                 )

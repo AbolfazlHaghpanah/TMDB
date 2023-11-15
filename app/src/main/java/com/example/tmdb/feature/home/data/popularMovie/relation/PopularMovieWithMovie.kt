@@ -26,7 +26,7 @@ data class PopularMovieAndGenreWithMovie(
     fun toMovieDataWrapper(): MovieWithGenreDatabaseWrapper {
 
         return MovieWithGenreDatabaseWrapper(
-            genres = genres?: listOf(),
+            genres = genres ?: listOf(),
             movie = MovieDatabaseWrapper(
                 movieId = movie?.id ?: 0,
                 title = movie?.title ?: "",

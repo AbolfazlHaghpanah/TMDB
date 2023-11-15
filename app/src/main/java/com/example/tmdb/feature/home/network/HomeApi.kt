@@ -9,22 +9,22 @@ import com.example.tmdb.core.utils.tmdpApiKey
 
 
 interface HomeApi {
-    @GET("3/genre/movie/list?language=en")
+    @GET("genre/movie/list?language=en")
     suspend fun getGenre(
         @Header("Authorization") apiKey: String = tmdpApiKey
     ):Response<GenreResponse>
 
-    @GET("3/movie/now_playing")
+    @GET("movie/now_playing")
     suspend fun getNowPlaying(
         @Header("Authorization") apiKey: String = tmdpApiKey
     ): Response<MovieResponse>
 
-    @GET("/3/movie/popular")
+    @GET("movie/popular")
     suspend fun getMostPopular(
         @Header("Authorization") apiKey: String = tmdpApiKey
     ): Response<MovieResponse>
 
-    @GET("/3/movie/top_rated")
+    @GET("movie/top_rated")
     suspend fun getTopRated(
         @Header("Authorization") apiKey: String = tmdpApiKey
     ): Response<MovieResponse>

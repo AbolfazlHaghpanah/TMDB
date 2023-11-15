@@ -17,9 +17,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.tmdb.R
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.ui.shimmer.fakeMovie
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
@@ -52,7 +54,9 @@ private fun HomeScreen(
 ) {
     val onNavigation: (String) -> Unit = remember {
         { route ->
-            navController.navigate(route)
+            navController.navigate(route) {
+                launchSingleTop = true
+            }
         }
     }
 
@@ -104,7 +108,7 @@ private fun HomeScreen(
                         .padding(top = 24.dp)
                         .height(180.dp),
                     state = pagerState,
-                    count = if (nowPlayingMovies.size > 5) 5 else nowPlayingMovies.size,
+                    count = if (nowPlayingMovies.size > 5) 5 else fakeMovie.size,
                     itemSpacing = 12.dp,
                     contentPadding = PaddingValues(horizontal = 40.dp)
                 ) { page ->
@@ -149,7 +153,7 @@ private fun HomeScreen(
             item {
                 MovieRow(
                     onClick = { onNavigation(AppScreens.Detail.route) },
-                    title = "Most Popular",
+                    title = stringResource(R.string.most_popular),
                     movies = popularMovies
                 )
             }
@@ -157,7 +161,7 @@ private fun HomeScreen(
             item {
                 MovieRow(
                     onClick = { onNavigation(AppScreens.Detail.route) },
-                    title = "Top Rated",
+                    title = stringResource(R.string.top_rated),
                     movies = topMovies
                 )
             }

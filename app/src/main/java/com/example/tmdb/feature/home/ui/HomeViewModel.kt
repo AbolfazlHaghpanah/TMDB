@@ -83,7 +83,6 @@ class HomeViewModel @Inject constructor(
                 _topMovies.emit(
                     it.map { it.toMovieDataWrapper() }
                 )
-
             }
         }
         getTopMovies()

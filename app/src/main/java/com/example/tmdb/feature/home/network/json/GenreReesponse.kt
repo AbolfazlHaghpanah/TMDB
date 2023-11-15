@@ -16,7 +16,7 @@ data class GenresResponse(
     fun toGenreEntity(): GenreEntity {
         return GenreEntity(
             genreId = id,
-            genre = name
+            genreName = name
         )
     }
 }

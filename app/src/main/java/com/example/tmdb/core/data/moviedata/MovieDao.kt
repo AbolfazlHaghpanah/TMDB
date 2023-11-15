@@ -18,9 +18,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MovieDao {
 
-    @Query("SELECT * From Movie")
-    fun observeMovie(): Flow<List<MovieEntity>>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addMovie(movie: MovieEntity)
 

@@ -34,13 +34,7 @@ fun BoxScope.VoteIcon(
             .background(TMDBTheme.colors.surface.copy(alpha = 0.7f))
             .padding(8.dp, 4.dp)
     ) {
-        Icon(
-            modifier = Modifier
-                .size(16.dp),
-            painter = painterResource(id = TMDBTheme.icons.star),
-            contentDescription = null,
-            tint = TMDBTheme.colors.secondary
-        )
+        VoteIcon()
 
         Text(
             text = vote,
@@ -48,4 +42,15 @@ fun BoxScope.VoteIcon(
             color = TMDBTheme.colors.secondary
         )
     }
+}
+
+@Composable
+private fun VoteIcon() {
+    Icon(
+        modifier = Modifier
+            .size(16.dp),
+        painter = painterResource(id = TMDBTheme.icons.star),
+        contentDescription = null,
+        tint = TMDBTheme.colors.secondary
+    )
 }
