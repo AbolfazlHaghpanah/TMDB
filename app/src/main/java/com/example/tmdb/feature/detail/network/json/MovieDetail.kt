@@ -67,5 +67,5 @@ data class SimilarMovieResult(
     @SerialName("vote_average")
     val voteAverage: Float,
     @SerialName("poster_path")
-    val posterPath: String
+    val posterPath: String?
 )
