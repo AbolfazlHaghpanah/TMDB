@@ -63,14 +63,18 @@ private fun HomeScreen(
     val popularMovies by viewModel.popularMovies.collectAsState()
     val topRated by viewModel.topMovies.collectAsState()
     val pagerState = rememberPagerState()
-    val result by viewModel.result.collectAsState()
+    val nowPlayingResult by viewModel.nowPlayingResult.collectAsState()
+    val popularMovieResult by viewModel.popularMovieResult.collectAsState()
+    val topMovieResult by viewModel.topMovieResult.collectAsState()
 
     HomeScreen(
         nowPlayingMovies = nowPlayingMovies,
         popularMovies = popularMovies,
         topMovies = topRated,
         pagerState = pagerState,
-        result = result,
+        nowPlayingResult = nowPlayingResult,
+        popularMovieResult = popularMovieResult,
+        topMovieResult = topMovieResult,
         onNavigation = onNavigation
     )
 }
@@ -82,12 +86,18 @@ private fun HomeScreen(
     popularMovies: List<MovieWithGenreDatabaseWrapper>,
     topMovies: List<MovieWithGenreDatabaseWrapper>,
     pagerState: PagerState,
-    result: Result,
+    nowPlayingResult: Result,
+    popularMovieResult: Result,
+    topMovieResult: Result,
     onNavigation: (String) -> Unit
 ) {
     Scaffold { scaffoldPadding ->
 
-        if (result == Result.Loading) {
+        if (
+            nowPlayingResult == Result.Loading ||
+            popularMovieResult == Result.Loading ||
+            topMovieResult == Result.Loading
+        ) {
 
             Box(modifier = Modifier.fillMaxSize()) {
                 CircularProgressIndicator(
@@ -99,7 +109,6 @@ private fun HomeScreen(
                 )
             }
         } else {
-
             LazyColumn(
                 modifier = Modifier
                     .systemBarsPadding()
@@ -107,7 +116,6 @@ private fun HomeScreen(
                 contentPadding = PaddingValues(bottom = 24.dp)
             ) {
                 item {
-
                     HorizontalPager(
                         modifier = Modifier
                             .padding(top = 24.dp)

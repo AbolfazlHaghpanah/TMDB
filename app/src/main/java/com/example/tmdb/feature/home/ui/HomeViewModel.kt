@@ -1,21 +1,19 @@
 package com.example.tmdb.feature.home.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.data.moviedata.MovieDao
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.safeApi
-import com.example.tmdb.feature.home.data.topmovie.relation.crossref.TopMovieGenreCrossRef
 import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.data.genre.dao.GenreDao
 import com.example.tmdb.feature.home.data.popularMovie.relation.PopularMovieGenreCrossRef
+import com.example.tmdb.feature.home.data.topmovie.relation.crossref.TopMovieGenreCrossRef
 import com.example.tmdb.feature.home.network.HomeApi
 import com.example.tmdb.feature.home.network.json.GenreResponse
 import com.example.tmdb.feature.home.network.json.MovieResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -40,25 +38,22 @@ class HomeViewModel @Inject constructor(
         MutableStateFlow<List<MovieWithGenreDatabaseWrapper>>(emptyList())
     val topMovies = _topMovies.asStateFlow()
 
-    private val _result =
-        MutableStateFlow<Result>(Result.Idle)
-    val result = _result.asStateFlow()
+    private val _nowPlayingResult = MutableStateFlow<Result>(Result.Idle)
+    val nowPlayingResult = _nowPlayingResult.asStateFlow()
 
+    private val _popularMovieResult = MutableStateFlow<Result>(Result.Idle)
+    val popularMovieResult = _popularMovieResult.asStateFlow()
+
+    private val _topMovieResult = MutableStateFlow<Result>(Result.Idle)
+    val topMovieResult = _topMovieResult.asStateFlow()
+
+    private val _genreResult = MutableStateFlow<Result>(Result.Idle)
+    val genreResult = _genreResult.asStateFlow()
     init {
         getGenre()
         observeTopMovies()
         observeNowPlaying()
         observePopularMovies()
-
-        viewModelScope.launch(Dispatchers.IO) {
-            delay(3000)
-            _popularMovies.value.forEach {
-                Log.d("TAG", " mmd: ${it.movie.title} ")
-            }
-            _topMovies.value.forEach {
-                Log.d("TAG", "hooshanh: ${it.movie.title}")
-            }
-        }
     }
 
     private fun observeNowPlaying() {
@@ -76,7 +71,6 @@ class HomeViewModel @Inject constructor(
                 _popularMovies.emit(
                     it.map { it.toMovieDataWrapper() }
                 )
-                Log.d("TAG", "observePopularMovies: ${it.joinToString { it.movie.title }}")
             }
         }
         getPopular()
@@ -88,7 +82,6 @@ class HomeViewModel @Inject constructor(
                 _topMovies.emit(
                     it.map { it.toMovieDataWrapper() }
                 )
-                Log.d("TAG", "topMovies: ${it.joinToString { it.movie.title }}")
 
             }
         }
@@ -104,7 +97,7 @@ class HomeViewModel @Inject constructor(
                 onDataReady = {
                     storeNowPlaying(it)
                 }
-            ).collect(_result)
+            ).collect(_nowPlayingResult)
         }
     }
 
@@ -117,7 +110,7 @@ class HomeViewModel @Inject constructor(
                 onDataReady = {
                     storePopulars(it)
                 }
-            ).collect(_result)
+            ).collect(_popularMovieResult)
         }
     }
 
@@ -130,7 +123,7 @@ class HomeViewModel @Inject constructor(
                 onDataReady = {
                     storeTopMovie(it)
                 }
-            ).collect(_result)
+            ).collect(_topMovieResult)
         }
     }
 
@@ -143,7 +136,7 @@ class HomeViewModel @Inject constructor(
                 onDataReady = {
                     storeGenres(it)
                 }
-            ).collect(_result)
+            ).collect(_genreResult)
         }
     }
 

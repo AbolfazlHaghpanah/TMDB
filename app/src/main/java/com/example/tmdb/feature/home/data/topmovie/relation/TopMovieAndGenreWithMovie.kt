@@ -11,28 +11,28 @@ import com.example.tmdb.feature.home.data.genre.entity.GenreEntity
 import com.example.tmdb.feature.home.data.topmovie.relation.crossref.TopMovieGenreCrossRef
 
 data class TopMovieAndGenreWithMovie(
-    @Embedded val topMovie: TopMovieEntity,
+    @Embedded val topMovie: TopMovieEntity?,
     @Relation(
         parentColumn = "movieId",
         entityColumn = "id"
     )
-    val movie: MovieEntity,
+    val movie: MovieEntity?,
     @Relation(
         parentColumn = "movieId",
         entity = GenreEntity::class,
         entityColumn = "genreId",
         associateBy = Junction(TopMovieGenreCrossRef::class)
     )
-    val genres: List<GenreEntity>
+    val genres: List<GenreEntity>?
 ) {
     fun toMovieDataWrapper(): MovieWithGenreDatabaseWrapper {
         return MovieWithGenreDatabaseWrapper(
-            genres = genres,
+            genres = genres?: listOf(),
             movie = MovieDatabaseWrapper(
-                movieId = movie.id,
-                title = movie.title,
-                posterPath = movie.posterPath,
-                voteAverage = movie.voteAverage
+                movieId = movie?.id ?: 0,
+                title = movie?.title ?: "",
+                posterPath = movie?.posterPath ?: "",
+                voteAverage = movie?.voteAverage ?: 0.1
             )
         )
     }
