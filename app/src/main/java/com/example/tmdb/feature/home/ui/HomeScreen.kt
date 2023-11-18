@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -55,6 +53,7 @@ private fun HomeScreen(
     val onNavigation: (String) -> Unit = remember {
         { route ->
             navController.navigate(route) {
+                popUpTo(AppScreens.Home.route)
                 launchSingleTop = true
             }
         }
@@ -92,82 +91,75 @@ private fun HomeScreen(
     topMovieResult: Result,
     onNavigation: (String) -> Unit
 ) {
+    LazyColumn {
 
-    Scaffold { scaffoldPadding ->
+        item {
+            HorizontalPager(
+                modifier = Modifier
+                    .padding(top = 24.dp)
+                    .height(180.dp),
+                state = pagerState,
+                count = if (nowPlayingMovies.size > 5) 5 else fakeMovie.size,
+                itemSpacing = 12.dp,
+                contentPadding = PaddingValues(horizontal = 40.dp)
+            ) { page ->
 
-        LazyColumn(
-            modifier = Modifier
-                .systemBarsPadding()
-                .padding(scaffoldPadding),
-            contentPadding = PaddingValues(bottom = 24.dp)
-        ) {
+                val pagerSize = animateDpAsState(
+                    targetValue = if (page == pagerState.currentPage) 180.dp else 160.dp,
+                    label = ""
+                )
 
-            item {
-                HorizontalPager(
-                    modifier = Modifier
-                        .padding(top = 24.dp)
-                        .height(180.dp),
-                    state = pagerState,
-                    count = if (nowPlayingMovies.size > 5) 5 else fakeMovie.size,
-                    itemSpacing = 12.dp,
-                    contentPadding = PaddingValues(horizontal = 40.dp)
-                ) { page ->
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
-                    val pagerSize = animateDpAsState(
-                        targetValue = if (page == pagerState.currentPage) 180.dp else 160.dp,
-                        label = ""
-                    )
-
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-
-                        PagerMovieItem(
-                            isLoading = nowPlayingMovies.size <= 5,
-                            modifier = Modifier
-                                .clip(TMDBTheme.shapes.large)
-                                .clickable {
-                                    onNavigation(AppScreens.Detail.route)
-                                }
-                                .height(pagerSize.value),
-                            movie = if (nowPlayingMovies.size >= 5) {
-                                nowPlayingMovies[page].movie
-                            } else {
-                                fakeMovie[0].movie
+                    PagerMovieItem(
+                        isLoading = nowPlayingMovies.size <= 5,
+                        modifier = Modifier
+                            .clip(TMDBTheme.shapes.large)
+                            .clickable {
+                                onNavigation(AppScreens.Detail.route)
                             }
-                        )
-                    }
+                            .height(pagerSize.value),
+                        movie = if (nowPlayingMovies.size >= 5) {
+                            nowPlayingMovies[page].movie
+                        } else {
+                            fakeMovie[0].movie
+                        }
+                    )
                 }
             }
+        }
 
-            item {
-                TMDBPagerIndicator(
-                    modifier = Modifier
-                        .ifShimmerActive(nowPlayingMovies.isEmpty()),
-                    pageCount = pagerState.pageCount,
-                    selectedPage = pagerState.currentPage
-                )
-            }
+        item {
+            TMDBPagerIndicator(
+                modifier = Modifier
+                    .ifShimmerActive(nowPlayingMovies.isEmpty()),
+                pageCount = pagerState.pageCount,
+                selectedPage = pagerState.currentPage
+            )
+        }
 
-            item {
-                MovieRow(
-                    onClick = { onNavigation(AppScreens.Detail.route) },
-                    title = stringResource(R.string.most_popular),
-                    movies = popularMovies
-                )
-            }
+        item {
+            MovieRow(
+                onClick = { onNavigation(AppScreens.Detail.route) },
+                title = stringResource(R.string.most_popular),
+                movies = popularMovies
+            )
+        }
 
-            item {
-                MovieRow(
-                    onClick = { onNavigation(AppScreens.Detail.route) },
-                    title = stringResource(R.string.top_rated),
-                    movies = topMovies
-                )
-            }
+        item {
+            MovieRow(
+                onClick = { onNavigation(AppScreens.Detail.route) },
+                title = stringResource(R.string.top_rated),
+                movies = topMovies
+            )
         }
     }
 }
+
+
 
 
 
