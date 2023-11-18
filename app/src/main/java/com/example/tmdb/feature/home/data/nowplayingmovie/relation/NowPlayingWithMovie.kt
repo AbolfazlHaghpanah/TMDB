@@ -23,8 +23,8 @@ data class NowPlayingWithMovie(
                 title = movie?.title ?: "",
                 posterPath = movie?.posterPath ?: "",
                 voteAverage = movie?.voteAverage ?: 0.1,
-                backdropPath = movie?.backdropPath?:"",
-                releaseDate = movie?.releaseDate?:""
+                backdropPath = nowPlayingMovie?.backdropPath?:"",
+                releaseDate = nowPlayingMovie?.releaseDate?:""
             )
         )
     }
