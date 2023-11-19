@@ -41,14 +41,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.feature.detail.network.json.MovieDetail
+import com.example.tmdb.feature.detail.data.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.ui.common.RowWithIconAndText
 import com.example.tmdb.feature.detail.ui.imageUrl
 import java.math.RoundingMode
 
 @Composable
 fun DetailTopWithGradient(
-    movieDetail: MovieDetail,
+    movieDetail: DetailMovieWithAllRelations,
     onBackArrowClick: () -> Unit
 ) {
 
@@ -64,7 +64,7 @@ fun DetailTopWithGradient(
             .fillMaxSize()
     ) {
         AsyncImage(
-            model = "$imageUrl${movieDetail.posterPath}",
+            model = "$imageUrl${movieDetail.movie?.posterPath}",
             contentDescription = null,
             Modifier
                 .fillMaxSize()
@@ -89,7 +89,7 @@ fun DetailTopWithGradient(
                 modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
             ) {
                 AsyncImage(
-                    model = "$imageUrl${movieDetail.posterPath}",
+                    model = "$imageUrl${movieDetail.movie?.posterPath}",
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -116,7 +116,7 @@ fun DetailTopWithGradient(
 }
 
 @Composable
-private fun MovieInfo(movieDetail: MovieDetail) {
+private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier
@@ -124,7 +124,9 @@ private fun MovieInfo(movieDetail: MovieDetail) {
     ) {
         RowWithIconAndText(
             iconId = R.drawable.calender,
-            text = movieDetail.releaseDate.split("-")[0]
+            text = movieDetail.detailEntity?.releaseDate?.split(
+                "-"
+            )?.get(0) ?: ""
         )
         Divider(
             color = TMDBTheme.colors.gray,
@@ -135,7 +137,7 @@ private fun MovieInfo(movieDetail: MovieDetail) {
         )
         RowWithIconAndText(
             iconId = R.drawable.clock,
-            text = "${movieDetail.runtime} Minutes"
+            text = "${movieDetail.detailEntity?.runtime} Minutes"
         )
         Divider(
             color = TMDBTheme.colors.gray,
@@ -144,10 +146,12 @@ private fun MovieInfo(movieDetail: MovieDetail) {
                 .height(16.dp)
                 .align(Alignment.CenterVertically)
         )
-        RowWithIconAndText(
-            iconId = R.drawable.film,
-            text = movieDetail.genres[0].name
-        )
+        movieDetail.genres?.get(0)?.let {
+            RowWithIconAndText(
+                iconId = R.drawable.film,
+                text = it.genreName
+            )
+        }
     }
 
     Row(
@@ -155,8 +159,9 @@ private fun MovieInfo(movieDetail: MovieDetail) {
             .padding(top = 8.dp)
             .padding(horizontal = 8.dp)
     ) {
-        val roundedVote = movieDetail.voteAverage.toBigDecimal()
-            .setScale(1, RoundingMode.FLOOR).toDouble()
+        val roundedVote =
+            movieDetail.movie?.voteAverage?.toBigDecimal()
+                ?.setScale(1, RoundingMode.FLOOR)?.toDouble()
         RowWithIconAndText(
             text = roundedVote.toString(),
             iconId = R.drawable.star,
@@ -169,7 +174,7 @@ private fun MovieInfo(movieDetail: MovieDetail) {
 @Composable
 private fun TopBar(
     onBackArrowClick: () -> Unit,
-    movieDetail: MovieDetail
+    movieDetail: DetailMovieWithAllRelations
 ) {
     Box(
         modifier = Modifier
@@ -192,13 +197,15 @@ private fun TopBar(
             )
         }
 
-        Text(
-            text = movieDetail.originalTitle,
-            style = TMDBTheme.typography.subtitle1,
-            color = TMDBTheme.colors.white,
-            textAlign = TextAlign.Start,
-            modifier = Modifier.align(Alignment.Center)
-        )
+        movieDetail.movie?.let {
+            Text(
+                text = it.title,
+                style = TMDBTheme.typography.subtitle1,
+                color = TMDBTheme.colors.white,
+                textAlign = TextAlign.Start,
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
 
         Row(
             modifier = Modifier.align(Alignment.CenterEnd),

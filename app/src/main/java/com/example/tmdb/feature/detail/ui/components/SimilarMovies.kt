@@ -27,16 +27,16 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.feature.detail.network.json.MovieDetail
-import com.example.tmdb.feature.detail.network.json.SimilarMovieResult
+import com.example.tmdb.feature.detail.data.DetailMovieWithAllRelations
+import com.example.tmdb.feature.detail.data.SimilarMovieWithGenre
 import com.example.tmdb.feature.detail.ui.common.RowWithIconAndText
 import com.example.tmdb.feature.detail.ui.imageUrl
 import java.math.RoundingMode
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-fun SimilarMovies(movieDetail: MovieDetail) {
-    if (movieDetail.similar.results.isNotEmpty()) {
+fun SimilarMovies(movieDetail: DetailMovieWithAllRelations) {
+    if (movieDetail.similarMovies.isNotEmpty()) {
         Text(
             text = stringResource(R.string.similar_movies),
             style = TMDBTheme.typography.subtitle1,
@@ -54,13 +54,13 @@ fun SimilarMovies(movieDetail: MovieDetail) {
                 top = 16.dp
             )
         ) {
-            items(movieDetail.similar.results) { similarMovie ->
+            items(movieDetail.similarMovies) { similarMovie ->
                 Column {
 
                     PosterWithTotalVote(similarMovie)
 
                     Text(
-                        text = similarMovie.originalTitle,
+                        text = similarMovie.movie.title,
                         style = TMDBTheme.typography.body1,
                         color = TMDBTheme.colors.white,
                         modifier = Modifier
@@ -69,8 +69,13 @@ fun SimilarMovies(movieDetail: MovieDetail) {
                             .padding(top = 12.dp, bottom = 4.dp)
                             .basicMarquee()
                     )
+                    var genresString = similarMovie.genres[0].toString()
+                    for (elem in similarMovie.genres) {
+                        genresString += "|"
+                        genresString += elem.genreName
+                    }
                     Text(
-                        text = similarMovie.genreIds[0].toString(),
+                        text = genresString,
                         style = TMDBTheme.typography.overLine,
                         color = TMDBTheme.colors.gray,
                         modifier = Modifier.padding(start = 8.dp)
@@ -82,10 +87,10 @@ fun SimilarMovies(movieDetail: MovieDetail) {
 }
 
 @Composable
-private fun PosterWithTotalVote(similarMovie: SimilarMovieResult) {
+private fun PosterWithTotalVote(similarMovie: SimilarMovieWithGenre) {
     Box {
         AsyncImage(
-            model = "$imageUrl${similarMovie.posterPath}",
+            model = "$imageUrl${similarMovie.movie.posterPath}",
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
@@ -106,7 +111,7 @@ private fun PosterWithTotalVote(similarMovie: SimilarMovieResult) {
                 .clip(TMDBTheme.shapes.small)
                 .background(TMDBTheme.colors.surface.copy(alpha = 0.7f))
         ) {
-            val roundedVote = similarMovie.voteAverage.toBigDecimal()
+            val roundedVote = similarMovie.movie.voteAverage.toBigDecimal()
                 .setScale(1, RoundingMode.FLOOR).toDouble()
             RowWithIconAndText(
                 text = roundedVote.toString(),

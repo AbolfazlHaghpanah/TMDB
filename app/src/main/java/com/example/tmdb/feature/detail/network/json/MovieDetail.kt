@@ -5,17 +5,22 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MovieDetail(
+    val id: Int,
     @SerialName("original_title")
     val originalTitle: String,
     val overview: String,
+
     @SerialName("vote_average")
     val voteAverage: Float,
+
     @SerialName("poster_path")
     val posterPath: String,
+
     @SerialName("release_date")
     val releaseDate: String,
     val runtime: Int,
     val genres: List<Genre>,
+
     @SerialName("external_ids")
     val externalIds: ExternalIds?,
     val credits: CastWithCrew,
@@ -47,6 +52,7 @@ data class CastWithCrew(
 
 @Serializable
 data class CastOrCrew(
+    val id: Int,
     val name: String,
     @SerialName("profile_path")
     val profilePath: String?,
@@ -60,12 +66,16 @@ data class SimilarResults(
 
 @Serializable
 data class SimilarMovieResult(
+    val id: Int,
     @SerialName("genre_ids")
     val genreIds: List<Int>,
+
     @SerialName("original_title")
     val originalTitle: String,
+
     @SerialName("vote_average")
     val voteAverage: Float,
+
     @SerialName("poster_path")
     val posterPath: String?
 )
