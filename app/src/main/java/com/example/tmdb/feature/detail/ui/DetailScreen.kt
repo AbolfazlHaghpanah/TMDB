@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.feature.detail.network.json.MovieDetail
+import com.example.tmdb.feature.detail.data.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.example.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
 import com.example.tmdb.feature.detail.ui.components.SimilarMovies
@@ -47,7 +47,7 @@ fun DetailScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DetailScreen(
-    movieDetail: MovieDetail?,
+    movieDetail: DetailMovieWithAllRelations?,
     onBackArrowClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
