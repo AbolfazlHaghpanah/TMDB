@@ -19,12 +19,17 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.tmdb.core.ui.component.TMDBBottomNavigation
 import com.example.tmdb.core.ui.theme.TMDBTheme
+import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.navigation.AppScreens
 import com.example.tmdb.navigation.mainNavGraph
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.ModalBottomSheetLayout
+import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
@@ -37,30 +42,39 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             val scaffoldState = rememberScaffoldState()
-            val navController = rememberNavController()
+            val bottomSheetNavigator = rememberBottomSheetNavigator()
+            val navController = rememberNavController(bottomSheetNavigator)
 
             TMDBTheme {
-                Scaffold(
-                    scaffoldState = scaffoldState,
-                    bottomBar = {
-                        TMDBBottomNavigation(
-                            navController = navController,
-                            //TODO check it when saved state handler set for detail
-                            bottomBarState = navController.currentBackStackEntryAsState()
-                                .value?.destination?.route != AppScreens.Detail.route
-                        )
-                    }) {
-                    Box(
-                        modifier = Modifier
-                            .statusBarsPadding()
-                            .padding(it)
-                            .fillMaxSize()
-                    ) {
-                        NavHost(
-                            navController = navController,
-                            startDestination = AppScreens.Home.route
+
+                ModalBottomSheetLayout(
+                    bottomSheetNavigator = bottomSheetNavigator,
+                    sheetShape = TMDBTheme.shapes.veryLarge,
+                    scrimColor = Color.Transparent
+                ) {
+
+                    Scaffold(
+                        scaffoldState = scaffoldState,
+                        bottomBar = {
+                            TMDBBottomNavigation(
+                                navController = navController,
+                                //TODO check it when saved state handler set for detail
+                                bottomBarState = navController.currentBackStackEntryAsState()
+                                    .value?.destination?.route != AppScreens.Detail.route
+                            )
+                        }) {
+                        Box(
+                            modifier = Modifier
+                                .statusBarsPadding()
+                                .padding(it)
+                                .fillMaxSize()
                         ) {
-                            mainNavGraph(navController)
+                            NavHost(
+                                navController = navController,
+                                startDestination = AppScreens.Home.route
+                            ) {
+                                mainNavGraph(navController)
+                            }
                         }
                     }
                 }

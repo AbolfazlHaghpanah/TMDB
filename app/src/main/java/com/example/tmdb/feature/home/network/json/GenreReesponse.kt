@@ -1,6 +1,6 @@
 package com.example.tmdb.feature.home.network.json
 
-import com.example.tmdb.feature.home.data.genre.entity.GenreEntity
+import com.example.tmdb.core.data.genre.entity.GenreEntity
 import kotlinx.serialization.Serializable
 
 @Serializable

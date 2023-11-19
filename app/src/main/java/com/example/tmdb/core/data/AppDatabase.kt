@@ -5,8 +5,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.tmdb.core.data.moviedata.MovieDao
 import com.example.tmdb.core.data.moviedata.MovieEntity
-import com.example.tmdb.feature.home.data.genre.dao.GenreDao
-import com.example.tmdb.feature.home.data.genre.entity.GenreEntity
+import com.example.tmdb.core.data.genre.dao.GenreDao
+import com.example.tmdb.core.data.genre.entity.GenreEntity
+import com.example.tmdb.feature.favorite.data.FavoriteMovieEntity
+import com.example.tmdb.feature.favorite.data.FavoriteMovieDao
+import com.example.tmdb.feature.favorite.data.relation.FavoriteMovieGenreCrossRef
 import com.example.tmdb.feature.home.data.nowplayingmovie.NowPlayingEntity
 import com.example.tmdb.feature.home.data.popularMovie.PopularMovieEntity
 import com.example.tmdb.feature.home.data.topmovie.TopMovieEntity
@@ -21,6 +24,8 @@ import com.example.tmdb.feature.home.data.topmovie.relation.crossref.TopMovieGen
         GenreEntity::class,
         TopMovieEntity::class,
         NowPlayingEntity::class,
+        FavoriteMovieEntity::class,
+        FavoriteMovieGenreCrossRef::class,
         PopularMovieGenreCrossRef::class,
         TopMovieGenreCrossRef::class
     ],
@@ -29,4 +34,5 @@ import com.example.tmdb.feature.home.data.topmovie.relation.crossref.TopMovieGen
 abstract class AppDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
     abstract fun genreDao(): GenreDao
+    abstract fun favoriteMovieDao(): FavoriteMovieDao
 }

@@ -7,5 +7,4 @@ import androidx.room.PrimaryKey
 data class NowPlayingEntity(
     @PrimaryKey val movieId: Int,
     val releaseDate: String,
-    val backdropPath: String,
 )

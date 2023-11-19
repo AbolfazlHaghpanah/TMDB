@@ -28,9 +28,11 @@ data class MovieResult(
             id = id,
             title = title,
             posterPath = posterPath,
-            voteAverage = voteAverage
+            voteAverage = voteAverage,
+            backdropPath = backdropPath
         )
     }
+
     fun toPopularMovieEntity(): PopularMovieEntity {
         return PopularMovieEntity(
             movieId = id,
@@ -47,7 +49,6 @@ data class MovieResult(
         return NowPlayingEntity(
             movieId = id,
             releaseDate = dateConvertor(releaseDate),
-            backdropPath = backdropPath,
         )
     }
 }

@@ -1,37 +1,35 @@
-package com.example.tmdb.feature.home.data.topmovie.relation
+package com.example.tmdb.feature.favorite.data.relation
 
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
+import com.example.tmdb.core.data.genre.entity.GenreEntity
 import com.example.tmdb.core.data.moviedata.MovieEntity
-import com.example.tmdb.feature.home.data.topmovie.TopMovieEntity
+import com.example.tmdb.feature.favorite.data.FavoriteMovieEntity
 import com.example.tmdb.feature.home.data.common.MovieDatabaseWrapper
 import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
-import com.example.tmdb.core.data.genre.entity.GenreEntity
-import com.example.tmdb.feature.home.data.topmovie.relation.crossref.TopMovieGenreCrossRef
 
-data class TopMovieAndGenreWithMovie(
-    @Embedded val topMovie: TopMovieEntity,
+data class FavoriteMovieWithMovieAndGenre(
+    @Embedded val favoriteMovie: FavoriteMovieEntity,
     @Relation(
         parentColumn = "movieId",
         entityColumn = "id"
-    )
-    val movie: MovieEntity,
+    ) val movie: MovieEntity,
     @Relation(
         parentColumn = "movieId",
-        entity = GenreEntity::class,
         entityColumn = "genreId",
-        associateBy = Junction(TopMovieGenreCrossRef::class)
-    )
-    val genres: List<GenreEntity>
+        associateBy = Junction(FavoriteMovieGenreCrossRef::class)
+    ) val genres: List<GenreEntity>
 ) {
-    fun toMovieDataWrapper(): MovieWithGenreDatabaseWrapper {
+    fun toMovieDatabaseWrapper(): MovieWithGenreDatabaseWrapper {
         return MovieWithGenreDatabaseWrapper(
             genres = genres,
             movie = MovieDatabaseWrapper(
-                movieId = movie.id,
                 title = movie.title,
+                releaseDate = movie.backdropPath,
+                movieId = movie.id,
                 posterPath = movie.posterPath,
+                backdropPath = movie.backdropPath,
                 voteAverage = movie.voteAverage
             )
         )
