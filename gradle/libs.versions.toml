@@ -29,6 +29,7 @@ kotlinSerialization = "1.6.0"
 kotlinSerialization-convertor = "1.0.0"
 coil = "2.5.0"
 shimmer = "1.2.0"
+splashScreen = "1.0.0"
 
 
 [libraries]
@@ -67,6 +68,8 @@ coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.ref = "shimmer" }
 kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 kotlinSerialization-convertor = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "kotlinSerialization-convertor" }
+splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splashScreen" }
+
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
