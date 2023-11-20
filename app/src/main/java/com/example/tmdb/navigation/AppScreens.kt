@@ -6,7 +6,12 @@ sealed class AppScreens(
 
     object Home : AppScreens("home")
     object Search : AppScreens("search")
-    object Detail : AppScreens("detail")
+    object Detail : AppScreens("details/{id}") {
+        fun createRoute(id: Int): String {
+            return "details/$id"
+        }
+    }
+
     object Favorite : AppScreens("favorite")
 
     object BottomSheet : AppScreens("BottomSheet/{id}") {

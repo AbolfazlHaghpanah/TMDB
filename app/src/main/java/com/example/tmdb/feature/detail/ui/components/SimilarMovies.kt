@@ -4,6 +4,7 @@ package com.example.tmdb.feature.detail.ui.components
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,15 +28,18 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.example.tmdb.core.utils.imageUrl
 import com.example.tmdb.feature.detail.data.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.data.SimilarMovieWithGenre
 import com.example.tmdb.feature.detail.ui.common.RowWithIconAndText
-import com.example.tmdb.feature.detail.ui.imageUrl
 import java.math.RoundingMode
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-fun SimilarMovies(movieDetail: DetailMovieWithAllRelations) {
+fun SimilarMovies(
+    movieDetail: DetailMovieWithAllRelations,
+    onSimilarClick: (Int) -> Unit
+) {
     if (movieDetail.similarMovies.isNotEmpty()) {
         Text(
             text = stringResource(R.string.similar_movies),
@@ -55,7 +59,11 @@ fun SimilarMovies(movieDetail: DetailMovieWithAllRelations) {
             )
         ) {
             items(movieDetail.similarMovies) { similarMovie ->
-                Column {
+                Column(
+                    modifier = Modifier.clickable {
+                        onSimilarClick(similarMovie.similarMovie.id)
+                    }
+                ) {
 
                     PosterWithTotalVote(similarMovie)
 

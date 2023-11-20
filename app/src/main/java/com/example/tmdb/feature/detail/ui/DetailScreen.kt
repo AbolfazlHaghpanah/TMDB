@@ -1,6 +1,5 @@
 package com.example.tmdb.feature.detail.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,8 +18,7 @@ import com.example.tmdb.feature.detail.data.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.example.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
 import com.example.tmdb.feature.detail.ui.components.SimilarMovies
-
-val imageUrl = "https://tmdb-api.samentic.com/image/t/p/w500"
+import com.example.tmdb.navigation.AppScreens
 
 @Composable
 fun DetailsScreen(navController: NavController) {
@@ -39,16 +37,17 @@ fun DetailScreen(
     val movieDetail = detailViewModel.movieDetail.collectAsState().value
     DetailScreen(
         movieDetail = movieDetail,
-        onBackArrowClick = { navController.navigateUp() }
+        onBackArrowClick = { navController.navigateUp() },
+        onSimilarItemClick = { navController.navigate(AppScreens.Detail.createRoute(it)) }
     )
 
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DetailScreen(
     movieDetail: DetailMovieWithAllRelations?,
-    onBackArrowClick: () -> Unit
+    onBackArrowClick: () -> Unit,
+    onSimilarItemClick: (Int) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -71,7 +70,7 @@ fun DetailScreen(
 
                 OverviewContentWithCastAndCrew(movieDetail)
 
-                SimilarMovies(movieDetail)
+                SimilarMovies(movieDetail, onSimilarItemClick)
 
             }
         }

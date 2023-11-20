@@ -32,7 +32,7 @@ data class MovieDetail(
 ) {
     fun toDetailEntity(): DetailEntity {
         return DetailEntity(
-            detailMovieId = 550,
+            detailMovieId = id,
             overview = overview,
             releaseDate = releaseDate,
             runtime = runtime,

@@ -1,5 +1,6 @@
 package com.example.tmdb.feature.detail.ui
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,13 +32,15 @@ class DetailViewModel @Inject constructor(
     private val _movieDetailResult = MutableStateFlow<Result>(Result.Idle)
     val movieDetailResult = _movieDetailResult.asStateFlow()
 
+    val id: Int = savedStateHandle.get<String>("id")?.toInt() ?: 0
+
     init {
         observeDetailMovieWithAllRelations()
     }
 
     private fun observeDetailMovieWithAllRelations() {
         viewModelScope.launch(Dispatchers.IO) {
-            detailDao.observeMovieDetail(550).collect {
+            detailDao.observeMovieDetail(id).collect {
                 _movieDetail.emit(it)
             }
         }
@@ -47,7 +50,7 @@ class DetailViewModel @Inject constructor(
     private fun fetchMovieDetail() {
         viewModelScope.launch {
             safeApi(call = {
-                detailApi.getMovieDetail()
+                detailApi.getMovieDetail(id = id)
             },
                 onDataReady = {
                     viewModelScope.launch(Dispatchers.IO) {

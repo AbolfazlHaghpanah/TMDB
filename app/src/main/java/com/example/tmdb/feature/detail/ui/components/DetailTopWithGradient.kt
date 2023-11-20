@@ -1,7 +1,9 @@
 package com.example.tmdb.feature.detail.ui.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -46,9 +49,9 @@ import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.example.tmdb.core.utils.imageUrl
 import com.example.tmdb.feature.detail.data.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.ui.common.RowWithIconAndText
-import com.example.tmdb.feature.detail.ui.imageUrl
 import java.math.RoundingMode
 
 @Composable
@@ -174,6 +177,7 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TopBar(
     onBackArrowClick: () -> Unit,
@@ -216,7 +220,11 @@ private fun TopBar(
             style = TMDBTheme.typography.subtitle1,
             color = TMDBTheme.colors.white,
             textAlign = TextAlign.Start,
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier
+                .align(Alignment.Center)
+                .widthIn(50.dp, 200.dp)
+                .basicMarquee(),
+            maxLines = 1
         )
 
         Row(
