@@ -12,4 +12,9 @@
     <string name="delete_alert">By doing this, the favorite movie will be deleted from your storage list</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
+    <string name="imdb">imdb-</string>
+    <string name="instagram">instagram-</string>
+    <string name="twitter">twitter-</string>
+    <string name="open_in">Open In</string>
+    <string name="null_text">null</string>
 </resources>

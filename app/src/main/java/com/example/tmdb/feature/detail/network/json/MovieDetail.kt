@@ -1,6 +1,5 @@
 package com.example.tmdb.feature.detail.network.json
 
-import com.example.tmdb.core.data.moviedata.MovieEntity
 import com.example.tmdb.feature.detail.data.credit.CreditEntity
 import com.example.tmdb.feature.detail.data.detail.DetailEntity
 import kotlinx.serialization.SerialName
