@@ -7,8 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.ui.Modifier
@@ -48,33 +48,51 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController(bottomSheetNavigator)
 
             TMDBTheme {
-
-                ModalBottomSheetLayout(
-                    bottomSheetNavigator = bottomSheetNavigator,
-                    sheetShape = TMDBTheme.shapes.veryLarge,
-                    scrimColor = Color.Transparent
+                CompositionLocalProvider(
+                    values = arrayOf(
+                        LocalSnackbarHostState provides snackBarHostState
+                    )
                 ) {
+                    ModalBottomSheetLayout(
+                        bottomSheetNavigator = bottomSheetNavigator,
+                        sheetShape = TMDBTheme.shapes.veryLarge,
+                        scrimColor = Color.Transparent
+                    ) {
 
-                    Scaffold(
-                        scaffoldState = scaffoldState,
-                        bottomBar = {
-                            TMDBBottomNavigation(
-                                navController = navController,
-                                bottomBarState = navController.currentBackStackEntryAsState()
-                                    .value?.destination?.route != AppScreens.Detail.route
-                            )
-                        }) {
-                        Box(
-                            modifier = Modifier
-                                .navigationBarsPadding()
-                                .padding(it)
-                                .fillMaxSize()
+                        Scaffold(
+                            scaffoldState = scaffoldState,
+                            bottomBar = {
+                                TMDBBottomNavigation(
+                                    navController = navController,
+                                    //TODO check it when saved state handler set for detail
+                                    bottomBarState = navController.currentBackStackEntryAsState()
+                                        .value?.destination?.route != AppScreens.Detail.route
+                                )
+                            },
+                            snackbarHost = {
+                                SnackbarHost(snackBarHostState){
+                                    TMDBSnackBar(
+                                        message = it.message,
+                                        actionLabel = it.actionLabel,
+                                        performAction = {
+                                            it.performAction()
+                                        }
+                                    )
+                                }
+                            }
                         ) {
-                            NavHost(
-                                navController = navController,
-                                startDestination = AppScreens.Home.route
+                            Box(
+                                modifier = Modifier
+                                    .statusBarsPadding()
+                                    .padding(it)
+                                    .fillMaxSize()
                             ) {
-                                mainNavGraph(navController)
+                                NavHost(
+                                    navController = navController,
+                                    startDestination = AppScreens.Home.route
+                                ) {
+                                    mainNavGraph(navController)
+                                }
                             }
                         }
                     }

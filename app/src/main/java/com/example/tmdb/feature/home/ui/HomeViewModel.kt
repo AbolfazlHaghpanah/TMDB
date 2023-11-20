@@ -88,7 +88,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getNowPlaying() {
+    fun getNowPlaying() {
         viewModelScope.launch(Dispatchers.IO) {
             safeApi(
                 call = {

@@ -25,6 +25,7 @@ import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.ui.shimmer.fakeMovie
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.example.tmdb.core.utils.LocalSnackbarHostState
 import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.ui.component.MovieRow
 import com.example.tmdb.feature.home.ui.component.PagerMovieItem
@@ -67,6 +68,7 @@ private fun HomeScreen(
     val nowPlayingResult by viewModel.nowPlayingResult.collectAsState()
     val popularMovieResult by viewModel.popularMovieResult.collectAsState()
     val topMovieResult by viewModel.topMovieResult.collectAsState()
+    val snackBar = LocalSnackbarHostState.current
 
     HomeScreen(
         nowPlayingMovies = nowPlayingMovies,
