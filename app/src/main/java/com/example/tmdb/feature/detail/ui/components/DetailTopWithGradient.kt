@@ -1,6 +1,5 @@
 package com.example.tmdb.feature.detail.ui.components
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,6 +35,7 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -180,18 +180,13 @@ private fun TopBar(
     movieDetail: DetailMovieWithAllRelations
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    Log.d("test", movieDetail.detailEntity.externalIds.toString())
 
     if (showDialog) {
-        val isInstagramIdNotNull =
-            movieDetail.detailEntity.externalIds[0] != stringResource(R.string.null_text)
-        val isTwitterIdNotNull =
-            movieDetail.detailEntity.externalIds[1] != stringResource(R.string.null_text)
-
-        val isIMDBIdNotNull =
-            movieDetail.detailEntity.externalIds[2] != stringResource(R.string.null_text)
-
-        ShareDialog(isInstagramIdNotNull, isTwitterIdNotNull, isIMDBIdNotNull) {
+        ShareDialog(
+            movieDetail.detailEntity.externalIds,
+            movieDetail.movie.id,
+            movieDetail.movie.title
+        ) {
             showDialog = it
         }
     }
@@ -259,11 +254,24 @@ private fun TopBar(
 
 @Composable
 private fun ShareDialog(
-    isInstagramIdNotNull: Boolean,
-    isTwitterIdNotNull: Boolean,
-    isIMDBIdNotNull: Boolean,
+    externalIds: List<String>,
+    movieId: Int,
+    movieTitle: String,
     changeShowDialog: (Boolean) -> Unit
 ) {
+    val imdbIndex = 0
+    val instagramIndex = 1
+    val twitterIndex = 2
+
+    val isInstagramIdNotNull =
+        externalIds[instagramIndex] != stringResource(R.string.null_text)
+    val isTwitterIdNotNull =
+        externalIds[twitterIndex] != stringResource(R.string.null_text)
+    val isIMDBIdNotNull =
+        externalIds[imdbIndex] != stringResource(R.string.null_text)
+
+    val uriHandler = LocalUriHandler.current
+
     Dialog(
         onDismissRequest = { changeShowDialog(false) }
     ) {
@@ -309,7 +317,11 @@ private fun ShareDialog(
                 modifier = Modifier.padding(top = 32.dp)
             ) {
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        uriHandler.openUri(
+                            uri = "https://www.instagram.com/thegodfathermovie/${externalIds[instagramIndex]}"
+                        )
+                    },
                     enabled = isInstagramIdNotNull
                 ) {
                     Image(
@@ -319,7 +331,11 @@ private fun ShareDialog(
                     )
                 }
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        uriHandler.openUri(
+                            uri = "https://twitter.com/${externalIds[twitterIndex]}"
+                        )
+                    },
                     enabled = isTwitterIdNotNull
                 ) {
                     Image(
@@ -329,7 +345,11 @@ private fun ShareDialog(
                     )
                 }
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        uriHandler.openUri(
+                            uri = "https://www.imdb.com/title/${externalIds[imdbIndex]}"
+                        )
+                    },
                     enabled = isIMDBIdNotNull
                 ) {
                     Image(
@@ -338,7 +358,17 @@ private fun ShareDialog(
                         alpha = if (isIMDBIdNotNull) 1f else 0.3f
                     )
                 }
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = {
+                    val titleSplit = movieTitle.split(" ")
+                    val titleSplitPlusDash = titleSplit.joinToString {
+                        var temp = it
+                        if (it != titleSplit.last()) temp += "-"
+                        temp
+                    }
+                    uriHandler.openUri(
+                        uri = "https://www.themoviedb.org/collection/${movieId}-${titleSplitPlusDash}"
+                    )
+                }) {
                     Image(
                         painter = painterResource(id = R.drawable.tmdb),
                         contentDescription = "share TMDB link"
