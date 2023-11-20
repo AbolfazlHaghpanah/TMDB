@@ -60,7 +60,7 @@ fun SimilarMovies(movieDetail: DetailMovieWithAllRelations) {
                     PosterWithTotalVote(similarMovie)
 
                     Text(
-                        text = similarMovie.movie.title,
+                        text = similarMovie.similarMovie.title,
                         style = TMDBTheme.typography.body1,
                         color = TMDBTheme.colors.white,
                         modifier = Modifier
@@ -69,16 +69,19 @@ fun SimilarMovies(movieDetail: DetailMovieWithAllRelations) {
                             .padding(top = 12.dp, bottom = 4.dp)
                             .basicMarquee()
                     )
-                    var genresString = similarMovie.genres[0].toString()
+                    var genresString = ""
                     for (elem in similarMovie.genres) {
-                        genresString += "|"
                         genresString += elem.genreName
+                        if (elem != similarMovie.genres.last()) genresString += "|"
                     }
                     Text(
                         text = genresString,
                         style = TMDBTheme.typography.overLine,
                         color = TMDBTheme.colors.gray,
-                        modifier = Modifier.padding(start = 8.dp)
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .width(135.dp),
+                        maxLines = 2
                     )
                 }
             }
@@ -90,7 +93,7 @@ fun SimilarMovies(movieDetail: DetailMovieWithAllRelations) {
 private fun PosterWithTotalVote(similarMovie: SimilarMovieWithGenre) {
     Box {
         AsyncImage(
-            model = "$imageUrl${similarMovie.movie.posterPath}",
+            model = "$imageUrl${similarMovie.similarMovie.posterPath}",
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
@@ -111,7 +114,7 @@ private fun PosterWithTotalVote(similarMovie: SimilarMovieWithGenre) {
                 .clip(TMDBTheme.shapes.small)
                 .background(TMDBTheme.colors.surface.copy(alpha = 0.7f))
         ) {
-            val roundedVote = similarMovie.movie.voteAverage.toBigDecimal()
+            val roundedVote = similarMovie.similarMovie.voteAverage.toBigDecimal()
                 .setScale(1, RoundingMode.FLOOR).toDouble()
             RowWithIconAndText(
                 text = roundedVote.toString(),

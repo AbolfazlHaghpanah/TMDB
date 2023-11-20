@@ -3,11 +3,11 @@ package com.example.tmdb.feature.detail.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tmdb.core.data.moviedata.MovieDao
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.safeApi
-import com.example.tmdb.feature.detail.data.CreditDao
 import com.example.tmdb.feature.detail.data.DetailMovieWithAllRelations
-import com.example.tmdb.feature.detail.data.MovieDao
+import com.example.tmdb.feature.detail.data.detail.DetailDao
 import com.example.tmdb.feature.detail.network.DetailApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,8 +20,8 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
     private val detailApi: DetailApi,
     savedStateHandle: SavedStateHandle,
-    private val movieDao: MovieDao,
-    private val creditDao: CreditDao
+    private val detailDao: DetailDao,
+    private val movieDao: MovieDao
 ) : ViewModel() {
 
     private var _movieDetail: MutableStateFlow<DetailMovieWithAllRelations?> =
@@ -31,22 +31,17 @@ class DetailViewModel @Inject constructor(
     private val _movieDetailResult = MutableStateFlow<Result>(Result.Idle)
     val movieDetailResult = _movieDetailResult.asStateFlow()
 
-//    private var _genres: MutableStateFlow<List<Genre>> = MutableStateFlow(listOf())
-//    val genres = _genres.asStateFlow()
-
     init {
         observeDetailMovieWithAllRelations()
-        fetchMovieDetail()
-        fetchAllGenres()
     }
-
 
     private fun observeDetailMovieWithAllRelations() {
         viewModelScope.launch(Dispatchers.IO) {
-            movieDao.getDetailMovieWithAllRelations(550).collect {
-                _movieDetail.value = it
+            detailDao.observeMovieDetail(550).collect {
+                _movieDetail.emit(it)
             }
         }
+        fetchMovieDetail()
     }
 
     private fun fetchMovieDetail() {
@@ -55,22 +50,12 @@ class DetailViewModel @Inject constructor(
                 detailApi.getMovieDetail()
             },
                 onDataReady = {
-//                    movieDao.addDetailMovie(it)
+                    viewModelScope.launch(Dispatchers.IO) {
+                        movieDao.addMovieDetail(it)
+                    }
                 }
             ).collect(_movieDetailResult)
         }
     }
 
-    private fun fetchAllGenres() {
-        viewModelScope.launch {
-            safeApi(
-                call = {
-                    detailApi.getAllGenres()
-                },
-                onDataReady = {
-//                    _genres.value = it
-                }
-            )
-        }
-    }
 }

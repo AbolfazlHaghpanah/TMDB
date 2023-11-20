@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.detail.data
+package com.example.tmdb.feature.detail.data.converter
 
 import androidx.room.TypeConverter
 import kotlinx.serialization.encodeToString

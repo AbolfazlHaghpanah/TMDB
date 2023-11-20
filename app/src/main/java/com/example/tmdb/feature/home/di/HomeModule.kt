@@ -1,8 +1,8 @@
 package com.example.tmdb.feature.home.di
 
 import com.example.tmdb.core.data.AppDatabase
-import com.example.tmdb.core.data.moviedata.MovieDao
 import com.example.tmdb.core.data.genre.dao.GenreDao
+import com.example.tmdb.core.data.moviedata.MovieDao
 import com.example.tmdb.feature.home.network.HomeApi
 import dagger.Module
 import dagger.Provides
@@ -18,7 +18,7 @@ object HomeModule {
     @Singleton
     @Provides
     fun provideTopMovieDao(appDatabase: AppDatabase): MovieDao {
-        return appDatabase.movieDao()
+        return appDatabase.MovieDao()
     }
 
     @Singleton
@@ -29,7 +29,7 @@ object HomeModule {
 
     @Singleton
     @Provides
-    fun provideHomeApi(retrofit: Retrofit):HomeApi{
+    fun provideHomeApi(retrofit: Retrofit): HomeApi {
         return retrofit.create(HomeApi::class.java)
     }
 }

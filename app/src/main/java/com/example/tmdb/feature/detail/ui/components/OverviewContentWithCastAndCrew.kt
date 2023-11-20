@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.feature.detail.data.CreditEntity
 import com.example.tmdb.feature.detail.data.DetailMovieWithAllRelations
+import com.example.tmdb.feature.detail.data.credit.CreditEntity
 import com.example.tmdb.feature.detail.ui.imageUrl
 
 @Composable
@@ -48,7 +48,6 @@ fun OverviewContentWithCastAndCrew(movieDetail: DetailMovieWithAllRelations) {
     )
     val castAndCrewCombinedList =
         movieDetail.credits.toMutableList()
-//    castAndCrewCombinedList.addAll(movieDetail.credits.crew)
     if (castAndCrewCombinedList.size > 0) {
         CastCrewLazyRow(castAndCrewCombinedList)
     }

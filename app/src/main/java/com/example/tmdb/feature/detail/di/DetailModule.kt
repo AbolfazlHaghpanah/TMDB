@@ -1,8 +1,7 @@
 package com.example.tmdb.feature.detail.di
 
 import com.example.tmdb.core.data.AppDatabase
-import com.example.tmdb.feature.detail.data.CreditDao
-import com.example.tmdb.feature.detail.data.MovieDao
+import com.example.tmdb.feature.detail.data.detail.DetailDao
 import com.example.tmdb.feature.detail.network.DetailApi
 import dagger.Module
 import dagger.Provides
@@ -23,14 +22,8 @@ object DetailModule {
 
     @Singleton
     @Provides
-    fun provideCreditDao(appDatabase: AppDatabase): CreditDao {
-        return appDatabase.CreditDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideMovieDao(appDatabase: AppDatabase): MovieDao {
-        return appDatabase.MovieDao()
+    fun provideDetailDao(appDatabase: AppDatabase): DetailDao {
+        return appDatabase.DetailDao()
     }
 
 }

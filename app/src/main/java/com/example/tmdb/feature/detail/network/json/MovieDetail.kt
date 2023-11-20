@@ -1,5 +1,8 @@
 package com.example.tmdb.feature.detail.network.json
 
+import com.example.tmdb.core.data.moviedata.MovieEntity
+import com.example.tmdb.feature.detail.data.credit.CreditEntity
+import com.example.tmdb.feature.detail.data.detail.DetailEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,6 +18,8 @@ data class MovieDetail(
 
     @SerialName("poster_path")
     val posterPath: String,
+    @SerialName("backdrop_path")
+    val backdropPath: String,
 
     @SerialName("release_date")
     val releaseDate: String,
@@ -25,7 +30,35 @@ data class MovieDetail(
     val externalIds: ExternalIds?,
     val credits: CastWithCrew,
     val similar: SimilarResults
-)
+) {
+    fun toDetailEntity(): DetailEntity {
+        return DetailEntity(
+            detailMovieId = 550,
+            overview = overview,
+            releaseDate = releaseDate,
+            runtime = runtime,
+            externalIds = listOf(
+                "${externalIds?.imdbId}",
+                "${externalIds?.instagramId}",
+                "${externalIds?.twitterId}"
+            )
+        )
+    }
+
+    fun toCreditsEntity(): List<CreditEntity> {
+        val castAndCrew = mutableListOf<CreditEntity>()
+
+        credits.cast.forEach {
+            castAndCrew.add(it.toCreditEntity())
+        }
+
+        credits.crew.forEach {
+            castAndCrew.add(it.toCreditEntity())
+        }
+
+        return castAndCrew
+    }
+}
 
 @Serializable
 data class Genre(
@@ -57,7 +90,16 @@ data class CastOrCrew(
     @SerialName("profile_path")
     val profilePath: String?,
     val job: String? = null
-)
+) {
+    fun toCreditEntity(): CreditEntity {
+        return CreditEntity(
+            creditId = id,
+            name = name,
+            job = job,
+            profilePath = profilePath
+        )
+    }
+}
 
 @Serializable
 data class SimilarResults(
@@ -66,6 +108,7 @@ data class SimilarResults(
 
 @Serializable
 data class SimilarMovieResult(
+
     val id: Int,
     @SerialName("genre_ids")
     val genreIds: List<Int>,
