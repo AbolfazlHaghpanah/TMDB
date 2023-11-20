@@ -58,7 +58,6 @@ class MainActivity : ComponentActivity() {
                         bottomBar = {
                             TMDBBottomNavigation(
                                 navController = navController,
-                                //TODO check it when saved state handler set for detail
                                 bottomBarState = navController.currentBackStackEntryAsState()
                                     .value?.destination?.route != AppScreens.Detail.route
                             )
