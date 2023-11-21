@@ -27,11 +27,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.tmdb.R
+import com.example.tmdb.core.ui.component.TextIcon
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.detail.data.DetailMovieWithAllRelations
-import com.example.tmdb.feature.detail.data.SimilarMovieWithGenre
-import com.example.tmdb.feature.detail.ui.common.RowWithIconAndText
+import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
+import com.example.tmdb.feature.detail.data.relation.SimilarMovieWithGenre
 import java.math.RoundingMode
 
 @Composable
@@ -77,15 +77,8 @@ fun SimilarMovies(
                             .padding(top = 12.dp, bottom = 4.dp)
                             .basicMarquee()
                     )
-
-                    //TODO move to top
-                    var genresString = ""
-                    for (elem in similarMovie.genres) {
-                        genresString += elem.genreName
-                        if (elem != similarMovie.genres.last()) genresString += "|"
-                    }
                     Text(
-                        text = genresString,
+                        text = similarMovie.genres.joinToString(separator = "|") { it.genreName },
                         style = TMDBTheme.typography.overLine,
                         color = TMDBTheme.colors.gray,
                         modifier = Modifier
@@ -102,22 +95,7 @@ fun SimilarMovies(
 @Composable
 private fun PosterWithTotalVote(similarMovie: SimilarMovieWithGenre) {
     Box {
-        //TODO move to another composable
-        AsyncImage(
-            model = "$imageUrl${similarMovie.similarMovie.posterPath}",
-            contentDescription = null,
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .clip(
-                    TMDBTheme.shapes.medium.copy(
-                        bottomEnd = CornerSize(0.dp),
-                        bottomStart = CornerSize(0.dp)
-                    )
-                )
-                .width(135.dp)
-                .aspectRatio(0.7f),
-            error = painterResource(id = R.drawable.videoimageerror)
-        )
+        SimilarMovieImageWrapper(similarMovie.similarMovie.posterPath)
         Row(
             modifier = Modifier
                 .align(Alignment.TopEnd)
@@ -127,7 +105,7 @@ private fun PosterWithTotalVote(similarMovie: SimilarMovieWithGenre) {
         ) {
             val roundedVote = similarMovie.similarMovie.voteAverage.toBigDecimal()
                 .setScale(1, RoundingMode.FLOOR).toDouble()
-            RowWithIconAndText(
+            TextIcon(
                 text = roundedVote.toString(),
                 iconId = R.drawable.star,
                 iconColor = TMDBTheme.colors.secondary,
@@ -135,4 +113,23 @@ private fun PosterWithTotalVote(similarMovie: SimilarMovieWithGenre) {
             )
         }
     }
+}
+
+@Composable
+private fun SimilarMovieImageWrapper(similarMoviePosterPath: String) {
+    AsyncImage(
+        model = "$imageUrl${similarMoviePosterPath}",
+        contentDescription = null,
+        contentScale = ContentScale.Fit,
+        modifier = Modifier
+            .clip(
+                TMDBTheme.shapes.medium.copy(
+                    bottomEnd = CornerSize(0.dp),
+                    bottomStart = CornerSize(0.dp)
+                )
+            )
+            .width(135.dp)
+            .aspectRatio(0.7f),
+        error = painterResource(id = R.drawable.videoimageerror)
+    )
 }

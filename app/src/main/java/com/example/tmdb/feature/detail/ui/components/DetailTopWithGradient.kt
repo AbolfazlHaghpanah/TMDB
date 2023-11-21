@@ -1,5 +1,6 @@
 package com.example.tmdb.feature.detail.ui.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
@@ -48,10 +50,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import com.example.tmdb.R
+import com.example.tmdb.core.ui.component.TextIcon
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.detail.data.DetailMovieWithAllRelations
-import com.example.tmdb.feature.detail.ui.common.RowWithIconAndText
+import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import java.math.RoundingMode
 
 @Composable
@@ -60,32 +62,11 @@ fun DetailTopWithGradient(
     onBackArrowClick: () -> Unit
 ) {
 
-    val gradient = Brush.verticalGradient(
-        colors = listOf(
-            TMDBTheme.colors.background.copy(alpha = 0.57f),
-            TMDBTheme.colors.background.copy(alpha = 1f)
-        )
-    )
-
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        //TODO move to another composable
-        AsyncImage(
-            model = "$imageUrl${movieDetail.movie.posterPath}",
-            contentDescription = null,
-            Modifier
-                .fillMaxSize()
-                .drawWithCache {
-                    onDrawWithContent {
-                        drawContent()
-                        drawRect(gradient)
-                    }
-                },
-            contentScale = ContentScale.Crop,
-            error = painterResource(id = R.drawable.videoimageerror)
-        )
+        BackgroundImage(movieDetail.movie.posterPath)
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -97,18 +78,7 @@ fun DetailTopWithGradient(
             Row(
                 modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
             ) {
-                //TODO move to another composable
-                AsyncImage(
-                    model = "$imageUrl${movieDetail.movie.posterPath}",
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1.1f)
-                        .padding(start = 85.dp, end = 85.dp)
-                        .clip(TMDBTheme.shapes.medium),
-                    contentScale = ContentScale.Crop,
-                    error = painterResource(id = R.drawable.videoimageerror)
-                )
+                ForegroundImage(movieDetail.movie.posterPath)
             }
 
             MovieInfo(movieDetail)
@@ -126,13 +96,53 @@ fun DetailTopWithGradient(
 }
 
 @Composable
+private fun ForegroundImage(movieDetailPosterPath: String) {
+    AsyncImage(
+        model = "$imageUrl${movieDetailPosterPath}",
+        contentDescription = null,
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(1.1f)
+            .padding(start = 85.dp, end = 85.dp)
+            .clip(TMDBTheme.shapes.medium),
+        contentScale = ContentScale.Crop,
+        error = painterResource(id = R.drawable.videoimageerror)
+    )
+}
+
+@Composable
+private fun BackgroundImage(movieDetailPosterPath: String) {
+    val gradient = Brush.verticalGradient(
+        colors = listOf(
+            TMDBTheme.colors.background.copy(alpha = 0.57f),
+            TMDBTheme.colors.background.copy(alpha = 1f)
+        )
+    )
+
+    AsyncImage(
+        model = "$imageUrl${movieDetailPosterPath}",
+        contentDescription = null,
+        Modifier
+            .fillMaxSize()
+            .drawWithCache {
+                onDrawWithContent {
+                    drawContent()
+                    drawRect(gradient)
+                }
+            },
+        contentScale = ContentScale.Crop,
+        error = painterResource(id = R.drawable.videoimageerror)
+    )
+}
+
+@Composable
 private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier
             .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
-        RowWithIconAndText(
+        TextIcon(
             iconId = R.drawable.calender,
             text = movieDetail.detailEntity.releaseDate.split(
                 "-"
@@ -145,7 +155,7 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
                 .height(16.dp)
                 .align(Alignment.CenterVertically)
         )
-        RowWithIconAndText(
+        TextIcon(
             iconId = R.drawable.clock,
             text = "${movieDetail.detailEntity.runtime} Minutes"
         )
@@ -156,7 +166,7 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
                 .height(16.dp)
                 .align(Alignment.CenterVertically)
         )
-        RowWithIconAndText(
+        TextIcon(
             iconId = R.drawable.film,
             text = movieDetail.genres[0].genreName
         )
@@ -170,7 +180,7 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
         val roundedVote =
             movieDetail.movie.voteAverage.toBigDecimal()
                 .setScale(1, RoundingMode.FLOOR)?.toDouble()
-        RowWithIconAndText(
+        TextIcon(
             text = roundedVote.toString(),
             iconId = R.drawable.star,
             iconColor = TMDBTheme.colors.secondary,
@@ -186,12 +196,16 @@ private fun TopBar(
     movieDetail: DetailMovieWithAllRelations
 ) {
     var showDialog by remember { mutableStateOf(false) }
+    val uriHandler = LocalUriHandler.current
 
     if (showDialog) {
         ShareDialog(
             movieDetail.detailEntity.externalIds,
             movieDetail.movie.id,
-            movieDetail.movie.title
+            movieDetail.movie.title,
+            { requestString ->
+                uriHandler.openUri(uri = requestString)
+            }
         ) {
             showDialog = it
         }
@@ -203,17 +217,16 @@ private fun TopBar(
             .statusBarsPadding()
             .padding(vertical = 12.dp, horizontal = 24.dp)
     ) {
-        IconButton(
+        TMDBIconButton(
             onClick = onBackArrowClick,
             Modifier
                 .clip(TMDBTheme.shapes.rounded)
                 .background(TMDBTheme.colors.surface)
                 .align(Alignment.CenterStart),
         ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.arrowback),
-                contentDescription = null,
-                tint = TMDBTheme.colors.white
+            IconWrapper(
+                icon = R.drawable.arrowback,
+                tintColor = TMDBTheme.colors.white
             )
         }
 
@@ -233,33 +246,27 @@ private fun TopBar(
             modifier = Modifier.align(Alignment.CenterEnd),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            IconButton(
-                //TODO add to favorite
+            TMDBIconButton(
                 onClick = { /*TODO*/ },
                 Modifier
                     .clip(TMDBTheme.shapes.rounded)
                     .background(TMDBTheme.colors.surface),
             ) {
-                //TODO check if favorite
-                //TODO move to another composable
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.heart),
-                    contentDescription = null,
-                    tint = TMDBTheme.colors.error
+                IconWrapper(
+                    icon = R.drawable.heart,
+                    tintColor = TMDBTheme.colors.error
                 )
             }
 
-            IconButton(
+            TMDBIconButton(
                 onClick = { showDialog = true },
                 Modifier
                     .clip(TMDBTheme.shapes.rounded)
                     .background(TMDBTheme.colors.surface),
             ) {
-                //TODO move to another composable
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.share),
-                    contentDescription = null,
-                    tint = TMDBTheme.colors.primary
+                IconWrapper(
+                    icon = R.drawable.share,
+                    tintColor = TMDBTheme.colors.primary
                 )
             }
         }
@@ -267,10 +274,23 @@ private fun TopBar(
 }
 
 @Composable
+private fun IconWrapper(
+    @DrawableRes icon: Int,
+    tintColor: Color
+) {
+    Icon(
+        imageVector = ImageVector.vectorResource(id = icon),
+        contentDescription = null,
+        tint = tintColor
+    )
+}
+
+@Composable
 private fun ShareDialog(
     externalIds: List<String>,
     movieId: Int,
     movieTitle: String,
+    shareIconOnClock: (String) -> Unit,
     changeShowDialog: (Boolean) -> Unit
 ) {
     val imdbIndex = 0
@@ -284,8 +304,6 @@ private fun ShareDialog(
     val isIMDBIdNotNull =
         externalIds[imdbIndex] != stringResource(R.string.null_text)
 
-    val uriHandler = LocalUriHandler.current
-
     Dialog(
         onDismissRequest = { changeShowDialog(false) }
     ) {
@@ -298,7 +316,7 @@ private fun ShareDialog(
                 .aspectRatio(1.4f)
                 .padding(top = 12.dp)
         ) {
-            IconButton(
+            TMDBIconButton(
                 onClick = { changeShowDialog(false) },
                 modifier = Modifier
                     .padding(end = 20.dp)
@@ -330,63 +348,54 @@ private fun ShareDialog(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(top = 32.dp)
             ) {
-                IconButton(
+                TMDBIconButton(
                     onClick = {
-                        uriHandler.openUri(
-                            uri = "https://www.instagram.com/thegodfathermovie/${externalIds[instagramIndex]}"
-                        )
+                        shareIconOnClock("https://www.instagram.com/thegodfathermovie/${externalIds[instagramIndex]}")
                     },
                     enabled = isInstagramIdNotNull
                 ) {
-                    Image(
-                        imageVector = ImageVector.vectorResource(R.drawable.instagram),
-                        contentDescription = "share instagram link",
-                        alpha = if (isInstagramIdNotNull) 1f else 0.3f
+                    ImageWrapper(
+                        shouldNotHaveAlpha = isInstagramIdNotNull,
+                        image = R.drawable.instagram,
+                        contentDescription = "share instagram link"
                     )
                 }
-                IconButton(
-                    //TODO all onClicks doing same thing can be a lambda (String)-> Unit
+                TMDBIconButton(
                     onClick = {
-                        uriHandler.openUri(
-                            uri = "https://twitter.com/${externalIds[twitterIndex]}"
-                        )
+                        shareIconOnClock("https://twitter.com/${externalIds[twitterIndex]}")
                     },
                     enabled = isTwitterIdNotNull
                 ) {
-                    Image(
-                        imageVector = ImageVector.vectorResource(R.drawable.twitter),
-                        contentDescription = "share twitter link",
-                        alpha = if (isTwitterIdNotNull) 1f else 0.3f
+                    ImageWrapper(
+                        shouldNotHaveAlpha = isTwitterIdNotNull,
+                        image = R.drawable.twitter,
+                        contentDescription = "share twitter link"
                     )
                 }
-                IconButton(
+                TMDBIconButton(
                     onClick = {
-                        uriHandler.openUri(
-                            uri = "https://www.imdb.com/title/${externalIds[imdbIndex]}"
-                        )
+                        shareIconOnClock("https://www.imdb.com/title/${externalIds[imdbIndex]}")
                     },
                     enabled = isIMDBIdNotNull
                 ) {
-                    //TODO move to another composable
-                    Image(
-                        painter = painterResource(R.drawable.imdb),
-                        contentDescription = "share IMDB link",
-                        alpha = if (isIMDBIdNotNull) 1f else 0.3f
+                    ImageWrapper(
+                        shouldNotHaveAlpha = isIMDBIdNotNull,
+                        image = R.drawable.imdb,
+                        contentDescription = "share IMDB link"
                     )
                 }
-                IconButton(onClick = {
+                TMDBIconButton(onClick = {
                     val titleSplit = movieTitle.split(" ")
                     val titleSplitPlusDash = titleSplit.joinToString {
                         var temp = it
                         if (it != titleSplit.last()) temp += "-"
                         temp
                     }
-                    uriHandler.openUri(
-                        uri = "https://www.themoviedb.org/collection/${movieId}-${titleSplitPlusDash}"
-                    )
+                    shareIconOnClock("https://www.themoviedb.org/collection/${movieId}-${titleSplitPlusDash}")
                 }) {
-                    Image(
-                        painter = painterResource(id = R.drawable.tmdb),
+                    ImageWrapper(
+                        shouldNotHaveAlpha = true,
+                        image = R.drawable.tmdb,
                         contentDescription = "share TMDB link"
                     )
                 }
@@ -394,9 +403,22 @@ private fun ShareDialog(
         }
     }
 }
-//TODO private and better to rename
+
 @Composable
-fun IconButton(
+private fun ImageWrapper(
+    shouldNotHaveAlpha: Boolean,
+    @DrawableRes image: Int,
+    contentDescription: String
+) {
+    Image(
+        painter = painterResource(image),
+        contentDescription = contentDescription,
+        alpha = if (shouldNotHaveAlpha) 1f else 0.3f
+    )
+}
+
+@Composable
+fun TMDBIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -411,7 +433,7 @@ fun IconButton(
                 enabled = enabled,
                 role = Role.Button,
                 interactionSource = interactionSource,
-                indication = rememberRipple(bounded = false, radius = RippleRadius)
+                indication = rememberRipple(bounded = false, radius = 24.dp)
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -419,6 +441,3 @@ fun IconButton(
         CompositionLocalProvider(LocalContentAlpha provides contentAlpha, content = content)
     }
 }
-
-//TODO move to Icon Button
-private val RippleRadius = 24.dp

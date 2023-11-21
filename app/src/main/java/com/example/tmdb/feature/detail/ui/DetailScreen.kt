@@ -10,11 +10,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.feature.detail.data.DetailMovieWithAllRelations
+import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.example.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
 import com.example.tmdb.feature.detail.ui.components.SimilarMovies
@@ -28,14 +29,12 @@ fun DetailsScreen(navController: NavController) {
     )
 }
 
-//TODO make it private
 @Composable
-fun DetailScreen(
+private fun DetailScreen(
     navController: NavController,
     detailViewModel: DetailViewModel
 ) {
-    //TODO use by instead .value
-    val movieDetail = detailViewModel.movieDetail.collectAsState().value
+    val movieDetail by detailViewModel.movieDetail.collectAsState()
     DetailScreen(
         movieDetail = movieDetail,
         onBackArrowClick = { navController.navigateUp() },
@@ -44,14 +43,12 @@ fun DetailScreen(
 
 }
 
-//TODO make it private
 @Composable
-fun DetailScreen(
+private fun DetailScreen(
     movieDetail: DetailMovieWithAllRelations?,
     onBackArrowClick: () -> Unit,
     onSimilarItemClick: (Int) -> Unit
 ) {
-    //TODO i think this screen should be stateless
     val scrollState = rememberScrollState()
 
     Scaffold(

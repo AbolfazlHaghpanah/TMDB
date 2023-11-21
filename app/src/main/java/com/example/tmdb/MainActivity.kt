@@ -7,8 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.ui.Modifier
@@ -64,8 +64,7 @@ class MainActivity : ComponentActivity() {
                         }) {
                         Box(
                             modifier = Modifier
-                                // TODO make app edge to edge my mistake
-                                .statusBarsPadding()
+                                .navigationBarsPadding()
                                 .padding(it)
                                 .fillMaxSize()
                         ) {

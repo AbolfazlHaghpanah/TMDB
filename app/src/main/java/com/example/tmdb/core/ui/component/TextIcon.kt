@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.detail.ui.common
+package com.example.tmdb.core.ui.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
@@ -15,9 +15,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 
-//TODO Rename move to core
 @Composable
-fun RowWithIconAndText(
+fun TextIcon(
     text: String,
     @DrawableRes iconId: Int,
     iconColor: Color? = null,

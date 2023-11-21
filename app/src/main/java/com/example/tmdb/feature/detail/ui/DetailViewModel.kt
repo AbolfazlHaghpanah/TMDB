@@ -1,15 +1,15 @@
 package com.example.tmdb.feature.detail.ui
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.data.moviedata.MovieDao
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.safeApi
-import com.example.tmdb.feature.detail.data.DetailMovieWithAllRelations
+import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.data.detail.DetailDao
 import com.example.tmdb.feature.detail.network.DetailApi
+import com.example.tmdb.feature.detail.network.json.MovieDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,12 +53,15 @@ class DetailViewModel @Inject constructor(
                 detailApi.getMovieDetail(id = id)
             },
                 onDataReady = {
-                    //TODO create function
-                    viewModelScope.launch(Dispatchers.IO) {
-                        movieDao.addMovieDetail(it)
-                    }
+                    addMovieDetail(it)
                 }
             ).collect(_movieDetailResult)
+        }
+    }
+
+    private fun addMovieDetail(movieDetail: MovieDetail) {
+        viewModelScope.launch(Dispatchers.IO) {
+            movieDao.addMovieDetail(movieDetail)
         }
     }
 }

@@ -24,7 +24,7 @@ import coil.compose.AsyncImage
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.detail.data.DetailMovieWithAllRelations
+import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.data.credit.CreditEntity
 
 @Composable
@@ -53,10 +53,9 @@ fun OverviewContentWithCastAndCrew(movieDetail: DetailMovieWithAllRelations) {
     }
 }
 
-//TODO private
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-fun CastCrewLazyRow(
+private fun CastCrewLazyRow(
     castOrCrewElements: List<CreditEntity>
 ) {
 
@@ -71,16 +70,7 @@ fun CastCrewLazyRow(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                //TODO move to another composable
-                AsyncImage(
-                    model = "$imageUrl${castOrCrew.profilePath}",
-                    contentDescription = null,
-                    contentScale = ContentScale.FillBounds,
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(TMDBTheme.shapes.rounded),
-                    error = painterResource(id = R.drawable.profileerror)
-                )
+                CreditImageWrapper(castOrCrew.profilePath)
                 Column(
                     modifier = Modifier.padding(end = 12.dp)
                 ) {
@@ -101,4 +91,17 @@ fun CastCrewLazyRow(
             }
         }
     }
+}
+
+@Composable
+private fun CreditImageWrapper(castOrCrewProfilePath: String?) {
+    AsyncImage(
+        model = "$imageUrl${castOrCrewProfilePath}",
+        contentDescription = null,
+        contentScale = ContentScale.FillBounds,
+        modifier = Modifier
+            .size(40.dp)
+            .clip(TMDBTheme.shapes.rounded),
+        error = painterResource(id = R.drawable.profileerror)
+    )
 }
