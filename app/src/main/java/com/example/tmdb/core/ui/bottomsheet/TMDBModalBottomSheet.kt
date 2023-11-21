@@ -8,6 +8,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -21,8 +22,41 @@ import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 
 @Composable
 fun TMDBModalBottomSheet(
+    navController: NavController
+) {
+    TMDBModalBottomSheet(
+        navController = navController,
+        viewModel = hiltViewModel()
+    )
+}
+
+@Composable
+fun TMDBModalBottomSheet(
     navController: NavController,
-    viewModel: TMDBModalBottomSheetViewModel = hiltViewModel()
+    viewModel: TMDBModalBottomSheetViewModel
+) {
+    val onDismiss: () -> Unit = remember {
+        {
+            navController.popBackStack()
+        }
+    }
+
+    val onDelete = remember {
+        {
+            viewModel.deleteMovie()
+        }
+    }
+
+    TMDBModalBottomSheet(
+        onDismiss = onDismiss,
+        onDelete = onDelete
+    )
+}
+
+@Composable
+private fun TMDBModalBottomSheet(
+    onDismiss: () -> Unit,
+    onDelete: () -> Unit
 ) {
     Column(
         modifier = Modifier.padding(bottom = 64.dp),
@@ -54,9 +88,7 @@ fun TMDBModalBottomSheet(
                 .padding(24.dp)
                 .fillMaxWidth(),
             shape = TMDBTheme.shapes.rounded,
-            onClick = {
-                navController.popBackStack()
-            }
+            onClick = onDismiss
 
         ) {
             Text(
@@ -68,8 +100,8 @@ fun TMDBModalBottomSheet(
 
         TextButton(
             onClick = {
-                viewModel.deleteMovie()
-                navController.popBackStack()
+                onDelete()
+                onDismiss()
             }
         ) {
 
