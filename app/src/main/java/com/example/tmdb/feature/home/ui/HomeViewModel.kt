@@ -24,6 +24,7 @@ class HomeViewModel @Inject constructor(
     private val genreDao: GenreDao
 ) : ViewModel() {
 
+    //    TODO: when internet turn on while you are in app, new results won't be update(we should close the app and open it again)
     private val _nowPlayingMovies =
         MutableStateFlow<List<MovieWithGenreDatabaseWrapper>>(emptyList())
     val nowPlayingMovies = _nowPlayingMovies.asStateFlow()
