@@ -1,34 +1,26 @@
 package com.example.tmdb.feature.home.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tmdb.core.data.databaseErrorCatchMessage
 import com.example.tmdb.core.data.genre.dao.GenreDao
-import com.example.tmdb.core.data.genre.entity.GenreEntity
 import com.example.tmdb.core.data.moviedata.MovieDao
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.Result.Success
 import com.example.tmdb.core.network.safeApi
-import com.example.tmdb.core.utils.LocalSnackbarHostState
 import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.network.HomeApi
 import com.example.tmdb.feature.home.network.json.GenreResponse
-import com.example.tmdb.feature.home.network.json.GenresResponse
 import com.example.tmdb.feature.home.network.json.MovieResponse
-import com.example.tmdb.feature.home.network.json.MovieResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.log
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -57,8 +49,7 @@ class HomeViewModel @Inject constructor(
 
     private val _genreResult = MutableStateFlow<Result>(Result.Idle)
 
-    private val _errorMessage = Channel<String?>(
-    )
+    private val _errorMessage = Channel<String?>()
     val errorMessage = _errorMessage.receiveAsFlow()
 
     init {
@@ -73,16 +64,21 @@ class HomeViewModel @Inject constructor(
             _errorMessage.send(null)
         }
         getGenre()
-        getNowPlaying()
-        getPopular()
-        getTopMovies()
+        observeTopMovies()
+        observeNowPlaying()
+        observePopularMovies()
     }
 
 
     private fun observeNowPlaying() {
         viewModelScope.launch(Dispatchers.IO) {
-            movieDao.observeNowPlayingMovie().catch { }.collect {
-                _nowPlayingMovies.emit(it.map { it.toMovieDataWrapper() })
+
+            movieDao.observeNowPlayingMovie().catch {
+                _errorMessage.send(databaseErrorCatchMessage(it))
+            }.collect {
+                _nowPlayingMovies.emit(
+                    it.map { it.toMovieDataWrapper() }
+                )
             }
         }
         getNowPlaying()
@@ -91,7 +87,11 @@ class HomeViewModel @Inject constructor(
     private fun observePopularMovies() {
 
         viewModelScope.launch(Dispatchers.IO) {
-            movieDao.observePopularMovie().collect {
+
+            movieDao.observePopularMovie().catch {
+                _errorMessage.send(databaseErrorCatchMessage(it))
+            }.collect {
+
                 _popularMovies.emit(
                     it.map { it.toMovieDataWrapper() }
                 )
@@ -103,7 +103,10 @@ class HomeViewModel @Inject constructor(
     private fun observeTopMovies() {
 
         viewModelScope.launch(Dispatchers.IO) {
-            movieDao.observeTopMovie().collect {
+
+            movieDao.observeTopMovie().catch {
+                _errorMessage.send(databaseErrorCatchMessage(it))
+            }.collect {
                 _topMovies.emit(
                     it.map { it.toMovieDataWrapper() }
                 )
@@ -181,9 +184,7 @@ class HomeViewModel @Inject constructor(
                 is Result.Error -> {
                     val error = (_genreResult.value as Result.Error).message
 
-                    _errorMessage.send(
-                        error
-                    )
+                    _errorMessage.send(error)
                 }
 
                 else -> {}
@@ -207,9 +208,7 @@ class HomeViewModel @Inject constructor(
 
                 is Result.Error -> {
                     val error = (_nowPlayingResult.value as Result.Error).message
-                    _errorMessage.send(
-                        error
-                    )
+                    _errorMessage.send(error)
                 }
 
                 else -> {}
@@ -230,9 +229,7 @@ class HomeViewModel @Inject constructor(
 
                 is Result.Error -> {
                     val error = (_popularMovieResult.value as Result.Error).message
-                    _errorMessage.send(
-                        error
-                    )
+                    _errorMessage.send(error)
                 }
 
                 else -> {}

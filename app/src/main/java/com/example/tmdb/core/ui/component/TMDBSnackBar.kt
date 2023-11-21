@@ -20,7 +20,8 @@ fun TMDBSnackBar(
     performAction: (() -> Unit)? = null
 ) {
     Snackbar(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier
+            .padding(16.dp),
         backgroundColor = TMDBTheme.colors.surface,
         shape = TMDBTheme.shapes.large,
     ) {
@@ -31,7 +32,10 @@ fun TMDBSnackBar(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                modifier = Modifier.fillMaxWidth(fraction = 0.6f),
+                modifier = Modifier.fillMaxWidth(
+                    if (actionLabel != null && performAction != null) 0.7f
+                    else 1f
+                ),
                 text = message,
                 style = TMDBTheme.typography.subtitle2,
                 color = TMDBTheme.colors.white
