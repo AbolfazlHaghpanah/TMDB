@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
@@ -59,13 +60,13 @@ class MainActivity : ComponentActivity() {
                         bottomBar = {
                             TMDBBottomNavigation(
                                 navController = navController,
-                                //TODO check it when saved state handler set for detail
                                 bottomBarState = navController.currentBackStackEntryAsState()
                                     .value?.destination?.route != AppScreens.Detail.route
                             )
                         }) {
                         Box(
                             modifier = Modifier
+                                .navigationBarsPadding()
                                 .padding(it)
                                 .fillMaxSize()
                         ) {

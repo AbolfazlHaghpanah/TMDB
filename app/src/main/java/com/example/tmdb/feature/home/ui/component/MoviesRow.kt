@@ -18,7 +18,7 @@ import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 
 @Composable
 fun MovieRow(
-    onClick: () -> Unit,
+    onClick: (Int) -> Unit,
     title: String,
     movies: List<MovieWithGenreDatabaseWrapper>
 ) {
@@ -38,7 +38,7 @@ fun MovieRow(
         ) {
             items(items = movies.ifEmpty { fakeMovie }) {
                 MovieCard(
-                    onClick = onClick,
+                    onClick = { onClick(it.movie.movieId) },
                     title = it.movie.title,
                     image = it.movie.posterPath,
                     genres = it.genres.joinToString(separator = "|") { it.genreName },

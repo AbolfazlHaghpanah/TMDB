@@ -5,6 +5,13 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.example.tmdb.feature.detail.data.credit.CreditEntity
+import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithCreditCrossRef
+import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
+import com.example.tmdb.feature.detail.data.crossrefrence.MovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.detail.DetailEntity
+import com.example.tmdb.feature.detail.network.json.MovieDetail
 import com.example.tmdb.feature.favorite.data.FavoriteMovieEntity
 import com.example.tmdb.feature.favorite.data.relation.FavoriteMovieGenreCrossRef
 import com.example.tmdb.feature.home.data.nowplayingmovie.NowPlayingEntity
@@ -65,7 +72,7 @@ interface MovieDao {
 
     @Transaction
     suspend fun addPopularMovie(
-        movie : MovieResult
+        movie: MovieResult
     ) {
         addPopularMovie(movie.toPopularMovieEntity())
         addMovie(movie.toMovieEntity())
@@ -92,6 +99,90 @@ interface MovieDao {
                     genreId = it
                 )
             )
+        }
+    }
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addDetail(detailEntity: DetailEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addDetailMovieWithCreditCrossRef(detailMovieWithCreditCrossRef: DetailMovieWithCreditCrossRef)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addDetailMovieWithGenreCrossRef(detailMovieWithGenreCrossRef: DetailMovieWithGenreCrossRef)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addDetailMovieWithSimilarMoviesCrossRef(detailMovieWithSimilarMoviesCrossRef: DetailMovieWithSimilarMoviesCrossRef)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addMovieWithGenreCrossRef(movieWithGenre: MovieWithGenreCrossRef)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addCredits(credit: List<CreditEntity>)
+
+    @Transaction
+    suspend fun addMovieDetail(movieDetail: MovieDetail) {
+        addMovie(
+            MovieEntity(
+                id = movieDetail.id,
+                posterPath = movieDetail.posterPath,
+                voteAverage = movieDetail.voteAverage.toDouble(),
+                backdropPath = movieDetail.backdropPath,
+                title = movieDetail.originalTitle
+            )
+        )
+        addDetail(movieDetail.toDetailEntity())
+        addCredits(movieDetail.toCreditsEntity())
+        movieDetail.credits.cast.forEach {
+            addDetailMovieWithCreditCrossRef(
+                DetailMovieWithCreditCrossRef(
+                    detailMovieId = movieDetail.id,
+                    creditId = it.id
+                )
+            )
+        }
+        movieDetail.credits.crew.forEach {
+            addDetailMovieWithCreditCrossRef(
+                DetailMovieWithCreditCrossRef(
+                    detailMovieId = movieDetail.id,
+                    creditId = it.id
+                )
+            )
+        }
+        movieDetail.genres.forEach {
+            addDetailMovieWithGenreCrossRef(
+                DetailMovieWithGenreCrossRef(
+                    detailMovieId = movieDetail.id,
+                    genreId = it.id
+                )
+            )
+        }
+        movieDetail.similar.results.forEach {
+            addDetailMovieWithSimilarMoviesCrossRef(
+                DetailMovieWithSimilarMoviesCrossRef(
+                    detailMovieId = movieDetail.id,
+                    id = it.id
+                )
+            )
+            addMovie(
+                MovieEntity(
+                    id = it.id,
+                    title = it.originalTitle,
+                    backdropPath = "",
+                    voteAverage = it.voteAverage.toDouble(),
+                    posterPath = it.posterPath ?: ""
+                )
+            )
+        }
+        movieDetail.similar.results.forEach { similarMovieResult ->
+            similarMovieResult.genreIds.forEach { genreId ->
+                addMovieWithGenreCrossRef(
+                    MovieWithGenreCrossRef(
+                        id = similarMovieResult.id,
+                        genreId = genreId
+                    )
+                )
+            }
         }
     }
 }

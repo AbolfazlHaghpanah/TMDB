@@ -122,7 +122,11 @@ private fun HomeScreen(
                         modifier = Modifier
                             .clip(TMDBTheme.shapes.large)
                             .clickable {
-                                onNavigation(AppScreens.Detail.route)
+                                if (nowPlayingMovies.size >= 5) onNavigation(
+                                    AppScreens.Detail.createRoute(
+                                        nowPlayingMovies[page].movie.movieId
+                                    )
+                                )
                             }
                             .height(pagerSize.value),
                         movie = if (nowPlayingMovies.size >= 5) {
@@ -146,8 +150,8 @@ private fun HomeScreen(
 
         item {
             MovieRow(
-                onClick = {
-                    onNavigation(AppScreens.Detail.route)
+                onClick = { id ->
+                    onNavigation(AppScreens.Detail.createRoute(id))
                 },
                 title = stringResource(R.string.most_popular),
                 movies = popularMovies
@@ -156,8 +160,8 @@ private fun HomeScreen(
 
         item {
             MovieRow(
-                onClick = {
-                    onNavigation(AppScreens.Detail.route)
+                onClick = { id ->
+                    onNavigation(AppScreens.Detail.createRoute(id))
                 },
                 title = stringResource(R.string.top_rated),
                 movies = topMovies

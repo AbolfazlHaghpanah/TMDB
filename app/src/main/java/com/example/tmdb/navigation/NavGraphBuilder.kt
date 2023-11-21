@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.tmdb.core.ui.bottomsheet.TMDBModalBottomSheet
-import com.example.tmdb.feature.detail.ui.DetailScreen
+import com.example.tmdb.feature.detail.ui.DetailsScreen
 import com.example.tmdb.feature.favorite.ui.FavoriteScreen
 import com.example.tmdb.feature.home.ui.HomeScreen
 import com.example.tmdb.feature.search.ui.SearchScreen
@@ -20,7 +20,7 @@ fun NavGraphBuilder.mainNavGraph(
     }
 
     composable(AppScreens.Detail.route) {
-        DetailScreen(navController = navController)
+        DetailsScreen(navController = navController)
     }
 
     composable(AppScreens.Favorite.route) {

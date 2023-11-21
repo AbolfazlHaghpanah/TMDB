@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">TMDB</string>
+    <string name="overview">Overview</string>
+    <string name="cast_and_crew">Cast and Crew</string>
+    <string name="similar_movies">Similar Movies</string>
+    <string name="actor">Actor</string>
     <string name="most_popular">Most Popular</string>
     <string name="top_rated">Top Rated</string>
     <string name="favorites">Favorites</string>
@@ -8,4 +12,9 @@
     <string name="delete_alert">By doing this, the favorite movie will be deleted from your storage list</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
+    <string name="imdb">imdb-</string>
+    <string name="instagram">instagram-</string>
+    <string name="twitter">twitter-</string>
+    <string name="open_in">Open In</string>
+    <string name="null_text">null</string>
 </resources>
