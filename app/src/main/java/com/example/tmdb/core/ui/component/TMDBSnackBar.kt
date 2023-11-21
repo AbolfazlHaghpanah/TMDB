@@ -31,6 +31,7 @@ fun TMDBSnackBar(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
+                modifier = Modifier.fillMaxWidth(fraction = 0.6f),
                 text = message,
                 style = TMDBTheme.typography.subtitle2,
                 color = TMDBTheme.colors.white
@@ -38,6 +39,7 @@ fun TMDBSnackBar(
             if (actionLabel != null && performAction != null) {
                 TextButton(onClick = performAction) {
                     Text(
+                        modifier = Modifier,
                         text = actionLabel,
                         style = TMDBTheme.typography.subtitle2,
                         color = TMDBTheme.colors.primary
