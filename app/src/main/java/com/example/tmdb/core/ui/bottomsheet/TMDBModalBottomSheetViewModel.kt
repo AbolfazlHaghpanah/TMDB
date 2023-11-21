@@ -13,11 +13,12 @@ import javax.inject.Inject
 class TMDBModalBottomSheetViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val favoriteMovieDao: FavoriteMovieDao
-):ViewModel(){
-    private val movieId = savedStateHandle.get<String>("id")?.toIntOrNull()?:-1
+) : ViewModel() {
+    //    TODO use id (1) or (550) etc instead of (-1)
+    private val movieId = savedStateHandle.get<String>("id")?.toIntOrNull() ?: -1
 
-    fun deleteMovie(){
-        viewModelScope.launch(Dispatchers.IO){
+    fun deleteMovie() {
+        viewModelScope.launch(Dispatchers.IO) {
             favoriteMovieDao.deleteMovie(movieId)
         }
     }

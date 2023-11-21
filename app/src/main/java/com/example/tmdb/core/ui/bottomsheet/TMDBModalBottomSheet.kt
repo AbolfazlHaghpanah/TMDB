@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 
+// TODO? use 3 step composable, one with navController, another with viewModel and last one for ui
 @Composable
 fun TMDBModalBottomSheet(
     navController: NavController,

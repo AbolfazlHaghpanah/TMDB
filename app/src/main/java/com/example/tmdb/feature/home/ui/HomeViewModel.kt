@@ -55,6 +55,7 @@ class HomeViewModel @Inject constructor(
         observePopularMovies()
     }
 
+    //    TODO call database observe first then api get function for all sections
     private fun observeNowPlaying() {
         getNowPlaying()
         viewModelScope.launch(Dispatchers.IO) {
