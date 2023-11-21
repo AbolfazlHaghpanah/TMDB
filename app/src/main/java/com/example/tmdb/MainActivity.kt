@@ -42,10 +42,14 @@ class MainActivity : ComponentActivity() {
                 scrim = Color.Transparent.toArgb()
             )
         )
+
         setContent {
             val scaffoldState = rememberScaffoldState()
             val bottomSheetNavigator = rememberBottomSheetNavigator()
             val navController = rememberNavController(bottomSheetNavigator)
+            val snackBarHostState = remember {
+                SnackbarHostState()
+            }
 
             TMDBTheme {
                 CompositionLocalProvider(

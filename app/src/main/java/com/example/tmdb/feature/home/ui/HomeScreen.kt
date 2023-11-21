@@ -1,6 +1,5 @@
 package com.example.tmdb.feature.home.ui
 
-import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,10 +22,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.asLiveData
 import androidx.navigation.NavController
 import com.example.tmdb.R
-import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.ui.shimmer.fakeMovie
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
@@ -72,6 +69,7 @@ private fun HomeScreen(
     val topRated by viewModel.topMovies.collectAsState()
     val pagerState = rememberPagerState()
     val snackBar = LocalSnackbarHostState.current
+
     LaunchedEffect(
         viewModel.errorMessage
     ) {
@@ -94,7 +92,7 @@ private fun HomeScreen(
                         viewModel.tryAgainApi()
                     }
                 } else {
-                    val snackBarResult = snackBar.showSnackbar(
+                    snackBar.showSnackbar(
                         message = it!!,
                         duration = SnackbarDuration.Short
                     )
@@ -109,7 +107,6 @@ private fun HomeScreen(
         pagerState = pagerState,
         onNavigation = onNavigation,
     )
-
 }
 
 
