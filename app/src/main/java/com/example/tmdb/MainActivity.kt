@@ -64,6 +64,7 @@ class MainActivity : ComponentActivity() {
                         }) {
                         Box(
                             modifier = Modifier
+                                // TODO make app edge to edge my mistake
                                 .statusBarsPadding()
                                 .padding(it)
                                 .fillMaxSize()

@@ -3,7 +3,7 @@ package com.example.tmdb.feature.detail.data
 import androidx.room.TypeConverter
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-
+//TODO Unused
 class ListStringToStringConverter {
     @TypeConverter
     fun fromListString(list: List<String>): String {

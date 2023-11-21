@@ -77,6 +77,8 @@ fun SimilarMovies(
                             .padding(top = 12.dp, bottom = 4.dp)
                             .basicMarquee()
                     )
+
+                    //TODO move to top
                     var genresString = ""
                     for (elem in similarMovie.genres) {
                         genresString += elem.genreName
@@ -100,6 +102,7 @@ fun SimilarMovies(
 @Composable
 private fun PosterWithTotalVote(similarMovie: SimilarMovieWithGenre) {
     Box {
+        //TODO move to another composable
         AsyncImage(
             model = "$imageUrl${similarMovie.similarMovie.posterPath}",
             contentDescription = null,

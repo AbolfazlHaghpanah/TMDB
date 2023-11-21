@@ -53,7 +53,7 @@ fun OverviewContentWithCastAndCrew(movieDetail: DetailMovieWithAllRelations) {
     }
 }
 
-
+//TODO private
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 fun CastCrewLazyRow(
@@ -71,6 +71,7 @@ fun CastCrewLazyRow(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                //TODO move to another composable
                 AsyncImage(
                     model = "$imageUrl${castOrCrew.profilePath}",
                     contentDescription = null,

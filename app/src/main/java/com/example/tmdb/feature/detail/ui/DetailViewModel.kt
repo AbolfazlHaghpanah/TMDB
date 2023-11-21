@@ -19,8 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val detailApi: DetailApi,
     savedStateHandle: SavedStateHandle,
+    private val detailApi: DetailApi,
     private val detailDao: DetailDao,
     private val movieDao: MovieDao
 ) : ViewModel() {
@@ -53,6 +53,7 @@ class DetailViewModel @Inject constructor(
                 detailApi.getMovieDetail(id = id)
             },
                 onDataReady = {
+                    //TODO create function
                     viewModelScope.launch(Dispatchers.IO) {
                         movieDao.addMovieDetail(it)
                     }
@@ -60,5 +61,4 @@ class DetailViewModel @Inject constructor(
             ).collect(_movieDetailResult)
         }
     }
-
 }

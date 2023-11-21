@@ -12,6 +12,7 @@ class ListStringToStringConverter {
 
     @TypeConverter
     fun toListString(str: String): List<String> {
+        //TODO remove unused explicit type
         return Json.decodeFromString<List<String>>(str)
     }
 }

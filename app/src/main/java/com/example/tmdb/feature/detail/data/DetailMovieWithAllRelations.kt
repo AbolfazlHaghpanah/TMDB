@@ -12,6 +12,7 @@ import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithSimilar
 import com.example.tmdb.feature.detail.data.crossrefrence.MovieWithGenreCrossRef
 import com.example.tmdb.feature.detail.data.detail.DetailEntity
 
+//TODO create a relation package
 data class DetailMovieWithAllRelations(
     @Embedded val detailEntity: DetailEntity,
     @Relation(

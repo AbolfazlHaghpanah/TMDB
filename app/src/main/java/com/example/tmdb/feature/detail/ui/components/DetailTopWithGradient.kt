@@ -71,6 +71,7 @@ fun DetailTopWithGradient(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        //TODO move to another composable
         AsyncImage(
             model = "$imageUrl${movieDetail.movie.posterPath}",
             contentDescription = null,
@@ -96,6 +97,7 @@ fun DetailTopWithGradient(
             Row(
                 modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
             ) {
+                //TODO move to another composable
                 AsyncImage(
                     model = "$imageUrl${movieDetail.movie.posterPath}",
                     contentDescription = null,
@@ -232,11 +234,14 @@ private fun TopBar(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             IconButton(
+                //TODO add to favorite
                 onClick = { /*TODO*/ },
                 Modifier
                     .clip(TMDBTheme.shapes.rounded)
                     .background(TMDBTheme.colors.surface),
             ) {
+                //TODO check if favorite
+                //TODO move to another composable
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.heart),
                     contentDescription = null,
@@ -250,6 +255,7 @@ private fun TopBar(
                     .clip(TMDBTheme.shapes.rounded)
                     .background(TMDBTheme.colors.surface),
             ) {
+                //TODO move to another composable
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.share),
                     contentDescription = null,
@@ -339,6 +345,7 @@ private fun ShareDialog(
                     )
                 }
                 IconButton(
+                    //TODO all onClicks doing same thing can be a lambda (String)-> Unit
                     onClick = {
                         uriHandler.openUri(
                             uri = "https://twitter.com/${externalIds[twitterIndex]}"
@@ -360,6 +367,7 @@ private fun ShareDialog(
                     },
                     enabled = isIMDBIdNotNull
                 ) {
+                    //TODO move to another composable
                     Image(
                         painter = painterResource(R.drawable.imdb),
                         contentDescription = "share IMDB link",
@@ -386,7 +394,7 @@ private fun ShareDialog(
         }
     }
 }
-
+//TODO private and better to rename
 @Composable
 fun IconButton(
     onClick: () -> Unit,
@@ -412,4 +420,5 @@ fun IconButton(
     }
 }
 
+//TODO move to Icon Button
 private val RippleRadius = 24.dp

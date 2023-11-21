@@ -15,6 +15,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 
+//TODO Rename move to core
 @Composable
 fun RowWithIconAndText(
     text: String,

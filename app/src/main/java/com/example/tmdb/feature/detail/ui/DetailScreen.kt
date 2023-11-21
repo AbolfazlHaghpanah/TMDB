@@ -28,12 +28,13 @@ fun DetailsScreen(navController: NavController) {
     )
 }
 
+//TODO make it private
 @Composable
 fun DetailScreen(
     navController: NavController,
     detailViewModel: DetailViewModel
 ) {
-
+    //TODO use by instead .value
     val movieDetail = detailViewModel.movieDetail.collectAsState().value
     DetailScreen(
         movieDetail = movieDetail,
@@ -43,12 +44,14 @@ fun DetailScreen(
 
 }
 
+//TODO make it private
 @Composable
 fun DetailScreen(
     movieDetail: DetailMovieWithAllRelations?,
     onBackArrowClick: () -> Unit,
     onSimilarItemClick: (Int) -> Unit
 ) {
+    //TODO i think this screen should be stateless
     val scrollState = rememberScrollState()
 
     Scaffold(
