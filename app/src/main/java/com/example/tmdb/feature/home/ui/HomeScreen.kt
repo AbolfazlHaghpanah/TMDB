@@ -75,7 +75,7 @@ private fun HomeScreen(
         nowPlayingResult = nowPlayingResult,
         popularMovieResult = popularMovieResult,
         topMovieResult = topMovieResult,
-        onNavigation = onNavigation
+        onNavigation = onNavigation,
     )
 }
 
@@ -89,7 +89,7 @@ private fun HomeScreen(
     nowPlayingResult: Result,
     popularMovieResult: Result,
     topMovieResult: Result,
-    onNavigation: (String) -> Unit
+    onNavigation: (String) -> Unit,
 ) {
     LazyColumn {
 
@@ -143,7 +143,9 @@ private fun HomeScreen(
 
         item {
             MovieRow(
-                onClick = { onNavigation(AppScreens.Detail.route) },
+                onClick = {
+                          onNavigation(AppScreens.Detail.route)
+                },
                 title = stringResource(R.string.most_popular),
                 movies = popularMovies
             )
@@ -151,7 +153,9 @@ private fun HomeScreen(
 
         item {
             MovieRow(
-                onClick = { onNavigation(AppScreens.Detail.route) },
+                onClick = {
+                    onNavigation(AppScreens.Detail.route)
+                },
                 title = stringResource(R.string.top_rated),
                 movies = topMovies
             )

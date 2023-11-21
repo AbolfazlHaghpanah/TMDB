@@ -2,7 +2,7 @@ package com.example.tmdb.feature.home.di
 
 import com.example.tmdb.core.data.AppDatabase
 import com.example.tmdb.core.data.moviedata.MovieDao
-import com.example.tmdb.feature.home.data.genre.dao.GenreDao
+import com.example.tmdb.core.data.genre.dao.GenreDao
 import com.example.tmdb.feature.home.network.HomeApi
 import dagger.Module
 import dagger.Provides

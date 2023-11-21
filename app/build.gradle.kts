@@ -80,6 +80,7 @@ dependencies {
     implementation(libs.accompanistPager)
     implementation(libs.accompanistPagerIndicators)
     implementation(libs.accompanistSystemUiController)
+    implementation(libs.accompanistNavigation)
 
     //network
     implementation(libs.retrofit)

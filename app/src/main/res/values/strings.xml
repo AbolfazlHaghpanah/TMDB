@@ -2,4 +2,10 @@
     <string name="app_name">TMDB</string>
     <string name="most_popular">Most Popular</string>
     <string name="top_rated">Top Rated</string>
+    <string name="favorites">Favorites</string>
+    <string name="there_is_no_movie_yet">There is no movie yet!</string>
+    <string name="are_you_sure">Are you sure ?</string>
+    <string name="delete_alert">By doing this, the favorite movie will be deleted from your storage list</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
 </resources>

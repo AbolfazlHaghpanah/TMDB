@@ -1,7 +1,7 @@
 package com.example.tmdb.feature.home.data.common
 
 import androidx.compose.runtime.Immutable
-import com.example.tmdb.feature.home.data.genre.entity.GenreEntity
+import com.example.tmdb.core.data.genre.entity.GenreEntity
 
 @Immutable
 data class MovieWithGenreDatabaseWrapper(

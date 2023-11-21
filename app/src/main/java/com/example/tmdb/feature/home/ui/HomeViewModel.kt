@@ -2,13 +2,11 @@ package com.example.tmdb.feature.home.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tmdb.core.data.genre.dao.GenreDao
 import com.example.tmdb.core.data.moviedata.MovieDao
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.safeApi
 import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
-import com.example.tmdb.feature.home.data.genre.dao.GenreDao
-import com.example.tmdb.feature.home.data.popularMovie.relation.PopularMovieGenreCrossRef
-import com.example.tmdb.feature.home.data.topmovie.relation.crossref.TopMovieGenreCrossRef
 import com.example.tmdb.feature.home.network.HomeApi
 import com.example.tmdb.feature.home.network.json.GenreResponse
 import com.example.tmdb.feature.home.network.json.MovieResponse
@@ -58,15 +56,17 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun observeNowPlaying() {
+        getNowPlaying()
         viewModelScope.launch(Dispatchers.IO) {
             movieDao.observeNowPlayingMovie().collect {
                 _nowPlayingMovies.emit(it.map { it.toMovieDataWrapper() })
             }
         }
-        getNowPlaying()
     }
 
     private fun observePopularMovies() {
+        getPopular()
+
         viewModelScope.launch(Dispatchers.IO) {
             movieDao.observePopularMovie().collect {
                 _popularMovies.emit(
@@ -74,10 +74,11 @@ class HomeViewModel @Inject constructor(
                 )
             }
         }
-        getPopular()
     }
 
     private fun observeTopMovies() {
+        getTopMovies()
+
         viewModelScope.launch(Dispatchers.IO) {
             movieDao.observeTopMovie().collect {
                 _topMovies.emit(
@@ -85,7 +86,6 @@ class HomeViewModel @Inject constructor(
                 )
             }
         }
-        getTopMovies()
     }
 
     private fun getNowPlaying() {
@@ -151,8 +151,7 @@ class HomeViewModel @Inject constructor(
     private fun storeNowPlaying(movies: MovieResponse) {
         viewModelScope.launch(Dispatchers.IO) {
             movies.results.forEach { movie ->
-                movieDao.addMovie(movie.toMovieEntity())
-                movieDao.addNowPlayingMovie(movie.toNowPlayingEntity())
+                movieDao.addNowPlayingMovie(movie.toNowPlayingEntity(), movie.toMovieEntity())
             }
         }
     }
@@ -160,18 +159,7 @@ class HomeViewModel @Inject constructor(
     private fun storePopulars(movie: MovieResponse) {
         viewModelScope.launch(Dispatchers.IO) {
             movie.results.forEach { movie ->
-                movieDao.addPopularMovie(movie.toPopularMovieEntity())
-
-                movieDao.addMovie(movie.toMovieEntity())
-
-                movie.genreIds.forEach {
-                    movieDao.addPopularMoviesGenre(
-                        PopularMovieGenreCrossRef(
-                            movieId = movie.id,
-                            genreId = it
-                        )
-                    )
-                }
+                movieDao.addPopularMovie(movie)
             }
         }
     }
@@ -179,19 +167,7 @@ class HomeViewModel @Inject constructor(
     private fun storeTopMovie(movie: MovieResponse) {
         viewModelScope.launch(Dispatchers.IO) {
             movie.results.forEach { movie ->
-
-                movieDao.addMovie(movie.toMovieEntity())
-
-                movieDao.addTopMovie(movie.toTopPlayingEntity())
-
-                movie.genreIds.forEach {
-                    movieDao.addTopMoviesGenre(
-                        TopMovieGenreCrossRef(
-                            movieId = movie.id,
-                            genreId = it
-                        )
-                    )
-                }
+                movieDao.addTopMovie(movie)
             }
         }
     }

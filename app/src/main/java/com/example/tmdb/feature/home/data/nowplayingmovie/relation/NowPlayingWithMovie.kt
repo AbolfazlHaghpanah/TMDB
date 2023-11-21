@@ -8,23 +8,23 @@ import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.data.nowplayingmovie.NowPlayingEntity
 
 data class NowPlayingWithMovie(
-    @Embedded val nowPlayingMovie: NowPlayingEntity?,
+    @Embedded val nowPlayingMovie: NowPlayingEntity,
     @Relation(
         parentColumn = "movieId",
         entityColumn = "id"
     )
-    val movie: MovieEntity?,
+    val movie: MovieEntity,
 ) {
     fun toMovieDataWrapper(): MovieWithGenreDatabaseWrapper {
         return MovieWithGenreDatabaseWrapper(
             genres = listOf(),
             movie = MovieDatabaseWrapper(
-                movieId = movie?.id ?: 0,
-                title = movie?.title ?: "",
-                posterPath = movie?.posterPath ?: "",
-                voteAverage = movie?.voteAverage ?: 0.1,
-                backdropPath = nowPlayingMovie?.backdropPath?:"",
-                releaseDate = nowPlayingMovie?.releaseDate?:""
+                movieId = movie.id,
+                title = movie.title,
+                posterPath = movie.posterPath,
+                voteAverage = movie.voteAverage,
+                backdropPath = movie.backdropPath,
+                releaseDate = nowPlayingMovie.releaseDate
             )
         )
     }
