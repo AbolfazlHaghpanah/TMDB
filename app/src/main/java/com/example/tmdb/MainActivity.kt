@@ -10,7 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -19,8 +23,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.tmdb.core.ui.component.TMDBBottomNavigation
+import com.example.tmdb.core.ui.component.TMDBSnackBar
 import com.example.tmdb.core.ui.theme.TMDBTheme
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.example.tmdb.core.utils.LocalSnackbarHostState
 import com.example.tmdb.navigation.AppScreens
 import com.example.tmdb.navigation.mainNavGraph
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi

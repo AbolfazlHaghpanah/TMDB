@@ -59,7 +59,8 @@ import java.math.RoundingMode
 @Composable
 fun DetailTopWithGradient(
     movieDetail: DetailMovieWithAllRelations,
-    onBackArrowClick: () -> Unit
+    onBackArrowClick: () -> Unit,
+    onAddToFavorite: () -> Unit
 ) {
 
     Box(
@@ -73,7 +74,7 @@ fun DetailTopWithGradient(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            TopBar(onBackArrowClick, movieDetail)
+            TopBar(onBackArrowClick, movieDetail, onAddToFavorite)
 
             Row(
                 modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
@@ -193,7 +194,8 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
 @Composable
 private fun TopBar(
     onBackArrowClick: () -> Unit,
-    movieDetail: DetailMovieWithAllRelations
+    movieDetail: DetailMovieWithAllRelations,
+    onAddToFavorite: () -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }
     val uriHandler = LocalUriHandler.current
@@ -247,7 +249,7 @@ private fun TopBar(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             TMDBIconButton(
-                onClick = { /*TODO*/ },
+                onClick = onAddToFavorite,
                 Modifier
                     .clip(TMDBTheme.shapes.rounded)
                     .background(TMDBTheme.colors.surface),

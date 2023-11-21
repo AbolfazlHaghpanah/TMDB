@@ -6,10 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.data.moviedata.MovieDao
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.safeApi
-import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.data.detail.DetailDao
+import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.network.DetailApi
 import com.example.tmdb.feature.detail.network.json.MovieDetail
+import com.example.tmdb.feature.favorite.data.FavoriteMovieEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,12 +31,20 @@ class DetailViewModel @Inject constructor(
     val movieDetail = _movieDetail.asStateFlow()
 
     private val _movieDetailResult = MutableStateFlow<Result>(Result.Idle)
-    val movieDetailResult = _movieDetailResult.asStateFlow()
 
     val id: Int = savedStateHandle.get<String>("id")?.toInt() ?: 0
 
     init {
         observeDetailMovieWithAllRelations()
+    }
+
+    fun addToFavorite() {
+        viewModelScope.launch(Dispatchers.IO) {
+            movieDao.addToFavorite(
+                FavoriteMovieEntity(id),
+                movieDetail.value?.genres ?: listOf()
+            )
+        }
     }
 
     private fun observeDetailMovieWithAllRelations() {
@@ -52,16 +61,30 @@ class DetailViewModel @Inject constructor(
             safeApi(call = {
                 detailApi.getMovieDetail(id = id)
             },
-                onDataReady = {
-                    addMovieDetail(it)
+                onRequestDone = {
+                    addMovieDetail()
                 }
             ).collect(_movieDetailResult)
         }
     }
 
-    private fun addMovieDetail(movieDetail: MovieDetail) {
+    private fun addMovieDetail() {
         viewModelScope.launch(Dispatchers.IO) {
-            movieDao.addMovieDetail(movieDetail)
+            when (_movieDetailResult.value) {
+                is Result.Success<*> -> {
+                    val data =
+                        (_movieDetailResult.value as Result.Success<*>).response as MovieDetail
+
+                    movieDao.addMovieDetail(data)
+                }
+
+                is Result.Error -> {
+                    val error = (_movieDetailResult.value as Result.Error).message
+
+                }
+
+                else -> {}
+            }
         }
     }
 }

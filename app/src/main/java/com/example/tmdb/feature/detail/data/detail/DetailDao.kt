@@ -9,6 +9,4 @@ import kotlinx.coroutines.flow.Flow
 interface DetailDao {
     @Query("select * from detail_movies where detailMovieId = :detailMovieId")
     fun observeMovieDetail(detailMovieId: Int): Flow<DetailMovieWithAllRelations>
-
-
 }

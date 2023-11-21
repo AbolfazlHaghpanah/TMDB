@@ -5,11 +5,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
+import kotlinx.serialization.json.Json
 import retrofit2.Response
 
 suspend fun <T> safeApi(
     call: suspend () -> Response<T>,
-    onDataReady: (T) -> Unit
+    onRequestDone: () -> Unit
 ): Flow<Result> {
     return flow {
         emit(Result.Loading)
