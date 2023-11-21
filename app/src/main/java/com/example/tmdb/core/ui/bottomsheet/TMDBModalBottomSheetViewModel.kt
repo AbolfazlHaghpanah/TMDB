@@ -14,7 +14,7 @@ class TMDBModalBottomSheetViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val favoriteMovieDao: FavoriteMovieDao
 ) : ViewModel() {
-    //    TODO use id (1) or (550) etc instead of (-1)
+
     private val movieId = savedStateHandle.get<String>("id")?.toIntOrNull() ?: -1
 
     fun deleteMovie() {
