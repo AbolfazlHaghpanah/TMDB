@@ -103,4 +103,7 @@ dependencies {
 
     //shimmer
     implementation(libs.shimmer)
+
+    //splashScreen
+    implementation(libs.splashScreen)
 }

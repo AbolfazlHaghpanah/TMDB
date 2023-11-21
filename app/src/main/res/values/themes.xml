@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.TMDB" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.TMDB" parent="android:Theme.Material.Light.NoActionBar"/>
+
+    <style name="Theme.SplashScreen.TMDBSplash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenIconBackgroundColor">#1F1D2B</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.TMDB</item>
+    </style>
 </resources>
