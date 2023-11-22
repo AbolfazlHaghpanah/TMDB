@@ -128,7 +128,7 @@ interface MovieDao {
                 posterPath = movieDetail.posterPath,
                 voteAverage = movieDetail.voteAverage.toDouble(),
                 backdropPath = movieDetail.backdropPath,
-                title = movieDetail.originalTitle
+                title = movieDetail.title
             )
         )
         addDetail(movieDetail.toDetailEntity())
@@ -167,7 +167,7 @@ interface MovieDao {
             addMovie(
                 MovieEntity(
                     id = it.id,
-                    title = it.originalTitle,
+                    title = it.title,
                     backdropPath = "",
                     voteAverage = it.voteAverage.toDouble(),
                     posterPath = it.posterPath ?: ""

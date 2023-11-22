@@ -10,8 +10,7 @@ data class SimilarMovieResult(
     @SerialName("genre_ids")
     val genreIds: List<Int>,
 
-    @SerialName("original_title")
-    val originalTitle: String,
+    val title: String,
 
     @SerialName("vote_average")
     val voteAverage: Float,
