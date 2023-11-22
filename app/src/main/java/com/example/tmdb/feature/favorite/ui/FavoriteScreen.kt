@@ -113,5 +113,4 @@ private fun FavoriteScreen(
             }
         }
     }
-
 }

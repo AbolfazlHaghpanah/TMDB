@@ -1,5 +1,6 @@
 package com.example.tmdb.feature.home.ui
 
+import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.data.databaseErrorCatchMessage
@@ -8,17 +9,16 @@ import com.example.tmdb.core.data.moviedata.MovieDao
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.Result.Success
 import com.example.tmdb.core.network.safeApi
+import com.example.tmdb.core.utils.SnackBarMessage
 import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.network.HomeApi
 import com.example.tmdb.feature.home.network.json.GenreResponse
 import com.example.tmdb.feature.home.network.json.MovieResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,7 +26,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val homeApi: HomeApi,
     private val movieDao: MovieDao,
-    private val genreDao: GenreDao
+    private val genreDao: GenreDao,
+    private val snackBarMessage: SnackBarMessage
 ) : ViewModel() {
 
     private val _nowPlayingMovies =
@@ -49,19 +50,9 @@ class HomeViewModel @Inject constructor(
 
     private val _genreResult = MutableStateFlow<Result>(Result.Idle)
 
-    private val _errorMessage = Channel<String?>()
-    val errorMessage = _errorMessage.receiveAsFlow()
-
     init {
-        getGenre()
-        observeTopMovies()
-        observeNowPlaying()
-        observePopularMovies()
-    }
-
-    fun tryAgainApi() {
         viewModelScope.launch {
-            _errorMessage.send(null)
+            snackBarMessage.dismissSnackBar()
         }
         getGenre()
         observeTopMovies()
@@ -70,16 +61,18 @@ class HomeViewModel @Inject constructor(
     }
 
 
+
     private fun observeNowPlaying() {
         viewModelScope.launch(Dispatchers.IO) {
 
-            movieDao.observeNowPlayingMovie().catch {
-                _errorMessage.send(databaseErrorCatchMessage(it))
-            }.collect {
-                _nowPlayingMovies.emit(
-                    it.map { it.toMovieDataWrapper() }
-                )
-            }
+            movieDao.observeNowPlayingMovie()
+                .catch {
+
+                }.collect {
+                    _nowPlayingMovies.emit(
+                        it.map { it.toMovieDataWrapper() }
+                    )
+                }
         }
         getNowPlaying()
     }
@@ -89,7 +82,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             movieDao.observePopularMovie().catch {
-                _errorMessage.send(databaseErrorCatchMessage(it))
+                sendDataBaseError(it)
             }.collect {
 
                 _popularMovies.emit(
@@ -105,7 +98,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             movieDao.observeTopMovie().catch {
-                _errorMessage.send(databaseErrorCatchMessage(it))
+                sendDataBaseError(it)
             }.collect {
                 _topMovies.emit(
                     it.map { it.toMovieDataWrapper() }
@@ -177,14 +170,17 @@ class HomeViewModel @Inject constructor(
                 is Success<*> -> {
                     val data = (_genreResult.value as Success<*>).response as GenreResponse
                     data.genres.forEach { it ->
-                        genreDao.addGenre(it.toGenreEntity())
+                        try {
+                            genreDao.addGenre(it.toGenreEntity())
+                        } catch (t: Throwable) {
+                            sendDataBaseError(t)
+                        }
                     }
                 }
 
                 is Result.Error -> {
                     val error = (_genreResult.value as Result.Error).message
-
-                    _errorMessage.send(error)
+                    sendNetworkError(error)
                 }
 
                 else -> {}
@@ -198,17 +194,21 @@ class HomeViewModel @Inject constructor(
 
                 is Success<*> -> {
                     val data = (_nowPlayingResult.value as Success<*>).response as MovieResponse
-                    data.results.forEach { movie ->
-                        movieDao.addNowPlayingMovie(
-                            movie.toNowPlayingEntity(),
-                            movie.toMovieEntity()
-                        )
+                    try {
+                        data.results.forEach { movie ->
+                            movieDao.addNowPlayingMovie(
+                                movie.toNowPlayingEntity(),
+                                movie.toMovieEntity()
+                            )
+                        }
+                    } catch (t: Throwable) {
+                        sendDataBaseError(t)
                     }
                 }
 
                 is Result.Error -> {
                     val error = (_nowPlayingResult.value as Result.Error).message
-                    _errorMessage.send(error)
+                    sendNetworkError(error)
                 }
 
                 else -> {}
@@ -222,14 +222,18 @@ class HomeViewModel @Inject constructor(
             when (_popularMovieResult.value) {
                 is Success<*> -> {
                     val data = (_popularMovieResult.value as Success<*>).response as MovieResponse
-                    data.results.forEach { movie ->
-                        movieDao.addPopularMovie(movie)
+                    try {
+                        data.results.forEach { movie ->
+                            movieDao.addPopularMovie(movie)
+                        }
+                    } catch (t: Throwable) {
+                        sendDataBaseError(t)
                     }
                 }
 
                 is Result.Error -> {
                     val error = (_popularMovieResult.value as Result.Error).message
-                    _errorMessage.send(error)
+                    sendNetworkError(error)
                 }
 
                 else -> {}
@@ -242,22 +246,67 @@ class HomeViewModel @Inject constructor(
             when (_topMovieResult.value) {
                 is Success<*> -> {
                     val data = (_topMovieResult.value as Success<*>).response as MovieResponse
-                    data.results.forEach { movie ->
-                        movieDao.addTopMovie(
-                            movie
-                        )
+                    try {
+                        data.results.forEach { movie ->
+                            movieDao.addTopMovie(
+                                movie
+                            )
+                        }
+                    } catch (t: Throwable) {
+                        sendDataBaseError(t)
                     }
                 }
 
                 is Result.Error -> {
                     val error = (_topMovieResult.value as Result.Error).message
-                    _errorMessage.send(
-                        error
-                    )
+                    sendNetworkError(error)
                 }
 
                 else -> {}
             }
         }
+    }
+
+    private fun isOneOfListEmpty() =
+        _nowPlayingMovies.value.isEmpty() || _popularMovies.value.isEmpty() || _topMovies.value.isEmpty()
+
+    private suspend fun sendDataBaseError(
+        throwable: Throwable
+    ) {
+        snackBarMessage.sendMessage(
+            message = databaseErrorCatchMessage(throwable),
+            actionLabel = "Try Again",
+            action = { tryAgainApi() },
+            duration = if (isOneOfListEmpty()) {
+                SnackbarDuration.Indefinite
+            } else {
+                SnackbarDuration.Short
+            }
+        )
+    }
+
+    private suspend fun sendNetworkError(
+        error: String
+    ) {
+        snackBarMessage.sendMessage(
+            message = error,
+            actionLabel = "Try Again",
+            action = { tryAgainApi() },
+            duration = if (isOneOfListEmpty()) {
+                SnackbarDuration.Indefinite
+            } else {
+                SnackbarDuration.Short
+            }
+        )
+    }
+
+    private fun tryAgainApi() {
+        viewModelScope.launch {
+            snackBarMessage.dismissSnackBar()
+        }
+        getGenre()
+        observeTopMovies()
+        observeNowPlaying()
+        observePopularMovies()
     }
 }

@@ -1,6 +1,7 @@
 package com.example.tmdb
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -12,8 +13,9 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,16 +28,22 @@ import com.example.tmdb.core.ui.component.TMDBBottomNavigation
 import com.example.tmdb.core.ui.component.TMDBSnackBar
 import com.example.tmdb.core.ui.theme.TMDBTheme
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.core.utils.LocalSnackbarHostState
+import com.example.tmdb.core.utils.SnackBarMessage
 import com.example.tmdb.navigation.AppScreens
 import com.example.tmdb.navigation.mainNavGraph
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var snackBarMessage: SnackBarMessage
+
     @OptIn(ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,52 +65,63 @@ class MainActivity : ComponentActivity() {
                 SnackbarHostState()
             }
 
-            TMDBTheme {
-                CompositionLocalProvider(
-                    values = arrayOf(
-                        LocalSnackbarHostState provides snackBarHostState
-                    )
-                ) {
-                    ModalBottomSheetLayout(
-                        bottomSheetNavigator = bottomSheetNavigator,
-                        sheetShape = TMDBTheme.shapes.veryLarge,
-                        scrimColor = Color.Transparent
-                    ) {
+            LaunchedEffect(Unit) {
+                snackBarMessage.getSnackBarMessage().collectLatest { snackBarMessage ->
+                    if (snackBarMessage?.getMessage().isNullOrEmpty().not()) {
+                        val snackBarResult = snackBarHostState.showSnackbar(
+                            message = snackBarMessage?.getMessage()!!,
+                            actionLabel = snackBarMessage.getActionLabel(),
+                            duration = snackBarMessage.getDuration()
+                        )
+                        if (snackBarResult == SnackbarResult.ActionPerformed) {
+                            Log.d("asd", "onCreate: ")
+                            snackBarMessage.performAction()
+                        }
+                    }
+                }
 
-                        Scaffold(
-                            scaffoldState = scaffoldState,
-                            bottomBar = {
-                                TMDBBottomNavigation(
-                                    navController = navController,
-                                    //TODO check it when saved state handler set for detail
-                                    bottomBarState = navController.currentBackStackEntryAsState()
-                                        .value?.destination?.route != AppScreens.Detail.route
+
+            }
+
+            TMDBTheme {
+                ModalBottomSheetLayout(
+                    bottomSheetNavigator = bottomSheetNavigator,
+                    sheetShape = TMDBTheme.shapes.veryLarge,
+                    scrimColor = Color.Transparent
+                ) {
+
+                    Scaffold(
+                        scaffoldState = scaffoldState,
+                        bottomBar = {
+                            TMDBBottomNavigation(
+                                navController = navController,
+                                bottomBarState = navController.currentBackStackEntryAsState()
+                                    .value?.destination?.route != AppScreens.Detail.route
+                            )
+                        },
+                        snackbarHost = {
+                            SnackbarHost(snackBarHostState) {
+                                TMDBSnackBar(
+                                    message = it.message,
+                                    actionLabel = it.actionLabel,
+                                    performAction = {
+                                        it.performAction()
+                                    }
                                 )
-                            },
-                            snackbarHost = {
-                                SnackbarHost(snackBarHostState){
-                                    TMDBSnackBar(
-                                        message = it.message,
-                                        actionLabel = it.actionLabel,
-                                        performAction = {
-                                            it.performAction()
-                                        }
-                                    )
-                                }
                             }
+                        }
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .statusBarsPadding()
+                                .padding(it)
+                                .fillMaxSize()
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .statusBarsPadding()
-                                    .padding(it)
-                                    .fillMaxSize()
+                            NavHost(
+                                navController = navController,
+                                startDestination = AppScreens.Home.route
                             ) {
-                                NavHost(
-                                    navController = navController,
-                                    startDestination = AppScreens.Home.route
-                                ) {
-                                    mainNavGraph(navController)
-                                }
+                                mainNavGraph(navController)
                             }
                         }
                     }
