@@ -4,8 +4,8 @@ import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.data.databaseErrorCatchMessage
+import com.example.tmdb.core.utils.SnackBarMassage
 import com.example.tmdb.core.utils.SnackBarManager
-import com.example.tmdb.core.utils.SnackBarMessage
 import com.example.tmdb.feature.favorite.data.FavoriteMovieDao
 import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
     private val favoriteMovieDao: FavoriteMovieDao,
-    private val snackBarMessage: SnackBarMessage
+    private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
     private val _favoriteMovieList =
@@ -34,7 +34,7 @@ class FavoriteViewModel @Inject constructor(
 
     fun onTryAgain() {
         viewModelScope.launch {
-            snackBarMessage.dismissSnackBar()
+            snackBarManager.dismissSnackBar()
         }
         observeFavoriteMovies()
     }
@@ -42,9 +42,12 @@ class FavoriteViewModel @Inject constructor(
     private fun observeFavoriteMovies() {
         viewModelScope.launch(Dispatchers.IO) {
             favoriteMovieDao.observeMovies()
+                .onEach {
+                    throw Throwable("mm" )
+                }
                 .catch {
-                    snackBarMessage.sendMessage(
-                        SnackBarManager(
+                    snackBarManager.sendMessage(
+                        SnackBarMassage(
                             snackBarMessage = databaseErrorCatchMessage(it),
                             snackBarDuration = SnackbarDuration.Indefinite,
                             snackBarAction = {

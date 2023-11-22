@@ -9,7 +9,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
@@ -28,7 +27,7 @@ import com.example.tmdb.core.ui.component.TMDBBottomNavigation
 import com.example.tmdb.core.ui.component.TMDBSnackBar
 import com.example.tmdb.core.ui.theme.TMDBTheme
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.core.utils.SnackBarMessage
+import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.navigation.AppScreens
 import com.example.tmdb.navigation.mainNavGraph
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -42,7 +41,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var snackBarMessage: SnackBarMessage
+    lateinit var snackBarManager: SnackBarManager
 
     @OptIn(ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +65,7 @@ class MainActivity : ComponentActivity() {
             }
 
             LaunchedEffect(Unit) {
-                snackBarMessage.getSnackBarMessage().collectLatest { snackBarMessage ->
+                snackBarManager.getSnackBarMessage().collectLatest { snackBarMessage ->
                     if (snackBarMessage?.getMessage().isNullOrEmpty().not()) {
                         val snackBarResult = snackBarHostState.showSnackbar(
                             message = snackBarMessage?.getMessage()!!,

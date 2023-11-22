@@ -67,7 +67,7 @@ private fun HomeScreen(
     val nowPlayingMovies by viewModel.nowPlayingMovies.collectAsState()
     val popularMovies by viewModel.popularMovies.collectAsState()
     val topRated by viewModel.topMovies.collectAsState()
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(initialPage = 2)
 
     HomeScreen(
         nowPlayingMovies = nowPlayingMovies,

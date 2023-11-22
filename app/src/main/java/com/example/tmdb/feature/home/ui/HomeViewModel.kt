@@ -10,7 +10,7 @@ import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.Result.Success
 import com.example.tmdb.core.network.safeApi
 import com.example.tmdb.core.utils.SnackBarManager
-import com.example.tmdb.core.utils.SnackBarMessage
+import com.example.tmdb.core.utils.SnackBarMassage
 import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.network.HomeApi
 import com.example.tmdb.feature.home.network.json.GenreResponse
@@ -28,7 +28,7 @@ class HomeViewModel @Inject constructor(
     private val homeApi: HomeApi,
     private val movieDao: MovieDao,
     private val genreDao: GenreDao,
-    private val snackBarMessage: SnackBarMessage
+    private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
     private val _nowPlayingMovies =
@@ -51,7 +51,7 @@ class HomeViewModel @Inject constructor(
 
     private val _genreResult = MutableStateFlow<Result>(Result.Idle)
 
-    private val _snackBarManager = MutableStateFlow<SnackBarManager?>(null)
+    private val _snackBarMassage = MutableStateFlow<SnackBarMassage?>(null)
 
     init {
         getGenre()
@@ -61,14 +61,14 @@ class HomeViewModel @Inject constructor(
     }
 
     suspend fun showLastSnackBar() {
-        snackBarMessage.sendMessage(
-            _snackBarManager.value
+        snackBarManager.sendMessage(
+            _snackBarMassage.value
         )
     }
 
     private suspend fun dismissSnackBar() {
-        _snackBarManager.emit(
-            _snackBarManager.value?.copy(isHaveToShow = false)
+        _snackBarMassage.emit(
+            _snackBarMassage.value?.copy(isHaveToShow = false)
         )
     }
 
@@ -79,13 +79,13 @@ class HomeViewModel @Inject constructor(
                 .catch {
                     sendDataBaseError(it)
                 }.collect { movies ->
-                    dismissSnackBar()
                     _nowPlayingMovies.emit(
                         movies.map { it.toMovieDataWrapper() }
                     )
+
+                    getNowPlaying()
                 }
         }
-        getNowPlaying()
     }
 
     private fun observePopularMovies() {
@@ -95,13 +95,12 @@ class HomeViewModel @Inject constructor(
             movieDao.observePopularMovie().catch {
                 sendDataBaseError(it)
             }.collect { movies ->
-                dismissSnackBar()
                 _popularMovies.emit(
                     movies.map { it.toMovieDataWrapper() }
                 )
+                getPopular()
             }
         }
-        getPopular()
     }
 
     private fun observeTopMovies() {
@@ -111,13 +110,12 @@ class HomeViewModel @Inject constructor(
             movieDao.observeTopMovie().catch {
                 sendDataBaseError(it)
             }.collect { movies ->
-                dismissSnackBar()
                 _topMovies.emit(
                     movies.map { it.toMovieDataWrapper() }
                 )
+                getTopMovies()
             }
         }
-        getTopMovies()
     }
 
     private fun getNowPlaying() {
@@ -289,46 +287,51 @@ class HomeViewModel @Inject constructor(
     private suspend fun sendDataBaseError(
         throwable: Throwable
     ) {
-        _snackBarManager.emit(
-            SnackBarManager(
+        if (isOneOfListEmpty()) {
+            SnackBarMassage(
                 snackBarMessage = databaseErrorCatchMessage(throwable),
                 snackBarActionLabel = "Try Again",
                 snackBarAction = { tryAgainApi() },
-                snackBarDuration = if (isOneOfListEmpty()) {
-                    SnackbarDuration.Indefinite
-                } else {
-                    SnackbarDuration.Short
-                }
+                snackBarDuration = SnackbarDuration.Indefinite
             )
-        )
-        snackBarMessage.sendMessage(
-            snackBarManager = _snackBarManager.value
+        } else {
+            SnackBarMassage(
+                snackBarMessage = databaseErrorCatchMessage(throwable),
+                snackBarDuration = SnackbarDuration.Short
+            )
+        }
+        snackBarManager.sendMessage(
+            snackBarMassage = _snackBarMassage.value
         )
     }
 
     private suspend fun sendNetworkError(
         error: String
     ) {
-        _snackBarManager.emit(
-            SnackBarManager(
-                snackBarMessage = error,
-                snackBarActionLabel = "Try Again",
-                snackBarAction = { tryAgainApi() },
-                snackBarDuration = if (isOneOfListEmpty()) {
-                    SnackbarDuration.Indefinite
-                } else {
-                    SnackbarDuration.Short
-                }
-            )
+        _snackBarMassage.emit(
+            if (isOneOfListEmpty()) {
+                SnackBarMassage(
+                    snackBarMessage = error,
+                    snackBarActionLabel = "Try Again",
+                    snackBarAction = { tryAgainApi() },
+                    snackBarDuration = SnackbarDuration.Indefinite
+                )
+            } else {
+                SnackBarMassage(
+                    snackBarMessage = error,
+                    snackBarDuration = SnackbarDuration.Short
+                )
+            }
+
         )
-        snackBarMessage.sendMessage(
-            _snackBarManager.value
+        snackBarManager.sendMessage(
+            _snackBarMassage.value
         )
     }
 
     private fun tryAgainApi() {
         viewModelScope.launch {
-            snackBarMessage.dismissSnackBar()
+            snackBarManager.dismissSnackBar()
         }
         getGenre()
         observeTopMovies()

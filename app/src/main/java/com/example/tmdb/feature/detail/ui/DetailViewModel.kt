@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.data.moviedata.MovieDao
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.safeApi
-import com.example.tmdb.core.utils.SnackBarMessage
+import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.feature.detail.data.detail.DetailDao
 import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.network.DetailApi
@@ -25,7 +25,7 @@ class DetailViewModel @Inject constructor(
     private val detailApi: DetailApi,
     private val detailDao: DetailDao,
     private val movieDao: MovieDao,
-    private val snackBarMessage: SnackBarMessage
+    private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
     private var _movieDetail: MutableStateFlow<DetailMovieWithAllRelations?> =
@@ -38,7 +38,7 @@ class DetailViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            snackBarMessage.dismissSnackBar()
+            snackBarManager.dismissSnackBar()
         }
         observeDetailMovieWithAllRelations()
     }

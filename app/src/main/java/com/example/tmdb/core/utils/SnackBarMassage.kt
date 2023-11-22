@@ -5,15 +5,14 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import javax.annotation.concurrent.Immutable
 
-@Immutable
-data class SnackBarMessage(
-    private val _snackBarMessage: Channel<SnackBarManager?>
-) {
+class SnackBarManager() {
+    private val _snackBarMessage: Channel<SnackBarMassage?> = Channel()
+
     suspend fun sendMessage(
-        snackBarManager: SnackBarManager?
+        snackBarMassage: SnackBarMassage?
     ) {
         _snackBarMessage.send(
-            if (snackBarManager?.isHaveToShow == true) snackBarManager else null
+            if (snackBarMassage?.isHaveToShow == true) snackBarMassage else null
         )
     }
 
@@ -25,7 +24,7 @@ data class SnackBarMessage(
 }
 
 @Immutable
-data class SnackBarManager(
+data class SnackBarMassage(
     val snackBarMessage: String?,
     val snackBarAction: (() -> Unit)? = null,
     val snackBarActionLabel: String? = null,
