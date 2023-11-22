@@ -113,7 +113,6 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Box(
                             modifier = Modifier
-                                .statusBarsPadding()
                                 .padding(it)
                                 .fillMaxSize()
                         ) {

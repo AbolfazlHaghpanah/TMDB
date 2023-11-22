@@ -10,18 +10,10 @@ data class SnackBarMessage(
     private val _snackBarMessage: Channel<SnackBarManager?>
 ) {
     suspend fun sendMessage(
-        message: String?,
-        action: (() -> Unit)? = null,
-        actionLabel: String? = null,
-        duration: SnackbarDuration = SnackbarDuration.Long
+        snackBarManager: SnackBarManager?
     ) {
         _snackBarMessage.send(
-            SnackBarManager(
-                _message = message,
-                _actionLabel = actionLabel,
-                _action = action,
-                _duration = duration
-            )
+            if (snackBarManager?.isHaveToShow == true) snackBarManager else null
         )
     }
 
@@ -33,17 +25,18 @@ data class SnackBarMessage(
 }
 
 @Immutable
-class SnackBarManager(
-    private val _message: String?,
-    private var _action: (() -> Unit)? = null,
-    private var _actionLabel: String? = null,
-    private var _duration: SnackbarDuration = SnackbarDuration.Long
+data class SnackBarManager(
+    val snackBarMessage: String?,
+    val snackBarAction: (() -> Unit)? = null,
+    val snackBarActionLabel: String? = null,
+    val snackBarDuration: SnackbarDuration = SnackbarDuration.Long,
+    val isHaveToShow: Boolean = true
 ) {
-    fun getMessage() = _message
-    fun getActionLabel() = _actionLabel
-    fun getDuration() = _duration
+    fun getMessage() = snackBarMessage
+    fun getActionLabel() = snackBarActionLabel
+    fun getDuration() = snackBarDuration
 
     fun performAction() {
-        _action?.invoke()
+        snackBarAction?.invoke()
     }
 }

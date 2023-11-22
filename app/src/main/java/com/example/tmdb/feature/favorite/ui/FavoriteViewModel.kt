@@ -4,6 +4,7 @@ import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.data.databaseErrorCatchMessage
+import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMessage
 import com.example.tmdb.feature.favorite.data.FavoriteMovieDao
 import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
@@ -12,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,7 +32,10 @@ class FavoriteViewModel @Inject constructor(
         observeFavoriteMovies()
     }
 
-    private fun onTryAgain() {
+    fun onTryAgain() {
+        viewModelScope.launch {
+            snackBarMessage.dismissSnackBar()
+        }
         observeFavoriteMovies()
     }
 
@@ -39,12 +44,14 @@ class FavoriteViewModel @Inject constructor(
             favoriteMovieDao.observeMovies()
                 .catch {
                     snackBarMessage.sendMessage(
-                        message = databaseErrorCatchMessage(it),
-                        duration = SnackbarDuration.Indefinite,
-                        action = {
-                            onTryAgain()
-                        },
-                        actionLabel = "Try Again"
+                        SnackBarManager(
+                            snackBarMessage = databaseErrorCatchMessage(it),
+                            snackBarDuration = SnackbarDuration.Indefinite,
+                            snackBarAction = {
+                                onTryAgain()
+                            },
+                            snackBarActionLabel = "Try Again"
+                        )
                     )
                 }.collect {
                     _favoriteMovieList.emit(it.map { movie -> movie.toMovieDatabaseWrapper() })

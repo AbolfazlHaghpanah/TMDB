@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.data.databaseErrorCatchMessage
+import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMessage
 import com.example.tmdb.feature.favorite.data.FavoriteMovieDao
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,8 +25,9 @@ class TMDBModalBottomSheetViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 favoriteMovieDao.deleteMovie(movieId)
+                throw Throwable("mmd")
             } catch (t: Throwable) {
-                snackBarMessage.sendMessage(databaseErrorCatchMessage(t))
+                snackBarMessage.sendMessage(SnackBarManager(databaseErrorCatchMessage(t)))
             }
         }
     }

@@ -9,6 +9,7 @@ import com.example.tmdb.core.data.moviedata.MovieDao
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.Result.Success
 import com.example.tmdb.core.network.safeApi
+import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMessage
 import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.network.HomeApi
@@ -50,27 +51,37 @@ class HomeViewModel @Inject constructor(
 
     private val _genreResult = MutableStateFlow<Result>(Result.Idle)
 
+    private val _snackBarManager = MutableStateFlow<SnackBarManager?>(null)
+
     init {
-        viewModelScope.launch {
-            snackBarMessage.dismissSnackBar()
-        }
         getGenre()
         observeTopMovies()
         observeNowPlaying()
         observePopularMovies()
     }
 
+    suspend fun showLastSnackBar() {
+        snackBarMessage.sendMessage(
+            _snackBarManager.value
+        )
+    }
 
+    private suspend fun dismissSnackBar() {
+        _snackBarManager.emit(
+            _snackBarManager.value?.copy(isHaveToShow = false)
+        )
+    }
 
     private fun observeNowPlaying() {
         viewModelScope.launch(Dispatchers.IO) {
 
             movieDao.observeNowPlayingMovie()
                 .catch {
-
-                }.collect {
+                    sendDataBaseError(it)
+                }.collect { movies ->
+                    dismissSnackBar()
                     _nowPlayingMovies.emit(
-                        it.map { it.toMovieDataWrapper() }
+                        movies.map { it.toMovieDataWrapper() }
                     )
                 }
         }
@@ -83,10 +94,10 @@ class HomeViewModel @Inject constructor(
 
             movieDao.observePopularMovie().catch {
                 sendDataBaseError(it)
-            }.collect {
-
+            }.collect { movies ->
+                dismissSnackBar()
                 _popularMovies.emit(
-                    it.map { it.toMovieDataWrapper() }
+                    movies.map { it.toMovieDataWrapper() }
                 )
             }
         }
@@ -99,9 +110,10 @@ class HomeViewModel @Inject constructor(
 
             movieDao.observeTopMovie().catch {
                 sendDataBaseError(it)
-            }.collect {
+            }.collect { movies ->
+                dismissSnackBar()
                 _topMovies.emit(
-                    it.map { it.toMovieDataWrapper() }
+                    movies.map { it.toMovieDataWrapper() }
                 )
             }
         }
@@ -168,6 +180,7 @@ class HomeViewModel @Inject constructor(
             when (_genreResult.value) {
 
                 is Success<*> -> {
+                    dismissSnackBar()
                     val data = (_genreResult.value as Success<*>).response as GenreResponse
                     data.genres.forEach { it ->
                         try {
@@ -193,6 +206,7 @@ class HomeViewModel @Inject constructor(
             when (_nowPlayingResult.value) {
 
                 is Success<*> -> {
+                    dismissSnackBar()
                     val data = (_nowPlayingResult.value as Success<*>).response as MovieResponse
                     try {
                         data.results.forEach { movie ->
@@ -221,6 +235,7 @@ class HomeViewModel @Inject constructor(
 
             when (_popularMovieResult.value) {
                 is Success<*> -> {
+                    dismissSnackBar()
                     val data = (_popularMovieResult.value as Success<*>).response as MovieResponse
                     try {
                         data.results.forEach { movie ->
@@ -245,6 +260,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             when (_topMovieResult.value) {
                 is Success<*> -> {
+                    dismissSnackBar()
                     val data = (_topMovieResult.value as Success<*>).response as MovieResponse
                     try {
                         data.results.forEach { movie ->
@@ -273,30 +289,40 @@ class HomeViewModel @Inject constructor(
     private suspend fun sendDataBaseError(
         throwable: Throwable
     ) {
+        _snackBarManager.emit(
+            SnackBarManager(
+                snackBarMessage = databaseErrorCatchMessage(throwable),
+                snackBarActionLabel = "Try Again",
+                snackBarAction = { tryAgainApi() },
+                snackBarDuration = if (isOneOfListEmpty()) {
+                    SnackbarDuration.Indefinite
+                } else {
+                    SnackbarDuration.Short
+                }
+            )
+        )
         snackBarMessage.sendMessage(
-            message = databaseErrorCatchMessage(throwable),
-            actionLabel = "Try Again",
-            action = { tryAgainApi() },
-            duration = if (isOneOfListEmpty()) {
-                SnackbarDuration.Indefinite
-            } else {
-                SnackbarDuration.Short
-            }
+            snackBarManager = _snackBarManager.value
         )
     }
 
     private suspend fun sendNetworkError(
         error: String
     ) {
+        _snackBarManager.emit(
+            SnackBarManager(
+                snackBarMessage = error,
+                snackBarActionLabel = "Try Again",
+                snackBarAction = { tryAgainApi() },
+                snackBarDuration = if (isOneOfListEmpty()) {
+                    SnackbarDuration.Indefinite
+                } else {
+                    SnackbarDuration.Short
+                }
+            )
+        )
         snackBarMessage.sendMessage(
-            message = error,
-            actionLabel = "Try Again",
-            action = { tryAgainApi() },
-            duration = if (isOneOfListEmpty()) {
-                SnackbarDuration.Indefinite
-            } else {
-                SnackbarDuration.Short
-            }
+            _snackBarManager.value
         )
     }
 
