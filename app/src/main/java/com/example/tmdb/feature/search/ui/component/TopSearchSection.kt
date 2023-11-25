@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -45,7 +46,8 @@ fun TopSearchSection(
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .border(0.dp, TMDBTheme.colors.surface)
-                .background(color = TMDBTheme.colors.surface, shape = TMDBTheme.shapes.veryLarge),
+                .background(color = TMDBTheme.colors.surface, shape = TMDBTheme.shapes.veryLarge)
+                .width(292.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 unfocusedBorderColor = Color.Transparent
             )

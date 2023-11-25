@@ -22,6 +22,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -61,6 +62,10 @@ private fun SearchScreen(
 ) {
     val searchResult by searchViewModel.searchResult.collectAsState()
     val apiResult by searchViewModel.apiResult.collectAsState()
+
+    LaunchedEffect(apiResult) {
+        searchViewModel.showLastSnackBar()
+    }
 
     SearchScreen(
         apiResult = apiResult,
@@ -107,7 +112,7 @@ private fun SearchScreen(
         } else {
             if (searchResult.isNotEmpty()) {
                 SearchResults(searchResult, getMovieGenres, onSearchElementClick)
-            } else if (apiResult == Result.Success && searchString != "") {
+            } else if (searchString != "" && apiResult !is Result.Error) {
                 NoSearchResultSection()
             }
         }
