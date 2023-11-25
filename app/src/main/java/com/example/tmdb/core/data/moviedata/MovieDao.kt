@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.example.tmdb.core.data.genre.entity.GenreEntity
 import com.example.tmdb.feature.detail.data.credit.CreditEntity
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithCreditCrossRef
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithGenreCrossRef
@@ -60,6 +61,22 @@ interface MovieDao {
 
     @Query("SELECT * FROM NOW_PLAYING")
     fun observeNowPlayingMovie(): Flow<List<NowPlayingWithMovie>>
+
+    @Transaction
+    suspend fun addToFavorite(
+        movie: FavoriteMovieEntity,
+        genres: List<GenreEntity>
+    ) {
+        genres.forEach {
+            addFavoriteMovieGenre(
+                FavoriteMovieGenreCrossRef(
+                    movie.movieId,
+                    it.genreId
+                )
+            )
+        }
+        addToFavorite(movie)
+    }
 
     @Transaction
     suspend fun addNowPlayingMovie(

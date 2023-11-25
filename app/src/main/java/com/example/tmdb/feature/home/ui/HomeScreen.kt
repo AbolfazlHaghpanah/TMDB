@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarResult
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -21,10 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tmdb.R
-import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.ui.shimmer.fakeMovie
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.example.tmdb.core.utils.LocalSnackbarHostState
 import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.ui.component.MovieRow
 import com.example.tmdb.feature.home.ui.component.PagerMovieItem
@@ -34,6 +37,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun HomeScreen(
@@ -64,21 +68,47 @@ private fun HomeScreen(
     val popularMovies by viewModel.popularMovies.collectAsState()
     val topRated by viewModel.topMovies.collectAsState()
     val pagerState = rememberPagerState()
-    val nowPlayingResult by viewModel.nowPlayingResult.collectAsState()
-    val popularMovieResult by viewModel.popularMovieResult.collectAsState()
-    val topMovieResult by viewModel.topMovieResult.collectAsState()
+    val snackBar = LocalSnackbarHostState.current
 
+    LaunchedEffect(
+        viewModel.errorMessage
+    ) {
+        viewModel.errorMessage.collectLatest {
+            if (
+                it.isNullOrEmpty().not()
+            ) {
+                if (
+                    (nowPlayingMovies.isEmpty()) ||
+                    (popularMovies.isEmpty()) ||
+                    (topRated.isEmpty())
+                ) {
+                    val snackBarResult = snackBar.showSnackbar(
+                        message = it!!,
+                        actionLabel = "Try Again",
+                        duration = SnackbarDuration.Indefinite
+
+                    )
+                    if (snackBarResult == SnackbarResult.ActionPerformed) {
+                        viewModel.tryAgainApi()
+                    }
+                } else {
+                    snackBar.showSnackbar(
+                        message = it!!,
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+        }
+    }
     HomeScreen(
         nowPlayingMovies = nowPlayingMovies,
         popularMovies = popularMovies,
         topMovies = topRated,
         pagerState = pagerState,
-        nowPlayingResult = nowPlayingResult,
-        popularMovieResult = popularMovieResult,
-        topMovieResult = topMovieResult,
         onNavigation = onNavigation,
     )
 }
+
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -87,9 +117,6 @@ private fun HomeScreen(
     popularMovies: List<MovieWithGenreDatabaseWrapper>,
     topMovies: List<MovieWithGenreDatabaseWrapper>,
     pagerState: PagerState,
-    nowPlayingResult: Result,
-    popularMovieResult: Result,
-    topMovieResult: Result,
     onNavigation: (String) -> Unit,
 ) {
     LazyColumn(
