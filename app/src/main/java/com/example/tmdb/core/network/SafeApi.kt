@@ -39,7 +39,7 @@ suspend fun <T> safeApi(
                 throw Throwable(message = mapServerErrorMessage(bodyCode?.status_message ?: ""))
             }
         } catch (t: Throwable) {
-            emit(Result.Error(mapServerErrorMessage(t.message ?: "")))
+            emit(Result.Error(t.message ?: ""))
         }
         onRequestDone()
     }.cancellable()
@@ -94,6 +94,6 @@ fun mapServerErrorMessage(serverErrorMessage: String): String {
         serverErrorMessage.contains("This user has been suspended.") -> "This user has been suspended."
         serverErrorMessage.contains("The API is undergoing maintenance. Try again later.") -> "The API is undergoing maintenance. Try again later."
         serverErrorMessage.contains("The input is not valid.") -> "The input is not valid."
-        else -> "Network may not Be Available"
+        else -> "unexpected server error : $serverErrorMessage"
     }
 }

@@ -1,8 +1,5 @@
 package com.example.tmdb.core.network
 
-import retrofit2.Response
-
-
 sealed class Result {
 
     object Idle : Result()

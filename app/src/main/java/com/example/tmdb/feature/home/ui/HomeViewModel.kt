@@ -1,5 +1,6 @@
 package com.example.tmdb.feature.home.ui
 
+import android.util.Log
 import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -73,49 +74,54 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun observeNowPlaying() {
+
         viewModelScope.launch(Dispatchers.IO) {
 
             movieDao.observeNowPlayingMovie()
                 .catch {
                     sendDataBaseError(it)
-                }.collect { movies ->
+                }
+                .collect { movies ->
                     _nowPlayingMovies.emit(
                         movies.map { it.toMovieDataWrapper() }
                     )
-
-                    getNowPlaying()
                 }
         }
+        getNowPlaying()
     }
 
     private fun observePopularMovies() {
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            movieDao.observePopularMovie().catch {
-                sendDataBaseError(it)
-            }.collect { movies ->
-                _popularMovies.emit(
-                    movies.map { it.toMovieDataWrapper() }
-                )
-                getPopular()
-            }
+            movieDao.observePopularMovie()
+                .catch {
+                    sendDataBaseError(it)
+                }
+                .collect { movies ->
+                    _popularMovies.emit(
+                        movies.map { it.toMovieDataWrapper() }
+                    )
+                }
         }
+        getPopular()
     }
 
     private fun observeTopMovies() {
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            movieDao.observeTopMovie().catch {
-                sendDataBaseError(it)
-            }.collect { movies ->
-                _topMovies.emit(
-                    movies.map { it.toMovieDataWrapper() }
-                )
-                getTopMovies()
-            }
+            movieDao.observeTopMovie()
+                .catch {
+                    sendDataBaseError(it)
+                }
+                .collect { movies ->
+                    _topMovies.emit(
+                        movies.map { it.toMovieDataWrapper() }
+                    )
+                }
         }
+        getTopMovies()
     }
 
     private fun getNowPlaying() {
@@ -145,6 +151,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getTopMovies() {
+        Log.d("asd", "getTopMovies: mmd")
         viewModelScope.launch(Dispatchers.IO) {
             safeApi(
                 call = {
@@ -232,6 +239,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             when (_popularMovieResult.value) {
+
                 is Success<*> -> {
                     dismissSnackBar()
                     val data = (_popularMovieResult.value as Success<*>).response as MovieResponse
