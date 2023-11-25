@@ -9,8 +9,7 @@ import kotlinx.serialization.json.Json
 import retrofit2.Response
 
 suspend fun <T> safeApi(
-    call: suspend () -> Response<T>,
-    onRequestDone: () -> Unit
+    call: suspend () -> Response<T>
 ): Flow<Result> {
     return flow {
         emit(Result.Loading)
@@ -23,12 +22,7 @@ suspend fun <T> safeApi(
                         emit(Result.Success(body))
                     }
                 } else {
-                    val bodyCode = response.errorBody()?.string()
-                        ?.let {
-                            val json = Json { ignoreUnknownKeys = true }
-                            json.decodeFromString<ErrorResponse>(it)
-                        }
-                    throw Throwable(message = mapServerErrorMessage(bodyCode?.status_message ?: ""))
+                    throw Throwable(message = "body was empty")
                 }
             } else {
                 val bodyCode = response.errorBody()?.string()
@@ -36,12 +30,11 @@ suspend fun <T> safeApi(
                         val json = Json { ignoreUnknownKeys = true }
                         json.decodeFromString<ErrorResponse>(it)
                     }
-                throw Throwable(message = mapServerErrorMessage(bodyCode?.status_message ?: ""))
+                throw Throwable(message = bodyCode?.status_message ?: "")
             }
         } catch (t: Throwable) {
-            emit(Result.Error(t.message ?: ""))
+            emit(Result.Error(mapServerErrorMessage((t.message ?: ""))))
         }
-        onRequestDone()
     }.cancellable()
 }
 
