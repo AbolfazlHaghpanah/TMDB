@@ -93,7 +93,7 @@ interface MovieDao {
     ) {
         addPopularMovie(movie.toPopularMovieEntity())
         addMovie(movie.toMovieEntity())
-        movie.genreIds.forEach {
+        movie.genreIds?.forEach {
             addPopularMoviesGenre(
                 PopularMovieGenreCrossRef(
                     movieId = movie.id,
@@ -109,7 +109,7 @@ interface MovieDao {
     ) {
         addTopMovie(movie.toTopPlayingEntity())
         addMovie(movie.toMovieEntity())
-        movie.genreIds.forEach {
+        movie.genreIds?.forEach {
             addTopMoviesGenre(
                 TopMovieGenreCrossRef(
                     movieId = movie.id,
