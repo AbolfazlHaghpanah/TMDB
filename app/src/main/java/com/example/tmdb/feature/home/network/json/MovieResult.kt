@@ -13,23 +13,23 @@ data class MovieResult(
     val title: String,
     val id: Int,
     @SerialName("release_date")
-    val releaseDate: String,
+    val releaseDate: String?,
     @SerialName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
     @SerialName("poster_path")
-    val posterPath: String,
+    val posterPath: String?,
     @SerialName("genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>?,
     @SerialName("vote_average")
-    val voteAverage: Double
+    val voteAverage: Double?
 ) {
     fun toMovieEntity(): MovieEntity {
         return MovieEntity(
             id = id,
             title = title,
-            posterPath = posterPath,
-            voteAverage = voteAverage,
-            backdropPath = backdropPath
+            posterPath = posterPath?:"",
+            voteAverage = voteAverage?:0.0,
+            backdropPath = backdropPath?:""
         )
     }
 
@@ -48,7 +48,7 @@ data class MovieResult(
     fun toNowPlayingEntity(): NowPlayingEntity {
         return NowPlayingEntity(
             movieId = id,
-            releaseDate = dateConvertor(releaseDate),
+            releaseDate = dateConvertor(releaseDate?:"0000,00,00"),
         )
     }
 }

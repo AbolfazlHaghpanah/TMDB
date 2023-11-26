@@ -11,6 +11,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -35,10 +36,18 @@ private fun DetailScreen(
     detailViewModel: DetailViewModel
 ) {
     val movieDetail by detailViewModel.movieDetail.collectAsState()
+
+    val onAddToFavorite = remember {
+        {
+            detailViewModel.addToFavorite()
+        }
+    }
+
     DetailScreen(
         movieDetail = movieDetail,
         onBackArrowClick = { navController.navigateUp() },
-        onSimilarItemClick = { navController.navigate(AppScreens.Detail.createRoute(it)) }
+        onSimilarItemClick = { navController.navigate(AppScreens.Detail.createRoute(it)) },
+        onAddToFavorite = onAddToFavorite
     )
 
 }
@@ -47,7 +56,8 @@ private fun DetailScreen(
 private fun DetailScreen(
     movieDetail: DetailMovieWithAllRelations?,
     onBackArrowClick: () -> Unit,
-    onSimilarItemClick: (Int) -> Unit
+    onSimilarItemClick: (Int) -> Unit,
+    onAddToFavorite: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -66,7 +76,7 @@ private fun DetailScreen(
                     .verticalScroll(scrollState)
             ) {
 
-                DetailTopWithGradient(movieDetail, onBackArrowClick)
+                DetailTopWithGradient(movieDetail, onBackArrowClick, onAddToFavorite)
 
                 OverviewContentWithCastAndCrew(movieDetail)
 

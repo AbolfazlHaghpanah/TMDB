@@ -6,10 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.data.moviedata.MovieDao
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.safeApi
-import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
+import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.feature.detail.data.detail.DetailDao
+import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.network.DetailApi
 import com.example.tmdb.feature.detail.network.json.MovieDetail
+import com.example.tmdb.feature.favorite.data.FavoriteMovieEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,20 +24,30 @@ class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val detailApi: DetailApi,
     private val detailDao: DetailDao,
-    private val movieDao: MovieDao
+    private val movieDao: MovieDao,
+    private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
     private var _movieDetail: MutableStateFlow<DetailMovieWithAllRelations?> =
         MutableStateFlow(null)
     val movieDetail = _movieDetail.asStateFlow()
 
-    private val _movieDetailResult = MutableStateFlow<Result>(Result.Idle)
-    val movieDetailResult = _movieDetailResult.asStateFlow()
-
     val id: Int = savedStateHandle.get<String>("id")?.toInt() ?: 0
 
     init {
+        viewModelScope.launch {
+            snackBarManager.dismissSnackBar()
+        }
         observeDetailMovieWithAllRelations()
+    }
+
+    fun addToFavorite() {
+        viewModelScope.launch(Dispatchers.IO) {
+            movieDao.addToFavorite(
+                FavoriteMovieEntity(id),
+                movieDetail.value?.genres ?: listOf()
+            )
+        }
     }
 
     private fun observeDetailMovieWithAllRelations() {
@@ -51,17 +63,28 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch {
             safeApi(call = {
                 detailApi.getMovieDetail(id = id)
-            },
-                onDataReady = {
-                    addMovieDetail(it)
-                }
-            ).collect(_movieDetailResult)
+            }
+            ).collect {
+                addMovieDetail(it)
+            }
         }
     }
 
-    private fun addMovieDetail(movieDetail: MovieDetail) {
-        viewModelScope.launch(Dispatchers.IO) {
-            movieDao.addMovieDetail(movieDetail)
+    private suspend fun addMovieDetail(result: Result) {
+
+        when (result) {
+            is Result.Success<*> -> {
+                val data =
+                    result.response as MovieDetail
+
+                movieDao.addMovieDetail(data)
+            }
+
+            is Result.Error -> {
+                val error = result.message
+            }
+
+            else -> {}
         }
     }
 }

@@ -1,11 +1,16 @@
 package com.example.tmdb.feature.home.ui
 
+import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tmdb.core.data.databaseErrorCatchMessage
 import com.example.tmdb.core.data.genre.dao.GenreDao
 import com.example.tmdb.core.data.moviedata.MovieDao
 import com.example.tmdb.core.network.Result
+import com.example.tmdb.core.network.Result.Success
 import com.example.tmdb.core.network.safeApi
+import com.example.tmdb.core.utils.SnackBarManager
+import com.example.tmdb.core.utils.SnackBarMassage
 import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.network.HomeApi
 import com.example.tmdb.feature.home.network.json.GenreResponse
@@ -14,6 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +27,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val homeApi: HomeApi,
     private val movieDao: MovieDao,
-    private val genreDao: GenreDao
+    private val genreDao: GenreDao,
+    private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
     private val _nowPlayingMovies =
@@ -36,17 +43,7 @@ class HomeViewModel @Inject constructor(
         MutableStateFlow<List<MovieWithGenreDatabaseWrapper>>(emptyList())
     val topMovies = _topMovies.asStateFlow()
 
-    private val _nowPlayingResult = MutableStateFlow<Result>(Result.Idle)
-    val nowPlayingResult = _nowPlayingResult.asStateFlow()
-
-    private val _popularMovieResult = MutableStateFlow<Result>(Result.Idle)
-    val popularMovieResult = _popularMovieResult.asStateFlow()
-
-    private val _topMovieResult = MutableStateFlow<Result>(Result.Idle)
-    val topMovieResult = _topMovieResult.asStateFlow()
-
-    private val _genreResult = MutableStateFlow<Result>(Result.Idle)
-    val genreResult = _genreResult.asStateFlow()
+    private val _snackBarMassage = MutableStateFlow<SnackBarMassage?>(null)
 
     init {
         getGenre()
@@ -55,37 +52,67 @@ class HomeViewModel @Inject constructor(
         observePopularMovies()
     }
 
+    suspend fun showLastSnackBar() {
+        snackBarManager.sendMessage(
+            _snackBarMassage.value
+        )
+    }
+
+    private suspend fun dismissSnackBar() {
+        _snackBarMassage.emit(
+            _snackBarMassage.value?.copy(isHaveToShow = false)
+        )
+    }
+
     private fun observeNowPlaying() {
-        getNowPlaying()
+
         viewModelScope.launch(Dispatchers.IO) {
-            movieDao.observeNowPlayingMovie().collect {
-                _nowPlayingMovies.emit(it.map { it.toMovieDataWrapper() })
-            }
+
+            movieDao.observeNowPlayingMovie()
+                .catch {
+                    sendDataBaseError(it)
+                }
+                .collect { movies ->
+                    _nowPlayingMovies.emit(
+                        movies.map { it.toMovieDataWrapper() }
+                    )
+                }
         }
+        getNowPlaying()
     }
 
     private fun observePopularMovies() {
-        getPopular()
 
         viewModelScope.launch(Dispatchers.IO) {
-            movieDao.observePopularMovie().collect {
-                _popularMovies.emit(
-                    it.map { it.toMovieDataWrapper() }
-                )
-            }
+
+            movieDao.observePopularMovie()
+                .catch {
+                    sendDataBaseError(it)
+                }
+                .collect { movies ->
+                    _popularMovies.emit(
+                        movies.map { it.toMovieDataWrapper() }
+                    )
+                }
         }
+        getPopular()
     }
 
     private fun observeTopMovies() {
-        getTopMovies()
 
         viewModelScope.launch(Dispatchers.IO) {
-            movieDao.observeTopMovie().collect {
-                _topMovies.emit(
-                    it.map { it.toMovieDataWrapper() }
-                )
-            }
+
+            movieDao.observeTopMovie()
+                .catch {
+                    sendDataBaseError(it)
+                }
+                .collect { movies ->
+                    _topMovies.emit(
+                        movies.map { it.toMovieDataWrapper() }
+                    )
+                }
         }
+        getTopMovies()
     }
 
     private fun getNowPlaying() {
@@ -93,11 +120,10 @@ class HomeViewModel @Inject constructor(
             safeApi(
                 call = {
                     homeApi.getNowPlaying()
-                },
-                onDataReady = {
-                    storeNowPlaying(it)
                 }
-            ).collect(_nowPlayingResult)
+            ).collect {
+                storeNowPlaying(it)
+            }
         }
     }
 
@@ -106,11 +132,10 @@ class HomeViewModel @Inject constructor(
             safeApi(
                 call = {
                     homeApi.getMostPopular()
-                },
-                onDataReady = {
-                    storePopulars(it)
                 }
-            ).collect(_popularMovieResult)
+            ).collect {
+                storePopulars(it)
+            }
         }
     }
 
@@ -119,12 +144,12 @@ class HomeViewModel @Inject constructor(
             safeApi(
                 call = {
                     homeApi.getTopRated()
-                },
-                onDataReady = {
-                    storeTopMovie(it)
                 }
-            ).collect(_topMovieResult)
+            ).collect{
+                storeTopMovie(it)
+            }
         }
+
     }
 
     private fun getGenre() {
@@ -132,43 +157,177 @@ class HomeViewModel @Inject constructor(
             safeApi(
                 call = {
                     homeApi.getGenre()
-                },
-                onDataReady = {
-                    storeGenres(it)
                 }
-            ).collect(_genreResult)
-        }
-    }
-
-    private fun storeGenres(genre: GenreResponse) {
-        viewModelScope.launch(Dispatchers.IO) {
-            genre.genres.forEach {
-                genreDao.addGenre(it.toGenreEntity())
+            ).collect {
+                storeGenre(it)
             }
         }
     }
 
-    private fun storeNowPlaying(movies: MovieResponse) {
-        viewModelScope.launch(Dispatchers.IO) {
-            movies.results.forEach { movie ->
-                movieDao.addNowPlayingMovie(movie.toNowPlayingEntity(), movie.toMovieEntity())
+    private suspend fun storeGenre(result: Result) {
+
+        when (result) {
+            is Success<*> -> {
+
+                dismissSnackBar()
+                val data = result.response as GenreResponse
+
+                data.genres.forEach { it ->
+                    try {
+                        genreDao.addGenre(it.toGenreEntity())
+                    } catch (t: Throwable) {
+                        sendDataBaseError(t)
+                    }
+                }
             }
+
+            is Result.Error -> {
+                val error = (result).message
+                sendNetworkError(error)
+            }
+
+            else -> {}
+        }
+
+    }
+
+    private suspend fun storeNowPlaying(result: Result) {
+
+        when (result) {
+
+            is Success<*> -> {
+                dismissSnackBar()
+                val data = result.response as MovieResponse
+                try {
+                    data.results.forEach { movie ->
+                        movieDao.addNowPlayingMovie(
+                            movie.toNowPlayingEntity(),
+                            movie.toMovieEntity()
+                        )
+                    }
+                } catch (t: Throwable) {
+                    sendDataBaseError(t)
+                }
+            }
+
+            is Result.Error -> {
+                val error = result.message
+                sendNetworkError(error)
+            }
+
+            else -> {}
+        }
+
+    }
+
+    private suspend fun storePopulars(result: Result) {
+
+        when (result) {
+
+            is Success<*> -> {
+                dismissSnackBar()
+                val data = result.response as MovieResponse
+                try {
+                    data.results.forEach { movie ->
+                        movieDao.addPopularMovie(movie)
+                    }
+                } catch (t: Throwable) {
+                    sendDataBaseError(t)
+                }
+            }
+
+            is Result.Error -> {
+                val error = result.message
+                sendNetworkError(error)
+            }
+
+            else -> {}
+        }
+
+    }
+
+    private suspend fun storeTopMovie(result: Result) {
+
+        when (result) {
+            is Success<*> -> {
+                dismissSnackBar()
+                val data = result.response as MovieResponse
+                try {
+                    data.results.forEach { movie ->
+                        movieDao.addTopMovie(
+                            movie
+                        )
+                    }
+                } catch (t: Throwable) {
+                    sendDataBaseError(t)
+                }
+            }
+
+            is Result.Error -> {
+                val error = result.message
+                sendNetworkError(error)
+            }
+
+            else -> {}
         }
     }
 
-    private fun storePopulars(movie: MovieResponse) {
-        viewModelScope.launch(Dispatchers.IO) {
-            movie.results.forEach { movie ->
-                movieDao.addPopularMovie(movie)
-            }
+
+    private fun isOneOfListEmpty() =
+        _nowPlayingMovies.value.isEmpty() || _popularMovies.value.isEmpty() || _topMovies.value.isEmpty()
+
+    private suspend fun sendDataBaseError(
+        throwable: Throwable
+    ) {
+        if (isOneOfListEmpty()) {
+            SnackBarMassage(
+                snackBarMessage = databaseErrorCatchMessage(throwable),
+                snackBarActionLabel = "Try Again",
+                snackBarAction = { tryAgainApi() },
+                snackBarDuration = SnackbarDuration.Indefinite
+            )
+        } else {
+            SnackBarMassage(
+                snackBarMessage = databaseErrorCatchMessage(throwable),
+                snackBarDuration = SnackbarDuration.Short
+            )
         }
+        snackBarManager.sendMessage(
+            snackBarMassage = _snackBarMassage.value
+        )
     }
 
-    private fun storeTopMovie(movie: MovieResponse) {
-        viewModelScope.launch(Dispatchers.IO) {
-            movie.results.forEach { movie ->
-                movieDao.addTopMovie(movie)
+    private suspend fun sendNetworkError(
+        error: String
+    ) {
+        _snackBarMassage.emit(
+            if (isOneOfListEmpty()) {
+                SnackBarMassage(
+                    snackBarMessage = error,
+                    snackBarActionLabel = "Try Again",
+                    snackBarAction = { tryAgainApi() },
+                    snackBarDuration = SnackbarDuration.Indefinite
+                )
+            } else {
+                SnackBarMassage(
+                    snackBarMessage = error,
+                    snackBarDuration = SnackbarDuration.Short
+                )
             }
+
+        )
+        snackBarManager.sendMessage(
+            _snackBarMassage.value
+        )
+    }
+
+    private fun tryAgainApi() {
+        viewModelScope.launch {
+            snackBarManager.dismissSnackBar()
         }
+        getGenre()
+        observeTopMovies()
+        observeNowPlaying()
+        observePopularMovies()
     }
 }

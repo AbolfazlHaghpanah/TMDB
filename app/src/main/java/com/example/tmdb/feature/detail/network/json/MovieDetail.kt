@@ -8,10 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MovieDetail(
     val id: Int,
-
-    @SerialName("original_title")
-    val originalTitle: String,
-
+    val title: String,
     val overview: String,
 
     @SerialName("vote_average")

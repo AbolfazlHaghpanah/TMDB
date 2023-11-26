@@ -13,6 +13,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -50,6 +51,10 @@ private fun FavoriteScreen(
         {
             navController.navigate(AppScreens.BottomSheet.createRoute(it))
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.onTryAgain()
     }
 
     FavoriteScreen(
@@ -113,5 +118,4 @@ private fun FavoriteScreen(
             }
         }
     }
-
 }

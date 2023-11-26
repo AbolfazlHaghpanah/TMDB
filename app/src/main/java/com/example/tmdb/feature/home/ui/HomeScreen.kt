@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -21,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tmdb.R
-import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.ui.shimmer.fakeMovie
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
@@ -60,25 +60,24 @@ private fun HomeScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.showLastSnackBar()
+    }
+
     val nowPlayingMovies by viewModel.nowPlayingMovies.collectAsState()
     val popularMovies by viewModel.popularMovies.collectAsState()
     val topRated by viewModel.topMovies.collectAsState()
-    val pagerState = rememberPagerState()
-    val nowPlayingResult by viewModel.nowPlayingResult.collectAsState()
-    val popularMovieResult by viewModel.popularMovieResult.collectAsState()
-    val topMovieResult by viewModel.topMovieResult.collectAsState()
+    val pagerState = rememberPagerState(initialPage = 2)
 
     HomeScreen(
         nowPlayingMovies = nowPlayingMovies,
         popularMovies = popularMovies,
         topMovies = topRated,
         pagerState = pagerState,
-        nowPlayingResult = nowPlayingResult,
-        popularMovieResult = popularMovieResult,
-        topMovieResult = topMovieResult,
         onNavigation = onNavigation,
     )
 }
+
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -87,9 +86,6 @@ private fun HomeScreen(
     popularMovies: List<MovieWithGenreDatabaseWrapper>,
     topMovies: List<MovieWithGenreDatabaseWrapper>,
     pagerState: PagerState,
-    nowPlayingResult: Result,
-    popularMovieResult: Result,
-    topMovieResult: Result,
     onNavigation: (String) -> Unit,
 ) {
     LazyColumn(

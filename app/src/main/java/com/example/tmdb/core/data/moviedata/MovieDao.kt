@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.example.tmdb.core.data.genre.entity.GenreEntity
 import com.example.tmdb.feature.detail.data.credit.CreditEntity
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithCreditCrossRef
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithGenreCrossRef
@@ -62,6 +63,22 @@ interface MovieDao {
     fun observeNowPlayingMovie(): Flow<List<NowPlayingWithMovie>>
 
     @Transaction
+    suspend fun addToFavorite(
+        movie: FavoriteMovieEntity,
+        genres: List<GenreEntity>
+    ) {
+        genres.forEach {
+            addFavoriteMovieGenre(
+                FavoriteMovieGenreCrossRef(
+                    movie.movieId,
+                    it.genreId
+                )
+            )
+        }
+        addToFavorite(movie)
+    }
+
+    @Transaction
     suspend fun addNowPlayingMovie(
         nowPlaying: NowPlayingEntity,
         movie: MovieEntity
@@ -76,7 +93,7 @@ interface MovieDao {
     ) {
         addPopularMovie(movie.toPopularMovieEntity())
         addMovie(movie.toMovieEntity())
-        movie.genreIds.forEach {
+        movie.genreIds?.forEach {
             addPopularMoviesGenre(
                 PopularMovieGenreCrossRef(
                     movieId = movie.id,
@@ -92,7 +109,7 @@ interface MovieDao {
     ) {
         addTopMovie(movie.toTopPlayingEntity())
         addMovie(movie.toMovieEntity())
-        movie.genreIds.forEach {
+        movie.genreIds?.forEach {
             addTopMoviesGenre(
                 TopMovieGenreCrossRef(
                     movieId = movie.id,
@@ -128,7 +145,7 @@ interface MovieDao {
                 posterPath = movieDetail.posterPath,
                 voteAverage = movieDetail.voteAverage.toDouble(),
                 backdropPath = movieDetail.backdropPath,
-                title = movieDetail.originalTitle
+                title = movieDetail.title
             )
         )
         addDetail(movieDetail.toDetailEntity())
@@ -167,7 +184,7 @@ interface MovieDao {
             addMovie(
                 MovieEntity(
                     id = it.id,
-                    title = it.originalTitle,
+                    title = it.title,
                     backdropPath = "",
                     voteAverage = it.voteAverage.toDouble(),
                     posterPath = it.posterPath ?: ""

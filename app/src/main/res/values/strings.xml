@@ -17,4 +17,6 @@
     <string name="twitter">twitter-</string>
     <string name="open_in">Open In</string>
     <string name="null_text">null</string>
+    <string name="movie_search_error1">we are sorry,we can not find the movie :(</string>
+    <string name="find_movie_by_title">"Find your movie by Type title "</string>
 </resources>
