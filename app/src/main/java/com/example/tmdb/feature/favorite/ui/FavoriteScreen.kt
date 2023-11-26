@@ -27,7 +27,7 @@ import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.feature.favorite.ui.component.EmptyIcon
 import com.example.tmdb.feature.favorite.ui.component.MovieItems
-import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
+import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.navigation.AppScreens
 
 @Composable

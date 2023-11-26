@@ -4,8 +4,8 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 import com.example.tmdb.core.data.moviedata.MovieEntity
-import com.example.tmdb.feature.home.data.common.MovieDatabaseWrapper
-import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
+import com.example.tmdb.core.utils.MovieDatabaseWrapper
+import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.core.data.genre.entity.GenreEntity
 import com.example.tmdb.feature.home.data.popularMovie.PopularMovieEntity
 

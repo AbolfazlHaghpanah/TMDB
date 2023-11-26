@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.example.tmdb.core.ui.shimmer.fakeMovie
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
+import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 
 @Composable
 fun MovieRow(

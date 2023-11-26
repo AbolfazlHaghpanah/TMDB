@@ -1,7 +1,7 @@
 package com.example.tmdb.core.ui.shimmer
 
-import com.example.tmdb.feature.home.data.common.MovieDatabaseWrapper
-import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
+import com.example.tmdb.core.utils.MovieDatabaseWrapper
+import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.core.data.genre.entity.GenreEntity
 
 val fakeMovie = listOf(

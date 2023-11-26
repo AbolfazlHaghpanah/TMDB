@@ -11,7 +11,7 @@ import com.example.tmdb.core.network.Result.Success
 import com.example.tmdb.core.network.safeApi
 import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMassage
-import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
+import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.network.HomeApi
 import com.example.tmdb.feature.home.network.json.GenreResponse
 import com.example.tmdb.feature.home.network.json.MovieResponse

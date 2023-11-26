@@ -29,7 +29,7 @@ import coil.compose.AsyncImage
 import com.example.tmdb.core.ui.component.VoteIcon
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
+import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 
 @Composable
 fun MovieItems(

@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.home.data.common
+package com.example.tmdb.core.utils
 
 import androidx.compose.runtime.Immutable
 import com.example.tmdb.core.data.genre.entity.GenreEntity
