@@ -24,7 +24,6 @@ import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 
 @Composable
 fun TopSearchSection(
-    onSearch: (String) -> Unit,
     searchString: String,
     onSearchChange: (String) -> Unit
 ) {
@@ -35,9 +34,7 @@ fun TopSearchSection(
         OutlinedTextField(
             value = searchString,
             onValueChange = {
-                //TODO
                 onSearchChange(it)
-                onSearch(it)
             },
             maxLines = 2,
             shape = TMDBTheme.shapes.veryLarge,
@@ -57,7 +54,6 @@ fun TopSearchSection(
             onClick = {
                 if (searchString != "") {
                     onSearchChange("")
-                    onSearch(searchString)
                 }
             },
             modifier = Modifier

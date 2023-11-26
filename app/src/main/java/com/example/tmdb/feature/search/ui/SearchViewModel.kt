@@ -28,7 +28,6 @@ class SearchViewModel @Inject constructor(
     private val _searchResult = MutableStateFlow(listOf<SearchResultElement>())
     val searchResult = _searchResult.asStateFlow()
 
-    //TODO remove
     private val _apiResult = MutableStateFlow<Result>(Result.Idle)
     val apiResult = _apiResult.asStateFlow()
 
@@ -64,15 +63,14 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    //TODO join to String
-    fun getRelatedGenres(genreIds: List<Int>): List<String> {
+    fun getRelatedGenres(genreIds: List<Int>): String {
         val genreNames = mutableListOf<String>()
         genreIds.forEach { genreId ->
             genreNames.add(_genres.find {
                 it.genreId == genreId
             }?.genreName ?: "")
         }
-        return genreNames
+        return genreNames.joinToString(separator = "  |  ") { it }
     }
 
     private suspend fun emiSearchResult(result: Result) {
@@ -96,7 +94,6 @@ class SearchViewModel @Inject constructor(
                             snackBarActionLabel = "try again"
                         )
                     )
-//                    snackBarManager.sendMessage(_snackBarMessage.value)
                     _apiResult.emit(result)
                 }
 
