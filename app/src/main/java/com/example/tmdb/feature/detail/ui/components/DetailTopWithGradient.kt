@@ -248,6 +248,8 @@ private fun TopBar(
             modifier = Modifier.align(Alignment.CenterEnd),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            val suitableIcon =
+                if (movieDetail.favorite == null) R.drawable.heartborder else R.drawable.heart
             TMDBIconButton(
                 onClick = onAddToFavorite,
                 Modifier
@@ -255,7 +257,7 @@ private fun TopBar(
                     .background(TMDBTheme.colors.surface),
             ) {
                 IconWrapper(
-                    icon = R.drawable.heart,
+                    icon = suitableIcon,
                     tintColor = TMDBTheme.colors.error
                 )
             }

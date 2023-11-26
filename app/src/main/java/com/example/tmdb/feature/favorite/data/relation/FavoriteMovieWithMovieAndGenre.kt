@@ -26,10 +26,8 @@ data class FavoriteMovieWithMovieAndGenre(
             genres = genres,
             movie = MovieDatabaseWrapper(
                 title = movie.title,
-                releaseDate = movie.backdropPath,
                 movieId = movie.id,
                 posterPath = movie.posterPath,
-                backdropPath = movie.backdropPath,
                 voteAverage = movie.voteAverage
             )
         )

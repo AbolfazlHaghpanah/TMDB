@@ -9,8 +9,7 @@ import kotlinx.serialization.Serializable
 data class MovieDetail(
     val id: Int,
 
-    @SerialName("original_title")
-    val originalTitle: String,
+    val title: String,
 
     val overview: String,
 
@@ -19,9 +18,6 @@ data class MovieDetail(
 
     @SerialName("poster_path")
     val posterPath: String,
-
-    @SerialName("backdrop_path")
-    val backdropPath: String,
 
     @SerialName("release_date")
     val releaseDate: String,

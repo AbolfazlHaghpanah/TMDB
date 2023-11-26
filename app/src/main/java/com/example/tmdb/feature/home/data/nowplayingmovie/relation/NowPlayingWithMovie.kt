@@ -23,7 +23,6 @@ data class NowPlayingWithMovie(
                 title = movie.title,
                 posterPath = movie.posterPath,
                 voteAverage = movie.voteAverage,
-                backdropPath = movie.backdropPath,
                 releaseDate = nowPlayingMovie.releaseDate
             )
         )

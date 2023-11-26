@@ -28,8 +28,7 @@ data class MovieResult(
             id = id,
             title = title,
             posterPath = posterPath?:"",
-            voteAverage = voteAverage?:0.0,
-            backdropPath = backdropPath?:""
+            voteAverage = voteAverage?:0.0
         )
     }
 

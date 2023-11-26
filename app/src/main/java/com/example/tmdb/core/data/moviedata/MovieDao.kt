@@ -1,6 +1,7 @@
 package com.example.tmdb.core.data.moviedata
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -41,6 +42,9 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addToFavorite(movieEntity: FavoriteMovieEntity)
 
+    @Delete
+    suspend fun deleteFavorite(movieEntity: FavoriteMovieEntity)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTopMovie(movie: TopMovieEntity)
 
@@ -49,6 +53,9 @@ interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addFavoriteMovieGenre(genre: FavoriteMovieGenreCrossRef)
+
+    @Delete
+    suspend fun deleteFavoriteMovieGenre(favoriteMovieGenreCrossRef: FavoriteMovieGenreCrossRef)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addPopularMoviesGenre(genre: PopularMovieGenreCrossRef)
@@ -76,6 +83,22 @@ interface MovieDao {
             )
         }
         addToFavorite(movie)
+    }
+
+    @Transaction
+    suspend fun removeFavorite(
+        movie: FavoriteMovieEntity,
+        genres: List<GenreEntity>
+    ) {
+        genres.forEach {
+            deleteFavoriteMovieGenre(
+                FavoriteMovieGenreCrossRef(
+                    movieId = movie.movieId,
+                    genreId = it.genreId
+                )
+            )
+        }
+        deleteFavorite(movie)
     }
 
     @Transaction
@@ -144,8 +167,7 @@ interface MovieDao {
                 id = movieDetail.id,
                 posterPath = movieDetail.posterPath,
                 voteAverage = movieDetail.voteAverage.toDouble(),
-                backdropPath = movieDetail.backdropPath,
-                title = movieDetail.originalTitle
+                title = movieDetail.title
             )
         )
         addDetail(movieDetail.toDetailEntity())
@@ -184,8 +206,7 @@ interface MovieDao {
             addMovie(
                 MovieEntity(
                     id = it.id,
-                    title = it.originalTitle,
-                    backdropPath = "",
+                    title = it.title,
                     voteAverage = it.voteAverage.toDouble(),
                     posterPath = it.posterPath ?: ""
                 )

@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.tmdb.R
@@ -56,7 +58,8 @@ fun SimilarMovies(
             contentPadding = PaddingValues(
                 start = 24.dp,
                 top = 16.dp
-            )
+            ),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(movieDetail.similarMovies) { similarMovie ->
                 Column(
@@ -83,8 +86,9 @@ fun SimilarMovies(
                         color = TMDBTheme.colors.gray,
                         modifier = Modifier
                             .padding(start = 8.dp)
-                            .width(135.dp),
-                        maxLines = 2
+                            .width(128.dp),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                     )
                 }
             }

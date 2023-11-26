@@ -11,6 +11,7 @@ import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithGenreCr
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
 import com.example.tmdb.feature.detail.data.crossrefrence.MovieWithGenreCrossRef
 import com.example.tmdb.feature.detail.data.detail.DetailEntity
+import com.example.tmdb.feature.favorite.data.FavoriteMovieEntity
 
 data class DetailMovieWithAllRelations(
     @Embedded val detailEntity: DetailEntity,
@@ -37,7 +38,12 @@ data class DetailMovieWithAllRelations(
         parentColumn = "detailMovieId",
         entityColumn = "id"
     )
-    val movie: MovieEntity
+    val movie: MovieEntity,
+    @Relation(
+        parentColumn = "detailMovieId",
+        entityColumn = "movieId"
+    )
+    val favorite: FavoriteMovieEntity?
 )
 
 data class SimilarMovieWithGenre(
