@@ -63,6 +63,7 @@ private fun SearchScreen(
     val searchResult by searchViewModel.searchResult.collectAsState()
     val apiResult by searchViewModel.apiResult.collectAsState()
 
+    //TODO
     LaunchedEffect(apiResult) {
         searchViewModel.showLastSnackBar()
     }
@@ -82,6 +83,7 @@ private fun SearchScreen(
     )
 }
 
+//TODO NonRestortable
 @Composable
 private fun SearchScreen(
     apiResult: Result,
