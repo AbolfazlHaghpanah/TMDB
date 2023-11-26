@@ -1,9 +1,7 @@
 package com.example.tmdb.core.network
 
 sealed class Result {
-
-    object Idle : Result()
-    object Loading : Result()
+    data object Loading : Result()
     data class Error(
         val message: String
     ) : Result()
