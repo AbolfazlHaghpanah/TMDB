@@ -1,7 +1,6 @@
 package com.example.tmdb
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -66,15 +65,14 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(Unit) {
                 snackBarManager.getSnackBarMessage().collectLatest { snackBarMessage ->
-                    if (snackBarMessage?.getMessage().isNullOrEmpty().not()) {
+                    if (snackBarMessage?.snackBarMessage.isNullOrEmpty().not()) {
                         val snackBarResult = snackBarHostState.showSnackbar(
-                            message = snackBarMessage?.getMessage()!!,
-                            actionLabel = snackBarMessage.getActionLabel(),
-                            duration = snackBarMessage.getDuration()
+                            message = snackBarMessage?.snackBarMessage!!,
+                            actionLabel = snackBarMessage.snackBarActionLabel,
+                            duration = snackBarMessage.snackBarDuration
                         )
                         if (snackBarResult == SnackbarResult.ActionPerformed) {
-                            Log.d("asd", "onCreate: ")
-                            snackBarMessage.performAction()
+                            snackBarMessage.snackBarAction
                         }
                     }
                 }

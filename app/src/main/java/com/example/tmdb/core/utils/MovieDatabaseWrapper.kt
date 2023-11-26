@@ -2,11 +2,12 @@ package com.example.tmdb.core.utils
 
 import androidx.compose.runtime.Immutable
 import com.example.tmdb.core.data.genre.entity.GenreEntity
+import kotlinx.collections.immutable.PersistentList
 
 @Immutable
 data class MovieWithGenreDatabaseWrapper(
     val movie : MovieDatabaseWrapper,
-    val genres : List<GenreEntity>
+    val genres : PersistentList<GenreEntity>
 )
 @Immutable
 data class MovieDatabaseWrapper(

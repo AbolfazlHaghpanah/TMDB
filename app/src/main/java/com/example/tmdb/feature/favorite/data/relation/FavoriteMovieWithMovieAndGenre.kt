@@ -8,6 +8,7 @@ import com.example.tmdb.core.data.moviedata.MovieEntity
 import com.example.tmdb.feature.favorite.data.FavoriteMovieEntity
 import com.example.tmdb.core.utils.MovieDatabaseWrapper
 import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
+import kotlinx.collections.immutable.toPersistentList
 
 data class FavoriteMovieWithMovieAndGenre(
     @Embedded val favoriteMovie: FavoriteMovieEntity,
@@ -23,7 +24,7 @@ data class FavoriteMovieWithMovieAndGenre(
 ) {
     fun toMovieDatabaseWrapper(): MovieWithGenreDatabaseWrapper {
         return MovieWithGenreDatabaseWrapper(
-            genres = genres,
+            genres = genres.toPersistentList(),
             movie = MovieDatabaseWrapper(
                 title = movie.title,
                 movieId = movie.id,

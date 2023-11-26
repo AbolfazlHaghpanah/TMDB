@@ -14,7 +14,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -62,11 +63,7 @@ fun TMDBBottomNavigation(
                         }
                     },
                     icon = {
-                        Icon(
-                            modifier = Modifier,
-                            painter = painterResource(id = item.icon),
-                            contentDescription = item.label,
-                        )
+                        BottomNavItem(item)
                     },
                     label = {
                         Text(
@@ -77,11 +74,18 @@ fun TMDBBottomNavigation(
                     selectedContentColor = TMDBTheme.colors.primary,
                     unselectedContentColor = TMDBTheme.colors.gray,
                 )
-
             }
-
         }
     }
+}
+
+@Composable
+private fun BottomNavItem(item: BottomNavigationItems) {
+    Icon(
+        modifier = Modifier,
+        imageVector = ImageVector.vectorResource(id = item.icon),
+        contentDescription = item.label,
+    )
 }
 
 
@@ -90,13 +94,14 @@ sealed class BottomNavigationItems(
     @DrawableRes val icon: Int,
     val route: String
 ) {
-    object Home :
+    data object Home :
         BottomNavigationItems("Home", R.drawable.home, AppScreens.Home.route)
 
-    object Search :
+    data object Search :
         BottomNavigationItems("Search", R.drawable.search, AppScreens.Search.route)
 
-    object Favorite : BottomNavigationItems("Favorite", R.drawable.heart, AppScreens.Favorite.route)
+    data object Favorite :
+        BottomNavigationItems("Favorite", R.drawable.heart, AppScreens.Favorite.route)
 
 }
 

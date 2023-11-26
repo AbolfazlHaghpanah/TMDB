@@ -36,7 +36,10 @@ fun MovieRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(items = movies.ifEmpty { fakeMovie }) {
+            items(
+                items = movies.ifEmpty { fakeMovie },
+                key = { it.movie.movieId }
+            ) {
                 MovieCard(
                     onClick = { onClick(it.movie.movieId) },
                     title = it.movie.title,

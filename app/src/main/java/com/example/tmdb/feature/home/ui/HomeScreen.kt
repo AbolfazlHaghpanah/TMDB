@@ -35,6 +35,8 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 
 @NonRestartableComposable
 @Composable
@@ -73,9 +75,9 @@ private fun HomeScreen(
     val pagerState = rememberPagerState(initialPage = 2)
 
     HomeScreen(
-        nowPlayingMovies = nowPlayingMovies,
-        popularMovies = popularMovies,
-        topMovies = topRated,
+        nowPlayingMovies = nowPlayingMovies.toPersistentList(),
+        popularMovies = popularMovies.toPersistentList(),
+        topMovies = topRated.toPersistentList(),
         pagerState = pagerState,
         onNavigation = onNavigation,
     )
@@ -85,9 +87,9 @@ private fun HomeScreen(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun HomeScreen(
-    nowPlayingMovies: List<MovieWithGenreDatabaseWrapper>,
-    popularMovies: List<MovieWithGenreDatabaseWrapper>,
-    topMovies: List<MovieWithGenreDatabaseWrapper>,
+    nowPlayingMovies: PersistentList<MovieWithGenreDatabaseWrapper>,
+    popularMovies: PersistentList<MovieWithGenreDatabaseWrapper>,
+    topMovies: PersistentList<MovieWithGenreDatabaseWrapper>,
     pagerState: PagerState,
     onNavigation: (String) -> Unit,
 ) {

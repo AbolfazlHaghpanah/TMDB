@@ -8,6 +8,7 @@ import com.example.tmdb.core.utils.MovieDatabaseWrapper
 import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.core.data.genre.entity.GenreEntity
 import com.example.tmdb.feature.home.data.popularMovie.PopularMovieEntity
+import kotlinx.collections.immutable.toPersistentList
 
 data class PopularMovieAndGenreWithMovie(
     @Embedded val popularMovie: PopularMovieEntity,
@@ -26,7 +27,7 @@ data class PopularMovieAndGenreWithMovie(
     fun toMovieDataWrapper(): MovieWithGenreDatabaseWrapper {
 
         return MovieWithGenreDatabaseWrapper(
-            genres = genres,
+            genres = genres.toPersistentList(),
             movie = MovieDatabaseWrapper(
                 movieId = movie.id,
                 title = movie.title,
