@@ -8,7 +8,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MovieDetail(
     val id: Int,
+
     val title: String,
+
     val overview: String,
 
     @SerialName("vote_average")
@@ -16,9 +18,6 @@ data class MovieDetail(
 
     @SerialName("poster_path")
     val posterPath: String,
-
-    @SerialName("backdrop_path")
-    val backdropPath: String,
 
     @SerialName("release_date")
     val releaseDate: String,

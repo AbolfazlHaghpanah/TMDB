@@ -145,7 +145,7 @@ class HomeViewModel @Inject constructor(
                 call = {
                     homeApi.getTopRated()
                 }
-            ).collect{
+            ).collect {
                 storeTopMovie(it)
             }
         }
@@ -272,26 +272,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
-    private fun isOneOfListEmpty() =
-        _nowPlayingMovies.value.isEmpty() || _popularMovies.value.isEmpty() || _topMovies.value.isEmpty()
-
     private suspend fun sendDataBaseError(
         throwable: Throwable
     ) {
-        if (isOneOfListEmpty()) {
+        _snackBarMassage.emit(
             SnackBarMassage(
                 snackBarMessage = databaseErrorCatchMessage(throwable),
                 snackBarActionLabel = "Try Again",
                 snackBarAction = { tryAgainApi() },
-                snackBarDuration = SnackbarDuration.Indefinite
-            )
-        } else {
-            SnackBarMassage(
-                snackBarMessage = databaseErrorCatchMessage(throwable),
                 snackBarDuration = SnackbarDuration.Short
             )
-        }
+        )
         snackBarManager.sendMessage(
             snackBarMassage = _snackBarMassage.value
         )
@@ -301,19 +292,12 @@ class HomeViewModel @Inject constructor(
         error: String
     ) {
         _snackBarMassage.emit(
-            if (isOneOfListEmpty()) {
-                SnackBarMassage(
-                    snackBarMessage = error,
-                    snackBarActionLabel = "Try Again",
-                    snackBarAction = { tryAgainApi() },
-                    snackBarDuration = SnackbarDuration.Indefinite
-                )
-            } else {
-                SnackBarMassage(
-                    snackBarMessage = error,
-                    snackBarDuration = SnackbarDuration.Short
-                )
-            }
+            SnackBarMassage(
+                snackBarMessage = error,
+                snackBarActionLabel = "Try Again",
+                snackBarAction = { tryAgainApi() },
+                snackBarDuration = SnackbarDuration.Short
+            )
 
         )
         snackBarManager.sendMessage(
