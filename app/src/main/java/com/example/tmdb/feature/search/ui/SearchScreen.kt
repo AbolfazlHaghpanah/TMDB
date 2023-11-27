@@ -62,7 +62,7 @@ private fun SearchScreen(
 
 @Composable
 private fun SearchScreen(
-    apiResult: Result,
+    apiResult: Result?,
     searchResult: List<SearchResultElement>,
     onSearch: (String) -> Unit,
     getMovieGenres: (List<Int>) -> String,

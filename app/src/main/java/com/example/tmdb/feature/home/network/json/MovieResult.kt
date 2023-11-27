@@ -27,8 +27,9 @@ data class MovieResult(
         return MovieEntity(
             id = id,
             title = title,
-            posterPath = posterPath?:"",
-            voteAverage = voteAverage?:0.0
+            posterPath = posterPath ?: "",
+            voteAverage = voteAverage ?: 0.0,
+            backdropPath = backdropPath ?: ""
         )
     }
 
@@ -47,7 +48,7 @@ data class MovieResult(
     fun toNowPlayingEntity(): NowPlayingEntity {
         return NowPlayingEntity(
             movieId = id,
-            releaseDate = dateConvertor(releaseDate?:"0000,00,00"),
+            releaseDate = dateConvertor(releaseDate ?: "0000,00,00"),
         )
     }
 }
