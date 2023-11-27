@@ -25,7 +25,6 @@ class TMDBModalBottomSheetViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 favoriteMovieDao.deleteMovie(movieId)
-                throw Throwable("mmd")
             } catch (t: Throwable) {
                 snackBarManager.sendMessage(SnackBarMassage(databaseErrorCatchMessage(t)))
             }

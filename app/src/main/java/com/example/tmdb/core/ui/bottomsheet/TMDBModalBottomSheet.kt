@@ -3,6 +3,7 @@ package com.example.tmdb.core.ui.bottomsheet
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tmdb.R
+import com.example.tmdb.core.ui.bottomsheet.component.TrashIcon
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 
 @Composable
@@ -59,15 +61,13 @@ private fun TMDBModalBottomSheet(
     onDelete: () -> Unit
 ) {
     Column(
-        modifier = Modifier.padding(bottom = 64.dp),
+        modifier = Modifier
+            .navigationBarsPadding()
+            .padding(bottom = 64.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Image(
-            modifier = Modifier
-                .padding(top = 24.dp, bottom = 16.dp),
-            painter = painterResource(id = TMDBTheme.icons.illustration),
-            contentDescription = null
-        )
+        TrashIcon()
+
         Text(
             text = stringResource(R.string.are_you_sure),
             style = TMDBTheme.typography.h6,
