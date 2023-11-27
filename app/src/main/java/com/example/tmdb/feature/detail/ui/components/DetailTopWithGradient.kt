@@ -181,6 +181,7 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
         val roundedVote =
             movieDetail.movie.voteAverage.toBigDecimal()
                 .setScale(1, RoundingMode.FLOOR)?.toDouble()
+
         TextIcon(
             text = roundedVote.toString(),
             iconId = R.drawable.star,

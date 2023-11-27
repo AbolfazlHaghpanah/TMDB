@@ -4,7 +4,9 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 import com.example.tmdb.core.data.genre.entity.GenreEntity
-import com.example.tmdb.core.data.moviedata.MovieEntity
+import com.example.tmdb.core.data.moviedata.Entity.MovieEntity
+import com.example.tmdb.core.utils.MovieDatabaseWrapper
+import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.detail.data.credit.CreditEntity
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithCreditCrossRef
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithGenreCrossRef
@@ -12,6 +14,7 @@ import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithSimilar
 import com.example.tmdb.feature.detail.data.crossrefrence.MovieWithGenreCrossRef
 import com.example.tmdb.feature.detail.data.detail.DetailEntity
 import com.example.tmdb.feature.favorite.data.FavoriteMovieEntity
+import kotlinx.collections.immutable.toPersistentList
 
 data class DetailMovieWithAllRelations(
     @Embedded val detailEntity: DetailEntity,
@@ -55,4 +58,18 @@ data class SimilarMovieWithGenre(
         associateBy = Junction(MovieWithGenreCrossRef::class)
     )
     val genres: List<GenreEntity>
-)
+) {
+    fun toMovieWithGenreDataBaseWrapper(): MovieWithGenreDatabaseWrapper {
+        return MovieWithGenreDatabaseWrapper(
+            movie = MovieDatabaseWrapper(
+                movieId = similarMovie.id,
+                backdropPath = similarMovie.backdropPath,
+                voteAverage = similarMovie.voteAverage,
+                posterPath = similarMovie.posterPath,
+                releaseDate = "",
+                title = similarMovie.title
+            ),
+            genres = genres.toPersistentList()
+        )
+    }
+}

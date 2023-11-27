@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.home.ui.component
+package com.example.tmdb.core.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +15,7 @@ import com.example.tmdb.core.ui.shimmer.fakeMovie
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
+import com.example.tmdb.feature.home.ui.component.MovieCard
 
 @Composable
 fun MovieRow(
@@ -28,7 +29,8 @@ fun MovieRow(
                 .padding(start = 24.dp, top = 16.dp)
                 .ifShimmerActive(movies.isEmpty()),
             text = title,
-            style = TMDBTheme.typography.subtitle1
+            style = TMDBTheme.typography.subtitle1,
+            color = TMDBTheme.colors.white
         )
 
         LazyRow(

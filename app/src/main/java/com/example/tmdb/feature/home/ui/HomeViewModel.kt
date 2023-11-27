@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.data.databaseErrorCatchMessage
 import com.example.tmdb.core.data.genre.dao.GenreDao
-import com.example.tmdb.core.data.moviedata.MovieDao
+import com.example.tmdb.core.data.moviedata.Dao.MovieDao
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.Result.Success
 import com.example.tmdb.core.network.safeApi

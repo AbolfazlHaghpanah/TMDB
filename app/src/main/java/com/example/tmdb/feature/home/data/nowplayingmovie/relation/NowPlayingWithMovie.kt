@@ -2,7 +2,7 @@ package com.example.tmdb.feature.home.data.nowplayingmovie.relation
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.example.tmdb.core.data.moviedata.MovieEntity
+import com.example.tmdb.core.data.moviedata.Entity.MovieEntity
 import com.example.tmdb.core.utils.MovieDatabaseWrapper
 import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.data.nowplayingmovie.NowPlayingEntity

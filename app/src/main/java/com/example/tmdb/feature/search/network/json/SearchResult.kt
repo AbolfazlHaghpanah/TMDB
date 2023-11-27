@@ -1,6 +1,6 @@
 package com.example.tmdb.feature.search.network.json
 
-import com.example.tmdb.core.data.moviedata.MovieEntity
+import com.example.tmdb.core.data.moviedata.Entity.MovieEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -8,7 +8,6 @@ import kotlinx.serialization.Serializable
 data class SearchResult(
     val results: List<SearchResultElement>
 )
-
 
 @Serializable
 data class SearchResultElement(

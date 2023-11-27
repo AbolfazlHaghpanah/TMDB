@@ -1,4 +1,4 @@
-package com.example.tmdb.core.ui.bottomsheet
+package com.example.tmdb.feature.bottomsheet.ui
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

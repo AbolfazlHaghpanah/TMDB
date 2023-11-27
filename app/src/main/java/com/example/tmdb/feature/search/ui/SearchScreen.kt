@@ -78,6 +78,7 @@ private fun SearchScreen(
         modifier = Modifier
             .statusBarsPadding()
             .padding(vertical = 8.dp, horizontal = 24.dp)
+
     ) {
         TopSearchSection(
             searchString = searchString,

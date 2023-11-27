@@ -13,32 +13,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 
 @Composable
 fun TextIcon(
+    modifier: Modifier = Modifier,
     text: String,
     @DrawableRes iconId: Int,
     iconColor: Color? = null,
     textColor: Color? = null
 ) {
     Row(
-        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = Modifier
+            .zIndex(1f)
+            .then(modifier)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = iconId),
-                contentDescription = null,
-                tint = iconColor ?: TMDBTheme.colors.gray,
-            )
-            Text(
-                text = text,
-                color = textColor ?: TMDBTheme.colors.gray,
-                style = TMDBTheme.typography.body2
-            )
-        }
+        Icon(
+            imageVector = ImageVector.vectorResource(id = iconId),
+            contentDescription = null,
+            tint = iconColor ?: TMDBTheme.colors.gray,
+        )
+        Text(
+            text = text,
+            color = textColor ?: TMDBTheme.colors.gray,
+            style = TMDBTheme.typography.body2
+        )
     }
 }

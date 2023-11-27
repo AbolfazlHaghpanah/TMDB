@@ -1,6 +1,6 @@
 package com.example.tmdb.feature.home.network.json
 
-import com.example.tmdb.core.data.moviedata.MovieEntity
+import com.example.tmdb.core.data.moviedata.Entity.MovieEntity
 import com.example.tmdb.core.utils.dateConvertor
 import com.example.tmdb.feature.home.data.nowplayingmovie.NowPlayingEntity
 import com.example.tmdb.feature.home.data.popularMovie.PopularMovieEntity

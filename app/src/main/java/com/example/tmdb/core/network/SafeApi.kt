@@ -12,11 +12,15 @@ suspend fun <T> safeApi(
     call: suspend () -> Response<T>
 ): Flow<Result> {
     return flow {
+
         emit(Result.Loading)
+
         try {
             val response = call()
+
             if (response.isSuccessful) {
                 val body = response.body()
+
                 if (body != null) {
                     if (currentCoroutineContext().isActive) {
                         emit(Result.Success(body))
@@ -30,7 +34,7 @@ suspend fun <T> safeApi(
                         val json = Json { ignoreUnknownKeys = true }
                         json.decodeFromString<ErrorResponse>(it)
                     }
-                throw Throwable(message = bodyCode?.status_message ?: "")
+                throw Throwable(message = bodyCode?.statusMessage ?: "")
             }
         } catch (t: Throwable) {
             emit(Result.Error(mapServerErrorMessage((t.message ?: ""))))

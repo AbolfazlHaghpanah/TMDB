@@ -15,10 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.tmdb.core.ui.component.VoteIcon
+import com.example.tmdb.R
+import com.example.tmdb.core.ui.component.TextIcon
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
@@ -49,7 +51,7 @@ fun MovieCard(
                 .height(178.dp)
         ) {
 
-            VoteIcon(
+            TextIcon(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(8.dp)
@@ -57,7 +59,10 @@ fun MovieCard(
                     .background(TMDBTheme.colors.surface.copy(alpha = 0.7f))
                     .padding(8.dp, 4.dp)
                     .ifShimmerActive(isShimmer),
-                vote = vote
+                text = vote,
+                iconId = TMDBTheme.icons.star,
+                iconColor = TMDBTheme.colors.secondary,
+                textColor = TMDBTheme.colors.secondary
             )
 
             AsyncImage(
@@ -65,7 +70,8 @@ fun MovieCard(
                     .fillMaxSize(),
                 model = imageUrl + image,
                 contentScale = ContentScale.Crop,
-                contentDescription = null
+                contentDescription = null,
+                error = painterResource(id = R.drawable.videoimageerror)
             )
         }
 
@@ -76,7 +82,8 @@ fun MovieCard(
             text = title,
             style = TMDBTheme.typography.body1,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            color = TMDBTheme.colors.white
         )
 
         Text(

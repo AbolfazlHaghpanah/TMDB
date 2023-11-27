@@ -1,4 +1,4 @@
-package com.example.tmdb.core.data.moviedata
+package com.example.tmdb.core.data.moviedata.Dao
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.tmdb.core.data.genre.entity.GenreEntity
+import com.example.tmdb.core.data.moviedata.Entity.MovieEntity
 import com.example.tmdb.feature.detail.data.credit.CreditEntity
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithCreditCrossRef
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithGenreCrossRef

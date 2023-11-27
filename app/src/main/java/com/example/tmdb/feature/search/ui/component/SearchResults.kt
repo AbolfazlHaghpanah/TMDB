@@ -1,5 +1,6 @@
 package com.example.tmdb.feature.search.ui.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -19,16 +21,22 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.tmdb.R
-import com.example.tmdb.core.ui.component.PosterWithTotalVote
+import com.example.tmdb.core.data.moviedata.Entity.MovieEntity
 import com.example.tmdb.core.ui.component.TextIcon
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.example.tmdb.core.utils.imageUrl
 import com.example.tmdb.feature.search.network.json.SearchResultElement
+import java.math.RoundingMode
 import java.util.Locale
 
 @Composable
@@ -52,9 +60,7 @@ fun SearchResults(
             ) {
 
                 PosterWithTotalVote(
-                    movieEntity = searchElement.toMovieEntity(),
-                    backGroundColor = TMDBTheme.colors.surface.copy(alpha = 0.7f),
-                    alignment = Alignment.TopStart
+                    movieEntity = searchElement.toMovieEntity()
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -138,4 +144,44 @@ private fun MovieInfo(
             }
         }
     }
+}
+
+@Composable
+private fun PosterWithTotalVote(
+    movieEntity: MovieEntity
+) {
+    val roundedVote = movieEntity.voteAverage.toBigDecimal()
+        .setScale(1, RoundingMode.FLOOR).toDouble()
+
+    Box {
+        SimilarMovieImageWrapper(movieEntity.posterPath)
+
+        TextIcon(
+            modifier = Modifier
+                .padding(8.dp)
+                .clip(TMDBTheme.shapes.small)
+                .background(TMDBTheme.colors.surface.copy(alpha = 0.7f))
+                .padding(8.dp, 4.dp),
+            text = roundedVote.toString(),
+            iconId = R.drawable.star,
+            iconColor = TMDBTheme.colors.secondary,
+            textColor = TMDBTheme.colors.secondary
+        )
+    }
+}
+
+@Composable
+private fun SimilarMovieImageWrapper(similarMoviePosterPath: String) {
+    AsyncImage(
+        model = "$imageUrl${similarMoviePosterPath}",
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .clip(
+                TMDBTheme.shapes.medium
+            )
+            .width(112.dp)
+            .aspectRatio(0.8f),
+        error = painterResource(id = R.drawable.videoimageerror)
+    )
 }

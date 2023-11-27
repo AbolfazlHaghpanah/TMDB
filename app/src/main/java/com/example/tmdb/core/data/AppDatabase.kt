@@ -5,8 +5,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.tmdb.core.data.genre.dao.GenreDao
 import com.example.tmdb.core.data.genre.entity.GenreEntity
-import com.example.tmdb.core.data.moviedata.MovieDao
-import com.example.tmdb.core.data.moviedata.MovieEntity
+import com.example.tmdb.core.data.moviedata.Dao.MovieDao
+import com.example.tmdb.core.data.moviedata.Entity.MovieEntity
 import com.example.tmdb.feature.detail.data.converter.ListStringToStringConverter
 import com.example.tmdb.feature.detail.data.credit.CreditEntity
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithCreditCrossRef
@@ -24,7 +24,7 @@ import com.example.tmdb.feature.home.data.popularMovie.relation.PopularMovieGenr
 import com.example.tmdb.feature.home.data.topmovie.TopMovieEntity
 import com.example.tmdb.feature.home.data.topmovie.relation.crossref.TopMovieGenreCrossRef
 
-@TypeConverters(DatabaseTypeConvertor::class, ListStringToStringConverter::class)
+@TypeConverters(ListStringToStringConverter::class)
 @Database(
     entities = [
         MovieEntity::class,
