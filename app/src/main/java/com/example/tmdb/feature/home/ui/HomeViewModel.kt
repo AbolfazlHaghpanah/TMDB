@@ -62,12 +62,6 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    private suspend fun dismissSnackBar() {
-        _snackBarMassage.emit(
-            _snackBarMassage.value?.copy(isHaveToShow = false)
-        )
-    }
-
     private fun observeNowPlaying() {
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -219,7 +213,6 @@ class HomeViewModel @Inject constructor(
 
             else -> {}
         }
-
     }
 
     private suspend fun storePopulars(result: Result) {
@@ -316,7 +309,6 @@ class HomeViewModel @Inject constructor(
                 snackBarAction = { tryAgainApi() },
                 snackBarDuration = SnackbarDuration.Short
             )
-
         )
         snackBarManager.sendMessage(
             _snackBarMassage.value
@@ -331,5 +323,13 @@ class HomeViewModel @Inject constructor(
         observeTopMovies()
         observeNowPlaying()
         observePopularMovies()
+    }
+
+    private fun dismissSnackBar() {
+        viewModelScope.launch {
+            _snackBarMassage.emit(
+                _snackBarMassage.value?.copy(isHaveToShow = false)
+            )
+        }
     }
 }

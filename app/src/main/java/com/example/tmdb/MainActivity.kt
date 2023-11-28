@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
             }
 
             LaunchedEffect(Unit) {
-                snackBarManager.getSnackBarMessage().collectLatest { snackBarMessage ->
+                snackBarManager.snackBarMessage.collectLatest { snackBarMessage ->
                     if (snackBarMessage?.snackBarMessage.isNullOrEmpty().not()) {
                         val snackBarResult = snackBarHostState.showSnackbar(
                             message = snackBarMessage?.snackBarMessage!!,
@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                             duration = snackBarMessage.snackBarDuration
                         )
                         if (snackBarResult == SnackbarResult.ActionPerformed) {
-                            snackBarMessage.snackBarAction
+                            snackBarMessage.performAction()
                         }
                     }
                 }
