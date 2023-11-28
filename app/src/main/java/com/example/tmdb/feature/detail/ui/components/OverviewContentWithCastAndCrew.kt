@@ -25,7 +25,7 @@ import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
 import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
-import com.example.tmdb.feature.detail.data.credit.CreditEntity
+import com.example.tmdb.feature.detail.data.credit.entity.CreditEntity
 
 @Composable
 fun OverviewContentWithCastAndCrew(movieDetail: DetailMovieWithAllRelations) {

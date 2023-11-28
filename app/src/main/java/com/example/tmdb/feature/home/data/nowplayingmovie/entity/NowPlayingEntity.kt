@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.home.data.nowplayingmovie
+package com.example.tmdb.feature.home.data.nowplayingmovie.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -9,9 +9,11 @@ import com.example.tmdb.core.data.moviedata.Dao.MovieDao
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.Result.Success
 import com.example.tmdb.core.network.safeApi
+import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMassage
-import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
+import com.example.tmdb.feature.home.data.nowplayingmovie.dao.NowPlayingDao
+import com.example.tmdb.feature.home.data.popularMovie.dao.PopularMovieDao
 import com.example.tmdb.feature.home.network.HomeApi
 import com.example.tmdb.feature.home.network.json.GenreResponse
 import com.example.tmdb.feature.home.network.json.MovieResponse
@@ -28,6 +30,8 @@ class HomeViewModel @Inject constructor(
     private val homeApi: HomeApi,
     private val movieDao: MovieDao,
     private val genreDao: GenreDao,
+    private val nowPlayingDao: NowPlayingDao,
+    private val popularMovieDao: PopularMovieDao,
     private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
@@ -200,10 +204,8 @@ class HomeViewModel @Inject constructor(
                 val data = result.response as MovieResponse
                 try {
                     data.results.forEach { movie ->
-                        movieDao.addNowPlayingMovie(
-                            movie.toNowPlayingEntity(),
-                            movie.toMovieEntity()
-                        )
+                        nowPlayingDao.addNowPlayingMovie(movie.toNowPlayingEntity())
+                        movieDao.addMovie(movie.toMovieEntity())
                     }
                 } catch (t: Throwable) {
                     sendDataBaseError(t)
@@ -229,7 +231,12 @@ class HomeViewModel @Inject constructor(
                 val data = result.response as MovieResponse
                 try {
                     data.results.forEach { movie ->
-                        movieDao.addPopularMovie(movie)
+                        popularMovieDao.addPopularMovie(movie.toPopularMovieEntity())
+                        movieDao.addMovie(movie.toMovieEntity())
+                        movie.genreIds?.forEach {
+
+                        }
+//                        movieDao.addPopularMovie(movie)
                     }
                 } catch (t: Throwable) {
                     sendDataBaseError(t)

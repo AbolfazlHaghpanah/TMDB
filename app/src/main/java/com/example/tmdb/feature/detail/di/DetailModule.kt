@@ -1,7 +1,7 @@
 package com.example.tmdb.feature.detail.di
 
 import com.example.tmdb.core.data.AppDatabase
-import com.example.tmdb.feature.detail.data.detail.DetailDao
+import com.example.tmdb.feature.detail.data.detail.dao.DetailDao
 import com.example.tmdb.feature.detail.network.DetailApi
 import dagger.Module
 import dagger.Provides

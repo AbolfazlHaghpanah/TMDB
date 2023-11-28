@@ -10,7 +10,7 @@ import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.safeApi
 import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMassage
-import com.example.tmdb.feature.detail.data.detail.DetailDao
+import com.example.tmdb.feature.detail.data.detail.dao.DetailDao
 import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.network.DetailApi
 import com.example.tmdb.feature.detail.network.json.MovieDetail

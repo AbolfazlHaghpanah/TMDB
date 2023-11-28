@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.detail.data.detail
+package com.example.tmdb.feature.detail.data.detail.dao
 
 import androidx.room.Dao
 import androidx.room.Query

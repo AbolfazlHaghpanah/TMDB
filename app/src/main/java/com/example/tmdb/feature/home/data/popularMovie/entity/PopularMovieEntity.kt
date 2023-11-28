@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.home.data.popularMovie
+package com.example.tmdb.feature.home.data.popularMovie.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

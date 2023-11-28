@@ -7,12 +7,12 @@ import com.example.tmdb.core.data.genre.entity.GenreEntity
 import com.example.tmdb.core.data.moviedata.Entity.MovieEntity
 import com.example.tmdb.core.utils.MovieDatabaseWrapper
 import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
-import com.example.tmdb.feature.detail.data.credit.CreditEntity
+import com.example.tmdb.feature.detail.data.credit.entity.CreditEntity
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithCreditCrossRef
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithGenreCrossRef
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
 import com.example.tmdb.feature.detail.data.crossrefrence.MovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.detail.DetailEntity
+import com.example.tmdb.feature.detail.data.detail.entity.DetailEntity
 import com.example.tmdb.feature.favorite.data.FavoriteMovieEntity
 import kotlinx.collections.immutable.toPersistentList
 

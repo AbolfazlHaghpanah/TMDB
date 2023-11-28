@@ -8,18 +8,17 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.example.tmdb.core.data.genre.entity.GenreEntity
 import com.example.tmdb.core.data.moviedata.Entity.MovieEntity
-import com.example.tmdb.feature.detail.data.credit.CreditEntity
+import com.example.tmdb.feature.detail.data.credit.entity.CreditEntity
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithCreditCrossRef
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithGenreCrossRef
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
 import com.example.tmdb.feature.detail.data.crossrefrence.MovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.detail.DetailEntity
+import com.example.tmdb.feature.detail.data.detail.entity.DetailEntity
 import com.example.tmdb.feature.detail.network.json.MovieDetail
 import com.example.tmdb.feature.favorite.data.FavoriteMovieEntity
 import com.example.tmdb.feature.favorite.data.relation.FavoriteMovieGenreCrossRef
-import com.example.tmdb.feature.home.data.nowplayingmovie.NowPlayingEntity
 import com.example.tmdb.feature.home.data.nowplayingmovie.relation.NowPlayingWithMovie
-import com.example.tmdb.feature.home.data.popularMovie.PopularMovieEntity
+import com.example.tmdb.feature.home.data.popularMovie.entity.PopularMovieEntity
 import com.example.tmdb.feature.home.data.popularMovie.relation.PopularMovieAndGenreWithMovie
 import com.example.tmdb.feature.home.data.popularMovie.relation.PopularMovieGenreCrossRef
 import com.example.tmdb.feature.home.data.topmovie.TopMovieEntity
@@ -33,12 +32,6 @@ interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addMovie(movie: MovieEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addNowPlayingMovie(movie: NowPlayingEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addPopularMovie(movie: PopularMovieEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addToFavorite(movieEntity: FavoriteMovieEntity)
@@ -103,20 +96,11 @@ interface MovieDao {
     }
 
     @Transaction
-    suspend fun addNowPlayingMovie(
-        nowPlaying: NowPlayingEntity,
-        movie: MovieEntity
-    ) {
-        addNowPlayingMovie(nowPlaying)
-        addMovie(movie)
-    }
-
-    @Transaction
     suspend fun addPopularMovie(
         movie: MovieResult
     ) {
-        addPopularMovie(movie.toPopularMovieEntity())
-        addMovie(movie.toMovieEntity())
+//        addPopularMovie(movie.toPopularMovieEntity())
+//        addMovie(movie.toMovieEntity())
         movie.genreIds?.forEach {
             addPopularMoviesGenre(
                 PopularMovieGenreCrossRef(

@@ -3,6 +3,8 @@ package com.example.tmdb.feature.home.di
 import com.example.tmdb.core.data.AppDatabase
 import com.example.tmdb.core.data.genre.dao.GenreDao
 import com.example.tmdb.core.data.moviedata.Dao.MovieDao
+import com.example.tmdb.feature.home.data.nowplayingmovie.dao.NowPlayingDao
+import com.example.tmdb.feature.home.data.popularMovie.dao.PopularMovieDao
 import com.example.tmdb.feature.home.network.HomeApi
 import dagger.Module
 import dagger.Provides
@@ -31,5 +33,17 @@ object HomeModule {
     @Provides
     fun provideHomeApi(retrofit: Retrofit): HomeApi {
         return retrofit.create(HomeApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideNowPlayingDao(appDatabase: AppDatabase): NowPlayingDao {
+        return appDatabase.NowPlayingDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providePopularMovieDao(appDatabase: AppDatabase): PopularMovieDao {
+        return appDatabase.PopularMovieDao()
     }
 }

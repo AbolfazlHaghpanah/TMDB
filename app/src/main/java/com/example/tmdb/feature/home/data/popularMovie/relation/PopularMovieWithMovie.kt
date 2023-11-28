@@ -3,11 +3,11 @@ package com.example.tmdb.feature.home.data.popularMovie.relation
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
+import com.example.tmdb.core.data.genre.entity.GenreEntity
 import com.example.tmdb.core.data.moviedata.Entity.MovieEntity
 import com.example.tmdb.core.utils.MovieDatabaseWrapper
 import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
-import com.example.tmdb.core.data.genre.entity.GenreEntity
-import com.example.tmdb.feature.home.data.popularMovie.PopularMovieEntity
+import com.example.tmdb.feature.home.data.popularMovie.entity.PopularMovieEntity
 import kotlinx.collections.immutable.toPersistentList
 
 data class PopularMovieAndGenreWithMovie(
@@ -31,7 +31,7 @@ data class PopularMovieAndGenreWithMovie(
             movie = MovieDatabaseWrapper(
                 movieId = movie.id,
                 title = movie.title,
-                posterPath = movie.posterPath ,
+                posterPath = movie.posterPath,
                 voteAverage = movie.voteAverage
             )
         )
