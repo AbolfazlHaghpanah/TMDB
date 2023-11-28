@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.favorite.data
+package com.example.tmdb.feature.favorite.data.dao
 
 import androidx.room.Dao
 import androidx.room.Query

@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.favorite.data
+package com.example.tmdb.feature.favorite.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

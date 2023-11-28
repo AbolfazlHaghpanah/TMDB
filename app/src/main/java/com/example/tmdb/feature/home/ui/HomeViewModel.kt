@@ -5,15 +5,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.data.databaseErrorCatchMessage
 import com.example.tmdb.core.data.genre.dao.GenreDao
-import com.example.tmdb.core.data.moviedata.Dao.MovieDao
+import com.example.tmdb.core.data.moviedata.dao.MovieDao
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.Result.Success
 import com.example.tmdb.core.network.safeApi
 import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMassage
-import com.example.tmdb.feature.home.data.nowplayingmovie.dao.NowPlayingDao
-import com.example.tmdb.feature.home.data.popularMovie.dao.PopularMovieDao
+import com.example.tmdb.feature.home.data.dao.HomeDao
+import com.example.tmdb.feature.home.data.relation.crossref.PopularMovieGenreCrossRef
+import com.example.tmdb.feature.home.data.relation.crossref.TopMovieGenreCrossRef
 import com.example.tmdb.feature.home.network.HomeApi
 import com.example.tmdb.feature.home.network.json.GenreResponse
 import com.example.tmdb.feature.home.network.json.MovieResponse
@@ -30,8 +31,7 @@ class HomeViewModel @Inject constructor(
     private val homeApi: HomeApi,
     private val movieDao: MovieDao,
     private val genreDao: GenreDao,
-    private val nowPlayingDao: NowPlayingDao,
-    private val popularMovieDao: PopularMovieDao,
+    private val homeDao: HomeDao,
     private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
@@ -72,7 +72,7 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            movieDao.observeNowPlayingMovie()
+            homeDao.observeNowPlayingMovie()
                 .catch {
                     sendDataBaseError(it)
                 }
@@ -89,7 +89,7 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            movieDao.observePopularMovie()
+            homeDao.observePopularMovie()
                 .catch {
                     sendDataBaseError(it)
                 }
@@ -106,7 +106,7 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            movieDao.observeTopMovie()
+            homeDao.observeTopMovie()
                 .catch {
                     sendDataBaseError(it)
                 }
@@ -204,7 +204,7 @@ class HomeViewModel @Inject constructor(
                 val data = result.response as MovieResponse
                 try {
                     data.results.forEach { movie ->
-                        nowPlayingDao.addNowPlayingMovie(movie.toNowPlayingEntity())
+                        homeDao.addNowPlayingMovie(movie.toNowPlayingEntity())
                         movieDao.addMovie(movie.toMovieEntity())
                     }
                 } catch (t: Throwable) {
@@ -231,12 +231,16 @@ class HomeViewModel @Inject constructor(
                 val data = result.response as MovieResponse
                 try {
                     data.results.forEach { movie ->
-                        popularMovieDao.addPopularMovie(movie.toPopularMovieEntity())
+                        homeDao.addPopularMovie(movie.toPopularMovieEntity())
                         movieDao.addMovie(movie.toMovieEntity())
                         movie.genreIds?.forEach {
-
+                            homeDao.addPopularMoviesGenre(
+                                PopularMovieGenreCrossRef(
+                                    movieId = movie.id,
+                                    genreId = it
+                                )
+                            )
                         }
-//                        movieDao.addPopularMovie(movie)
                     }
                 } catch (t: Throwable) {
                     sendDataBaseError(t)
@@ -261,9 +265,16 @@ class HomeViewModel @Inject constructor(
                 val data = result.response as MovieResponse
                 try {
                     data.results.forEach { movie ->
-                        movieDao.addTopMovie(
-                            movie
-                        )
+                        homeDao.addTopMovie(movie.toTopPlayingEntity())
+                        movieDao.addMovie(movie.toMovieEntity())
+                        movie.genreIds?.forEach {
+                            homeDao.addTopMoviesGenre(
+                                TopMovieGenreCrossRef(
+                                    movieId = movie.id,
+                                    genreId = it
+                                )
+                            )
+                        }
                     }
                 } catch (t: Throwable) {
                     sendDataBaseError(t)

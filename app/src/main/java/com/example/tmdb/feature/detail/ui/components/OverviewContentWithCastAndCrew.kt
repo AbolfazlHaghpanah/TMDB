@@ -24,8 +24,8 @@ import coil.compose.AsyncImage
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.data.credit.entity.CreditEntity
+import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 
 @Composable
 fun OverviewContentWithCastAndCrew(movieDetail: DetailMovieWithAllRelations) {
@@ -47,9 +47,9 @@ fun OverviewContentWithCastAndCrew(movieDetail: DetailMovieWithAllRelations) {
             )
     )
     val castAndCrewCombinedList =
-        movieDetail.credits.toMutableList()
-    if (castAndCrewCombinedList.size > 0) {
-        CastCrewLazyRow(castAndCrewCombinedList)
+        movieDetail.credits?.toMutableList()
+    if ((castAndCrewCombinedList?.size ?: mutableListOf<CreditEntity>().size) > 0) {
+        castAndCrewCombinedList?.let { CastCrewLazyRow(it) }
     }
 }
 

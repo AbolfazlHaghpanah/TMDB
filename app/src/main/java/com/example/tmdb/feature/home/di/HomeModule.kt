@@ -2,9 +2,8 @@ package com.example.tmdb.feature.home.di
 
 import com.example.tmdb.core.data.AppDatabase
 import com.example.tmdb.core.data.genre.dao.GenreDao
-import com.example.tmdb.core.data.moviedata.Dao.MovieDao
-import com.example.tmdb.feature.home.data.nowplayingmovie.dao.NowPlayingDao
-import com.example.tmdb.feature.home.data.popularMovie.dao.PopularMovieDao
+import com.example.tmdb.core.data.moviedata.dao.MovieDao
+import com.example.tmdb.feature.home.data.dao.HomeDao
 import com.example.tmdb.feature.home.network.HomeApi
 import dagger.Module
 import dagger.Provides
@@ -37,13 +36,7 @@ object HomeModule {
 
     @Singleton
     @Provides
-    fun provideNowPlayingDao(appDatabase: AppDatabase): NowPlayingDao {
-        return appDatabase.NowPlayingDao()
-    }
-
-    @Singleton
-    @Provides
-    fun providePopularMovieDao(appDatabase: AppDatabase): PopularMovieDao {
-        return appDatabase.PopularMovieDao()
+    fun provideHomeDao(appDatabase: AppDatabase): HomeDao {
+        return appDatabase.HomeDao()
     }
 }

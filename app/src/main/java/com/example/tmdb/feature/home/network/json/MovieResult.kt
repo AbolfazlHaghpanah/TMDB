@@ -1,10 +1,10 @@
 package com.example.tmdb.feature.home.network.json
 
-import com.example.tmdb.core.data.moviedata.Entity.MovieEntity
+import com.example.tmdb.core.data.moviedata.entity.MovieEntity
 import com.example.tmdb.core.utils.dateConvertor
-import com.example.tmdb.feature.home.data.nowplayingmovie.entity.NowPlayingEntity
-import com.example.tmdb.feature.home.data.popularMovie.entity.PopularMovieEntity
-import com.example.tmdb.feature.home.data.topmovie.TopMovieEntity
+import com.example.tmdb.feature.home.data.entity.NowPlayingEntity
+import com.example.tmdb.feature.home.data.entity.PopularMovieEntity
+import com.example.tmdb.feature.home.data.entity.TopMovieEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

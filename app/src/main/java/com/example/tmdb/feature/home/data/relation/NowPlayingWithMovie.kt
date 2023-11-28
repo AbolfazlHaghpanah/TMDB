@@ -1,11 +1,11 @@
-package com.example.tmdb.feature.home.data.nowplayingmovie.relation
+package com.example.tmdb.feature.home.data.relation
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.example.tmdb.core.data.moviedata.Entity.MovieEntity
+import com.example.tmdb.core.data.moviedata.entity.MovieEntity
 import com.example.tmdb.core.utils.MovieDatabaseWrapper
 import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
-import com.example.tmdb.feature.home.data.nowplayingmovie.entity.NowPlayingEntity
+import com.example.tmdb.feature.home.data.entity.NowPlayingEntity
 import kotlinx.collections.immutable.persistentListOf
 
 data class NowPlayingWithMovie(

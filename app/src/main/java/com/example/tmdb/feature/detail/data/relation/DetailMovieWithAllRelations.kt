@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 import com.example.tmdb.core.data.genre.entity.GenreEntity
-import com.example.tmdb.core.data.moviedata.Entity.MovieEntity
+import com.example.tmdb.core.data.moviedata.entity.MovieEntity
 import com.example.tmdb.core.utils.MovieDatabaseWrapper
 import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.detail.data.credit.entity.CreditEntity
@@ -13,7 +13,7 @@ import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithGenreCr
 import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
 import com.example.tmdb.feature.detail.data.crossrefrence.MovieWithGenreCrossRef
 import com.example.tmdb.feature.detail.data.detail.entity.DetailEntity
-import com.example.tmdb.feature.favorite.data.FavoriteMovieEntity
+import com.example.tmdb.feature.favorite.data.entity.FavoriteMovieEntity
 import kotlinx.collections.immutable.toPersistentList
 
 data class DetailMovieWithAllRelations(
@@ -23,25 +23,25 @@ data class DetailMovieWithAllRelations(
         entityColumn = "genreId",
         associateBy = Junction(DetailMovieWithGenreCrossRef::class)
     )
-    val genres: List<GenreEntity>,
+    val genres: List<GenreEntity>?,
     @Relation(
         parentColumn = "detailMovieId",
         entityColumn = "creditId",
         associateBy = Junction(DetailMovieWithCreditCrossRef::class)
     )
-    val credits: List<CreditEntity>,
+    val credits: List<CreditEntity>?,
     @Relation(
         parentColumn = "detailMovieId",
         entityColumn = "id",
         entity = MovieEntity::class,
         associateBy = Junction(DetailMovieWithSimilarMoviesCrossRef::class)
     )
-    val similarMovies: List<SimilarMovieWithGenre>,
+    val similarMovies: List<SimilarMovieWithGenre>?,
     @Relation(
         parentColumn = "detailMovieId",
         entityColumn = "id"
     )
-    val movie: MovieEntity,
+    val movie: MovieEntity?,
     @Relation(
         parentColumn = "detailMovieId",
         entityColumn = "movieId"

@@ -100,11 +100,13 @@ private fun DetailScreen(
 
                     OverviewContentWithCastAndCrew(movieDetail)
 
-                    MovieRow(
-                        onClick = onSimilarItemClick,
-                        title = stringResource(R.string.similar_movies),
-                        movies = movieDetail.similarMovies.map { it.toMovieWithGenreDataBaseWrapper() }
-                    )
+                    movieDetail.similarMovies?.let {
+                        MovieRow(
+                            onClick = onSimilarItemClick,
+                            title = stringResource(R.string.similar_movies),
+                            movies = it.map { it.toMovieWithGenreDataBaseWrapper() }
+                        )
+                    }
                 }
             }
         }
