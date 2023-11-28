@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.detail.data.detail.dao
+package com.example.tmdb.feature.detail.data.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -6,18 +6,19 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.tmdb.feature.favorite.data.entity.FavoriteMovieEntity
-import com.example.tmdb.feature.detail.data.credit.entity.CreditEntity
-import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithCreditCrossRef
-import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
-import com.example.tmdb.feature.detail.data.crossrefrence.MovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.detail.entity.DetailEntity
+import com.example.tmdb.feature.detail.data.entity.CreditEntity
+import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithCreditCrossRef
+import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
+import com.example.tmdb.feature.detail.data.relation.crossrefrence.MovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.entity.DetailEntity
 import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import com.example.tmdb.feature.favorite.data.relation.FavoriteMovieGenreCrossRef
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DetailDao {
+
     //   movie detail
     @Query("select * from detail_movies where detailMovieId = :detailMovieId")
     fun observeMovieDetail(detailMovieId: Int): Flow<DetailMovieWithAllRelations>
@@ -53,5 +54,4 @@ interface DetailDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addToFavorite(movieEntity: FavoriteMovieEntity)
-
 }

@@ -3,9 +3,9 @@ package com.example.tmdb.feature.home.ui
 import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.core.data.databaseErrorCatchMessage
+import com.example.tmdb.core.utils.databaseErrorCatchMessage
 import com.example.tmdb.core.data.genre.dao.GenreDao
-import com.example.tmdb.core.data.moviedata.dao.MovieDao
+import com.example.tmdb.core.data.movie.dao.MovieDao
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.Result.Success
 import com.example.tmdb.core.network.safeApi

@@ -1,4 +1,4 @@
-package com.example.tmdb.core.data.moviedata.entity
+package com.example.tmdb.core.data.movie.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

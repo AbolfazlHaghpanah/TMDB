@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GenreDao {
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addGenre(genre: GenreEntity)
 

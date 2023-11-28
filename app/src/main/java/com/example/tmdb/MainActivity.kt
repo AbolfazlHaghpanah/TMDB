@@ -80,6 +80,7 @@ class MainActivity : ComponentActivity() {
             }
 
             TMDBTheme {
+
                 ModalBottomSheetLayout(
                     bottomSheetNavigator = bottomSheetNavigator,
                     sheetShape = TMDBTheme.shapes.veryLarge,

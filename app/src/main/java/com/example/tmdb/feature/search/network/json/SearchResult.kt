@@ -1,6 +1,6 @@
 package com.example.tmdb.feature.search.network.json
 
-import com.example.tmdb.core.data.moviedata.entity.MovieEntity
+import com.example.tmdb.core.data.movie.entity.MovieEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -37,12 +37,9 @@ interface HomeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addNowPlayingMovie(movie: NowPlayingEntity)
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addPopularMovie(movie: PopularMovieEntity)
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTopMovie(movie: TopMovieEntity)
-
 }

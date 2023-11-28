@@ -12,15 +12,11 @@ suspend fun <T> safeApi(
     call: suspend () -> Response<T>
 ): Flow<Result> {
     return flow {
-
         emit(Result.Loading)
-
         try {
             val response = call()
-
             if (response.isSuccessful) {
                 val body = response.body()
-
                 if (body != null) {
                     if (currentCoroutineContext().isActive) {
                         emit(Result.Success(body))

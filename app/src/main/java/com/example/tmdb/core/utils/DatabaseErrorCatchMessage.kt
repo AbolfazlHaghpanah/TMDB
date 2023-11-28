@@ -1,4 +1,4 @@
-package com.example.tmdb.core.data
+package com.example.tmdb.core.utils
 
 import android.database.StaleDataException
 import android.database.sqlite.SQLiteException

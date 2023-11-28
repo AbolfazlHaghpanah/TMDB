@@ -4,15 +4,15 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 import com.example.tmdb.core.data.genre.entity.GenreEntity
-import com.example.tmdb.core.data.moviedata.entity.MovieEntity
+import com.example.tmdb.core.data.movie.entity.MovieEntity
 import com.example.tmdb.core.utils.MovieDatabaseWrapper
 import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
-import com.example.tmdb.feature.detail.data.credit.entity.CreditEntity
-import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithCreditCrossRef
-import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
-import com.example.tmdb.feature.detail.data.crossrefrence.MovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.detail.entity.DetailEntity
+import com.example.tmdb.feature.detail.data.entity.CreditEntity
+import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithCreditCrossRef
+import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
+import com.example.tmdb.feature.detail.data.relation.crossrefrence.MovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.entity.DetailEntity
 import com.example.tmdb.feature.favorite.data.entity.FavoriteMovieEntity
 import kotlinx.collections.immutable.toPersistentList
 

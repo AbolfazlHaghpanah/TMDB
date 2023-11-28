@@ -3,7 +3,7 @@ package com.example.tmdb.feature.bottomsheet.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.core.data.databaseErrorCatchMessage
+import com.example.tmdb.core.utils.databaseErrorCatchMessage
 import com.example.tmdb.core.utils.SnackBarMassage
 import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.feature.favorite.data.dao.FavoriteMovieDao

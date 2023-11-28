@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.detail.data.credit.entity
+package com.example.tmdb.feature.detail.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

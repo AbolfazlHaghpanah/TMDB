@@ -24,7 +24,7 @@ import coil.compose.AsyncImage
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.detail.data.credit.entity.CreditEntity
+import com.example.tmdb.feature.detail.data.entity.CreditEntity
 import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 
 @Composable
