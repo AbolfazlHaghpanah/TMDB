@@ -62,7 +62,7 @@ private fun SearchScreen(
 
 @Composable
 private fun SearchScreen(
-    apiResult: Result,
+    apiResult: Result?,
     searchResult: List<SearchResultElement>,
     onSearch: (String) -> Unit,
     getMovieGenres: (List<Int>) -> String,
@@ -78,6 +78,7 @@ private fun SearchScreen(
         modifier = Modifier
             .statusBarsPadding()
             .padding(vertical = 8.dp, horizontal = 24.dp)
+
     ) {
         TopSearchSection(
             searchString = searchString,

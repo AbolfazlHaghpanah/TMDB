@@ -1,7 +1,7 @@
 package com.example.tmdb.feature.favorite.di
 
 import com.example.tmdb.core.data.AppDatabase
-import com.example.tmdb.feature.favorite.data.FavoriteMovieDao
+import com.example.tmdb.feature.favorite.data.dao.FavoriteMovieDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

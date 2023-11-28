@@ -1,13 +1,13 @@
 package com.example.tmdb
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHost
@@ -65,24 +65,22 @@ class MainActivity : ComponentActivity() {
             }
 
             LaunchedEffect(Unit) {
-                snackBarManager.getSnackBarMessage().collectLatest { snackBarMessage ->
-                    if (snackBarMessage?.getMessage().isNullOrEmpty().not()) {
+                snackBarManager.snackBarMessage.collectLatest { snackBarMessage ->
+                    if (snackBarMessage?.snackBarMessage.isNullOrEmpty().not()) {
                         val snackBarResult = snackBarHostState.showSnackbar(
-                            message = snackBarMessage?.getMessage()!!,
-                            actionLabel = snackBarMessage.getActionLabel(),
-                            duration = snackBarMessage.getDuration()
+                            message = snackBarMessage?.snackBarMessage!!,
+                            actionLabel = snackBarMessage.snackBarActionLabel,
+                            duration = snackBarMessage.snackBarDuration
                         )
                         if (snackBarResult == SnackbarResult.ActionPerformed) {
-                            Log.d("asd", "onCreate: ")
                             snackBarMessage.performAction()
                         }
                     }
                 }
-
-
             }
 
             TMDBTheme {
+
                 ModalBottomSheetLayout(
                     bottomSheetNavigator = bottomSheetNavigator,
                     sheetShape = TMDBTheme.shapes.veryLarge,
@@ -90,6 +88,8 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     Scaffold(
+                        modifier = Modifier
+                            .imePadding(),
                         scaffoldState = scaffoldState,
                         bottomBar = {
                             TMDBBottomNavigation(

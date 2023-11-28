@@ -3,7 +3,7 @@ package com.example.tmdb.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.tmdb.core.ui.bottomsheet.TMDBModalBottomSheet
+import com.example.tmdb.feature.bottomsheet.ui.TMDBModalBottomSheet
 import com.example.tmdb.feature.detail.ui.DetailsScreen
 import com.example.tmdb.feature.favorite.ui.FavoriteScreen
 import com.example.tmdb.feature.home.ui.HomeScreen

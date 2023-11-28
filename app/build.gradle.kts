@@ -106,4 +106,7 @@ dependencies {
 
     //splashScreen
     implementation(libs.splashScreen)
+
+    //PersistentList
+    implementation(libs.imutableCollection)
 }

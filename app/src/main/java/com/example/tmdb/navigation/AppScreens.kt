@@ -4,17 +4,17 @@ sealed class AppScreens(
     val route: String
 ) {
 
-    object Home : AppScreens("home")
-    object Search : AppScreens("search")
-    object Detail : AppScreens("details/{id}") {
+    data object Home : AppScreens("home")
+    data object Search : AppScreens("search")
+    data object Detail : AppScreens("details/{id}") {
         fun createRoute(id: Int): String {
             return "details/$id"
         }
     }
 
-    object Favorite : AppScreens("favorite")
+    data object Favorite : AppScreens("favorite")
 
-    object BottomSheet : AppScreens("BottomSheet/{id}") {
+    data object BottomSheet : AppScreens("BottomSheet/{id}") {
         fun createRoute(id: Int): String {
             return "BottomSheet/$id"
         }

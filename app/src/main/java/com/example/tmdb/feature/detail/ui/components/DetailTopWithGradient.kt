@@ -67,7 +67,7 @@ fun DetailTopWithGradient(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        BackgroundImage(movieDetail.movie.posterPath)
+        movieDetail.movie?.let { BackgroundImage(it.posterPath) }
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -79,7 +79,7 @@ fun DetailTopWithGradient(
             Row(
                 modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
             ) {
-                ForegroundImage(movieDetail.movie.posterPath)
+                ForegroundImage(movieDetail.movie?.posterPath ?: "")
             }
 
             MovieInfo(movieDetail)
@@ -160,17 +160,19 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
             iconId = R.drawable.clock,
             text = "${movieDetail.detailEntity.runtime} Minutes"
         )
-        Divider(
-            color = TMDBTheme.colors.gray,
-            modifier = Modifier
-                .width(1.dp)
-                .height(16.dp)
-                .align(Alignment.CenterVertically)
-        )
-        TextIcon(
-            iconId = R.drawable.film,
-            text = movieDetail.genres[0].genreName
-        )
+        if (!movieDetail.genres.isNullOrEmpty()) {
+            Divider(
+                color = TMDBTheme.colors.gray,
+                modifier = Modifier
+                    .width(1.dp)
+                    .height(16.dp)
+                    .align(Alignment.CenterVertically)
+            )
+            TextIcon(
+                iconId = R.drawable.film,
+                text = movieDetail.genres[0].genreName
+            )
+        }
     }
 
     Row(
@@ -179,8 +181,9 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
             .padding(horizontal = 8.dp)
     ) {
         val roundedVote =
-            movieDetail.movie.voteAverage.toBigDecimal()
-                .setScale(1, RoundingMode.FLOOR)?.toDouble()
+            movieDetail.movie?.voteAverage?.toBigDecimal()
+                ?.setScale(1, RoundingMode.FLOOR)?.toDouble()
+
         TextIcon(
             text = roundedVote.toString(),
             iconId = R.drawable.star,
@@ -203,8 +206,8 @@ private fun TopBar(
     if (showDialog) {
         ShareDialog(
             movieDetail.detailEntity.externalIds,
-            movieDetail.movie.id,
-            movieDetail.movie.title,
+            movieDetail.movie?.id,
+            movieDetail.movie?.title,
             { requestString ->
                 uriHandler.openUri(uri = requestString)
             }
@@ -232,17 +235,19 @@ private fun TopBar(
             )
         }
 
-        Text(
-            text = movieDetail.movie.title,
-            style = TMDBTheme.typography.subtitle1,
-            color = TMDBTheme.colors.white,
-            textAlign = TextAlign.Start,
-            modifier = Modifier
-                .align(Alignment.Center)
-                .widthIn(50.dp, 200.dp)
-                .basicMarquee(),
-            maxLines = 1
-        )
+        movieDetail.movie?.let {
+            Text(
+                text = it.title,
+                style = TMDBTheme.typography.subtitle1,
+                color = TMDBTheme.colors.white,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .widthIn(50.dp, 200.dp)
+                    .basicMarquee(),
+                maxLines = 1
+            )
+        }
 
         Row(
             modifier = Modifier.align(Alignment.CenterEnd),
@@ -292,8 +297,8 @@ private fun IconWrapper(
 @Composable
 private fun ShareDialog(
     externalIds: List<String>,
-    movieId: Int,
-    movieTitle: String,
+    movieId: Int?,
+    movieTitle: String?,
     shareIconOnClock: (String) -> Unit,
     changeShowDialog: (Boolean) -> Unit
 ) {
@@ -389,13 +394,9 @@ private fun ShareDialog(
                     )
                 }
                 TMDBIconButton(onClick = {
-                    val titleSplit = movieTitle.split(" ")
-                    val titleSplitPlusDash = titleSplit.joinToString {
-                        var temp = it
-                        if (it != titleSplit.last()) temp += "-"
-                        temp
-                    }
-                    shareIconOnClock("https://www.themoviedb.org/collection/${movieId}-${titleSplitPlusDash}")
+                    val titleSplit = movieTitle?.split(" ")
+                    val titleSplitPlusDash = titleSplit?.joinToString(separator = "-") { it }
+                    if (titleSplitPlusDash != null && titleSplit != null) shareIconOnClock("https://www.themoviedb.org/collection/${movieId}-${titleSplitPlusDash}")
                 }) {
                     ImageWrapper(
                         shouldNotHaveAlpha = true,

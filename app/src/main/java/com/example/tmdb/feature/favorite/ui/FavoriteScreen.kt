@@ -1,11 +1,14 @@
 package com.example.tmdb.feature.favorite.ui
 
+import android.service.autofill.OnClickAction
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
@@ -25,10 +28,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.favorite.ui.component.EmptyIcon
 import com.example.tmdb.feature.favorite.ui.component.MovieItems
-import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.navigation.AppScreens
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun FavoriteScreen(
@@ -53,23 +58,33 @@ private fun FavoriteScreen(
         }
     }
 
+    val onClickAction: (Int) -> Unit = remember {
+        {
+            navController.navigate(AppScreens.Detail.createRoute(it))
+        }
+    }
+
     LaunchedEffect(Unit) {
         viewModel.onTryAgain()
     }
 
     FavoriteScreen(
-        movies = favoriteMovies,
-        onDeleteMovie = onDeleteMovie
+        movies = favoriteMovies.toPersistentList(),
+        onDeleteMovie = onDeleteMovie,
+        onClickAction = onClickAction
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun FavoriteScreen(
-    movies: List<MovieWithGenreDatabaseWrapper>,
-    onDeleteMovie: (Int) -> Unit
+    movies: PersistentList<MovieWithGenreDatabaseWrapper>,
+    onDeleteMovie: (Int) -> Unit,
+    onClickAction: (Int) -> Unit
 ) {
     Scaffold(
+        modifier = Modifier
+            .statusBarsPadding(),
         topBar = {
             TopAppBar(
                 backgroundColor = TMDBTheme.colors.background
@@ -86,9 +101,7 @@ private fun FavoriteScreen(
     ) { paddingValues ->
 
         if (movies.isEmpty()) {
-
             EmptyIcon()
-
         } else {
 
             LazyColumn(
@@ -101,14 +114,14 @@ private fun FavoriteScreen(
                 ),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-
                 items(
                     items = movies,
                     key = { it.movie.movieId }
                 ) { movie ->
                     MovieItems(
                         modifier = Modifier
-                            .animateItemPlacement(),
+                            .animateItemPlacement()
+                            .clickable { onClickAction(movie.movie.movieId) },
                         movie = movie,
                         onDelete = {
                             onDeleteMovie(movie.movie.movieId)

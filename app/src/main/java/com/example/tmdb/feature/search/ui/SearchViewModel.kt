@@ -28,7 +28,7 @@ class SearchViewModel @Inject constructor(
     private val _searchResult = MutableStateFlow(listOf<SearchResultElement>())
     val searchResult = _searchResult.asStateFlow()
 
-    private val _apiResult = MutableStateFlow<Result>(Result.Idle)
+    private val _apiResult = MutableStateFlow<Result?>(null)
     val apiResult = _apiResult.asStateFlow()
 
     private val _genres: MutableList<GenreEntity> = mutableListOf()
@@ -97,7 +97,7 @@ class SearchViewModel @Inject constructor(
                     _apiResult.emit(result)
                 }
 
-                else -> {
+                is Result.Loading -> {
                     _apiResult.emit(result)
                 }
             }

@@ -22,7 +22,7 @@ import coil.compose.AsyncImage
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.home.data.common.MovieDatabaseWrapper
+import com.example.tmdb.core.utils.MovieDatabaseWrapper
 
 @Composable
 fun PagerMovieItem(

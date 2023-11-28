@@ -3,11 +3,11 @@ package com.example.tmdb.feature.favorite.ui
 import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.core.data.databaseErrorCatchMessage
+import com.example.tmdb.core.utils.databaseErrorCatchMessage
 import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMassage
-import com.example.tmdb.feature.favorite.data.FavoriteMovieDao
-import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
+import com.example.tmdb.feature.favorite.data.dao.FavoriteMovieDao
+import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

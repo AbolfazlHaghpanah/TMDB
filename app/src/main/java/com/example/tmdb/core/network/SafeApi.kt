@@ -30,7 +30,7 @@ suspend fun <T> safeApi(
                         val json = Json { ignoreUnknownKeys = true }
                         json.decodeFromString<ErrorResponse>(it)
                     }
-                throw Throwable(message = bodyCode?.status_message ?: "")
+                throw Throwable(message = bodyCode?.statusMessage ?: "")
             }
         } catch (t: Throwable) {
             emit(Result.Error(mapServerErrorMessage((t.message ?: ""))))

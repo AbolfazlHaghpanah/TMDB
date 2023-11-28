@@ -1,10 +1,13 @@
 package com.example.tmdb.core.network
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.io.Serial
 
 @Serializable
 data class ErrorResponse(
-    val status_message : String,
-    val status_code : Int
+    @SerialName("status_message")
+    val statusMessage : String,
+
+    @SerialName("status_code")
+    val statusCode : Int
 )

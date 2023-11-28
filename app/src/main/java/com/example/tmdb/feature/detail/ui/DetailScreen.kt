@@ -16,13 +16,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.tmdb.R
+import com.example.tmdb.core.ui.component.MovieRow
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.example.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
-import com.example.tmdb.feature.detail.ui.components.SimilarMovies
 import com.example.tmdb.navigation.AppScreens
 
 @Composable
@@ -98,8 +100,13 @@ private fun DetailScreen(
 
                     OverviewContentWithCastAndCrew(movieDetail)
 
-                    SimilarMovies(movieDetail, onSimilarItemClick)
-
+                    movieDetail.similarMovies?.let {
+                        MovieRow(
+                            onClick = onSimilarItemClick,
+                            title = stringResource(R.string.similar_movies),
+                            movies = it.map { it.toMovieWithGenreDataBaseWrapper() }
+                        )
+                    }
                 }
             }
         }

@@ -1,10 +1,10 @@
 package com.example.tmdb.feature.home.network.json
 
-import com.example.tmdb.core.data.moviedata.MovieEntity
+import com.example.tmdb.core.data.movie.entity.MovieEntity
 import com.example.tmdb.core.utils.dateConvertor
-import com.example.tmdb.feature.home.data.nowplayingmovie.NowPlayingEntity
-import com.example.tmdb.feature.home.data.popularMovie.PopularMovieEntity
-import com.example.tmdb.feature.home.data.topmovie.TopMovieEntity
+import com.example.tmdb.feature.home.data.entity.NowPlayingEntity
+import com.example.tmdb.feature.home.data.entity.PopularMovieEntity
+import com.example.tmdb.feature.home.data.entity.TopMovieEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -27,8 +27,9 @@ data class MovieResult(
         return MovieEntity(
             id = id,
             title = title,
-            posterPath = posterPath?:"",
-            voteAverage = voteAverage?:0.0
+            posterPath = posterPath ?: "",
+            voteAverage = voteAverage ?: 0.0,
+            backdropPath = backdropPath ?: ""
         )
     }
 
@@ -47,7 +48,7 @@ data class MovieResult(
     fun toNowPlayingEntity(): NowPlayingEntity {
         return NowPlayingEntity(
             movieId = id,
-            releaseDate = dateConvertor(releaseDate?:"0000,00,00"),
+            releaseDate = dateConvertor(releaseDate ?: "0000,00,00"),
         )
     }
 }

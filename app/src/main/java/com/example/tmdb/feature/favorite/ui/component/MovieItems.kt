@@ -26,10 +26,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.tmdb.core.ui.component.VoteIcon
+import com.example.tmdb.core.ui.component.TextIcon
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
 
 @Composable
 fun MovieItems(
@@ -111,7 +111,12 @@ private fun InfoSection(
                 overflow = TextOverflow.Ellipsis
             )
 
-            VoteIcon(vote = vote)
+            TextIcon(
+                text = vote,
+                iconId = TMDBTheme.icons.star,
+                iconColor = TMDBTheme.colors.secondary,
+                textColor = TMDBTheme.colors.secondary
+            )
         }
 
         FavoriteIcon(onDelete = onDelete)

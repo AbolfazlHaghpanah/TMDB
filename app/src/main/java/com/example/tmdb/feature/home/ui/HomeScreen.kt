@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -25,8 +26,8 @@ import com.example.tmdb.R
 import com.example.tmdb.core.ui.shimmer.fakeMovie
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.feature.home.data.common.MovieWithGenreDatabaseWrapper
-import com.example.tmdb.feature.home.ui.component.MovieRow
+import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
+import com.example.tmdb.core.ui.component.MovieRow
 import com.example.tmdb.feature.home.ui.component.PagerMovieItem
 import com.example.tmdb.feature.home.ui.component.TMDBPagerIndicator
 import com.example.tmdb.navigation.AppScreens
@@ -34,7 +35,10 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 
+@NonRestartableComposable
 @Composable
 fun HomeScreen(
     navController: NavController
@@ -45,6 +49,7 @@ fun HomeScreen(
     )
 }
 
+@NonRestartableComposable
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun HomeScreen(
@@ -70,9 +75,9 @@ private fun HomeScreen(
     val pagerState = rememberPagerState(initialPage = 2)
 
     HomeScreen(
-        nowPlayingMovies = nowPlayingMovies,
-        popularMovies = popularMovies,
-        topMovies = topRated,
+        nowPlayingMovies = nowPlayingMovies.toPersistentList(),
+        popularMovies = popularMovies.toPersistentList(),
+        topMovies = topRated.toPersistentList(),
         pagerState = pagerState,
         onNavigation = onNavigation,
     )
@@ -82,9 +87,9 @@ private fun HomeScreen(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun HomeScreen(
-    nowPlayingMovies: List<MovieWithGenreDatabaseWrapper>,
-    popularMovies: List<MovieWithGenreDatabaseWrapper>,
-    topMovies: List<MovieWithGenreDatabaseWrapper>,
+    nowPlayingMovies: PersistentList<MovieWithGenreDatabaseWrapper>,
+    popularMovies: PersistentList<MovieWithGenreDatabaseWrapper>,
+    topMovies: PersistentList<MovieWithGenreDatabaseWrapper>,
     pagerState: PagerState,
     onNavigation: (String) -> Unit,
 ) {
