@@ -70,7 +70,8 @@ shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.ref = "s
 kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 kotlinSerialization-convertor = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "kotlinSerialization-convertor" }
 splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splashScreen" }
-imutableCollection = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "imutableCollection"}
+imutableCollection = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "imutableCollection" }
+lifecycleRuntimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-ktx" }
 
 
 [plugins]

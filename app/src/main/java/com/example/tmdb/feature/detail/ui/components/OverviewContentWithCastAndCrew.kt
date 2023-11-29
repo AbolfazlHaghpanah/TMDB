@@ -26,6 +26,8 @@ import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
 import com.example.tmdb.feature.detail.data.entity.CreditEntity
 import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun OverviewContentWithCastAndCrew(movieDetail: DetailMovieWithAllRelations) {
@@ -48,15 +50,15 @@ fun OverviewContentWithCastAndCrew(movieDetail: DetailMovieWithAllRelations) {
     )
     val castAndCrewCombinedList =
         movieDetail.credits?.toMutableList()
-    if ((castAndCrewCombinedList?.size ?: mutableListOf<CreditEntity>().size) > 0) {
-        castAndCrewCombinedList?.let { CastCrewLazyRow(it) }
+    if ((castAndCrewCombinedList?.size ?: 0) > 0) {
+        castAndCrewCombinedList?.let { CastCrewLazyRow(it.toPersistentList()) }
     }
 }
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun CastCrewLazyRow(
-    castOrCrewElements: List<CreditEntity>
+    castOrCrewElements: PersistentList<CreditEntity>
 ) {
 
     LazyRow(

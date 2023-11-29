@@ -36,12 +36,13 @@ import com.example.tmdb.core.ui.component.TextIcon
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
 import com.example.tmdb.feature.search.network.json.SearchResultElement
+import kotlinx.collections.immutable.PersistentList
 import java.math.RoundingMode
 import java.util.Locale
 
 @Composable
 fun SearchResults(
-    searchResult: List<SearchResultElement>,
+    searchResult: PersistentList<SearchResultElement>,
     getMovieGenres: (List<Int>) -> String,
     onSearchElementClick: (Int) -> Unit
 ) {
@@ -104,7 +105,7 @@ private fun MovieInfo(
             if (searchElement.releaseDate.split("-").size > 1) {
                 TextIcon(
                     text = searchElement.releaseDate.split("-")[0],
-                    iconId = R.drawable.calender
+                    iconId = TMDBTheme.icons.calendar
                 )
             }
             Box(
@@ -129,7 +130,7 @@ private fun MovieInfo(
                 modifier = Modifier.padding(top = 16.dp)
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.film),
+                    imageVector = ImageVector.vectorResource(TMDBTheme.icons.film),
                     contentDescription = null,
                     tint = TMDBTheme.colors.gray
                 )
@@ -163,7 +164,7 @@ private fun PosterWithTotalVote(
                 .background(TMDBTheme.colors.surface.copy(alpha = 0.7f))
                 .padding(8.dp, 4.dp),
             text = roundedVote.toString(),
-            iconId = R.drawable.star,
+            iconId = TMDBTheme.icons.star,
             iconColor = TMDBTheme.colors.secondary,
             textColor = TMDBTheme.colors.secondary
         )

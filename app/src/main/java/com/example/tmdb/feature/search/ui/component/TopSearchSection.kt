@@ -73,7 +73,7 @@ fun TopSearchSection(
 @Composable
 private fun IconWrapper() {
     Icon(
-        imageVector = ImageVector.vectorResource(id = R.drawable.search),
+        imageVector = ImageVector.vectorResource(id = TMDBTheme.icons.search),
         contentDescription = null
     )
 }

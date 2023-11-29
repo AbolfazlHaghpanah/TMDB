@@ -18,5 +18,6 @@ data class TMDBIcons(
     val star: Int = R.drawable.star,
     val close: Int = R.drawable.close,
     val illustration: Int = R.drawable.illustration,
-    val layer: Int = R.drawable.layer
+    val layer: Int = R.drawable.layer,
+    val heartBorder: Int = R.drawable.heartborder
 )
