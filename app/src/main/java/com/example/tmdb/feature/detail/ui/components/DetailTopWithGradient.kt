@@ -60,7 +60,7 @@ import java.math.RoundingMode
 fun DetailTopWithGradient(
     movieDetail: DetailMovieWithAllRelations,
     onBackArrowClick: () -> Unit,
-    onAddToFavorite: () -> Unit
+    onFavoriteIconClick: () -> Unit
 ) {
 
     Box(
@@ -74,7 +74,7 @@ fun DetailTopWithGradient(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            TopBar(onBackArrowClick, movieDetail, onAddToFavorite)
+            TopBar(onBackArrowClick, movieDetail, onFavoriteIconClick)
 
             Row(
                 modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
@@ -144,7 +144,7 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
             .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
         TextIcon(
-            iconId = R.drawable.calender,
+            iconId = TMDBTheme.icons.calendar,
             text = movieDetail.detailEntity.releaseDate.split(
                 "-"
             )[0]
@@ -157,7 +157,7 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
                 .align(Alignment.CenterVertically)
         )
         TextIcon(
-            iconId = R.drawable.clock,
+            iconId = TMDBTheme.icons.clock,
             text = "${movieDetail.detailEntity.runtime} Minutes"
         )
         if (!movieDetail.genres.isNullOrEmpty()) {
@@ -169,7 +169,7 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
                     .align(Alignment.CenterVertically)
             )
             TextIcon(
-                iconId = R.drawable.film,
+                iconId = TMDBTheme.icons.film,
                 text = movieDetail.genres[0].genreName
             )
         }
@@ -186,7 +186,7 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
 
         TextIcon(
             text = roundedVote.toString(),
-            iconId = R.drawable.star,
+            iconId = TMDBTheme.icons.star,
             iconColor = TMDBTheme.colors.secondary,
             textColor = TMDBTheme.colors.secondary
         )
@@ -198,7 +198,7 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
 private fun TopBar(
     onBackArrowClick: () -> Unit,
     movieDetail: DetailMovieWithAllRelations,
-    onAddToFavorite: () -> Unit
+    onFavoriteIconClick: () -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }
     val uriHandler = LocalUriHandler.current
@@ -230,7 +230,7 @@ private fun TopBar(
                 .align(Alignment.CenterStart),
         ) {
             IconWrapper(
-                icon = R.drawable.arrowback,
+                icon = TMDBTheme.icons.arrowBack,
                 tintColor = TMDBTheme.colors.white
             )
         }
@@ -254,9 +254,9 @@ private fun TopBar(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             val suitableIcon =
-                if (movieDetail.favorite == null) R.drawable.heartborder else R.drawable.heart
+                if (movieDetail.favorite == null) TMDBTheme.icons.heartBorder else TMDBTheme.icons.heart
             TMDBIconButton(
-                onClick = onAddToFavorite,
+                onClick = onFavoriteIconClick,
                 Modifier
                     .clip(TMDBTheme.shapes.rounded)
                     .background(TMDBTheme.colors.surface),
@@ -274,7 +274,7 @@ private fun TopBar(
                     .background(TMDBTheme.colors.surface),
             ) {
                 IconWrapper(
-                    icon = R.drawable.share,
+                    icon = TMDBTheme.icons.share,
                     tintColor = TMDBTheme.colors.primary
                 )
             }
@@ -332,7 +332,7 @@ private fun ShareDialog(
                     .align(Alignment.End)
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.close),
+                    imageVector = ImageVector.vectorResource(TMDBTheme.icons.close),
                     contentDescription = "close",
                     tint = TMDBTheme.colors.gray
                 )

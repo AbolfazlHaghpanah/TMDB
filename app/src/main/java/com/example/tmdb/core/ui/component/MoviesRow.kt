@@ -16,12 +16,13 @@ import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.ui.component.MovieCard
+import kotlinx.collections.immutable.PersistentList
 
 @Composable
 fun MovieRow(
     onClick: (Int) -> Unit,
     title: String,
-    movies: List<MovieWithGenreDatabaseWrapper>
+    movies: PersistentList<MovieWithGenreDatabaseWrapper>
 ) {
     Column {
         Text(
@@ -41,13 +42,13 @@ fun MovieRow(
             items(
                 items = movies.ifEmpty { fakeMovie },
                 key = { it.movie.movieId }
-            ) {
+            ) { movieWithGenreDatabaseWrapper ->
                 MovieCard(
-                    onClick = { onClick(it.movie.movieId) },
-                    title = it.movie.title,
-                    image = it.movie.posterPath,
-                    genres = it.genres.joinToString(separator = "|") { it.genreName },
-                    vote = String.format("%.1f", it.movie.voteAverage),
+                    onClick = { onClick(movieWithGenreDatabaseWrapper.movie.movieId) },
+                    title = movieWithGenreDatabaseWrapper.movie.title,
+                    image = movieWithGenreDatabaseWrapper.movie.posterPath,
+                    genres = movieWithGenreDatabaseWrapper.genres.joinToString(separator = "|") { it.genreName },
+                    vote = String.format("%.1f", movieWithGenreDatabaseWrapper.movie.voteAverage),
                     isShimmer = movies.isEmpty()
                 )
             }

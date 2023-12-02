@@ -28,7 +28,7 @@ fun NoSearchResultSection() {
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            imageVector = ImageVector.vectorResource(R.drawable.noresult),
+            imageVector = ImageVector.vectorResource(TMDBTheme.icons.noResult),
             contentDescription = null
         )
         Text(

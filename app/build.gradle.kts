@@ -74,6 +74,7 @@ dependencies {
     implementation(libs.lifecycleLiveData)
     implementation(libs.lifecycleViewModel)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycleRuntimeCompose)
 
     //accompanist
     implementation(libs.accompanistFlowLayout)

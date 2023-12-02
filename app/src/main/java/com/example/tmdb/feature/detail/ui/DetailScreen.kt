@@ -12,12 +12,13 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.component.MovieRow
@@ -26,8 +27,10 @@ import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.example.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
 import com.example.tmdb.navigation.AppScreens
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
+@NonRestartableComposable
 fun DetailsScreen(navController: NavController) {
     DetailScreen(
         navController = navController,
@@ -36,20 +39,21 @@ fun DetailsScreen(navController: NavController) {
 }
 
 @Composable
+@NonRestartableComposable
 private fun DetailScreen(
     navController: NavController,
     detailViewModel: DetailViewModel
 ) {
-    val movieDetail by detailViewModel.movieDetail.collectAsState()
+    val movieDetail by detailViewModel.movieDetail.collectAsStateWithLifecycle()
 
-    val onAddToFavorite = remember {
+    val onFavoriteIconClick = remember {
         {
             if (movieDetail?.favorite == null) detailViewModel.addToFavorite()
             else detailViewModel.removeFromFavorite()
         }
     }
 
-    val isLoading by detailViewModel.isLoading.collectAsState()
+    val isLoading by detailViewModel.isLoading.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         detailViewModel.showLastSnackBar()
@@ -58,9 +62,9 @@ private fun DetailScreen(
     DetailScreen(
         movieDetail = movieDetail,
         isLoading = isLoading,
-        onBackArrowClick = { navController.navigateUp() },
-        onSimilarItemClick = { navController.navigate(AppScreens.Detail.createRoute(it)) },
-        onAddToFavorite = onAddToFavorite
+        onBackArrowClick = remember { { navController.navigateUp() } },
+        onSimilarItemClick = remember { { navController.navigate(AppScreens.Detail.createRoute(it)) } },
+        onFavoriteIconClick = onFavoriteIconClick
     )
 
 }
@@ -71,7 +75,7 @@ private fun DetailScreen(
     isLoading: Boolean,
     onBackArrowClick: () -> Unit,
     onSimilarItemClick: (Int) -> Unit,
-    onAddToFavorite: () -> Unit
+    onFavoriteIconClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -96,15 +100,16 @@ private fun DetailScreen(
                         .verticalScroll(scrollState)
                 ) {
 
-                    DetailTopWithGradient(movieDetail, onBackArrowClick, onAddToFavorite)
+                    DetailTopWithGradient(movieDetail, onBackArrowClick, onFavoriteIconClick)
 
                     OverviewContentWithCastAndCrew(movieDetail)
 
-                    movieDetail.similarMovies?.let {
+                    movieDetail.similarMovies?.let { similarMovieWithGenres ->
                         MovieRow(
                             onClick = onSimilarItemClick,
                             title = stringResource(R.string.similar_movies),
-                            movies = it.map { it.toMovieWithGenreDataBaseWrapper() }
+                            movies = similarMovieWithGenres.map { it.toMovieWithGenreDataBaseWrapper() }
+                                .toPersistentList()
                         )
                     }
                 }
