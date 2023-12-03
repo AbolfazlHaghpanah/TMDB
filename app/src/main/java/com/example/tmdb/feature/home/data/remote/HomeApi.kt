@@ -1,7 +1,7 @@
-package com.example.tmdb.feature.home.network
+package com.example.tmdb.feature.home.data.remote
 
-import com.example.tmdb.feature.home.network.json.GenreResponse
-import com.example.tmdb.feature.home.network.json.MovieResponse
+import com.example.tmdb.feature.home.data.remote.json.GenreResponse
+import com.example.tmdb.feature.home.data.remote.json.MovieResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header

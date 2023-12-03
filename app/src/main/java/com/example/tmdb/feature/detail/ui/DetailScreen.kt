@@ -16,18 +16,14 @@ import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.tmdb.R
-import com.example.tmdb.core.ui.component.MovieRow
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.example.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
 import com.example.tmdb.navigation.AppScreens
-import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 @NonRestartableComposable
@@ -105,12 +101,12 @@ private fun DetailScreen(
                     OverviewContentWithCastAndCrew(movieDetail)
 
                     movieDetail.similarMovies?.let { similarMovieWithGenres ->
-                        MovieRow(
-                            onClick = onSimilarItemClick,
-                            title = stringResource(R.string.similar_movies),
-                            movies = similarMovieWithGenres.map { it.toMovieWithGenreDataBaseWrapper() }
-                                .toPersistentList()
-                        )
+//                        MovieRow(
+//                            onClick = onSimilarItemClick,
+//                            title = stringResource(R.string.similar_movies),
+//                            movies = similarMovieWithGenres.map { it.toMovieWithGenreDataBaseWrapper() }
+//                                .toPersistentList()
+//                        )
                     }
                 }
             }

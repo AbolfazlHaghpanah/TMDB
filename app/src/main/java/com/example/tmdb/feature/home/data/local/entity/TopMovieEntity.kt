@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.home.data.entity
+package com.example.tmdb.feature.home.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

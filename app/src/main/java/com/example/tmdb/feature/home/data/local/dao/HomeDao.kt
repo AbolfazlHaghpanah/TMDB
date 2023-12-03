@@ -1,17 +1,17 @@
-package com.example.tmdb.feature.home.data.dao
+package com.example.tmdb.feature.home.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.tmdb.feature.home.data.entity.NowPlayingEntity
-import com.example.tmdb.feature.home.data.relation.NowPlayingWithMovie
-import com.example.tmdb.feature.home.data.entity.PopularMovieEntity
-import com.example.tmdb.feature.home.data.relation.PopularMovieAndGenreWithMovie
-import com.example.tmdb.feature.home.data.relation.crossref.PopularMovieGenreCrossRef
-import com.example.tmdb.feature.home.data.entity.TopMovieEntity
-import com.example.tmdb.feature.home.data.relation.TopMovieAndGenreWithMovie
-import com.example.tmdb.feature.home.data.relation.crossref.TopMovieGenreCrossRef
+import com.example.tmdb.feature.home.data.local.entity.NowPlayingEntity
+import com.example.tmdb.feature.home.data.local.relation.NowPlayingWithMovie
+import com.example.tmdb.feature.home.data.local.entity.PopularMovieEntity
+import com.example.tmdb.feature.home.data.local.relation.PopularMovieAndGenreWithMovie
+import com.example.tmdb.feature.home.data.local.relation.crossref.PopularMovieGenreCrossRef
+import com.example.tmdb.feature.home.data.local.entity.TopMovieEntity
+import com.example.tmdb.feature.home.data.local.relation.TopMovieAndGenreWithMovie
+import com.example.tmdb.feature.home.data.local.relation.crossref.TopMovieGenreCrossRef
 import kotlinx.coroutines.flow.Flow
 
 @Dao

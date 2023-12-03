@@ -28,8 +28,10 @@ import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.core.ui.component.MovieRow
+import com.example.tmdb.core.ui.theme.designsystem.montserratFont
 import com.example.tmdb.feature.home.ui.component.PagerMovieItem
 import com.example.tmdb.feature.home.ui.component.TMDBPagerIndicator
+import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
 import com.example.tmdb.navigation.AppScreens
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -87,9 +89,9 @@ private fun HomeScreen(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun HomeScreen(
-    nowPlayingMovies: PersistentList<MovieWithGenreDatabaseWrapper>,
-    popularMovies: PersistentList<MovieWithGenreDatabaseWrapper>,
-    topMovies: PersistentList<MovieWithGenreDatabaseWrapper>,
+    nowPlayingMovies: PersistentList<HomeMovieUiModel>,
+    popularMovies: PersistentList<HomeMovieUiModel>,
+    topMovies: PersistentList<HomeMovieUiModel>,
     pagerState: PagerState,
     onNavigation: (String) -> Unit,
 ) {
@@ -125,15 +127,20 @@ private fun HomeScreen(
                             .clickable {
                                 if (nowPlayingMovies.size >= 5) onNavigation(
                                     AppScreens.Detail.createRoute(
-                                        nowPlayingMovies[page].movie.movieId
+                                        nowPlayingMovies[page].movieId
                                     )
                                 )
                             }
                             .height(pagerSize.value),
                         movie = if (nowPlayingMovies.size >= 5) {
-                            nowPlayingMovies[page].movie
+                            nowPlayingMovies[page]
                         } else {
-                            fakeMovie[0].movie
+                            HomeMovieUiModel(
+                                movieId = 0,
+                                title = "///",
+                                posterPath = "",
+                                voteAverage = 0.0
+                            )
                         }
                     )
                 }

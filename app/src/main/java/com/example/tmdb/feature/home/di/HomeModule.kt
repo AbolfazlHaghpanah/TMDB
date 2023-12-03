@@ -3,8 +3,8 @@ package com.example.tmdb.feature.home.di
 import com.example.tmdb.core.data.AppDatabase
 import com.example.tmdb.core.data.genre.dao.GenreDao
 import com.example.tmdb.core.data.movie.dao.MovieDao
-import com.example.tmdb.feature.home.data.dao.HomeDao
-import com.example.tmdb.feature.home.network.HomeApi
+import com.example.tmdb.feature.home.data.local.dao.HomeDao
+import com.example.tmdb.feature.home.data.remote.HomeApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
