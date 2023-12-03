@@ -18,12 +18,12 @@ import com.example.tmdb.feature.detail.data.entity.DetailEntity
 import com.example.tmdb.feature.favorite.data.dao.FavoriteMovieDao
 import com.example.tmdb.feature.favorite.data.entity.FavoriteMovieEntity
 import com.example.tmdb.feature.favorite.data.relation.FavoriteMovieGenreCrossRef
-import com.example.tmdb.feature.home.data.dao.HomeDao
-import com.example.tmdb.feature.home.data.entity.NowPlayingEntity
-import com.example.tmdb.feature.home.data.entity.PopularMovieEntity
-import com.example.tmdb.feature.home.data.relation.crossref.PopularMovieGenreCrossRef
-import com.example.tmdb.feature.home.data.entity.TopMovieEntity
-import com.example.tmdb.feature.home.data.relation.crossref.TopMovieGenreCrossRef
+import com.example.tmdb.feature.home.data.local.dao.HomeDao
+import com.example.tmdb.feature.home.data.local.entity.NowPlayingEntity
+import com.example.tmdb.feature.home.data.local.entity.PopularMovieEntity
+import com.example.tmdb.feature.home.data.local.relation.crossref.PopularMovieGenreCrossRef
+import com.example.tmdb.feature.home.data.local.entity.TopMovieEntity
+import com.example.tmdb.feature.home.data.local.relation.crossref.TopMovieGenreCrossRef
 
 @TypeConverters(ListStringToStringConverter::class)
 @Database(

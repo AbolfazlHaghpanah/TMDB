@@ -23,11 +23,12 @@ import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
 import com.example.tmdb.core.utils.MovieDatabaseWrapper
+import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
 
 @Composable
 fun PagerMovieItem(
     modifier: Modifier = Modifier,
-    movie: MovieDatabaseWrapper,
+    movie: HomeMovieUiModel,
     isLoading: Boolean = false
 ) {
     Card(

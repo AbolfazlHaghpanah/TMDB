@@ -14,15 +14,15 @@ import androidx.compose.ui.unit.dp
 import com.example.tmdb.core.ui.shimmer.fakeMovie
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.ui.component.MovieCard
+import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
 import kotlinx.collections.immutable.PersistentList
 
 @Composable
 fun MovieRow(
     onClick: (Int) -> Unit,
     title: String,
-    movies: PersistentList<MovieWithGenreDatabaseWrapper>
+    movies: PersistentList<HomeMovieUiModel>
 ) {
     Column {
         Text(
@@ -41,14 +41,14 @@ fun MovieRow(
         ) {
             items(
                 items = movies.ifEmpty { fakeMovie },
-                key = { it.movie.movieId }
+                key = { it.movieId }
             ) { movieWithGenreDatabaseWrapper ->
                 MovieCard(
-                    onClick = { onClick(movieWithGenreDatabaseWrapper.movie.movieId) },
-                    title = movieWithGenreDatabaseWrapper.movie.title,
-                    image = movieWithGenreDatabaseWrapper.movie.posterPath,
-                    genres = movieWithGenreDatabaseWrapper.genres.joinToString(separator = "|") { it.genreName },
-                    vote = String.format("%.1f", movieWithGenreDatabaseWrapper.movie.voteAverage),
+                    onClick = { onClick(movieWithGenreDatabaseWrapper.movieId) },
+                    title = movieWithGenreDatabaseWrapper.title,
+                    image = movieWithGenreDatabaseWrapper.posterPath,
+                    genres = movieWithGenreDatabaseWrapper.genres,
+                    vote = String.format("%.1f", movieWithGenreDatabaseWrapper.voteAverage),
                     isShimmer = movies.isEmpty()
                 )
             }

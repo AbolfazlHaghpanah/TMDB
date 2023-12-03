@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.home.data.relation
+package com.example.tmdb.feature.home.data.local.relation
 
 import androidx.room.Embedded
 import androidx.room.Junction
@@ -7,8 +7,9 @@ import com.example.tmdb.core.data.genre.entity.GenreEntity
 import com.example.tmdb.core.data.movie.entity.MovieEntity
 import com.example.tmdb.core.utils.MovieDatabaseWrapper
 import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
-import com.example.tmdb.feature.home.data.entity.PopularMovieEntity
-import com.example.tmdb.feature.home.data.relation.crossref.PopularMovieGenreCrossRef
+import com.example.tmdb.feature.home.data.local.entity.PopularMovieEntity
+import com.example.tmdb.feature.home.data.local.relation.crossref.PopularMovieGenreCrossRef
+import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 
@@ -26,16 +27,14 @@ data class PopularMovieAndGenreWithMovie(
     )
     val genres: List<GenreEntity>?
 ) {
-    fun toMovieDataWrapper(): MovieWithGenreDatabaseWrapper {
+    fun toUiModel(): HomeMovieUiModel {
 
-        return MovieWithGenreDatabaseWrapper(
-            genres = genres?.toPersistentList() ?: persistentListOf(),
-            movie = MovieDatabaseWrapper(
-                movieId = movie?.id ?: 1,
-                title = movie?.title ?: "",
-                posterPath = movie?.posterPath ?: "",
-                voteAverage = movie?.voteAverage ?: 0.0
-            )
+        return HomeMovieUiModel(
+            genres = genres?.joinToString(separator = "|") { it.genreName } ?: "",
+            movieId = movie?.id ?: 1,
+            title = movie?.title ?: "",
+            posterPath = movie?.posterPath ?: "",
+            voteAverage = movie?.voteAverage ?: 0.0
         )
     }
 }

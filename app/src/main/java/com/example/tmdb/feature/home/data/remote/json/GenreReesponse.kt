@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.home.network.json
+package com.example.tmdb.feature.home.data.remote.json
 
 import com.example.tmdb.core.data.genre.entity.GenreEntity
 import kotlinx.serialization.Serializable
