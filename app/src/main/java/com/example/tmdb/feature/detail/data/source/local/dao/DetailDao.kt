@@ -1,19 +1,19 @@
-package com.example.tmdb.feature.detail.data.dao
+package com.example.tmdb.feature.detail.data.source.local.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.tmdb.feature.favorite.data.local.entity.FavoriteMovieEntity
-import com.example.tmdb.feature.detail.data.entity.CreditEntity
-import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithCreditCrossRef
-import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
-import com.example.tmdb.feature.detail.data.relation.crossrefrence.MovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.entity.DetailEntity
-import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
-import com.example.tmdb.feature.favorite.data.local.relation.FavoriteMovieGenreCrossRef
+import com.example.tmdb.feature.favorite.data.entity.FavoriteMovieEntity
+import com.example.tmdb.feature.detail.data.source.local.entity.CreditEntity
+import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithCreditCrossRef
+import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
+import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.MovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.source.local.entity.DetailEntity
+import com.example.tmdb.feature.detail.data.source.local.relation.DetailMovieWithAllRelations
+import com.example.tmdb.feature.favorite.data.relation.FavoriteMovieGenreCrossRef
 import kotlinx.coroutines.flow.Flow
 
 @Dao

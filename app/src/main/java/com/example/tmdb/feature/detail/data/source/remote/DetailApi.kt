@@ -1,7 +1,7 @@
-package com.example.tmdb.feature.detail.network
+package com.example.tmdb.feature.detail.data.source.remote
 
 import com.example.tmdb.core.utils.tmdpApiKey
-import com.example.tmdb.feature.detail.network.json.MovieDetail
+import com.example.tmdb.feature.detail.data.source.remote.dto.MovieDetailDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -15,6 +15,6 @@ interface DetailApi {
         @Header("Authorization") apiKey: String = tmdpApiKey,
         @Path("id") id: Int,
         @Query("append_to_response") append: String = "external_ids,credits,similar"
-    ): Response<MovieDetail>
+    ): Response<MovieDetailDto>
 
 }

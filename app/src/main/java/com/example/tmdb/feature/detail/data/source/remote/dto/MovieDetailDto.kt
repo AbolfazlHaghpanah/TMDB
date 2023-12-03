@@ -1,12 +1,12 @@
-package com.example.tmdb.feature.detail.network.json
+package com.example.tmdb.feature.detail.data.source.remote.dto
 
-import com.example.tmdb.feature.detail.data.entity.CreditEntity
-import com.example.tmdb.feature.detail.data.entity.DetailEntity
+import com.example.tmdb.feature.detail.data.source.local.entity.CreditEntity
+import com.example.tmdb.feature.detail.data.source.local.entity.DetailEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MovieDetail(
+data class MovieDetailDto(
     val id: Int,
 
     val title: String,
@@ -24,14 +24,14 @@ data class MovieDetail(
 
     val runtime: Int,
 
-    val genres: List<Genre>,
+    val genreDtos: List<GenreDto>,
 
     @SerialName("external_ids")
-    val externalIds: ExternalIds?,
+    val externalIdsDto: ExternalIdsDto?,
 
-    val credits: CastWithCrew,
+    val credits: CastWithCrewDto,
 
-    val similar: SimilarResults
+    val similar: SimilarResultsDto
 ) {
     fun toDetailEntity(): DetailEntity {
         return DetailEntity(
@@ -40,9 +40,9 @@ data class MovieDetail(
             releaseDate = releaseDate,
             runtime = runtime,
             externalIds = listOf(
-                "${externalIds?.imdbId}",
-                "${externalIds?.instagramId}",
-                "${externalIds?.twitterId}"
+                "${externalIdsDto?.imdbId}",
+                "${externalIdsDto?.instagramId}",
+                "${externalIdsDto?.twitterId}"
             )
         )
     }

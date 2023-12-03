@@ -24,8 +24,8 @@ import coil.compose.AsyncImage
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.detail.data.entity.CreditEntity
-import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
+import com.example.tmdb.feature.detail.data.source.local.entity.CreditEntity
+import com.example.tmdb.feature.detail.data.source.local.relation.DetailMovieWithAllRelations
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 

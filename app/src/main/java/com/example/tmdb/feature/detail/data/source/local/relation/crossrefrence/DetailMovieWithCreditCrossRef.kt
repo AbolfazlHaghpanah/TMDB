@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.detail.data.relation.crossrefrence
+package com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence
 
 import androidx.room.Entity
 

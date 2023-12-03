@@ -1,10 +1,10 @@
-package com.example.tmdb.feature.detail.network.json
+package com.example.tmdb.feature.detail.data.source.remote.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SimilarMovieResult(
+data class SimilarMovieResultDto(
 
     val id: Int,
     @SerialName("genre_ids")

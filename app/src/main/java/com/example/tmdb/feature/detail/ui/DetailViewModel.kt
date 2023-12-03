@@ -5,22 +5,22 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.utils.databaseErrorCatchMessage
-import com.example.tmdb.feature.favorite.data.local.entity.FavoriteMovieEntity
+import com.example.tmdb.feature.favorite.data.entity.FavoriteMovieEntity
 import com.example.tmdb.core.data.movie.dao.MovieDao
 import com.example.tmdb.core.data.movie.entity.MovieEntity
 import com.example.tmdb.core.network.Result
 import com.example.tmdb.core.network.safeApi
 import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMassage
-import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithCreditCrossRef
-import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
-import com.example.tmdb.feature.detail.data.relation.crossrefrence.MovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.dao.DetailDao
-import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
-import com.example.tmdb.feature.detail.network.DetailApi
-import com.example.tmdb.feature.detail.network.json.MovieDetail
-import com.example.tmdb.feature.favorite.data.local.relation.FavoriteMovieGenreCrossRef
+import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithCreditCrossRef
+import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
+import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.MovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.source.local.dao.DetailDao
+import com.example.tmdb.feature.detail.data.source.local.relation.DetailMovieWithAllRelations
+import com.example.tmdb.feature.detail.data.source.remote.DetailApi
+import com.example.tmdb.feature.detail.data.source.remote.dto.MovieDetailDto
+import com.example.tmdb.feature.favorite.data.relation.FavoriteMovieGenreCrossRef
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -134,7 +134,7 @@ class DetailViewModel @Inject constructor(
             is Result.Success<*> -> {
                 _isLoading.emit(false)
                 val data =
-                    result.response as MovieDetail
+                    result.response as MovieDetailDto
 
                 addMovieDetailEntity(data)
             }
@@ -183,53 +183,53 @@ class DetailViewModel @Inject constructor(
         )
     }
 
-    private fun addMovieDetailEntity(movieDetail: MovieDetail) {
+    private fun addMovieDetailEntity(movieDetailDto: MovieDetailDto) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 movieDao.addMovie(
                     MovieEntity(
-                        id = movieDetail.id,
-                        posterPath = movieDetail.posterPath,
-                        voteAverage = movieDetail.voteAverage.toDouble(),
+                        id = movieDetailDto.id,
+                        posterPath = movieDetailDto.posterPath,
+                        voteAverage = movieDetailDto.voteAverage.toDouble(),
                         backdropPath = "",
-                        title = movieDetail.title
+                        title = movieDetailDto.title
                     )
                 )
 
-                detailDao.addDetail(movieDetail.toDetailEntity())
+                detailDao.addDetail(movieDetailDto.toDetailEntity())
 
-                detailDao.addCredits(movieDetail.toCreditsEntity())
+                detailDao.addCredits(movieDetailDto.toCreditsEntity())
 
-                movieDetail.credits.cast.forEach {
+                movieDetailDto.credits.cast.forEach {
                     detailDao.addDetailMovieWithCreditCrossRef(
                         DetailMovieWithCreditCrossRef(
-                            detailMovieId = movieDetail.id,
+                            detailMovieId = movieDetailDto.id,
                             creditId = it.id
                         )
                     )
                 }
-                movieDetail.credits.crew.forEach {
+                movieDetailDto.credits.crew.forEach {
                     detailDao.addDetailMovieWithCreditCrossRef(
                         DetailMovieWithCreditCrossRef(
-                            detailMovieId = movieDetail.id,
+                            detailMovieId = movieDetailDto.id,
                             creditId = it.id
                         )
                     )
                 }
 
-                movieDetail.genres.forEach {
+                movieDetailDto.genreDtos.forEach {
                     detailDao.addDetailMovieWithGenreCrossRef(
                         DetailMovieWithGenreCrossRef(
-                            detailMovieId = movieDetail.id,
+                            detailMovieId = movieDetailDto.id,
                             genreId = it.id
                         )
                     )
                 }
 
-                movieDetail.similar.results.forEach {
+                movieDetailDto.similar.results.forEach {
                     detailDao.addDetailMovieWithSimilarMoviesCrossRef(
                         DetailMovieWithSimilarMoviesCrossRef(
-                            detailMovieId = movieDetail.id,
+                            detailMovieId = movieDetailDto.id,
                             id = it.id
                         )
                     )
@@ -244,7 +244,7 @@ class DetailViewModel @Inject constructor(
                     )
                 }
 
-                movieDetail.similar.results.forEach { similarMovieResult ->
+                movieDetailDto.similar.results.forEach { similarMovieResult ->
                     similarMovieResult.genreIds.forEach { genreId ->
                         detailDao.addMovieWithGenreCrossRef(
                             MovieWithGenreCrossRef(
@@ -257,7 +257,7 @@ class DetailViewModel @Inject constructor(
 
             } catch (t: Throwable) {
                 sendDataBaseError(throwable = t, onTryAgain = {
-                    addMovieDetailEntity(movieDetail)
+                    addMovieDetailEntity(movieDetailDto)
                 })
             }
         }

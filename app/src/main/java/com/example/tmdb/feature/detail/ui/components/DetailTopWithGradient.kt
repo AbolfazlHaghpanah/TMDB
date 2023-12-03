@@ -53,7 +53,7 @@ import com.example.tmdb.R
 import com.example.tmdb.core.ui.component.TextIcon
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
+import com.example.tmdb.feature.detail.data.source.local.relation.DetailMovieWithAllRelations
 import java.math.RoundingMode
 
 @Composable

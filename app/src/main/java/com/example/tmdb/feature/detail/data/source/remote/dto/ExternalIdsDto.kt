@@ -1,10 +1,10 @@
-package com.example.tmdb.feature.detail.network.json
+package com.example.tmdb.feature.detail.data.source.remote.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ExternalIds(
+data class ExternalIdsDto(
     @SerialName("imdb_id")
     val imdbId: String?,
     @SerialName("instagram_id")
