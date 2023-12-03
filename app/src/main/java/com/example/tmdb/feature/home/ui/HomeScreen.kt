@@ -23,12 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tmdb.R
+import com.example.tmdb.core.ui.component.MovieRow
 import com.example.tmdb.core.ui.shimmer.fakeMovie
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
-import com.example.tmdb.core.ui.component.MovieRow
-import com.example.tmdb.core.ui.theme.designsystem.montserratFont
 import com.example.tmdb.feature.home.ui.component.PagerMovieItem
 import com.example.tmdb.feature.home.ui.component.TMDBPagerIndicator
 import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
@@ -135,12 +133,7 @@ private fun HomeScreen(
                         movie = if (nowPlayingMovies.size >= 5) {
                             nowPlayingMovies[page]
                         } else {
-                            HomeMovieUiModel(
-                                movieId = 0,
-                                title = "///",
-                                posterPath = "",
-                                voteAverage = 0.0
-                            )
+                            fakeMovie[0]
                         }
                     )
                 }

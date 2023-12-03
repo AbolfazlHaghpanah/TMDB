@@ -1,10 +1,6 @@
 package com.example.tmdb.feature.home.data.repository
 
-import com.example.tmdb.core.network.Result
 import com.example.tmdb.feature.home.data.local.localdatasource.HomeLocalDataSource
-import com.example.tmdb.feature.home.data.local.relation.crossref.TopMovieGenreCrossRef
-import com.example.tmdb.feature.home.data.remote.json.GenreResponse
-import com.example.tmdb.feature.home.data.remote.json.MovieResponse
 import com.example.tmdb.feature.home.data.remote.remotedatasource.HomeRemoteDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -27,48 +23,40 @@ class HomeRepository @Inject constructor(
     }
 
     suspend fun fetchGenres() = withContext(Dispatchers.IO) {
-        val result = remoteDataSource.getGenres()
-        if (result is Result.Success<*>) {
-            val data = result.response as GenreResponse
-            localDataSource.storeGenres(data.genres.map { it.toGenreEntity() })
-        }
+        localDataSource.storeGenres(
+            remoteDataSource.getGenres().genres.map { it.toGenreEntity() }
+        )
     }
 
     suspend fun fetchNowPlaying() = withContext(Dispatchers.IO) {
-        val result = remoteDataSource.getNowPlaying()
-        if (result is Result.Success<*>) {
-            val data = result.response as MovieResponse
-            data.results.forEach {
-                localDataSource.addNowPlaying(it.toNowPlayingEntity(), it.toMovieEntity())
-            }
+        val data = remoteDataSource.getNowPlaying()
+        data.results.forEach {
+            localDataSource.addNowPlaying(
+                it.toNowPlayingEntity(),
+                it.toMovieEntity()
+            )
         }
     }
 
     suspend fun fetchTopMovie() = withContext(Dispatchers.IO) {
-        val result = remoteDataSource.getTopMovie()
-        if (result is Result.Success<*>) {
-            val data = result.response as MovieResponse
-            data.results.forEach {
-                localDataSource.storeTopMovie(
-                    it.toTopPlayingEntity(),
-                    it.toMovieEntity(),
-                    it.genreIds ?: listOf()
-                )
-            }
+        val data = remoteDataSource.getTopMovie()
+        data.results.forEach {
+            localDataSource.storeTopMovie(
+                it.toTopPlayingEntity(),
+                it.toMovieEntity(),
+                it.genreIds ?: listOf()
+            )
         }
     }
 
     suspend fun fetchPopularMovie() = withContext(Dispatchers.IO) {
-        val result = remoteDataSource.getPopular()
-        if (result is Result.Success<*>) {
-            val data = result.response as MovieResponse
-            data.results.forEach {
-                localDataSource.storePopularMovie(
-                    it.toPopularMovieEntity(),
-                    it.toMovieEntity(),
-                    it.genreIds ?: listOf()
-                )
-            }
+        val data = remoteDataSource.getPopular()
+        data.results.forEach {
+            localDataSource.storePopularMovie(
+                it.toPopularMovieEntity(),
+                it.toMovieEntity(),
+                it.genreIds ?: listOf()
+            )
         }
     }
 }

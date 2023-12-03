@@ -8,6 +8,7 @@ import com.example.tmdb.feature.home.data.local.dao.HomeDao
 import com.example.tmdb.feature.home.data.local.entity.NowPlayingEntity
 import com.example.tmdb.feature.home.data.local.entity.PopularMovieEntity
 import com.example.tmdb.feature.home.data.local.entity.TopMovieEntity
+import com.example.tmdb.feature.home.data.local.relation.crossref.PopularMovieGenreCrossRef
 import com.example.tmdb.feature.home.data.local.relation.crossref.TopMovieGenreCrossRef
 import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
 import kotlinx.coroutines.flow.Flow
@@ -49,7 +50,7 @@ class HomeLocalDataSource @Inject constructor(
     ) {
         homeDao.addPopularMovie(popularMovie)
         genres.forEach {
-            homeDao.addTopMoviesGenre(TopMovieGenreCrossRef(movie.id, it))
+            homeDao.addPopularMoviesGenre(PopularMovieGenreCrossRef(movie.id, it))
         }
         movieDao.addMovie(movie)
     }

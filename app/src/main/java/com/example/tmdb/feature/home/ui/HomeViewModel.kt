@@ -3,21 +3,12 @@ package com.example.tmdb.feature.home.ui
 import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.core.utils.databaseErrorCatchMessage
-import com.example.tmdb.core.data.genre.dao.GenreDao
-import com.example.tmdb.core.data.movie.dao.MovieDao
-import com.example.tmdb.core.network.Result
+import com.example.tmdb.core.network.Result.Error
 import com.example.tmdb.core.network.Result.Success
-import com.example.tmdb.core.network.safeApi
-import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMassage
-import com.example.tmdb.feature.home.data.local.dao.HomeDao
-import com.example.tmdb.feature.home.data.local.relation.crossref.PopularMovieGenreCrossRef
-import com.example.tmdb.feature.home.data.local.relation.crossref.TopMovieGenreCrossRef
-import com.example.tmdb.feature.home.data.remote.HomeApi
-import com.example.tmdb.feature.home.data.remote.json.GenreResponse
-import com.example.tmdb.feature.home.data.remote.json.MovieResponse
+import com.example.tmdb.core.utils.databaseErrorCatchMessage
+import com.example.tmdb.core.ui.resultWrapper
 import com.example.tmdb.feature.home.data.repository.HomeRepository
 import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -65,11 +55,14 @@ class HomeViewModel @Inject constructor(
     private fun observeNowPlaying() {
 
         viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.observeNowPlaying().collect { movies ->
-                _nowPlayingMovies.emit(
-                    movies.map { it }
-                )
-            }
+            homeRepository.observeNowPlaying()
+                .catch {
+                    sendDataBaseError(it)
+                }.collect { movies ->
+                    _nowPlayingMovies.emit(
+                        movies.map { it }
+                    )
+                }
         }
         getNowPlaying()
     }
@@ -78,9 +71,13 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            homeRepository.observePopularMovie().collect {
-                _popularMovies.emit(it)
-            }
+            homeRepository.observePopularMovie()
+                .catch {
+                    sendDataBaseError(it)
+                }
+                .collect {
+                    _popularMovies.emit(it)
+                }
         }
         getPopular()
     }
@@ -89,35 +86,59 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            homeRepository.observeTopMovie().collect {
-                _topMovies.emit(it)
-            }
+            homeRepository.observeTopMovie()
+                .catch {
+                    sendDataBaseError(it)
+                }
+                .collect {
+                    _topMovies.emit(it)
+                }
         }
         getTopMovies()
     }
 
     private fun getNowPlaying() {
         viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.fetchNowPlaying()
+            resultWrapper {
+                homeRepository.fetchNowPlaying()
+            }.collect { result ->
+                if (result is Error) sendNetworkError(result.message)
+                else if (result is Success<*>) dismissSnackBar()
+            }
         }
     }
 
     private fun getPopular() {
         viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.fetchPopularMovie()
+            resultWrapper {
+                homeRepository.fetchPopularMovie()
+            }.collect { result ->
+                if (result is Error) sendNetworkError(result.message)
+                else if (result is Success<*>) dismissSnackBar()
+            }
         }
     }
 
     private fun getTopMovies() {
         viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.fetchTopMovie()
+            resultWrapper {
+                homeRepository.fetchTopMovie()
+            }.collect { result ->
+                if (result is Error) sendNetworkError(result.message)
+                else if (result is Success<*>) dismissSnackBar()
+            }
         }
-
     }
 
     private fun getGenre() {
         viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.fetchGenres()
+
+            resultWrapper {
+                homeRepository.fetchGenres()
+            }.collect { result ->
+                if (result is Error) sendNetworkError(result.message)
+                else if (result is Success<*>) dismissSnackBar()
+            }
         }
     }
 

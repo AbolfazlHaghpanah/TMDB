@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import com.example.tmdb.core.ui.shimmer.fakeMovie
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.home.ui.component.MovieCard
 import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
 import kotlinx.collections.immutable.PersistentList
@@ -41,7 +40,7 @@ fun MovieRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(
-                items = movies,
+                items = movies.ifEmpty { fakeMovie },
                 key = { it.movieId }
             ) { movieWithGenreDatabaseWrapper ->
                 MovieCard(
