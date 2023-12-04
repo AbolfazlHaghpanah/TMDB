@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.bottomsheet.ui
+package com.example.tmdb.feature.favorite.ui.deletebottomsheet
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.feature.bottomsheet.ui.component.TrashIcon
+import com.example.tmdb.feature.favorite.ui.component.TrashIcon
 
 @Composable
 fun TMDBModalBottomSheet(
