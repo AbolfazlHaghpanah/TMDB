@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.tmdb.core.data.genre.entity.GenreEntity
 import com.example.tmdb.feature.home.data.local.entity.NowPlayingEntity
 import com.example.tmdb.feature.home.data.local.relation.NowPlayingWithMovie
 import com.example.tmdb.feature.home.data.local.entity.PopularMovieEntity
@@ -42,4 +43,8 @@ interface HomeDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTopMovie(movie: TopMovieEntity)
+
+    //genres
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addGenre(genre: GenreEntity)
 }
