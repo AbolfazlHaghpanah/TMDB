@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.utils.databaseErrorCatchMessage
-import com.example.tmdb.feature.favorite.data.entity.FavoriteMovieEntity
+import com.example.tmdb.feature.favorite.data.local.entity.FavoriteMovieEntity
 import com.example.tmdb.core.data.movie.dao.MovieDao
 import com.example.tmdb.core.data.movie.entity.MovieEntity
 import com.example.tmdb.core.network.Result
@@ -20,7 +20,7 @@ import com.example.tmdb.feature.detail.data.dao.DetailDao
 import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
 import com.example.tmdb.feature.detail.network.DetailApi
 import com.example.tmdb.feature.detail.network.json.MovieDetail
-import com.example.tmdb.feature.favorite.data.relation.FavoriteMovieGenreCrossRef
+import com.example.tmdb.feature.favorite.data.local.relation.FavoriteMovieGenreCrossRef
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

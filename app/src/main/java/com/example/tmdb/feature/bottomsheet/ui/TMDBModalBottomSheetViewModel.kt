@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.utils.databaseErrorCatchMessage
 import com.example.tmdb.core.utils.SnackBarMassage
 import com.example.tmdb.core.utils.SnackBarManager
-import com.example.tmdb.feature.favorite.data.dao.FavoriteMovieDao
+import com.example.tmdb.feature.favorite.data.local.dao.FavoriteMovieDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
