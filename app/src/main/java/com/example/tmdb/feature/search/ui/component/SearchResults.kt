@@ -31,19 +31,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.tmdb.R
-import com.example.tmdb.core.data.movie.entity.MovieEntity
 import com.example.tmdb.core.ui.component.TextIcon
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.search.network.json.SearchResultElement
+import com.example.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainModel
 import kotlinx.collections.immutable.PersistentList
 import java.math.RoundingMode
 import java.util.Locale
 
 @Composable
 fun SearchResults(
-    searchResult: PersistentList<SearchResultElement>,
-    getMovieGenres: (List<Int>) -> String,
+    searchResult: PersistentList<SearchMovieWithGenreDomainModel>,
     onSearchElementClick: (Int) -> Unit
 ) {
     LazyColumn(
@@ -56,19 +54,16 @@ fun SearchResults(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.clickable {
-                    onSearchElementClick(searchElement.id)
+                    onSearchElementClick(searchElement.movieDomainModel.id)
                 }
             ) {
 
-                PosterWithTotalVote(
-                    movieEntity = searchElement.toMovieEntity()
-                )
+                PosterWithTotalVote(movie = searchElement)
 
                 Spacer(modifier = Modifier.weight(1f))
 
                 MovieInfo(
                     searchElement = searchElement,
-                    getMovieGenres = getMovieGenres
                 )
             }
         }
@@ -77,11 +72,8 @@ fun SearchResults(
 
 @Composable
 private fun MovieInfo(
-    searchElement: SearchResultElement,
-    getMovieGenres: (List<Int>) -> String
+    searchElement: SearchMovieWithGenreDomainModel,
 ) {
-
-    val genres = getMovieGenres(searchElement.genreIds)
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -90,7 +82,7 @@ private fun MovieInfo(
             .padding(top = 8.dp)
     ) {
         Text(
-            text = searchElement.title,
+            text = searchElement.movieDomainModel.title,
             style = TMDBTheme.typography.subtitle1,
             color = TMDBTheme.colors.white,
             modifier = Modifier.widthIn(100.dp, 200.dp),
@@ -102,9 +94,9 @@ private fun MovieInfo(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(top = 32.dp)
         ) {
-            if (searchElement.releaseDate.split("-").size > 1) {
+            if (searchElement.movieDomainModel.releaseDate.split("-").size > 1) {
                 TextIcon(
-                    text = searchElement.releaseDate.split("-")[0],
+                    text = searchElement.movieDomainModel.releaseDate.split("-")[0],
                     iconId = TMDBTheme.icons.calendar
                 )
             }
@@ -112,7 +104,7 @@ private fun MovieInfo(
                 Modifier.border(1.dp, TMDBTheme.colors.primary)
             ) {
                 Text(
-                    text = searchElement.originalLanguage.uppercase(Locale.getDefault()),
+                    text = searchElement.movieDomainModel.originalLanguage.uppercase(Locale.getDefault()),
                     style = TMDBTheme.typography.caption,
                     color = TMDBTheme.colors.primary,
                     modifier = Modifier
@@ -123,7 +115,7 @@ private fun MovieInfo(
             }
         }
 
-        if (searchElement.genreIds.isNotEmpty()) {
+        if (searchElement.genres.isNotEmpty()) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -136,7 +128,7 @@ private fun MovieInfo(
                 )
 
                 Text(
-                    text = genres,
+                    text = searchElement.genres,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = TMDBTheme.typography.caption,
@@ -149,13 +141,13 @@ private fun MovieInfo(
 
 @Composable
 private fun PosterWithTotalVote(
-    movieEntity: MovieEntity
+    movie: SearchMovieWithGenreDomainModel
 ) {
-    val roundedVote = movieEntity.voteAverage.toBigDecimal()
+    val roundedVote = movie.movieDomainModel.voteAverage.toBigDecimal()
         .setScale(1, RoundingMode.FLOOR).toDouble()
 
     Box {
-        SimilarMovieImageWrapper(movieEntity.posterPath)
+        SimilarMovieImageWrapper(movie.movieDomainModel.posterPath)
 
         TextIcon(
             modifier = Modifier

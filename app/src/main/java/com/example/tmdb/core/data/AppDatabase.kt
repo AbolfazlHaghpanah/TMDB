@@ -24,6 +24,7 @@ import com.example.tmdb.feature.home.data.local.entity.PopularMovieEntity
 import com.example.tmdb.feature.home.data.local.relation.crossref.PopularMovieGenreCrossRef
 import com.example.tmdb.feature.home.data.local.entity.TopMovieEntity
 import com.example.tmdb.feature.home.data.local.relation.crossref.TopMovieGenreCrossRef
+import com.example.tmdb.feature.search.data.local.dao.SearchDao
 
 @TypeConverters(ListStringToStringConverter::class)
 @Database(
@@ -52,4 +53,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun favoriteMovieDao(): FavoriteMovieDao
     abstract fun DetailDao(): DetailDao
     abstract fun HomeDao(): HomeDao
+    abstract fun SearchDao(): SearchDao
 }
