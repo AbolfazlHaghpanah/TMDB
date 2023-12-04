@@ -5,16 +5,15 @@ import androidx.room.Junction
 import androidx.room.Relation
 import com.example.tmdb.core.data.genre.entity.GenreEntity
 import com.example.tmdb.core.data.movie.entity.MovieEntity
-import com.example.tmdb.core.utils.MovieDatabaseWrapper
-import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.feature.detail.data.source.local.entity.CreditEntity
+import com.example.tmdb.feature.detail.data.source.local.entity.DetailEntity
 import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithCreditCrossRef
 import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithGenreCrossRef
 import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
 import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.MovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.source.local.entity.DetailEntity
+import com.example.tmdb.feature.detail.domain.model.MovieDetail
+import com.example.tmdb.feature.detail.domain.model.SimilarMovie
 import com.example.tmdb.feature.favorite.data.entity.FavoriteMovieEntity
-import kotlinx.collections.immutable.toPersistentList
 
 data class DetailMovieWithAllRelations(
     @Embedded val detailEntity: DetailEntity,
@@ -47,7 +46,22 @@ data class DetailMovieWithAllRelations(
         entityColumn = "movieId"
     )
     val favorite: FavoriteMovieEntity?
-)
+) {
+    fun toMovieDetail(): MovieDetail = MovieDetail(
+        id = detailEntity.detailMovieId,
+        title = movie?.title ?: "",
+        overview = detailEntity.overview,
+        voteAverage = movie?.voteAverage ?: 0.0,
+        posterPath = movie?.posterPath ?: "",
+        releaseDate = detailEntity.releaseDate.split("-")[0],
+        genres = genres?.map { Pair(it.genreId, it.genreName) } ?: listOf(),
+        credits = credits?.map { it.toCastOrCrew() } ?: listOf(),
+        runtime = detailEntity.runtime,
+        externalIds = detailEntity.externalIds,
+        similar = similarMovies?.map { it.toSimilarMovie() } ?: listOf(),
+        isFavorite = favorite != null
+    )
+}
 
 data class SimilarMovieWithGenre(
     @Embedded val similarMovie: MovieEntity,
@@ -59,17 +73,24 @@ data class SimilarMovieWithGenre(
     )
     val genres: List<GenreEntity>
 ) {
-    fun toMovieWithGenreDataBaseWrapper(): MovieWithGenreDatabaseWrapper {
-        return MovieWithGenreDatabaseWrapper(
-            movie = MovieDatabaseWrapper(
-                movieId = similarMovie.id,
-                backdropPath = similarMovie.backdropPath,
-                voteAverage = similarMovie.voteAverage,
-                posterPath = similarMovie.posterPath,
-                releaseDate = "",
-                title = similarMovie.title
-            ),
-            genres = genres.toPersistentList()
-        )
-    }
+    //    fun toMovieWithGenreDataBaseWrapper(): MovieWithGenreDatabaseWrapper {
+//        return MovieWithGenreDatabaseWrapper(
+//            movie = MovieDatabaseWrapper(
+//                movieId = similarMovie.id,
+//                backdropPath = similarMovie.backdropPath,
+//                voteAverage = similarMovie.voteAverage,
+//                posterPath = similarMovie.posterPath,
+//                releaseDate = "",
+//                title = similarMovie.title
+//            ),
+//            genres = genres.toPersistentList()
+//        )
+//    }
+    fun toSimilarMovie(): SimilarMovie = SimilarMovie(
+        id = similarMovie.id,
+        posterPath = similarMovie.posterPath,
+        voteAverage = similarMovie.voteAverage.toFloat(),
+        title = similarMovie.title,
+        genreIds = genres.joinToString(separator = "|") { it.genreName }
+    )
 }

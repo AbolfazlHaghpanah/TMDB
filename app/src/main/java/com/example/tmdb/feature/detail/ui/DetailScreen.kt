@@ -1,5 +1,6 @@
 package com.example.tmdb.feature.detail.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,14 +17,19 @@ import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.tmdb.R
+import com.example.tmdb.core.ui.component.MovieRow
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.feature.detail.data.source.local.relation.DetailMovieWithAllRelations
+import com.example.tmdb.feature.detail.domain.model.MovieDetail
 import com.example.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.example.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
+import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
 import com.example.tmdb.navigation.AppScreens
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 @NonRestartableComposable
@@ -44,7 +50,7 @@ private fun DetailScreen(
 
     val onFavoriteIconClick = remember {
         {
-            if (movieDetail?.favorite == null) detailViewModel.addToFavorite()
+            if (movieDetail?.isFavorite == false) detailViewModel.addToFavorite()
             else detailViewModel.removeFromFavorite()
         }
     }
@@ -67,7 +73,7 @@ private fun DetailScreen(
 
 @Composable
 private fun DetailScreen(
-    movieDetail: DetailMovieWithAllRelations?,
+    movieDetail: MovieDetail?,
     isLoading: Boolean,
     onBackArrowClick: () -> Unit,
     onSimilarItemClick: (Int) -> Unit,
@@ -100,13 +106,22 @@ private fun DetailScreen(
 
                     OverviewContentWithCastAndCrew(movieDetail)
 
-                    movieDetail.similarMovies?.let { similarMovieWithGenres ->
-//                        MovieRow(
-//                            onClick = onSimilarItemClick,
-//                            title = stringResource(R.string.similar_movies),
-//                            movies = similarMovieWithGenres.map { it.toMovieWithGenreDataBaseWrapper() }
-//                                .toPersistentList()
-//                        )
+                    if (movieDetail.similar.isNotEmpty()) {
+                        Log.d("test", "awdsnsdfa")
+                        MovieRow(
+                            onClick = onSimilarItemClick,
+                            title = stringResource(R.string.similar_movies),
+                            movies = movieDetail.similar.map {
+                                HomeMovieUiModel(
+                                    title = it.title,
+                                    voteAverage = it.voteAverage.toDouble(),
+                                    posterPath = it.posterPath ?: "",
+                                    movieId = it.id,
+                                    genres = it.genreIds,
+                                    backdropPath = it.posterPath ?: ""
+                                )
+                            }.toPersistentList()
+                        )
                     }
                 }
             }

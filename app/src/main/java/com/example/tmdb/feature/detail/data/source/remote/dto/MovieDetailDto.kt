@@ -24,6 +24,7 @@ data class MovieDetailDto(
 
     val runtime: Int,
 
+    @SerialName("genres")
     val genreDtos: List<GenreDto>,
 
     @SerialName("external_ids")

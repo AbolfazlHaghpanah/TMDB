@@ -24,15 +24,15 @@ import coil.compose.AsyncImage
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.detail.data.source.local.entity.CreditEntity
-import com.example.tmdb.feature.detail.data.source.local.relation.DetailMovieWithAllRelations
+import com.example.tmdb.feature.detail.domain.model.CastOrCrew
+import com.example.tmdb.feature.detail.domain.model.MovieDetail
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
-fun OverviewContentWithCastAndCrew(movieDetail: DetailMovieWithAllRelations) {
+fun OverviewContentWithCastAndCrew(movieDetail: MovieDetail) {
     Text(
-        text = movieDetail.detailEntity.overview,
+        text = movieDetail.overview,
         color = TMDBTheme.colors.whiteGray,
         style = TMDBTheme.typography.subtitle2,
         modifier = Modifier.padding(horizontal = 24.dp)
@@ -49,16 +49,16 @@ fun OverviewContentWithCastAndCrew(movieDetail: DetailMovieWithAllRelations) {
             )
     )
     val castAndCrewCombinedList =
-        movieDetail.credits?.toMutableList()
-    if ((castAndCrewCombinedList?.size ?: 0) > 0) {
-        castAndCrewCombinedList?.let { CastCrewLazyRow(it.toPersistentList()) }
+        movieDetail.credits.toMutableList()
+    if ((castAndCrewCombinedList.size) > 0) {
+        CastCrewLazyRow(castAndCrewCombinedList.toPersistentList())
     }
 }
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun CastCrewLazyRow(
-    castOrCrewElements: PersistentList<CreditEntity>
+    castOrCrewElements: PersistentList<CastOrCrew>
 ) {
 
     LazyRow(

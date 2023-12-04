@@ -25,4 +25,5 @@ object DetailModule {
     fun provideDetailDao(appDatabase: AppDatabase): DetailDao {
         return appDatabase.DetailDao()
     }
+
 }
