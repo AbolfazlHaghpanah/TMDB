@@ -2,8 +2,8 @@ package com.example.tmdb.feature.home.data.remote.remotedatasource
 
 import com.example.tmdb.core.data.common.bodyOrThrow
 import com.example.tmdb.feature.home.data.remote.HomeApi
-import com.example.tmdb.feature.home.data.remote.json.GenreResponse
-import com.example.tmdb.feature.home.data.remote.json.MovieResponse
+import com.example.tmdb.feature.home.data.remote.dto.GenreResponse
+import com.example.tmdb.feature.home.data.remote.dto.MovieResponse
 import javax.inject.Inject
 
 class HomeRemoteDataSource @Inject constructor(
