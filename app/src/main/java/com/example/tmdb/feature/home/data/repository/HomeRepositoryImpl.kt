@@ -2,33 +2,35 @@ package com.example.tmdb.feature.home.data.repository
 
 import com.example.tmdb.feature.home.data.local.localdatasource.HomeLocalDataSource
 import com.example.tmdb.feature.home.data.remote.remotedatasource.HomeRemoteDataSource
+import com.example.tmdb.feature.home.domain.repository.HomeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class HomeRepository @Inject constructor(
+class HomeRepositoryImpl @Inject constructor(
     private val localDataSource: HomeLocalDataSource,
     private val remoteDataSource: HomeRemoteDataSource
-) {
-    suspend fun observeNowPlaying() = withContext(Dispatchers.IO) {
+) : HomeRepository {
+
+    override suspend fun getNowPlaying() = withContext(Dispatchers.IO) {
         localDataSource.getNowPlaying()
     }
 
-    suspend fun observeTopMovie() = withContext(Dispatchers.IO) {
+    override suspend fun getTopMovie() = withContext(Dispatchers.IO) {
         localDataSource.getTopMovie()
     }
 
-    suspend fun observePopularMovie() = withContext(Dispatchers.IO) {
+    override suspend fun getPopularMovie() = withContext(Dispatchers.IO) {
         localDataSource.getPopularMovie()
     }
 
-    suspend fun fetchGenres() = withContext(Dispatchers.IO) {
+    override suspend fun fetchGenres() = withContext(Dispatchers.IO) {
         localDataSource.storeGenres(
             remoteDataSource.getGenres().genres.map { it.toGenreEntity() }
         )
     }
 
-    suspend fun fetchNowPlaying() = withContext(Dispatchers.IO) {
+    override suspend fun fetchNowPlaying() = withContext(Dispatchers.IO) {
         val data = remoteDataSource.getNowPlaying()
         data.results.forEach {
             localDataSource.addNowPlaying(
@@ -38,7 +40,7 @@ class HomeRepository @Inject constructor(
         }
     }
 
-    suspend fun fetchTopMovie() = withContext(Dispatchers.IO) {
+    override suspend fun fetchTopMovie() = withContext(Dispatchers.IO) {
         val data = remoteDataSource.getTopMovie()
         data.results.forEach {
             localDataSource.storeTopMovie(
@@ -49,7 +51,7 @@ class HomeRepository @Inject constructor(
         }
     }
 
-    suspend fun fetchPopularMovie() = withContext(Dispatchers.IO) {
+    override suspend fun fetchPopularMovie() = withContext(Dispatchers.IO) {
         val data = remoteDataSource.getPopular()
         data.results.forEach {
             localDataSource.storePopularMovie(
@@ -60,3 +62,4 @@ class HomeRepository @Inject constructor(
         }
     }
 }
+

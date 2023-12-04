@@ -14,15 +14,15 @@ import androidx.compose.ui.unit.dp
 import com.example.tmdb.core.ui.shimmer.fakeMovie
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.example.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import com.example.tmdb.feature.home.ui.component.MovieCard
-import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
 import kotlinx.collections.immutable.PersistentList
 
 @Composable
 fun MovieRow(
     onClick: (Int) -> Unit,
     title: String,
-    movies: PersistentList<HomeMovieUiModel>
+    movies: PersistentList<HomeMovieDomainModel>
 ) {
     Column {
         Text(
