@@ -1,8 +1,8 @@
-package com.example.tmdb.feature.favorite.data.dao
+package com.example.tmdb.feature.favorite.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.example.tmdb.feature.favorite.data.relation.FavoriteMovieWithMovieAndGenre
+import com.example.tmdb.feature.favorite.data.local.relation.FavoriteMovieWithMovieAndGenre
 import kotlinx.coroutines.flow.Flow
 
 @Dao

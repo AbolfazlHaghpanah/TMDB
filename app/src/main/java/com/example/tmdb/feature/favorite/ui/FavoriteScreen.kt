@@ -1,6 +1,5 @@
 package com.example.tmdb.feature.favorite.ui
 
-import android.service.autofill.OnClickAction
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -28,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
+import com.example.tmdb.feature.favorite.domain.model.FavoriteMovieDomainModel
 import com.example.tmdb.feature.favorite.ui.component.EmptyIcon
 import com.example.tmdb.feature.favorite.ui.component.MovieItems
 import com.example.tmdb.navigation.AppScreens
@@ -78,7 +76,7 @@ private fun FavoriteScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun FavoriteScreen(
-    movies: PersistentList<MovieWithGenreDatabaseWrapper>,
+    movies: PersistentList<FavoriteMovieDomainModel>,
     onDeleteMovie: (Int) -> Unit,
     onClickAction: (Int) -> Unit
 ) {
@@ -116,15 +114,15 @@ private fun FavoriteScreen(
             ) {
                 items(
                     items = movies,
-                    key = { it.movie.movieId }
+                    key = { it.id }
                 ) { movie ->
                     MovieItems(
                         modifier = Modifier
                             .animateItemPlacement()
-                            .clickable { onClickAction(movie.movie.movieId) },
+                            .clickable { onClickAction(movie.id) },
                         movie = movie,
                         onDelete = {
-                            onDeleteMovie(movie.movie.movieId)
+                            onDeleteMovie(movie.id)
                         }
                     )
                 }

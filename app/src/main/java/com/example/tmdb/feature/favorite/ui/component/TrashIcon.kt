@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.bottomsheet.ui.component
+package com.example.tmdb.feature.favorite.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding

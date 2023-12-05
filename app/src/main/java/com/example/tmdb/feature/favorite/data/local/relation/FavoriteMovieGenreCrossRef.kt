@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.favorite.data.relation
+package com.example.tmdb.feature.favorite.data.local.relation
 
 import androidx.room.Entity
 

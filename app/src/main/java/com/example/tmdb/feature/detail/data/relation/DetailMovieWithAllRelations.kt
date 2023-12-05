@@ -13,7 +13,7 @@ import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWi
 import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
 import com.example.tmdb.feature.detail.data.relation.crossrefrence.MovieWithGenreCrossRef
 import com.example.tmdb.feature.detail.data.entity.DetailEntity
-import com.example.tmdb.feature.favorite.data.entity.FavoriteMovieEntity
+import com.example.tmdb.feature.favorite.data.local.entity.FavoriteMovieEntity
 import kotlinx.collections.immutable.toPersistentList
 
 data class DetailMovieWithAllRelations(

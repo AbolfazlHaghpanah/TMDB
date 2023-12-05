@@ -3,11 +3,11 @@ package com.example.tmdb.feature.favorite.ui
 import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.core.utils.databaseErrorCatchMessage
 import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMassage
-import com.example.tmdb.feature.favorite.data.dao.FavoriteMovieDao
-import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
+import com.example.tmdb.core.utils.databaseErrorCatchMessage
+import com.example.tmdb.feature.favorite.domain.model.FavoriteMovieDomainModel
+import com.example.tmdb.feature.favorite.domain.use_case.FavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,12 +18,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
-    private val favoriteMovieDao: FavoriteMovieDao,
+    private val favoriteUseCase: FavoriteUseCase,
     private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
     private val _favoriteMovieList =
-        MutableStateFlow<List<MovieWithGenreDatabaseWrapper>>(emptyList())
+        MutableStateFlow<List<FavoriteMovieDomainModel>>(emptyList())
 
     val favoriteMovieList = _favoriteMovieList.asStateFlow()
 
@@ -40,7 +40,7 @@ class FavoriteViewModel @Inject constructor(
 
     private fun observeFavoriteMovies() {
         viewModelScope.launch(Dispatchers.IO) {
-            favoriteMovieDao.observeMovies()
+            favoriteUseCase.getFavoriteUseCase()
                 .catch {
                     snackBarManager.sendMessage(
                         SnackBarMassage(
@@ -53,7 +53,7 @@ class FavoriteViewModel @Inject constructor(
                         )
                     )
                 }.collect {
-                    _favoriteMovieList.emit(it.map { movie -> movie.toMovieDatabaseWrapper() })
+                    _favoriteMovieList.emit(it)
                 }
         }
     }

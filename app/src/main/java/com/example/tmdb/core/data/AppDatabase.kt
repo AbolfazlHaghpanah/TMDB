@@ -15,9 +15,9 @@ import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWi
 import com.example.tmdb.feature.detail.data.relation.crossrefrence.MovieWithGenreCrossRef
 import com.example.tmdb.feature.detail.data.dao.DetailDao
 import com.example.tmdb.feature.detail.data.entity.DetailEntity
-import com.example.tmdb.feature.favorite.data.dao.FavoriteMovieDao
-import com.example.tmdb.feature.favorite.data.entity.FavoriteMovieEntity
-import com.example.tmdb.feature.favorite.data.relation.FavoriteMovieGenreCrossRef
+import com.example.tmdb.feature.favorite.data.local.dao.FavoriteMovieDao
+import com.example.tmdb.feature.favorite.data.local.entity.FavoriteMovieEntity
+import com.example.tmdb.feature.favorite.data.local.relation.FavoriteMovieGenreCrossRef
 import com.example.tmdb.feature.home.data.local.dao.HomeDao
 import com.example.tmdb.feature.home.data.local.entity.NowPlayingEntity
 import com.example.tmdb.feature.home.data.local.entity.PopularMovieEntity
