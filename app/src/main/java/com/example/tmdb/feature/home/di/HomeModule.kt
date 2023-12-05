@@ -1,11 +1,11 @@
 package com.example.tmdb.feature.home.di
 
 import com.example.tmdb.core.data.AppDatabase
-import com.example.tmdb.core.data.movie.dao.MovieDao
-import com.example.tmdb.feature.home.data.local.dao.HomeDao
-import com.example.tmdb.feature.home.data.local.localdatasource.HomeLocalDataSource
-import com.example.tmdb.feature.home.data.remote.HomeApi
-import com.example.tmdb.feature.home.data.remote.remotedatasource.HomeRemoteDataSource
+import com.example.tmdb.core.data.source.local.MovieDao
+import com.example.tmdb.feature.home.data.source.local.dao.HomeDao
+import com.example.tmdb.feature.home.data.source.local.localdatasource.HomeLocalDataSource
+import com.example.tmdb.feature.home.data.source.remote.api.HomeApi
+import com.example.tmdb.feature.home.data.source.remote.remotedatasource.HomeRemoteDataSource
 import com.example.tmdb.feature.home.data.repository.HomeRepositoryImpl
 import com.example.tmdb.feature.home.domain.repository.HomeRepository
 import com.example.tmdb.feature.home.domain.use_case.FetchGenresUseCase

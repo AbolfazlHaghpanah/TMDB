@@ -3,10 +3,9 @@ package com.example.tmdb.feature.favorite.ui.deletebottomsheet
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.core.utils.databaseErrorCatchMessage
-import com.example.tmdb.core.utils.SnackBarMassage
 import com.example.tmdb.core.utils.SnackBarManager
-import com.example.tmdb.feature.favorite.data.local.dao.FavoriteMovieDao
+import com.example.tmdb.core.utils.SnackBarMassage
+import com.example.tmdb.core.utils.databaseErrorCatchMessage
 import com.example.tmdb.feature.favorite.domain.use_case.FavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

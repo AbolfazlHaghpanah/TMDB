@@ -1,6 +1,6 @@
 package com.example.tmdb.feature.favorite.data.repository
 
-import com.example.tmdb.feature.favorite.data.local.localdatasource.FavoriteLocalDataSource
+import com.example.tmdb.feature.favorite.data.source.local.localdatasource.FavoriteLocalDataSource
 import com.example.tmdb.feature.favorite.domain.repository.FavoriteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

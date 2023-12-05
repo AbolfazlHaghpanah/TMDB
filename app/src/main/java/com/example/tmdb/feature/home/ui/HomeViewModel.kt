@@ -3,9 +3,9 @@ package com.example.tmdb.feature.home.ui
 import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.core.network.Result.Error
-import com.example.tmdb.core.network.Result.Success
-import com.example.tmdb.core.ui.resultWrapper
+import com.example.tmdb.core.utils.Result.Error
+import com.example.tmdb.core.utils.Result.Success
+import com.example.tmdb.core.utils.resultWrapper
 import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMassage
 import com.example.tmdb.core.utils.databaseErrorCatchMessage

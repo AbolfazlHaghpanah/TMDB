@@ -2,7 +2,7 @@ package com.example.tmdb.feature.detail.di
 
 import com.example.tmdb.core.data.AppDatabase
 import com.example.tmdb.feature.detail.data.source.local.dao.DetailDao
-import com.example.tmdb.feature.detail.data.source.remote.DetailApi
+import com.example.tmdb.feature.detail.data.source.remote.api.DetailApi
 import com.example.tmdb.feature.detail.domain.repository.DetailRepository
 import com.example.tmdb.feature.detail.domain.usecase.AddFavoriteUseCase
 import com.example.tmdb.feature.detail.domain.usecase.DetailUseCase

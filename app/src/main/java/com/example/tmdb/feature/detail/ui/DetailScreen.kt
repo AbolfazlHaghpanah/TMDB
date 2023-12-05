@@ -24,7 +24,7 @@ import androidx.navigation.NavController
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.component.MovieRow
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.feature.detail.domain.model.MovieDetail
+import com.example.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import com.example.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.example.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
 import com.example.tmdb.feature.home.domain.model.HomeMovieDomainModel
@@ -62,7 +62,7 @@ private fun DetailScreen(
     }
 
     DetailScreen(
-        movieDetail = movieDetail,
+        movieDetailDomainModel = movieDetail,
         isLoading = isLoading,
         onBackArrowClick = remember { { navController.navigateUp() } },
         onSimilarItemClick = remember { { navController.navigate(AppScreens.Detail.createRoute(it)) } },
@@ -73,7 +73,7 @@ private fun DetailScreen(
 
 @Composable
 private fun DetailScreen(
-    movieDetail: MovieDetail?,
+    movieDetailDomainModel: MovieDetailDomainModel?,
     isLoading: Boolean,
     onBackArrowClick: () -> Unit,
     onSimilarItemClick: (Int) -> Unit,
@@ -87,12 +87,12 @@ private fun DetailScreen(
         modifier = Modifier.background(TMDBTheme.colors.background)
     ) { paddingValues ->
 
-        if (isLoading && movieDetail == null) {
+        if (isLoading && movieDetailDomainModel == null) {
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth()
             )
         } else {
-            movieDetail?.let { movieDetail ->
+            movieDetailDomainModel?.let { movieDetail ->
                 Column(
                     modifier = Modifier
                         .background(TMDBTheme.colors.background)

@@ -1,8 +1,8 @@
 package com.example.tmdb.feature.favorite.di
 
 import com.example.tmdb.core.data.AppDatabase
-import com.example.tmdb.feature.favorite.data.local.dao.FavoriteMovieDao
-import com.example.tmdb.feature.favorite.data.local.localdatasource.FavoriteLocalDataSource
+import com.example.tmdb.feature.favorite.data.source.local.dao.FavoriteMovieDao
+import com.example.tmdb.feature.favorite.data.source.local.localdatasource.FavoriteLocalDataSource
 import com.example.tmdb.feature.favorite.data.repository.FavoriteRepositoryImpl
 import com.example.tmdb.feature.favorite.domain.repository.FavoriteRepository
 import com.example.tmdb.feature.favorite.domain.use_case.DeleteFromFavoriteUseCase

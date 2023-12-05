@@ -1,7 +1,7 @@
 package com.example.tmdb.feature.home.data.repository
 
-import com.example.tmdb.feature.home.data.local.localdatasource.HomeLocalDataSource
-import com.example.tmdb.feature.home.data.remote.remotedatasource.HomeRemoteDataSource
+import com.example.tmdb.feature.home.data.source.local.localdatasource.HomeLocalDataSource
+import com.example.tmdb.feature.home.data.source.remote.remotedatasource.HomeRemoteDataSource
 import com.example.tmdb.feature.home.domain.repository.HomeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

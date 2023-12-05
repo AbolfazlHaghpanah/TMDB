@@ -53,12 +53,12 @@ import com.example.tmdb.R
 import com.example.tmdb.core.ui.component.TextIcon
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.detail.domain.model.MovieDetail
+import com.example.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import java.math.RoundingMode
 
 @Composable
 fun DetailTopWithGradient(
-    movieDetail: MovieDetail,
+    movieDetailDomainModel: MovieDetailDomainModel,
     onBackArrowClick: () -> Unit,
     onFavoriteIconClick: () -> Unit
 ) {
@@ -67,22 +67,22 @@ fun DetailTopWithGradient(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        BackgroundImage(movieDetail.posterPath)
+        BackgroundImage(movieDetailDomainModel.posterPath)
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            TopBar(onBackArrowClick, movieDetail, onFavoriteIconClick)
+            TopBar(onBackArrowClick, movieDetailDomainModel, onFavoriteIconClick)
 
             Row(
                 modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
             ) {
-                ForegroundImage(movieDetail.posterPath)
+                ForegroundImage(movieDetailDomainModel.posterPath)
             }
 
-            MovieInfo(movieDetail)
+            MovieInfo(movieDetailDomainModel)
 
             Text(
                 text = stringResource(R.string.overview),
@@ -137,7 +137,7 @@ private fun BackgroundImage(movieDetailPosterPath: String) {
 }
 
 @Composable
-private fun MovieInfo(movieDetail: MovieDetail) {
+private fun MovieInfo(movieDetailDomainModel: MovieDetailDomainModel) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier
@@ -145,7 +145,7 @@ private fun MovieInfo(movieDetail: MovieDetail) {
     ) {
         TextIcon(
             iconId = TMDBTheme.icons.calendar,
-            text = movieDetail.releaseDate.split(
+            text = movieDetailDomainModel.releaseDate.split(
                 "-"
             )[0]
         )
@@ -158,9 +158,9 @@ private fun MovieInfo(movieDetail: MovieDetail) {
         )
         TextIcon(
             iconId = TMDBTheme.icons.clock,
-            text = "${movieDetail.runtime} Minutes"
+            text = "${movieDetailDomainModel.runtime} Minutes"
         )
-        if (movieDetail.genres.isNotEmpty()) {
+        if (movieDetailDomainModel.genres.isNotEmpty()) {
             Divider(
                 color = TMDBTheme.colors.gray,
                 modifier = Modifier
@@ -170,7 +170,7 @@ private fun MovieInfo(movieDetail: MovieDetail) {
             )
             TextIcon(
                 iconId = TMDBTheme.icons.film,
-                text = movieDetail.genres[0].second
+                text = movieDetailDomainModel.genres[0].second
             )
         }
     }
@@ -181,7 +181,7 @@ private fun MovieInfo(movieDetail: MovieDetail) {
             .padding(horizontal = 8.dp)
     ) {
         val roundedVote =
-            movieDetail.voteAverage.toBigDecimal()
+            movieDetailDomainModel.voteAverage.toBigDecimal()
                 .setScale(1, RoundingMode.FLOOR)?.toDouble()
 
         TextIcon(
@@ -197,7 +197,7 @@ private fun MovieInfo(movieDetail: MovieDetail) {
 @Composable
 private fun TopBar(
     onBackArrowClick: () -> Unit,
-    movieDetail: MovieDetail,
+    movieDetailDomainModel: MovieDetailDomainModel,
     onFavoriteIconClick: () -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }
@@ -205,9 +205,9 @@ private fun TopBar(
 
     if (showDialog) {
         ShareDialog(
-            movieDetail.externalIds,
-            movieDetail.id,
-            movieDetail.title,
+            movieDetailDomainModel.externalIds,
+            movieDetailDomainModel.id,
+            movieDetailDomainModel.title,
             { requestString ->
                 uriHandler.openUri(uri = requestString)
             }
@@ -236,7 +236,7 @@ private fun TopBar(
         }
 
         Text(
-            text = movieDetail.title,
+            text = movieDetailDomainModel.title,
             style = TMDBTheme.typography.subtitle1,
             color = TMDBTheme.colors.white,
             textAlign = TextAlign.Start,
@@ -252,7 +252,7 @@ private fun TopBar(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             val suitableIcon =
-                if (!movieDetail.isFavorite) TMDBTheme.icons.heartBorder else TMDBTheme.icons.heart
+                if (!movieDetailDomainModel.isFavorite) TMDBTheme.icons.heartBorder else TMDBTheme.icons.heart
             TMDBIconButton(
                 onClick = onFavoriteIconClick,
                 Modifier
@@ -394,7 +394,9 @@ private fun ShareDialog(
                 TMDBIconButton(onClick = {
                     val titleSplit = movieTitle?.split(" ")
                     val titleSplitPlusDash = titleSplit?.joinToString(separator = "-") { it }
-                    if (titleSplitPlusDash != null && titleSplit != null) shareIconOnClock("https://www.themoviedb.org/collection/${movieId}-${titleSplitPlusDash}")
+                    if (titleSplitPlusDash != null) {
+                        shareIconOnClock("https://www.themoviedb.org/collection/${movieId}-${titleSplitPlusDash}")
+                    }
                 }) {
                     ImageWrapper(
                         shouldNotHaveAlpha = true,
