@@ -32,7 +32,7 @@ object SearchModule {
 
     @Singleton
     @Provides
-    fun provideSearchUseCase(
+    fun provideSearchRepository(
         searchLocalDataSource: SearchLocalDataSource,
         searchRemoteDataSource: SearchRemoteDataSource
     ): SearchRepository {
