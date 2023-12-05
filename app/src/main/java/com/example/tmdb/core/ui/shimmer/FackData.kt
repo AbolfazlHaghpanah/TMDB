@@ -1,15 +1,16 @@
 package com.example.tmdb.core.ui.shimmer
 
-import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
+import com.example.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import kotlinx.collections.immutable.persistentListOf
 
 val fakeMovie = persistentListOf(
-    HomeMovieUiModel(
+    HomeMovieDomainModel(
         "", "//////////////////", 0, "/////////", "", 0.1,
     ),
-    HomeMovieUiModel(
+    HomeMovieDomainModel(
         "", "//////////////////", 1, "/////////", "", 0.1,
-    ),HomeMovieUiModel(
+    ),
+    HomeMovieDomainModel(
         "", "//////////////////", 2, "/////////", "", 0.1,
     )
 )

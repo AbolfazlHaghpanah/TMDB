@@ -27,9 +27,9 @@ import com.example.tmdb.core.ui.component.MovieRow
 import com.example.tmdb.core.ui.shimmer.fakeMovie
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.example.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import com.example.tmdb.feature.home.ui.component.PagerMovieItem
 import com.example.tmdb.feature.home.ui.component.TMDBPagerIndicator
-import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
 import com.example.tmdb.navigation.AppScreens
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -87,9 +87,9 @@ private fun HomeScreen(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun HomeScreen(
-    nowPlayingMovies: PersistentList<HomeMovieUiModel>,
-    popularMovies: PersistentList<HomeMovieUiModel>,
-    topMovies: PersistentList<HomeMovieUiModel>,
+    nowPlayingMovies: PersistentList<HomeMovieDomainModel>,
+    popularMovies: PersistentList<HomeMovieDomainModel>,
+    topMovies: PersistentList<HomeMovieDomainModel>,
     pagerState: PagerState,
     onNavigation: (String) -> Unit,
 ) {

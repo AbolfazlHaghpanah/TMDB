@@ -22,13 +22,12 @@ import coil.compose.AsyncImage
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.core.utils.MovieDatabaseWrapper
-import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
+import com.example.tmdb.feature.home.domain.model.HomeMovieDomainModel
 
 @Composable
 fun PagerMovieItem(
     modifier: Modifier = Modifier,
-    movie: HomeMovieUiModel,
+    movie: HomeMovieDomainModel,
     isLoading: Boolean = false
 ) {
     Card(

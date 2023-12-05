@@ -5,14 +5,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GenreResponse(
-    val genres : List<GenresResponse>
+    val genres: List<GenresResponse>
 )
 
 @Serializable
 data class GenresResponse(
-    val id : Int,
-    val name : String
-){
+    val id: Int,
+    val name: String
+) {
     fun toGenreEntity(): GenreEntity {
         return GenreEntity(
             genreId = id,

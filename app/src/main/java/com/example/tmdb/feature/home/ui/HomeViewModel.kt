@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdb.core.network.Result.Error
 import com.example.tmdb.core.network.Result.Success
+import com.example.tmdb.core.ui.resultWrapper
 import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMassage
 import com.example.tmdb.core.utils.databaseErrorCatchMessage
-import com.example.tmdb.core.ui.resultWrapper
-import com.example.tmdb.feature.home.data.repository.HomeRepository
-import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
+import com.example.tmdb.feature.home.domain.model.HomeMovieDomainModel
+import com.example.tmdb.feature.home.domain.use_case.HomeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,19 +22,19 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val snackBarManager: SnackBarManager,
-    private val homeRepository: HomeRepository
+    private val homeUseCase: HomeUseCase
 ) : ViewModel() {
 
     private val _nowPlayingMovies =
-        MutableStateFlow<List<HomeMovieUiModel>>(emptyList())
+        MutableStateFlow<List<HomeMovieDomainModel>>(emptyList())
     val nowPlayingMovies = _nowPlayingMovies.asStateFlow()
 
     private val _popularMovies =
-        MutableStateFlow<List<HomeMovieUiModel>>(emptyList())
+        MutableStateFlow<List<HomeMovieDomainModel>>(emptyList())
     val popularMovies = _popularMovies.asStateFlow()
 
     private val _topMovies =
-        MutableStateFlow<List<HomeMovieUiModel>>(emptyList())
+        MutableStateFlow<List<HomeMovieDomainModel>>(emptyList())
     val topMovies = _topMovies.asStateFlow()
 
     private val _snackBarMassage = MutableStateFlow<SnackBarMassage?>(null)
@@ -55,7 +55,7 @@ class HomeViewModel @Inject constructor(
     private fun observeNowPlaying() {
 
         viewModelScope.launch(Dispatchers.IO) {
-            homeRepository.observeNowPlaying()
+            homeUseCase.getNowPlayingUseCase()
                 .catch {
                     sendDataBaseError(it)
                 }.collect { movies ->
@@ -63,6 +63,7 @@ class HomeViewModel @Inject constructor(
                         movies.map { it }
                     )
                 }
+
         }
         getNowPlaying()
     }
@@ -71,7 +72,7 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            homeRepository.observePopularMovie()
+            homeUseCase.getPopularUseCase()
                 .catch {
                     sendDataBaseError(it)
                 }
@@ -83,10 +84,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun observeTopMovies() {
-
         viewModelScope.launch(Dispatchers.IO) {
-
-            homeRepository.observeTopMovie()
+            homeUseCase.getTopUseCase()
                 .catch {
                     sendDataBaseError(it)
                 }
@@ -100,7 +99,7 @@ class HomeViewModel @Inject constructor(
     private fun getNowPlaying() {
         viewModelScope.launch(Dispatchers.IO) {
             resultWrapper {
-                homeRepository.fetchNowPlaying()
+                homeUseCase.fetchNowPlayingUseCase()
             }.collect { result ->
                 if (result is Error) sendNetworkError(result.message)
                 else if (result is Success<*>) dismissSnackBar()
@@ -111,7 +110,7 @@ class HomeViewModel @Inject constructor(
     private fun getPopular() {
         viewModelScope.launch(Dispatchers.IO) {
             resultWrapper {
-                homeRepository.fetchPopularMovie()
+                homeUseCase.fetchPopularMovieUseCase()
             }.collect { result ->
                 if (result is Error) sendNetworkError(result.message)
                 else if (result is Success<*>) dismissSnackBar()
@@ -122,7 +121,7 @@ class HomeViewModel @Inject constructor(
     private fun getTopMovies() {
         viewModelScope.launch(Dispatchers.IO) {
             resultWrapper {
-                homeRepository.fetchTopMovie()
+                homeUseCase.fetchTopMovieUseCase()
             }.collect { result ->
                 if (result is Error) sendNetworkError(result.message)
                 else if (result is Success<*>) dismissSnackBar()
@@ -132,9 +131,8 @@ class HomeViewModel @Inject constructor(
 
     private fun getGenre() {
         viewModelScope.launch(Dispatchers.IO) {
-
             resultWrapper {
-                homeRepository.fetchGenres()
+                homeUseCase.fetchGenresUseCase()
             }.collect { result ->
                 if (result is Error) sendNetworkError(result.message)
                 else if (result is Success<*>) dismissSnackBar()
