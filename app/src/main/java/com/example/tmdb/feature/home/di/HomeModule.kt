@@ -1,7 +1,6 @@
 package com.example.tmdb.feature.home.di
 
 import com.example.tmdb.core.data.AppDatabase
-import com.example.tmdb.core.data.genre.dao.GenreDao
 import com.example.tmdb.core.data.movie.dao.MovieDao
 import com.example.tmdb.feature.home.data.local.dao.HomeDao
 import com.example.tmdb.feature.home.data.local.localdatasource.HomeLocalDataSource
@@ -32,12 +31,6 @@ object HomeModule {
     @Provides
     fun provideTopMovieDao(appDatabase: AppDatabase): MovieDao {
         return appDatabase.MovieDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideGenreDao(appDatabase: AppDatabase): GenreDao {
-        return appDatabase.genreDao()
     }
 
     @Singleton

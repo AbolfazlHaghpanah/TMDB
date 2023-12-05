@@ -1,4 +1,4 @@
-package com.example.tmdb.feature.home.data.remote.json
+package com.example.tmdb.feature.home.data.remote.dto
 
 import kotlinx.serialization.Serializable
 

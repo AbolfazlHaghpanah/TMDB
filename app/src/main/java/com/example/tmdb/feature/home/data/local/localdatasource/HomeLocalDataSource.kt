@@ -1,6 +1,5 @@
 package com.example.tmdb.feature.home.data.local.localdatasource
 
-import com.example.tmdb.core.data.genre.dao.GenreDao
 import com.example.tmdb.core.data.genre.entity.GenreEntity
 import com.example.tmdb.core.data.movie.dao.MovieDao
 import com.example.tmdb.core.data.movie.entity.MovieEntity
@@ -18,7 +17,6 @@ import javax.inject.Inject
 class HomeLocalDataSource @Inject constructor(
     private val homeDao: HomeDao,
     private val movieDao: MovieDao,
-    private val genreDao: GenreDao
 ) {
     fun getNowPlaying(): Flow<List<HomeMovieDomainModel>> {
         return homeDao.observeNowPlayingMovie()
@@ -39,7 +37,7 @@ class HomeLocalDataSource @Inject constructor(
         genres: List<GenreEntity>
     ) {
         genres.forEach {
-            genreDao.addGenre(it)
+            homeDao.addGenre(it)
         }
     }
 
