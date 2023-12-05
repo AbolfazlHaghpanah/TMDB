@@ -1,4 +1,4 @@
-package com.example.tmdb
+package com.hooshang.tmdb
 
 import org.junit.Test
 

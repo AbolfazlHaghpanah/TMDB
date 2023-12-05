@@ -9,11 +9,11 @@ plugins {
 
 
 android {
-    namespace = "com.example.tmdb"
+    namespace = "com.hooshang.tmdb"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.tmdb"
+        applicationId = "com.hooshang.tmdb"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
