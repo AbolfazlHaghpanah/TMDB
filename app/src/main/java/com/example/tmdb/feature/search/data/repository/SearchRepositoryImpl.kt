@@ -1,8 +1,8 @@
 package com.example.tmdb.feature.search.data.repository
 
-import com.example.tmdb.core.data.genre.entity.GenreEntity
-import com.example.tmdb.feature.search.data.local.localdatasource.SearchLocalDataSource
-import com.example.tmdb.feature.search.data.remote.remotedatasource.SearchRemoteDataSource
+import com.example.tmdb.core.data.model.local.GenreEntity
+import com.example.tmdb.feature.search.data.source.local.localdatasource.SearchLocalDataSource
+import com.example.tmdb.feature.search.data.source.remote.remotedatasource.SearchRemoteDataSource
 import com.example.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainModel
 import com.example.tmdb.feature.search.domain.repository.SearchRepository
 import kotlinx.coroutines.flow.first

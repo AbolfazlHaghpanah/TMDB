@@ -1,10 +1,10 @@
 package com.example.tmdb.feature.search.di
 
 import com.example.tmdb.core.data.AppDatabase
-import com.example.tmdb.feature.search.data.local.dao.SearchDao
-import com.example.tmdb.feature.search.data.local.localdatasource.SearchLocalDataSource
-import com.example.tmdb.feature.search.data.remote.SearchApi
-import com.example.tmdb.feature.search.data.remote.remotedatasource.SearchRemoteDataSource
+import com.example.tmdb.feature.search.data.source.local.dao.SearchDao
+import com.example.tmdb.feature.search.data.source.local.localdatasource.SearchLocalDataSource
+import com.example.tmdb.feature.search.data.source.remote.api.SearchApi
+import com.example.tmdb.feature.search.data.source.remote.remotedatasource.SearchRemoteDataSource
 import com.example.tmdb.feature.search.data.repository.SearchRepositoryImpl
 import com.example.tmdb.feature.search.domain.repository.SearchRepository
 import com.example.tmdb.feature.search.domain.use_case.SearchUseCase

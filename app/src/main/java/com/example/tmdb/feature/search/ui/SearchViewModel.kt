@@ -2,10 +2,10 @@ package com.example.tmdb.feature.search.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.core.network.Result
-import com.example.tmdb.core.ui.resultWrapper
+import com.example.tmdb.core.utils.Result
 import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMassage
+import com.example.tmdb.core.utils.resultWrapper
 import com.example.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainModel
 import com.example.tmdb.feature.search.domain.use_case.SearchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

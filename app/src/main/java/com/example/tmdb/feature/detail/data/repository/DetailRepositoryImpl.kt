@@ -1,16 +1,16 @@
 package com.example.tmdb.feature.detail.data.repository
 
-import com.example.tmdb.core.data.movie.entity.MovieEntity
-import com.example.tmdb.feature.detail.data.source.local.DetailLocalDataSource
-import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithCreditCrossRef
-import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
-import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.MovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.source.remote.DetailRemoteDataSource
-import com.example.tmdb.feature.detail.domain.model.MovieDetail
+import com.example.tmdb.core.data.model.local.MovieEntity
+import com.example.tmdb.feature.detail.data.source.local.localdatasource.DetailLocalDataSource
+import com.example.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithCreditCrossRef
+import com.example.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
+import com.example.tmdb.feature.detail.data.model.local.relation.crossrefrence.MovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.source.remote.remotedatasource.DetailRemoteDataSource
+import com.example.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import com.example.tmdb.feature.detail.domain.repository.DetailRepository
-import com.example.tmdb.feature.favorite.data.local.entity.FavoriteMovieEntity
-import com.example.tmdb.feature.favorite.data.local.relation.FavoriteMovieGenreCrossRef
+import com.example.tmdb.feature.favorite.data.model.local.entity.FavoriteMovieEntity
+import com.example.tmdb.feature.favorite.data.model.local.relation.FavoriteMovieGenreCrossRef
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -34,20 +34,20 @@ class DetailRepositoryImpl @Inject constructor(
             localDataSource.addToFavorite(FavoriteMovieEntity(movieId))
         }
 
-    override suspend fun removeFromFavorite(movieDetail: MovieDetail) =
+    override suspend fun removeFromFavorite(movieDetailDomainModel: MovieDetailDomainModel) =
         withContext(Dispatchers.IO) {
-            movieDetail.genres.forEach { genre ->
+            movieDetailDomainModel.genres.forEach { genre ->
                 localDataSource.deleteFavoriteMovieGenre(
                     FavoriteMovieGenreCrossRef(
                         genreId = genre.first,
-                        movieId = movieDetail.id
+                        movieId = movieDetailDomainModel.id
                     )
                 )
             }
 
             localDataSource.deleteFavorite(
                 FavoriteMovieEntity(
-                    movieId = movieDetail.id
+                    movieId = movieDetailDomainModel.id
                 )
             )
         }
@@ -92,7 +92,7 @@ class DetailRepositoryImpl @Inject constructor(
             )
         }
 
-        movieDetailDto.genreDtos.forEach {
+        movieDetailDto.genreResponses.forEach {
             localDataSource.addDetailMovieWithGenreCrossRef(
                 DetailMovieWithGenreCrossRef(
                     detailMovieId = movieDetailDto.id,

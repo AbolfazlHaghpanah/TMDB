@@ -4,12 +4,12 @@ import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.core.network.Result
-import com.example.tmdb.core.ui.resultWrapper
+import com.example.tmdb.core.utils.Result
+import com.example.tmdb.core.utils.resultWrapper
 import com.example.tmdb.core.utils.SnackBarManager
 import com.example.tmdb.core.utils.SnackBarMassage
 import com.example.tmdb.core.utils.databaseErrorCatchMessage
-import com.example.tmdb.feature.detail.domain.model.MovieDetail
+import com.example.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import com.example.tmdb.feature.detail.domain.usecase.DetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,9 +26,9 @@ class DetailViewModel @Inject constructor(
     private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
-    private var _movieDetail: MutableStateFlow<MovieDetail?> =
+    private var _movieDetailDomainModel: MutableStateFlow<MovieDetailDomainModel?> =
         MutableStateFlow(null)
-    val movieDetail = _movieDetail.asStateFlow()
+    val movieDetail = _movieDetailDomainModel.asStateFlow()
 
     private val id: Int = savedStateHandle.get<String>("id")?.toInt() ?: 0
 
@@ -86,7 +86,7 @@ class DetailViewModel @Inject constructor(
                     })
                 }
                 .collect {
-                    _movieDetail.emit(it)
+                    _movieDetailDomainModel.emit(it)
                 }
         }
         fetchMovieDetail()

@@ -3,27 +3,27 @@ package com.example.tmdb.core.data
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.tmdb.core.data.genre.entity.GenreEntity
-import com.example.tmdb.core.data.movie.dao.MovieDao
-import com.example.tmdb.core.data.movie.entity.MovieEntity
+import com.example.tmdb.core.data.model.local.GenreEntity
+import com.example.tmdb.core.data.source.local.MovieDao
+import com.example.tmdb.core.data.model.local.MovieEntity
 import com.example.tmdb.feature.detail.data.source.local.converter.ListStringToStringConverter
 import com.example.tmdb.feature.detail.data.source.local.dao.DetailDao
-import com.example.tmdb.feature.detail.data.source.local.entity.CreditEntity
-import com.example.tmdb.feature.detail.data.source.local.entity.DetailEntity
-import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithCreditCrossRef
-import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
-import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.MovieWithGenreCrossRef
-import com.example.tmdb.feature.favorite.data.local.dao.FavoriteMovieDao
-import com.example.tmdb.feature.favorite.data.local.entity.FavoriteMovieEntity
-import com.example.tmdb.feature.favorite.data.local.relation.FavoriteMovieGenreCrossRef
-import com.example.tmdb.feature.home.data.local.dao.HomeDao
-import com.example.tmdb.feature.home.data.local.entity.NowPlayingEntity
-import com.example.tmdb.feature.home.data.local.entity.PopularMovieEntity
-import com.example.tmdb.feature.home.data.local.entity.TopMovieEntity
-import com.example.tmdb.feature.home.data.local.relation.crossref.PopularMovieGenreCrossRef
-import com.example.tmdb.feature.home.data.local.relation.crossref.TopMovieGenreCrossRef
-import com.example.tmdb.feature.search.data.local.dao.SearchDao
+import com.example.tmdb.feature.detail.data.model.local.entity.CreditEntity
+import com.example.tmdb.feature.detail.data.model.local.entity.DetailEntity
+import com.example.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithCreditCrossRef
+import com.example.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
+import com.example.tmdb.feature.detail.data.model.local.relation.crossrefrence.MovieWithGenreCrossRef
+import com.example.tmdb.feature.favorite.data.source.local.dao.FavoriteMovieDao
+import com.example.tmdb.feature.favorite.data.model.local.entity.FavoriteMovieEntity
+import com.example.tmdb.feature.favorite.data.model.local.relation.FavoriteMovieGenreCrossRef
+import com.example.tmdb.feature.home.data.source.local.dao.HomeDao
+import com.example.tmdb.feature.home.data.model.local.entity.NowPlayingEntity
+import com.example.tmdb.feature.home.data.model.local.entity.PopularMovieEntity
+import com.example.tmdb.feature.home.data.model.local.entity.TopMovieEntity
+import com.example.tmdb.feature.home.data.model.local.relation.crossref.PopularMovieGenreCrossRef
+import com.example.tmdb.feature.home.data.model.local.relation.crossref.TopMovieGenreCrossRef
+import com.example.tmdb.feature.search.data.source.local.dao.SearchDao
 
 @TypeConverters(ListStringToStringConverter::class)
 @Database(
