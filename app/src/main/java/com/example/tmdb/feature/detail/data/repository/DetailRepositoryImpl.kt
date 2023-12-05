@@ -9,8 +9,8 @@ import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.
 import com.example.tmdb.feature.detail.data.source.remote.DetailRemoteDataSource
 import com.example.tmdb.feature.detail.domain.model.MovieDetail
 import com.example.tmdb.feature.detail.domain.repository.DetailRepository
-import com.example.tmdb.feature.favorite.data.entity.FavoriteMovieEntity
-import com.example.tmdb.feature.favorite.data.relation.FavoriteMovieGenreCrossRef
+import com.example.tmdb.feature.favorite.data.local.entity.FavoriteMovieEntity
+import com.example.tmdb.feature.favorite.data.local.relation.FavoriteMovieGenreCrossRef
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -129,7 +129,5 @@ class DetailRepositoryImpl @Inject constructor(
                 )
             }
         }
-
     }
-
 }

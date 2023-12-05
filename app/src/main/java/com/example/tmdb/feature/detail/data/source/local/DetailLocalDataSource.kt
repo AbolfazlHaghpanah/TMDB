@@ -10,8 +10,8 @@ import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.
 import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithGenreCrossRef
 import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
 import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.MovieWithGenreCrossRef
-import com.example.tmdb.feature.favorite.data.entity.FavoriteMovieEntity
-import com.example.tmdb.feature.favorite.data.relation.FavoriteMovieGenreCrossRef
+import com.example.tmdb.feature.favorite.data.local.entity.FavoriteMovieEntity
+import com.example.tmdb.feature.favorite.data.local.relation.FavoriteMovieGenreCrossRef
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

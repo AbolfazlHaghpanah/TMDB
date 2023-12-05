@@ -16,5 +16,4 @@ interface DetailApi {
         @Path("id") id: Int,
         @Query("append_to_response") append: String = "external_ids,credits,similar"
     ): Response<MovieDetailDto>
-
 }

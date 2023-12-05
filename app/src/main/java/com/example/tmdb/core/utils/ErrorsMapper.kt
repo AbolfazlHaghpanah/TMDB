@@ -1,41 +1,15 @@
-package com.example.tmdb.core.network
+package com.example.tmdb.core.utils
 
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.cancellable
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.isActive
-import kotlinx.serialization.json.Json
-import retrofit2.Response
+import android.database.StaleDataException
+import android.database.sqlite.SQLiteException
 
-suspend fun <T> safeApi(
-    call: suspend () -> Response<T>
-): Flow<Result> {
-    return flow {
-        emit(Result.Loading)
-        try {
-            val response = call()
-            if (response.isSuccessful) {
-                val body = response.body()
-                if (body != null) {
-                    if (currentCoroutineContext().isActive) {
-                        emit(Result.Success(body))
-                    }
-                } else {
-                    throw Throwable(message = "body was empty")
-                }
-            } else {
-                val bodyCode = response.errorBody()?.string()
-                    ?.let {
-                        val json = Json { ignoreUnknownKeys = true }
-                        json.decodeFromString<ErrorResponse>(it)
-                    }
-                throw Throwable(message = bodyCode?.statusMessage ?: "")
-            }
-        } catch (t: Throwable) {
-            emit(Result.Error(mapServerErrorMessage((t.message ?: ""))))
-        }
-    }.cancellable()
+fun databaseErrorCatchMessage(t: Throwable): String {
+    return when(t){
+        is SQLiteException -> "An unexpected error occurred while accessing the database. Please try again later."
+        is IllegalStateException -> "Database error: The database is not accessible. Please try again later."
+        is StaleDataException ->"Data update conflict: The data you are trying to access has been modified. Please refresh and try again"
+        else -> "unexpected error occurred while accessing the database"
+    }
 }
 
 fun mapServerErrorMessage(serverErrorMessage: String): String {

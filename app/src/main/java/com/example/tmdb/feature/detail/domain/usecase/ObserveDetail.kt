@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 class ObserveDetail(
     private val detailRepository: DetailRepository
 ) {
-
     suspend operator fun invoke(id: Int): Flow<MovieDetail> {
         return detailRepository.observeDetailMovieWithAllRelations(id)
     }

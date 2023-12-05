@@ -13,7 +13,7 @@ import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.
 import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.MovieWithGenreCrossRef
 import com.example.tmdb.feature.detail.domain.model.MovieDetail
 import com.example.tmdb.feature.detail.domain.model.SimilarMovie
-import com.example.tmdb.feature.favorite.data.entity.FavoriteMovieEntity
+import com.example.tmdb.feature.favorite.data.local.entity.FavoriteMovieEntity
 
 data class DetailMovieWithAllRelations(
     @Embedded val detailEntity: DetailEntity,

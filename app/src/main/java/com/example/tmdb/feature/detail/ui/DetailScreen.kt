@@ -27,7 +27,7 @@ import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.feature.detail.domain.model.MovieDetail
 import com.example.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.example.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
-import com.example.tmdb.feature.home.ui.model.HomeMovieUiModel
+import com.example.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import com.example.tmdb.navigation.AppScreens
 import kotlinx.collections.immutable.toPersistentList
 
@@ -112,7 +112,7 @@ private fun DetailScreen(
                             onClick = onSimilarItemClick,
                             title = stringResource(R.string.similar_movies),
                             movies = movieDetail.similar.map {
-                                HomeMovieUiModel(
+                                HomeMovieDomainModel(
                                     title = it.title,
                                     voteAverage = it.voteAverage.toDouble(),
                                     posterPath = it.posterPath ?: "",

@@ -8,5 +8,4 @@ class AddFavoriteUseCase(
     suspend operator fun invoke(movieId: Int, genres: List<Int>) {
         detailRepository.addToFavorite(movieId, genres)
     }
-
 }

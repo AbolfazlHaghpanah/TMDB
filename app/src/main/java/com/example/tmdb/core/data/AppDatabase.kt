@@ -6,14 +6,14 @@ import androidx.room.TypeConverters
 import com.example.tmdb.core.data.genre.entity.GenreEntity
 import com.example.tmdb.core.data.movie.dao.MovieDao
 import com.example.tmdb.core.data.movie.entity.MovieEntity
-import com.example.tmdb.feature.detail.data.converter.ListStringToStringConverter
-import com.example.tmdb.feature.detail.data.dao.DetailDao
-import com.example.tmdb.feature.detail.data.entity.CreditEntity
-import com.example.tmdb.feature.detail.data.entity.DetailEntity
-import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithCreditCrossRef
-import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithGenreCrossRef
-import com.example.tmdb.feature.detail.data.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
-import com.example.tmdb.feature.detail.data.relation.crossrefrence.MovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.source.local.converter.ListStringToStringConverter
+import com.example.tmdb.feature.detail.data.source.local.dao.DetailDao
+import com.example.tmdb.feature.detail.data.source.local.entity.CreditEntity
+import com.example.tmdb.feature.detail.data.source.local.entity.DetailEntity
+import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithCreditCrossRef
+import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithGenreCrossRef
+import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
+import com.example.tmdb.feature.detail.data.source.local.relation.crossrefrence.MovieWithGenreCrossRef
 import com.example.tmdb.feature.favorite.data.local.dao.FavoriteMovieDao
 import com.example.tmdb.feature.favorite.data.local.entity.FavoriteMovieEntity
 import com.example.tmdb.feature.favorite.data.local.relation.FavoriteMovieGenreCrossRef
@@ -46,7 +46,8 @@ import com.example.tmdb.feature.search.data.local.dao.SearchDao
     ],
     version = 1
 )
-abstract class AppDatabase : RoomDatabase() {
+abstract class AppDatabase() : RoomDatabase() {
+
     abstract fun MovieDao(): MovieDao
     abstract fun favoriteMovieDao(): FavoriteMovieDao
     abstract fun DetailDao(): DetailDao
