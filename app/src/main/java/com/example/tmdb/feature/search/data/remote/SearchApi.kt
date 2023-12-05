@@ -1,7 +1,7 @@
-package com.example.tmdb.feature.search.network
+package com.example.tmdb.feature.search.data.remote
 
 import com.example.tmdb.core.utils.tmdpApiKey
-import com.example.tmdb.feature.search.network.json.SearchResult
+import com.example.tmdb.feature.search.data.remote.dto.SearchResult
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header

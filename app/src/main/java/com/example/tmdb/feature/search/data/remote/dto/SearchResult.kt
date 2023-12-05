@@ -1,6 +1,7 @@
-package com.example.tmdb.feature.search.network.json
+package com.example.tmdb.feature.search.data.remote.dto
 
 import com.example.tmdb.core.data.movie.entity.MovieEntity
+import com.example.tmdb.feature.search.domain.model.SearchMovieDomainModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -29,13 +30,19 @@ data class SearchResultElement(
     @SerialName("genre_ids")
     val genreIds: List<Int>
 ) {
-    fun toMovieEntity(): MovieEntity {
-        return MovieEntity(
-            id = id,
-            title = title,
-            voteAverage = voteAverage.toDouble(),
-            posterPath = posterPath ?: "",
-            backdropPath = ""
+
+    fun toDomainModel(): Pair<SearchMovieDomainModel, List<Int>> {
+        return Pair(
+            SearchMovieDomainModel(
+                id = id,
+                title = title,
+                backdropPath = "",
+                voteAverage = voteAverage,
+                posterPath = posterPath ?: "",
+                releaseDate = releaseDate,
+                originalLanguage = originalLanguage
+            ),
+            genreIds
         )
     }
 }
