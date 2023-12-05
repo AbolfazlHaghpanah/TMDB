@@ -17,7 +17,7 @@ class FavoriteLocalDataSource @Inject constructor(
             }
     }
 
-    fun deleteMovie(id : Int) {
+    fun deleteMovie(id: Int) {
         favoriteMovieDao.deleteMovie(id)
     }
 }

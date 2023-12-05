@@ -8,12 +8,12 @@ import javax.inject.Inject
 
 class FavoriteRepositoryImpl @Inject constructor(
     private val favoriteLocalDataSource: FavoriteLocalDataSource
-):FavoriteRepository {
-    override suspend fun getFavorites() = withContext(Dispatchers.IO){
+) : FavoriteRepository {
+    override suspend fun getFavorites() = withContext(Dispatchers.IO) {
         favoriteLocalDataSource.getFavoriteMovies()
     }
 
-    override suspend fun deleteFromFavorite(id: Int)  {
+    override suspend fun deleteFromFavorite(id: Int) {
         favoriteLocalDataSource.deleteMovie(id)
     }
 }
