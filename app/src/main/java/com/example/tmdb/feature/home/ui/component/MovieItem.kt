@@ -71,7 +71,7 @@ fun MovieCard(
                 model = imageUrl + image,
                 contentScale = ContentScale.Crop,
                 contentDescription = null,
-                error = painterResource(id = R.drawable.videoimageerror)
+                error = if (isShimmer) null else painterResource(id = R.drawable.videoimageerror)
             )
         }
 

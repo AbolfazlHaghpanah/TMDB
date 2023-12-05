@@ -53,12 +53,12 @@ import com.example.tmdb.R
 import com.example.tmdb.core.ui.component.TextIcon
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
+import com.example.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import java.math.RoundingMode
 
 @Composable
 fun DetailTopWithGradient(
-    movieDetail: DetailMovieWithAllRelations,
+    movieDetailDomainModel: MovieDetailDomainModel,
     onBackArrowClick: () -> Unit,
     onFavoriteIconClick: () -> Unit
 ) {
@@ -67,22 +67,22 @@ fun DetailTopWithGradient(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        movieDetail.movie?.let { BackgroundImage(it.posterPath) }
+        BackgroundImage(movieDetailDomainModel.posterPath)
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            TopBar(onBackArrowClick, movieDetail, onFavoriteIconClick)
+            TopBar(onBackArrowClick, movieDetailDomainModel, onFavoriteIconClick)
 
             Row(
                 modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
             ) {
-                ForegroundImage(movieDetail.movie?.posterPath ?: "")
+                ForegroundImage(movieDetailDomainModel.posterPath)
             }
 
-            MovieInfo(movieDetail)
+            MovieInfo(movieDetailDomainModel)
 
             Text(
                 text = stringResource(R.string.overview),
@@ -137,7 +137,7 @@ private fun BackgroundImage(movieDetailPosterPath: String) {
 }
 
 @Composable
-private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
+private fun MovieInfo(movieDetailDomainModel: MovieDetailDomainModel) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier
@@ -145,7 +145,7 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
     ) {
         TextIcon(
             iconId = TMDBTheme.icons.calendar,
-            text = movieDetail.detailEntity.releaseDate.split(
+            text = movieDetailDomainModel.releaseDate.split(
                 "-"
             )[0]
         )
@@ -158,9 +158,9 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
         )
         TextIcon(
             iconId = TMDBTheme.icons.clock,
-            text = "${movieDetail.detailEntity.runtime} Minutes"
+            text = "${movieDetailDomainModel.runtime} Minutes"
         )
-        if (!movieDetail.genres.isNullOrEmpty()) {
+        if (movieDetailDomainModel.genres.isNotEmpty()) {
             Divider(
                 color = TMDBTheme.colors.gray,
                 modifier = Modifier
@@ -170,7 +170,7 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
             )
             TextIcon(
                 iconId = TMDBTheme.icons.film,
-                text = movieDetail.genres[0].genreName
+                text = movieDetailDomainModel.genres[0].second
             )
         }
     }
@@ -181,8 +181,8 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
             .padding(horizontal = 8.dp)
     ) {
         val roundedVote =
-            movieDetail.movie?.voteAverage?.toBigDecimal()
-                ?.setScale(1, RoundingMode.FLOOR)?.toDouble()
+            movieDetailDomainModel.voteAverage.toBigDecimal()
+                .setScale(1, RoundingMode.FLOOR)?.toDouble()
 
         TextIcon(
             text = roundedVote.toString(),
@@ -197,7 +197,7 @@ private fun MovieInfo(movieDetail: DetailMovieWithAllRelations) {
 @Composable
 private fun TopBar(
     onBackArrowClick: () -> Unit,
-    movieDetail: DetailMovieWithAllRelations,
+    movieDetailDomainModel: MovieDetailDomainModel,
     onFavoriteIconClick: () -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }
@@ -205,9 +205,9 @@ private fun TopBar(
 
     if (showDialog) {
         ShareDialog(
-            movieDetail.detailEntity.externalIds,
-            movieDetail.movie?.id,
-            movieDetail.movie?.title,
+            movieDetailDomainModel.externalIds,
+            movieDetailDomainModel.id,
+            movieDetailDomainModel.title,
             { requestString ->
                 uriHandler.openUri(uri = requestString)
             }
@@ -235,26 +235,24 @@ private fun TopBar(
             )
         }
 
-        movieDetail.movie?.let {
-            Text(
-                text = it.title,
-                style = TMDBTheme.typography.subtitle1,
-                color = TMDBTheme.colors.white,
-                textAlign = TextAlign.Start,
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .widthIn(50.dp, 200.dp)
-                    .basicMarquee(),
-                maxLines = 1
-            )
-        }
+        Text(
+            text = movieDetailDomainModel.title,
+            style = TMDBTheme.typography.subtitle1,
+            color = TMDBTheme.colors.white,
+            textAlign = TextAlign.Start,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .widthIn(50.dp, 200.dp)
+                .basicMarquee(),
+            maxLines = 1
+        )
 
         Row(
             modifier = Modifier.align(Alignment.CenterEnd),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             val suitableIcon =
-                if (movieDetail.favorite == null) TMDBTheme.icons.heartBorder else TMDBTheme.icons.heart
+                if (!movieDetailDomainModel.isFavorite) TMDBTheme.icons.heartBorder else TMDBTheme.icons.heart
             TMDBIconButton(
                 onClick = onFavoriteIconClick,
                 Modifier
@@ -396,7 +394,9 @@ private fun ShareDialog(
                 TMDBIconButton(onClick = {
                     val titleSplit = movieTitle?.split(" ")
                     val titleSplitPlusDash = titleSplit?.joinToString(separator = "-") { it }
-                    if (titleSplitPlusDash != null && titleSplit != null) shareIconOnClock("https://www.themoviedb.org/collection/${movieId}-${titleSplitPlusDash}")
+                    if (titleSplitPlusDash != null) {
+                        shareIconOnClock("https://www.themoviedb.org/collection/${movieId}-${titleSplitPlusDash}")
+                    }
                 }) {
                     ImageWrapper(
                         shouldNotHaveAlpha = true,

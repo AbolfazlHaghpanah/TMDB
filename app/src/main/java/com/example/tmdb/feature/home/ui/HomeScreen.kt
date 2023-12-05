@@ -23,11 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tmdb.R
+import com.example.tmdb.core.ui.component.MovieRow
 import com.example.tmdb.core.ui.shimmer.fakeMovie
 import com.example.tmdb.core.ui.shimmer.ifShimmerActive
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
-import com.example.tmdb.core.ui.component.MovieRow
+import com.example.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import com.example.tmdb.feature.home.ui.component.PagerMovieItem
 import com.example.tmdb.feature.home.ui.component.TMDBPagerIndicator
 import com.example.tmdb.navigation.AppScreens
@@ -87,9 +87,9 @@ private fun HomeScreen(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun HomeScreen(
-    nowPlayingMovies: PersistentList<MovieWithGenreDatabaseWrapper>,
-    popularMovies: PersistentList<MovieWithGenreDatabaseWrapper>,
-    topMovies: PersistentList<MovieWithGenreDatabaseWrapper>,
+    nowPlayingMovies: PersistentList<HomeMovieDomainModel>,
+    popularMovies: PersistentList<HomeMovieDomainModel>,
+    topMovies: PersistentList<HomeMovieDomainModel>,
     pagerState: PagerState,
     onNavigation: (String) -> Unit,
 ) {
@@ -125,15 +125,15 @@ private fun HomeScreen(
                             .clickable {
                                 if (nowPlayingMovies.size >= 5) onNavigation(
                                     AppScreens.Detail.createRoute(
-                                        nowPlayingMovies[page].movie.movieId
+                                        nowPlayingMovies[page].movieId
                                     )
                                 )
                             }
                             .height(pagerSize.value),
                         movie = if (nowPlayingMovies.size >= 5) {
-                            nowPlayingMovies[page].movie
+                            nowPlayingMovies[page]
                         } else {
-                            fakeMovie[0].movie
+                            fakeMovie[0]
                         }
                     )
                 }

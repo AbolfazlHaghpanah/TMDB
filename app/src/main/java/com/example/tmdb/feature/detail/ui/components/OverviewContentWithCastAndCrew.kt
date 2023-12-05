@@ -24,15 +24,15 @@ import coil.compose.AsyncImage
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.example.tmdb.core.utils.imageUrl
-import com.example.tmdb.feature.detail.data.entity.CreditEntity
-import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
+import com.example.tmdb.feature.detail.domain.model.CastOrCrewDomainModel
+import com.example.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
-fun OverviewContentWithCastAndCrew(movieDetail: DetailMovieWithAllRelations) {
+fun OverviewContentWithCastAndCrew(movieDetailDomainModel: MovieDetailDomainModel) {
     Text(
-        text = movieDetail.detailEntity.overview,
+        text = movieDetailDomainModel.overview,
         color = TMDBTheme.colors.whiteGray,
         style = TMDBTheme.typography.subtitle2,
         modifier = Modifier.padding(horizontal = 24.dp)
@@ -49,16 +49,16 @@ fun OverviewContentWithCastAndCrew(movieDetail: DetailMovieWithAllRelations) {
             )
     )
     val castAndCrewCombinedList =
-        movieDetail.credits?.toMutableList()
-    if ((castAndCrewCombinedList?.size ?: 0) > 0) {
-        castAndCrewCombinedList?.let { CastCrewLazyRow(it.toPersistentList()) }
+        movieDetailDomainModel.credits.toMutableList()
+    if ((castAndCrewCombinedList.size) > 0) {
+        CastCrewLazyRow(castAndCrewCombinedList.toPersistentList())
     }
 }
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun CastCrewLazyRow(
-    castOrCrewElements: PersistentList<CreditEntity>
+    castOrCrewDomainModelElements: PersistentList<CastOrCrewDomainModel>
 ) {
 
     LazyRow(
@@ -67,7 +67,7 @@ private fun CastCrewLazyRow(
             top = 16.dp
         )
     ) {
-        items(castOrCrewElements) { castOrCrew ->
+        items(castOrCrewDomainModelElements) { castOrCrew ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)

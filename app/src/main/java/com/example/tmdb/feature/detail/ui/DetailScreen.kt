@@ -1,5 +1,6 @@
 package com.example.tmdb.feature.detail.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,9 +24,10 @@ import androidx.navigation.NavController
 import com.example.tmdb.R
 import com.example.tmdb.core.ui.component.MovieRow
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.feature.detail.data.relation.DetailMovieWithAllRelations
+import com.example.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import com.example.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.example.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
+import com.example.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import com.example.tmdb.navigation.AppScreens
 import kotlinx.collections.immutable.toPersistentList
 
@@ -48,7 +50,7 @@ private fun DetailScreen(
 
     val onFavoriteIconClick = remember {
         {
-            if (movieDetail?.favorite == null) detailViewModel.addToFavorite()
+            if (movieDetail?.isFavorite == false) detailViewModel.addToFavorite()
             else detailViewModel.removeFromFavorite()
         }
     }
@@ -60,7 +62,7 @@ private fun DetailScreen(
     }
 
     DetailScreen(
-        movieDetail = movieDetail,
+        movieDetailDomainModel = movieDetail,
         isLoading = isLoading,
         onBackArrowClick = remember { { navController.navigateUp() } },
         onSimilarItemClick = remember { { navController.navigate(AppScreens.Detail.createRoute(it)) } },
@@ -71,7 +73,7 @@ private fun DetailScreen(
 
 @Composable
 private fun DetailScreen(
-    movieDetail: DetailMovieWithAllRelations?,
+    movieDetailDomainModel: MovieDetailDomainModel?,
     isLoading: Boolean,
     onBackArrowClick: () -> Unit,
     onSimilarItemClick: (Int) -> Unit,
@@ -85,12 +87,12 @@ private fun DetailScreen(
         modifier = Modifier.background(TMDBTheme.colors.background)
     ) { paddingValues ->
 
-        if (isLoading && movieDetail == null) {
+        if (isLoading && movieDetailDomainModel == null) {
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth()
             )
         } else {
-            movieDetail?.let { movieDetail ->
+            movieDetailDomainModel?.let { movieDetail ->
                 Column(
                     modifier = Modifier
                         .background(TMDBTheme.colors.background)
@@ -104,12 +106,21 @@ private fun DetailScreen(
 
                     OverviewContentWithCastAndCrew(movieDetail)
 
-                    movieDetail.similarMovies?.let { similarMovieWithGenres ->
+                    if (movieDetail.similar.isNotEmpty()) {
+                        Log.d("test", "awdsnsdfa")
                         MovieRow(
                             onClick = onSimilarItemClick,
                             title = stringResource(R.string.similar_movies),
-                            movies = similarMovieWithGenres.map { it.toMovieWithGenreDataBaseWrapper() }
-                                .toPersistentList()
+                            movies = movieDetail.similar.map {
+                                HomeMovieDomainModel(
+                                    title = it.title,
+                                    voteAverage = it.voteAverage.toDouble(),
+                                    posterPath = it.posterPath ?: "",
+                                    movieId = it.id,
+                                    genres = it.genreIds,
+                                    backdropPath = it.posterPath ?: ""
+                                )
+                            }.toPersistentList()
                         )
                     }
                 }

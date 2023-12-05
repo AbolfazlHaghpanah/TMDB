@@ -28,13 +28,13 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.tmdb.core.ui.component.TextIcon
 import com.example.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.example.tmdb.core.utils.MovieWithGenreDatabaseWrapper
 import com.example.tmdb.core.utils.imageUrl
+import com.example.tmdb.feature.favorite.domain.model.FavoriteMovieDomainModel
 
 @Composable
 fun MovieItems(
     modifier: Modifier = Modifier,
-    movie: MovieWithGenreDatabaseWrapper,
+    movie: FavoriteMovieDomainModel,
     onDelete: () -> Unit
 ) {
     Row(
@@ -48,12 +48,12 @@ fun MovieItems(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        ImageSection(image = movie.movie.backdropPath)
+        ImageSection(image = movie.backdropPath)
 
         InfoSection(
-            title = movie.movie.title,
-            genres = movie.genres.joinToString(separator = "|") { it.genreName },
-            vote = String.format("%.1f", movie.movie.voteAverage),
+            title = movie.title,
+            genres = movie.genres,
+            vote = String.format("%.1f", movie.voteAverage),
             onDelete = onDelete
         )
     }

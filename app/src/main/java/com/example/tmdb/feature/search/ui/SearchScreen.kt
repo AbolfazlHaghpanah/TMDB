@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.tmdb.core.network.Result
-import com.example.tmdb.feature.search.network.json.SearchResultElement
+import com.example.tmdb.core.utils.Result
+import com.example.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainModel
 import com.example.tmdb.feature.search.ui.component.LoadingSection
 import com.example.tmdb.feature.search.ui.component.NoSearchResultSection
 import com.example.tmdb.feature.search.ui.component.SearchResults
@@ -27,8 +27,8 @@ import com.example.tmdb.navigation.AppScreens
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
-@NonRestartableComposable
 @Composable
+@NonRestartableComposable
 fun SearchScreen(
     navController: NavController
 ) {
@@ -43,22 +43,17 @@ private fun SearchScreen(
 ) {
     val searchResult by searchViewModel.searchResult.collectAsStateWithLifecycle()
     val apiResult by searchViewModel.apiResult.collectAsStateWithLifecycle()
+
     LaunchedEffect(apiResult) {
         searchViewModel.showLastSnackBar()
     }
-
 
     SearchScreen(
         apiResult = apiResult,
         searchResult = searchResult.toPersistentList(),
         onSearch = remember {
             { newSearchString ->
-                searchViewModel.getSearchResults(newSearchString)
-            }
-        },
-        getMovieGenres = remember {
-            { genreIds ->
-                searchViewModel.getRelatedGenres(genreIds)
+                searchViewModel.search(newSearchString)
             }
         },
         onSearchElementClick = remember {
@@ -72,9 +67,8 @@ private fun SearchScreen(
 @Composable
 private fun SearchScreen(
     apiResult: Result?,
-    searchResult: PersistentList<SearchResultElement>,
+    searchResult: PersistentList<SearchMovieWithGenreDomainModel>,
     onSearch: (String) -> Unit,
-    getMovieGenres: (List<Int>) -> String,
     onSearchElementClick: (Int) -> Unit
 ) {
 
@@ -101,7 +95,7 @@ private fun SearchScreen(
             LoadingSection()
         } else {
             if (searchResult.isNotEmpty()) {
-                SearchResults(searchResult, getMovieGenres, onSearchElementClick)
+                SearchResults(searchResult, onSearchElementClick)
             } else if (searchString != "" && apiResult !is Result.Error) {
                 NoSearchResultSection()
             }
