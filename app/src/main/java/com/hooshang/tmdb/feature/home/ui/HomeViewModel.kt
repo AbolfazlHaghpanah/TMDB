@@ -1,15 +1,13 @@
 package com.hooshang.tmdb.feature.home.ui
 
 import androidx.compose.material.SnackbarDuration
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hooshang.tmdb.core.ui.BaseViewModel
 import com.hooshang.tmdb.core.utils.Result.Error
 import com.hooshang.tmdb.core.utils.Result.Success
-import com.hooshang.tmdb.core.utils.resultWrapper
 import com.hooshang.tmdb.core.utils.SnackBarManager
 import com.hooshang.tmdb.core.utils.SnackBarMassage
 import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
-import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import com.hooshang.tmdb.feature.home.domain.use_case.HomeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,19 +21,11 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val snackBarManager: SnackBarManager,
     private val homeUseCase: HomeUseCase
-) : ViewModel() {
+) : BaseViewModel<HomeAction, HomeState, HomeEffect>() {
 
-    private val _nowPlayingMovies =
-        MutableStateFlow<List<HomeMovieDomainModel>>(emptyList())
-    val nowPlayingMovies = _nowPlayingMovies.asStateFlow()
+//    private val _homeState = MutableStateFlow(setInitialState())
+//    val homeState = _homeState.asStateFlow()
 
-    private val _popularMovies =
-        MutableStateFlow<List<HomeMovieDomainModel>>(emptyList())
-    val popularMovies = _popularMovies.asStateFlow()
-
-    private val _topMovies =
-        MutableStateFlow<List<HomeMovieDomainModel>>(emptyList())
-    val topMovies = _topMovies.asStateFlow()
 
     private val _snackBarMassage = MutableStateFlow<SnackBarMassage?>(null)
 
@@ -44,6 +34,12 @@ class HomeViewModel @Inject constructor(
         observeTopMovies()
         observeNowPlaying()
         observePopularMovies()
+    }
+
+    override fun onAction(action: HomeAction) {}
+
+    override fun setInitialState(): HomeState {
+        return HomeState()
     }
 
     suspend fun showLastSnackBar() {
@@ -59,9 +55,7 @@ class HomeViewModel @Inject constructor(
                 .catch {
                     sendDataBaseError(it)
                 }.collect { movies ->
-                    _nowPlayingMovies.emit(
-                        movies.map { it }
-                    )
+                    setState { copy(nowPlayingMovies = movies) }
                 }
 
         }
@@ -76,8 +70,8 @@ class HomeViewModel @Inject constructor(
                 .catch {
                     sendDataBaseError(it)
                 }
-                .collect {
-                    _popularMovies.emit(it)
+                .collect { movies ->
+                    setState { copy(popularMovies = movies) }
                 }
         }
         getPopular()
@@ -89,8 +83,8 @@ class HomeViewModel @Inject constructor(
                 .catch {
                     sendDataBaseError(it)
                 }
-                .collect {
-                    _topMovies.emit(it)
+                .collect { movies ->
+                    setState { copy(topRatedMovies = movies) }
                 }
         }
         getTopMovies()
