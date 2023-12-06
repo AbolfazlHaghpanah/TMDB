@@ -14,7 +14,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -26,12 +25,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.hooshang.tmdb.feature.favorite.domain.model.FavoriteMovieDomainModel
 import com.hooshang.tmdb.feature.favorite.ui.component.EmptyIcon
 import com.hooshang.tmdb.feature.favorite.ui.component.MovieItems
 import com.hooshang.tmdb.navigation.AppScreens
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun FavoriteScreen(
@@ -48,37 +44,37 @@ private fun FavoriteScreen(
     navController: NavController,
     viewModel: FavoriteViewModel
 ) {
-    val favoriteMovies by viewModel.favoriteMovieList.collectAsState()
+    val favoriteState by viewModel.state.collectAsState()
 
-    val onDeleteMovie: (Int) -> Unit = remember {
-        {
-            navController.navigate(AppScreens.BottomSheet.createRoute(it))
+    val onAction: (FavoriteActions) -> Unit = remember {
+        { actions ->
+            when (actions) {
+                is FavoriteActions.OpenBottomSheet -> {
+                    navController.navigate(AppScreens.BottomSheet.createRoute(actions.id))
+                }
+
+                is FavoriteActions.NavigateToDetails -> {
+                    navController.navigate(AppScreens.Detail.createRoute(actions.id))
+                }
+
+                else -> {
+                    viewModel.onAction(actions)
+                }
+            }
         }
-    }
-
-    val onClickAction: (Int) -> Unit = remember {
-        {
-            navController.navigate(AppScreens.Detail.createRoute(it))
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.onTryAgain()
     }
 
     FavoriteScreen(
-        movies = favoriteMovies.toPersistentList(),
-        onDeleteMovie = onDeleteMovie,
-        onClickAction = onClickAction
+        favoriteState = favoriteState,
+        onAction = onAction
     )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun FavoriteScreen(
-    movies: PersistentList<FavoriteMovieDomainModel>,
-    onDeleteMovie: (Int) -> Unit,
-    onClickAction: (Int) -> Unit
+    favoriteState: FavoriteState,
+    onAction: (FavoriteActions) -> Unit
 ) {
     Scaffold(
         modifier = Modifier
@@ -98,7 +94,7 @@ private fun FavoriteScreen(
         }
     ) { paddingValues ->
 
-        if (movies.isEmpty()) {
+        if (favoriteState.movies.isEmpty()) {
             EmptyIcon()
         } else {
 
@@ -113,16 +109,16 @@ private fun FavoriteScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(
-                    items = movies,
+                    items = favoriteState.movies,
                     key = { it.id }
                 ) { movie ->
                     MovieItems(
                         modifier = Modifier
                             .animateItemPlacement()
-                            .clickable { onClickAction(movie.id) },
+                            .clickable { onAction(FavoriteActions.NavigateToDetails(movie.id)) },
                         movie = movie,
                         onDelete = {
-                            onDeleteMovie(movie.id)
+                            onAction(FavoriteActions.OpenBottomSheet(movie.id))
                         }
                     )
                 }

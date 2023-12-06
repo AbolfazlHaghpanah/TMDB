@@ -29,12 +29,12 @@ import coil.compose.AsyncImage
 import com.hooshang.tmdb.core.ui.component.TextIcon
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.core.utils.imageUrl
-import com.hooshang.tmdb.feature.favorite.domain.model.FavoriteMovieDomainModel
+import com.hooshang.tmdb.feature.favorite.ui.FavoriteMovie
 
 @Composable
 fun MovieItems(
     modifier: Modifier = Modifier,
-    movie: FavoriteMovieDomainModel,
+    movie: FavoriteMovie,
     onDelete: () -> Unit
 ) {
     Row(
