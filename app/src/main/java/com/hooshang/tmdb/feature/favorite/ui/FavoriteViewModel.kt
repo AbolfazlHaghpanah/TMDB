@@ -1,17 +1,18 @@
 package com.hooshang.tmdb.feature.favorite.ui
 
 import androidx.compose.material.SnackbarDuration
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hooshang.tmdb.core.ui.BaseViewModel
 import com.hooshang.tmdb.core.utils.SnackBarManager
 import com.hooshang.tmdb.core.utils.SnackBarMassage
 import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
 import com.hooshang.tmdb.feature.favorite.domain.model.FavoriteMovieDomainModel
 import com.hooshang.tmdb.feature.favorite.domain.use_case.FavoriteUseCase
+import com.hooshang.tmdb.feature.favorite.ui.contracts.FavoriteActions
+import com.hooshang.tmdb.feature.favorite.ui.contracts.FavoriteState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,18 +21,24 @@ import javax.inject.Inject
 class FavoriteViewModel @Inject constructor(
     private val favoriteUseCase: FavoriteUseCase,
     private val snackBarManager: SnackBarManager
-) : ViewModel() {
-
-    private val _favoriteMovieList =
-        MutableStateFlow<List<FavoriteMovieDomainModel>>(emptyList())
-
-    val favoriteMovieList = _favoriteMovieList.asStateFlow()
+) : BaseViewModel<FavoriteActions, FavoriteState>() {
 
     init {
         observeFavoriteMovies()
     }
 
-    fun onTryAgain() {
+    override fun onAction(action: FavoriteActions) {
+        when (action) {
+            is FavoriteActions.TryAgain -> onTryAgain()
+            else -> {}
+        }
+    }
+
+    override fun setInitialState(): FavoriteState {
+        return FavoriteState()
+    }
+
+    private fun onTryAgain() {
         viewModelScope.launch {
             snackBarManager.dismissSnackBar()
         }
@@ -52,9 +59,13 @@ class FavoriteViewModel @Inject constructor(
                             snackBarActionLabel = "Try Again"
                         )
                     )
-                }.collect {
-                    _favoriteMovieList.emit(it)
+                }.collect { domainModel ->
+                    setState { domainModel.toFavoriteState() }
                 }
         }
+    }
+
+    private fun List<FavoriteMovieDomainModel>.toFavoriteState(): FavoriteState {
+        return FavoriteState(movies = this.toPersistentList())
     }
 }

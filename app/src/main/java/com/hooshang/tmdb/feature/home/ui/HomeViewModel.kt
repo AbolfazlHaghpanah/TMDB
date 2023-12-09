@@ -1,20 +1,19 @@
 package com.hooshang.tmdb.feature.home.ui
 
 import androidx.compose.material.SnackbarDuration
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hooshang.tmdb.core.ui.BaseViewModel
 import com.hooshang.tmdb.core.utils.Result.Error
 import com.hooshang.tmdb.core.utils.Result.Success
-import com.hooshang.tmdb.core.utils.resultWrapper
 import com.hooshang.tmdb.core.utils.SnackBarManager
 import com.hooshang.tmdb.core.utils.SnackBarMassage
 import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
-import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import com.hooshang.tmdb.feature.home.domain.use_case.HomeUseCase
+import com.hooshang.tmdb.feature.home.ui.contracts.HomeAction
+import com.hooshang.tmdb.feature.home.ui.contracts.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,19 +22,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val snackBarManager: SnackBarManager,
     private val homeUseCase: HomeUseCase
-) : ViewModel() {
-
-    private val _nowPlayingMovies =
-        MutableStateFlow<List<HomeMovieDomainModel>>(emptyList())
-    val nowPlayingMovies = _nowPlayingMovies.asStateFlow()
-
-    private val _popularMovies =
-        MutableStateFlow<List<HomeMovieDomainModel>>(emptyList())
-    val popularMovies = _popularMovies.asStateFlow()
-
-    private val _topMovies =
-        MutableStateFlow<List<HomeMovieDomainModel>>(emptyList())
-    val topMovies = _topMovies.asStateFlow()
+) : BaseViewModel<HomeAction, HomeState>() {
 
     private val _snackBarMassage = MutableStateFlow<SnackBarMassage?>(null)
 
@@ -46,7 +33,22 @@ class HomeViewModel @Inject constructor(
         observePopularMovies()
     }
 
-    suspend fun showLastSnackBar() {
+    override fun onAction(action: HomeAction) {
+        when (action) {
+            is HomeAction.ShowLastSnackBar -> {
+                viewModelScope.launch {
+                    showLastSnackBar()
+                }
+            }
+            else -> {}
+        }
+    }
+
+    override fun setInitialState(): HomeState {
+        return HomeState()
+    }
+
+    private suspend fun showLastSnackBar() {
         snackBarManager.sendMessage(
             _snackBarMassage.value
         )
@@ -59,9 +61,7 @@ class HomeViewModel @Inject constructor(
                 .catch {
                     sendDataBaseError(it)
                 }.collect { movies ->
-                    _nowPlayingMovies.emit(
-                        movies.map { it }
-                    )
+                    setState { copy(nowPlayingMovies = movies) }
                 }
 
         }
@@ -76,8 +76,8 @@ class HomeViewModel @Inject constructor(
                 .catch {
                     sendDataBaseError(it)
                 }
-                .collect {
-                    _popularMovies.emit(it)
+                .collect { movies ->
+                    setState { copy(popularMovies = movies) }
                 }
         }
         getPopular()
@@ -89,8 +89,8 @@ class HomeViewModel @Inject constructor(
                 .catch {
                     sendDataBaseError(it)
                 }
-                .collect {
-                    _topMovies.emit(it)
+                .collect { movies ->
+                    setState { copy(topRatedMovies = movies) }
                 }
         }
         getTopMovies()
@@ -185,7 +185,7 @@ class HomeViewModel @Inject constructor(
     private fun dismissSnackBar() {
         viewModelScope.launch {
             _snackBarMassage.emit(
-                _snackBarMassage.value?.copy(isHaveToShow = false)
+                _snackBarMassage.value?.copy(shouldShow = false)
             )
         }
     }

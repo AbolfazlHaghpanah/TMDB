@@ -58,7 +58,7 @@ import java.math.RoundingMode
 
 @Composable
 fun DetailTopWithGradient(
-    movieDetailDomainModel: MovieDetailDomainModel,
+    detailsState: MovieDetailDomainModel,
     onBackArrowClick: () -> Unit,
     onFavoriteIconClick: () -> Unit
 ) {
@@ -67,22 +67,22 @@ fun DetailTopWithGradient(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        BackgroundImage(movieDetailDomainModel.posterPath)
+        BackgroundImage(detailsState.posterPath)
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            TopBar(onBackArrowClick, movieDetailDomainModel, onFavoriteIconClick)
+            TopBar(onBackArrowClick, detailsState, onFavoriteIconClick)
 
             Row(
                 modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
             ) {
-                ForegroundImage(movieDetailDomainModel.posterPath)
+                ForegroundImage(detailsState.posterPath)
             }
 
-            MovieInfo(movieDetailDomainModel)
+            MovieInfo(detailsState)
 
             Text(
                 text = stringResource(R.string.overview),

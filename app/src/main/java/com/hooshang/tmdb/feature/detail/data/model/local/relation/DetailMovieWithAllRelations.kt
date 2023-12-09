@@ -73,19 +73,6 @@ data class SimilarMovieWithGenre(
     )
     val genres: List<GenreEntity>
 ) {
-    //    fun toMovieWithGenreDataBaseWrapper(): MovieWithGenreDatabaseWrapper {
-//        return MovieWithGenreDatabaseWrapper(
-//            movie = MovieDatabaseWrapper(
-//                movieId = similarMovie.id,
-//                backdropPath = similarMovie.backdropPath,
-//                voteAverage = similarMovie.voteAverage,
-//                posterPath = similarMovie.posterPath,
-//                releaseDate = "",
-//                title = similarMovie.title
-//            ),
-//            genres = genres.toPersistentList()
-//        )
-//    }
     fun toSimilarMovie(): SimilarMovieDomainModel = SimilarMovieDomainModel(
         id = similarMovie.id,
         posterPath = similarMovie.posterPath,

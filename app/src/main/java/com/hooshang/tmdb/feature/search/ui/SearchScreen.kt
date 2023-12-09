@@ -17,15 +17,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.hooshang.tmdb.core.utils.Result
-import com.hooshang.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainModel
 import com.hooshang.tmdb.feature.search.ui.component.LoadingSection
 import com.hooshang.tmdb.feature.search.ui.component.NoSearchResultSection
 import com.hooshang.tmdb.feature.search.ui.component.SearchResults
 import com.hooshang.tmdb.feature.search.ui.component.TopSearchSection
+import com.hooshang.tmdb.feature.search.ui.contracts.SearchAction
+import com.hooshang.tmdb.feature.search.ui.contracts.SearchState
 import com.hooshang.tmdb.navigation.AppScreens
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 @NonRestartableComposable
@@ -41,35 +39,36 @@ private fun SearchScreen(
     navController: NavController,
     searchViewModel: SearchViewModel
 ) {
-    val searchResult by searchViewModel.searchResult.collectAsStateWithLifecycle()
-    val apiResult by searchViewModel.apiResult.collectAsStateWithLifecycle()
+    val searchState by searchViewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(apiResult) {
-        searchViewModel.showLastSnackBar()
+    val onAction: (action: SearchAction) -> Unit = remember {
+        { action ->
+            when (action) {
+                is SearchAction.NavigateToDetail -> navController.navigate(
+                    AppScreens.Detail.createRoute(
+                        action.id
+                    )
+                )
+
+                else -> searchViewModel.onAction(action)
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = searchState.isLoading, key2 = searchState.isError) {
+        onAction(SearchAction.ShowLastSnackBar)
     }
 
     SearchScreen(
-        apiResult = apiResult,
-        searchResult = searchResult.toPersistentList(),
-        onSearch = remember {
-            { newSearchString ->
-                searchViewModel.search(newSearchString)
-            }
-        },
-        onSearchElementClick = remember {
-            {
-                navController.navigate(AppScreens.Detail.createRoute(it))
-            }
-        }
+        searchState = searchState,
+        onAction = onAction
     )
 }
 
 @Composable
 private fun SearchScreen(
-    apiResult: Result?,
-    searchResult: PersistentList<SearchMovieWithGenreDomainModel>,
-    onSearch: (String) -> Unit,
-    onSearchElementClick: (Int) -> Unit
+    searchState: SearchState,
+    onAction: (SearchAction) -> Unit
 ) {
 
     var searchString by rememberSaveable {
@@ -86,17 +85,17 @@ private fun SearchScreen(
         TopSearchSection(
             searchString = searchString,
             onSearchChange = {
-                onSearch(it)
+                onAction(SearchAction.OnSearch(input = it))
                 searchString = it
             }
         )
 
-        if (apiResult == Result.Loading) {
+        if (searchState.isLoading) {
             LoadingSection()
         } else {
-            if (searchResult.isNotEmpty()) {
-                SearchResults(searchResult, onSearchElementClick)
-            } else if (searchString != "" && apiResult !is Result.Error) {
+            if (searchState.searchResults.isNotEmpty()) {
+                SearchResults(searchState.searchResults, onAction)
+            } else if (searchString != "" && !searchState.isError) {
                 NoSearchResultSection()
             }
         }

@@ -22,20 +22,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.rememberPagerState
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.component.MovieRow
 import com.hooshang.tmdb.core.ui.shimmer.fakeMovie
 import com.hooshang.tmdb.core.ui.shimmer.ifShimmerActive
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import com.hooshang.tmdb.feature.home.ui.component.PagerMovieItem
 import com.hooshang.tmdb.feature.home.ui.component.TMDBPagerIndicator
+import com.hooshang.tmdb.feature.home.ui.contracts.HomeAction
+import com.hooshang.tmdb.feature.home.ui.contracts.HomeState
 import com.hooshang.tmdb.navigation.AppScreens
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 @NonRestartableComposable
@@ -56,30 +56,33 @@ private fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel
 ) {
-    val onNavigation: (String) -> Unit = remember {
-        { route ->
-            navController.navigate(route) {
-                popUpTo(AppScreens.Home.route)
-                launchSingleTop = true
+    val homeState by viewModel.state.collectAsState()
+    val pagerState = rememberPagerState(initialPage = 2)
+
+    val onAction: (HomeAction) -> Unit = remember {
+        { action ->
+            when (action) {
+                is HomeAction.NavigateToDetail ->
+                    navController.navigate(AppScreens.Detail.createRoute(action.id)) {
+                        popUpTo(AppScreens.Home.route)
+                        launchSingleTop = true
+                    }
+
+                else -> {
+                    viewModel.onAction(action)
+                }
             }
         }
     }
 
     LaunchedEffect(Unit) {
-        viewModel.showLastSnackBar()
+        onAction(HomeAction.ShowLastSnackBar)
     }
 
-    val nowPlayingMovies by viewModel.nowPlayingMovies.collectAsState()
-    val popularMovies by viewModel.popularMovies.collectAsState()
-    val topRated by viewModel.topMovies.collectAsState()
-    val pagerState = rememberPagerState(initialPage = 2)
-
     HomeScreen(
-        nowPlayingMovies = nowPlayingMovies.toPersistentList(),
-        popularMovies = popularMovies.toPersistentList(),
-        topMovies = topRated.toPersistentList(),
+        homeState = homeState,
         pagerState = pagerState,
-        onNavigation = onNavigation,
+        onAction = onAction,
     )
 }
 
@@ -87,11 +90,9 @@ private fun HomeScreen(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun HomeScreen(
-    nowPlayingMovies: PersistentList<HomeMovieDomainModel>,
-    popularMovies: PersistentList<HomeMovieDomainModel>,
-    topMovies: PersistentList<HomeMovieDomainModel>,
+    homeState: HomeState,
     pagerState: PagerState,
-    onNavigation: (String) -> Unit,
+    onAction: (HomeAction) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier.statusBarsPadding()
@@ -103,7 +104,7 @@ private fun HomeScreen(
                     .padding(top = 24.dp)
                     .height(180.dp),
                 state = pagerState,
-                count = if (nowPlayingMovies.size > 5) 5 else fakeMovie.size,
+                count = if (homeState.nowPlayingMovies.size > 5) 5 else fakeMovie.size,
                 itemSpacing = 12.dp,
                 contentPadding = PaddingValues(horizontal = 40.dp)
             ) { page ->
@@ -119,19 +120,17 @@ private fun HomeScreen(
                 ) {
 
                     PagerMovieItem(
-                        isLoading = nowPlayingMovies.size <= 5,
+                        isLoading = homeState.nowPlayingMovies.size <= 5,
                         modifier = Modifier
                             .clip(TMDBTheme.shapes.large)
                             .clickable {
-                                if (nowPlayingMovies.size >= 5) onNavigation(
-                                    AppScreens.Detail.createRoute(
-                                        nowPlayingMovies[page].movieId
-                                    )
+                                if (homeState.nowPlayingMovies.size >= 5) onAction(
+                                    HomeAction.NavigateToDetail(id = homeState.nowPlayingMovies[page].movieId)
                                 )
                             }
                             .height(pagerSize.value),
-                        movie = if (nowPlayingMovies.size >= 5) {
-                            nowPlayingMovies[page]
+                        movie = if (homeState.nowPlayingMovies.size >= 5) {
+                            homeState.nowPlayingMovies[page]
                         } else {
                             fakeMovie[0]
                         }
@@ -143,7 +142,7 @@ private fun HomeScreen(
         item {
             TMDBPagerIndicator(
                 modifier = Modifier
-                    .ifShimmerActive(nowPlayingMovies.isEmpty()),
+                    .ifShimmerActive(homeState.nowPlayingMovies.isEmpty()),
                 pageCount = pagerState.pageCount,
                 selectedPage = pagerState.currentPage
             )
@@ -152,20 +151,20 @@ private fun HomeScreen(
         item {
             MovieRow(
                 onClick = { id ->
-                    onNavigation(AppScreens.Detail.createRoute(id))
+                    onAction(HomeAction.NavigateToDetail(id = id))
                 },
                 title = stringResource(R.string.most_popular),
-                movies = popularMovies
+                movies = homeState.popularMovies.toPersistentList()
             )
         }
 
         item {
             MovieRow(
                 onClick = { id ->
-                    onNavigation(AppScreens.Detail.createRoute(id))
+                    onAction(HomeAction.NavigateToDetail(id = id))
                 },
                 title = stringResource(R.string.top_rated),
-                movies = topMovies
+                movies = homeState.topRatedMovies.toPersistentList()
             )
         }
     }
