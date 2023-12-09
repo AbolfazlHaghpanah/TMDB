@@ -13,7 +13,7 @@ data class MovieDetailResponse(
     @SerialName("vote_average")
     val voteAverage: Float,
     @SerialName("poster_path")
-    val posterPath: String,
+    val posterPath: String?,
     @SerialName("release_date")
     val releaseDate: String,
     val runtime: Int,

@@ -45,7 +45,7 @@ class DetailRepositoryImpl @Inject constructor(
         localDataSource.addMovie(
             MovieEntity(
                 id = movieDetailDto.id,
-                posterPath = movieDetailDto.posterPath,
+                posterPath = movieDetailDto.posterPath ?: "",
                 voteAverage = movieDetailDto.voteAverage.toDouble(),
                 backdropPath = "",
                 title = movieDetailDto.title
