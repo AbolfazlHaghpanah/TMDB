@@ -47,7 +47,7 @@ class DetailRepositoryImpl @Inject constructor(
                 id = movieDetailDto.id,
                 posterPath = movieDetailDto.posterPath,
                 voteAverage = movieDetailDto.voteAverage.toDouble(),
-                backdropPath = "",
+                backdropPath = movieDetailDto.backdropPath ?: "",
                 title = movieDetailDto.title
             )
         )
@@ -93,7 +93,7 @@ class DetailRepositoryImpl @Inject constructor(
                 MovieEntity(
                     id = it.id,
                     title = it.title,
-                    backdropPath = "",
+                    backdropPath = it.backdropPath ?: "",
                     voteAverage = it.voteAverage.toDouble(),
                     posterPath = it.posterPath ?: ""
                 )
