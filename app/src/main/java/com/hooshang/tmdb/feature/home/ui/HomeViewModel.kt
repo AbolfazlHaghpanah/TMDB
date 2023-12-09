@@ -49,7 +49,7 @@ class HomeViewModel @Inject constructor(
         return HomeState()
     }
 
-    suspend fun showLastSnackBar() {
+    private suspend fun showLastSnackBar() {
         snackBarManager.sendMessage(
             _snackBarMassage.value
         )
