@@ -7,7 +7,7 @@ import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 @Immutable
 data class DetailsState(
     val movie: MovieDetailDomainModel = MovieDetailDomainModel(
-        id = 0,
+        id = -1,
         title = "",
         overview = "",
         voteAverage = 0.0,

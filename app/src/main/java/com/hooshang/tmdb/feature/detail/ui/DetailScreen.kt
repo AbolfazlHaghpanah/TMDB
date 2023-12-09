@@ -90,11 +90,11 @@ private fun DetailScreen(
         modifier = Modifier.background(TMDBTheme.colors.background)
     ) { paddingValues ->
 
-        if (detailsState.isLoading && detailsState.movie.id == -1) {
+        if (detailsState.isLoading) {
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth()
             )
-        } else {
+        } else if (detailsState.movie.id != -1) {
             Column(
                 modifier = Modifier
                     .background(TMDBTheme.colors.background)
