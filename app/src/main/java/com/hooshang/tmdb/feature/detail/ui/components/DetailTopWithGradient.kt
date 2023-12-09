@@ -53,12 +53,12 @@ import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.component.TextIcon
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.core.utils.imageUrl
-import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
+import com.hooshang.tmdb.feature.detail.ui.contract.DetailsState
 import java.math.RoundingMode
 
 @Composable
 fun DetailTopWithGradient(
-    movieDetailDomainModel: MovieDetailDomainModel,
+    detailsState: DetailsState,
     onBackArrowClick: () -> Unit,
     onFavoriteIconClick: () -> Unit
 ) {
@@ -67,22 +67,22 @@ fun DetailTopWithGradient(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        BackgroundImage(movieDetailDomainModel.posterPath)
+        BackgroundImage(detailsState.posterPath)
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            TopBar(onBackArrowClick, movieDetailDomainModel, onFavoriteIconClick)
+            TopBar(onBackArrowClick, detailsState, onFavoriteIconClick)
 
             Row(
                 modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
             ) {
-                ForegroundImage(movieDetailDomainModel.posterPath)
+                ForegroundImage(detailsState.posterPath)
             }
 
-            MovieInfo(movieDetailDomainModel)
+            MovieInfo(detailsState)
 
             Text(
                 text = stringResource(R.string.overview),
@@ -137,7 +137,7 @@ private fun BackgroundImage(movieDetailPosterPath: String) {
 }
 
 @Composable
-private fun MovieInfo(movieDetailDomainModel: MovieDetailDomainModel) {
+private fun MovieInfo(movieDetailDomainModel: DetailsState) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier
@@ -197,7 +197,7 @@ private fun MovieInfo(movieDetailDomainModel: MovieDetailDomainModel) {
 @Composable
 private fun TopBar(
     onBackArrowClick: () -> Unit,
-    movieDetailDomainModel: MovieDetailDomainModel,
+    movieDetailDomainModel: DetailsState,
     onFavoriteIconClick: () -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }

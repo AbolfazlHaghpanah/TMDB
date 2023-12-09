@@ -2,7 +2,7 @@ package com.hooshang.tmdb.feature.detail.domain.usecase
 
 import com.hooshang.tmdb.feature.detail.domain.repository.DetailRepository
 
-class FetchDetail(
+class FetchDetailUseCase(
     private val detailRepository: DetailRepository
 ) {
     suspend operator fun invoke(id: Int) {

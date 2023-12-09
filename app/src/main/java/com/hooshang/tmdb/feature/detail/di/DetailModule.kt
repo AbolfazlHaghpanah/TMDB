@@ -6,9 +6,9 @@ import com.hooshang.tmdb.feature.detail.data.source.remote.api.DetailApi
 import com.hooshang.tmdb.feature.detail.domain.repository.DetailRepository
 import com.hooshang.tmdb.feature.detail.domain.usecase.AddFavoriteUseCase
 import com.hooshang.tmdb.feature.detail.domain.usecase.DetailUseCase
-import com.hooshang.tmdb.feature.detail.domain.usecase.FetchDetail
-import com.hooshang.tmdb.feature.detail.domain.usecase.ObserveDetail
-import com.hooshang.tmdb.feature.detail.domain.usecase.RemoveFavoriteUseCase
+import com.hooshang.tmdb.feature.detail.domain.usecase.FetchDetailUseCase
+import com.hooshang.tmdb.feature.detail.domain.usecase.ObserveDetailUseCase
+import com.hooshang.tmdb.feature.favorite.domain.use_case.FavoriteUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,14 +32,16 @@ object DetailModule {
         return appDatabase.DetailDao()
     }
 
-    @Singleton
     @Provides
-    fun provideUseCase(detailRepository: DetailRepository): DetailUseCase {
+    fun provideUseCase(
+        detailRepository: DetailRepository,
+        favoriteUseCase: FavoriteUseCase
+    ): DetailUseCase {
         return DetailUseCase(
             addFavoriteUseCase = AddFavoriteUseCase(detailRepository),
-            removeFavoriteUseCase = RemoveFavoriteUseCase(detailRepository),
-            fetchDetailUseCase = FetchDetail(detailRepository),
-            observeDetailUseCase = ObserveDetail(detailRepository)
+            removeFavoriteUseCase = favoriteUseCase.deleteFromFavoriteUseCase,
+            fetchDetailUseCase = FetchDetailUseCase(detailRepository),
+            observeDetailUseCase = ObserveDetailUseCase(detailRepository)
         )
     }
 }
