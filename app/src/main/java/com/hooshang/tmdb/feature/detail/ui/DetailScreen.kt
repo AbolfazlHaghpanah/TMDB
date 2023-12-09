@@ -1,6 +1,5 @@
 package com.hooshang.tmdb.feature.detail.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,9 +23,10 @@ import androidx.navigation.NavController
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.component.MovieRow
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import com.hooshang.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.hooshang.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
+import com.hooshang.tmdb.feature.detail.ui.contract.DetailsAction
+import com.hooshang.tmdb.feature.detail.ui.contract.DetailsState
 import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import com.hooshang.tmdb.navigation.AppScreens
 import kotlinx.collections.immutable.toPersistentList
@@ -46,38 +46,41 @@ private fun DetailScreen(
     navController: NavController,
     detailViewModel: DetailViewModel
 ) {
-    val movieDetail by detailViewModel.movieDetail.collectAsStateWithLifecycle()
+    val movieDetail by detailViewModel.state.collectAsStateWithLifecycle()
 
-    val onFavoriteIconClick = remember {
-        {
-            if (movieDetail?.isFavorite == false) detailViewModel.addToFavorite()
-            else detailViewModel.removeFromFavorite()
+    val onAction: (DetailsAction) -> Unit = remember {
+        { action ->
+            when (action) {
+
+                is DetailsAction.NavigateToDetails -> {
+                    navController.navigate(AppScreens.Detail.createRoute(action.id))
+                }
+
+                is DetailsAction.Back -> {
+                    navController.navigateUp()
+                }
+
+                else -> {
+                    detailViewModel.onAction(action)
+                }
+            }
         }
     }
 
-    val isLoading by detailViewModel.isLoading.collectAsStateWithLifecycle()
-
     LaunchedEffect(Unit) {
-        detailViewModel.showLastSnackBar()
+        onAction(DetailsAction.ShowLastSnackBar)
     }
 
     DetailScreen(
-        movieDetailDomainModel = movieDetail,
-        isLoading = isLoading,
-        onBackArrowClick = remember { { navController.navigateUp() } },
-        onSimilarItemClick = remember { { navController.navigate(AppScreens.Detail.createRoute(it)) } },
-        onFavoriteIconClick = onFavoriteIconClick
+        detailsState = movieDetail,
+        onAction = onAction
     )
-
 }
 
 @Composable
 private fun DetailScreen(
-    movieDetailDomainModel: MovieDetailDomainModel?,
-    isLoading: Boolean,
-    onBackArrowClick: () -> Unit,
-    onSimilarItemClick: (Int) -> Unit,
-    onFavoriteIconClick: () -> Unit
+    detailsState: DetailsState,
+    onAction: (DetailsAction) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -87,42 +90,48 @@ private fun DetailScreen(
         modifier = Modifier.background(TMDBTheme.colors.background)
     ) { paddingValues ->
 
-        if (isLoading && movieDetailDomainModel == null) {
+        if (detailsState.isLoading) {
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth()
             )
-        } else {
-            movieDetailDomainModel?.let { movieDetail ->
-                Column(
-                    modifier = Modifier
-                        .background(TMDBTheme.colors.background)
-                        .navigationBarsPadding()
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                        .verticalScroll(scrollState)
-                ) {
+        } else if (detailsState.movie.id != -1) {
+            Column(
+                modifier = Modifier
+                    .background(TMDBTheme.colors.background)
+                    .navigationBarsPadding()
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(scrollState)
+            ) {
 
-                    DetailTopWithGradient(movieDetail, onBackArrowClick, onFavoriteIconClick)
-
-                    OverviewContentWithCastAndCrew(movieDetail)
-
-                    if (movieDetail.similar.isNotEmpty()) {
-                        Log.d("test", "awdsnsdfa")
-                        MovieRow(
-                            onClick = onSimilarItemClick,
-                            title = stringResource(R.string.similar_movies),
-                            movies = movieDetail.similar.map {
-                                HomeMovieDomainModel(
-                                    title = it.title,
-                                    voteAverage = it.voteAverage.toDouble(),
-                                    posterPath = it.posterPath ?: "",
-                                    movieId = it.id,
-                                    genres = it.genreIds,
-                                    backdropPath = it.posterPath ?: ""
-                                )
-                            }.toPersistentList()
+                DetailTopWithGradient(
+                    detailsState = detailsState.movie,
+                    onBackArrowClick = { onAction(DetailsAction.Back) },
+                    onFavoriteIconClick = {
+                        onAction(
+                            if (detailsState.movie.isFavorite) DetailsAction.RemoveFromFavorite
+                            else DetailsAction.AddToFavorite
                         )
                     }
+                )
+
+                OverviewContentWithCastAndCrew(detailsState.movie)
+
+                if (detailsState.movie.similar.isNotEmpty()) {
+                    MovieRow(
+                        onClick = { onAction(DetailsAction.NavigateToDetails(it)) },
+                        title = stringResource(R.string.similar_movies),
+                        movies = detailsState.movie.similar.map {
+                            HomeMovieDomainModel(
+                                title = it.title,
+                                voteAverage = it.voteAverage.toDouble(),
+                                posterPath = it.posterPath ?: "",
+                                movieId = it.id,
+                                genres = it.genreIds,
+                                backdropPath = it.posterPath ?: ""
+                            )
+                        }.toPersistentList()
+                    )
                 }
             }
         }
