@@ -25,12 +25,12 @@ import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.core.utils.imageUrl
 import com.hooshang.tmdb.feature.detail.domain.model.CastOrCrewDomainModel
-import com.hooshang.tmdb.feature.detail.ui.contract.DetailsState
+import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
-fun OverviewContentWithCastAndCrew(movieDetailDomainModel: DetailsState) {
+fun OverviewContentWithCastAndCrew(movieDetailDomainModel: MovieDetailDomainModel) {
     Text(
         text = movieDetailDomainModel.overview,
         color = TMDBTheme.colors.whiteGray,

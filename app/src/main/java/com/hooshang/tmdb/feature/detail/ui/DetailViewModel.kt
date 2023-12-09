@@ -14,7 +14,6 @@ import com.hooshang.tmdb.feature.detail.ui.contract.DetailsAction
 import com.hooshang.tmdb.feature.detail.ui.contract.DetailsEffect
 import com.hooshang.tmdb.feature.detail.ui.contract.DetailsState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
@@ -55,8 +54,8 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 detailUseCase.addFavoriteUseCase(
-                    state.value.id,
-                    state.value.genres.map { it.first }
+                    state.value.movie.id,
+                    state.value.movie.genres.map { it.first }
                 )
             } catch (t: Throwable) {
                 sendDataBaseError(
@@ -154,18 +153,7 @@ class DetailViewModel @Inject constructor(
 
     private fun MovieDetailDomainModel.toDetailState(): DetailsState {
         return DetailsState(
-            id = this.id,
-            title = this.title,
-            overview = this.overview,
-            voteAverage = this.voteAverage,
-            posterPath = this.posterPath,
-            releaseDate = this.releaseDate,
-            runtime = this.runtime,
-            genres = this.genres.toPersistentList(),
-            externalIds = this.externalIds.toPersistentList(),
-            credits = this.credits.toPersistentList(),
-            similar = this.similar.toPersistentList(),
-            isFavorite = this.isFavorite,
+            movie = this,
             isLoading = false
         )
     }

@@ -53,12 +53,12 @@ import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.component.TextIcon
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.core.utils.imageUrl
-import com.hooshang.tmdb.feature.detail.ui.contract.DetailsState
+import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import java.math.RoundingMode
 
 @Composable
 fun DetailTopWithGradient(
-    detailsState: DetailsState,
+    detailsState: MovieDetailDomainModel,
     onBackArrowClick: () -> Unit,
     onFavoriteIconClick: () -> Unit
 ) {
@@ -137,7 +137,7 @@ private fun BackgroundImage(movieDetailPosterPath: String) {
 }
 
 @Composable
-private fun MovieInfo(movieDetailDomainModel: DetailsState) {
+private fun MovieInfo(movieDetailDomainModel: MovieDetailDomainModel) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier
@@ -197,7 +197,7 @@ private fun MovieInfo(movieDetailDomainModel: DetailsState) {
 @Composable
 private fun TopBar(
     onBackArrowClick: () -> Unit,
-    movieDetailDomainModel: DetailsState,
+    movieDetailDomainModel: MovieDetailDomainModel,
     onFavoriteIconClick: () -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }

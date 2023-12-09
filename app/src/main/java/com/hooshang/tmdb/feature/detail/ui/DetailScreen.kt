@@ -1,6 +1,5 @@
 package com.hooshang.tmdb.feature.detail.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -91,7 +90,7 @@ private fun DetailScreen(
         modifier = Modifier.background(TMDBTheme.colors.background)
     ) { paddingValues ->
 
-        if (detailsState.isLoading && detailsState.id == -1) {
+        if (detailsState.isLoading && detailsState.movie.id == -1) {
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth()
             )
@@ -105,23 +104,24 @@ private fun DetailScreen(
                     .verticalScroll(scrollState)
             ) {
 
-                DetailTopWithGradient(detailsState, {
-                    onAction(DetailsAction.Back)
-                }, {
-                    onAction(
-                        if (detailsState.isFavorite) DetailsAction.RemoveFromFavorite
-                        else DetailsAction.AddToFavorite
-                    )
-                })
+                DetailTopWithGradient(
+                    detailsState = detailsState.movie,
+                    onBackArrowClick = { onAction(DetailsAction.Back) },
+                    onFavoriteIconClick = {
+                        onAction(
+                            if (detailsState.movie.isFavorite) DetailsAction.RemoveFromFavorite
+                            else DetailsAction.AddToFavorite
+                        )
+                    }
+                )
 
-                OverviewContentWithCastAndCrew(detailsState)
+                OverviewContentWithCastAndCrew(detailsState.movie)
 
-                if (detailsState.similar.isNotEmpty()) {
-                    Log.d("test", "awdsnsdfa")
+                if (detailsState.movie.similar.isNotEmpty()) {
                     MovieRow(
                         onClick = { onAction(DetailsAction.NavigateToDetails(it)) },
                         title = stringResource(R.string.similar_movies),
-                        movies = detailsState.similar.map {
+                        movies = detailsState.movie.similar.map {
                             HomeMovieDomainModel(
                                 title = it.title,
                                 voteAverage = it.voteAverage.toDouble(),

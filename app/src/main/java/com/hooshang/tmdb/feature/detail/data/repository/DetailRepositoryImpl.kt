@@ -1,13 +1,12 @@
 package com.hooshang.tmdb.feature.detail.data.repository
 
 import com.hooshang.tmdb.core.data.model.local.MovieEntity
-import com.hooshang.tmdb.feature.detail.data.source.local.localdatasource.DetailLocalDataSource
 import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithCreditCrossRef
 import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithGenreCrossRef
 import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
 import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.MovieWithGenreCrossRef
+import com.hooshang.tmdb.feature.detail.data.source.local.localdatasource.DetailLocalDataSource
 import com.hooshang.tmdb.feature.detail.data.source.remote.remotedatasource.DetailRemoteDataSource
-import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import com.hooshang.tmdb.feature.detail.domain.repository.DetailRepository
 import com.hooshang.tmdb.feature.favorite.data.model.local.entity.FavoriteMovieEntity
 import com.hooshang.tmdb.feature.favorite.data.model.local.relation.FavoriteMovieGenreCrossRef
@@ -32,24 +31,6 @@ class DetailRepositoryImpl @Inject constructor(
                 )
             }
             localDataSource.addToFavorite(FavoriteMovieEntity(movieId))
-        }
-
-    override suspend fun removeFromFavorite(movieDetailDomainModel: MovieDetailDomainModel) =
-        withContext(Dispatchers.IO) {
-            movieDetailDomainModel.genres.forEach { genre ->
-                localDataSource.deleteFavoriteMovieGenre(
-                    FavoriteMovieGenreCrossRef(
-                        genreId = genre.first,
-                        movieId = movieDetailDomainModel.id
-                    )
-                )
-            }
-
-            localDataSource.deleteFavorite(
-                FavoriteMovieEntity(
-                    movieId = movieDetailDomainModel.id
-                )
-            )
         }
 
     override suspend fun observeDetailMovieWithAllRelations(id: Int) = withContext(Dispatchers.IO) {
