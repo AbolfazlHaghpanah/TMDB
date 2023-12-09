@@ -18,9 +18,9 @@ abstract class BaseViewModel<A : ViewAction, S : ViewState> : ViewModel() {
     private val _state = MutableStateFlow(this.setInitialState())
     val state = _state.asStateFlow()
 
-    protected fun setState(reducer: S.(S) -> S) {
+    protected fun setState(reducer: S.() -> S) {
         viewModelScope.launch {
-            _state.emit(_state.value.reducer(_state.value))
+            _state.emit(_state.value.reducer())
         }
     }
 
