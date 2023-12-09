@@ -15,7 +15,7 @@ data class MovieDetailResponse(
     @SerialName("backdrop_path")
     val backdropPath: String?,
     @SerialName("poster_path")
-    val posterPath: String,
+    val posterPath: String?,
     @SerialName("release_date")
     val releaseDate: String,
     val runtime: Int,
