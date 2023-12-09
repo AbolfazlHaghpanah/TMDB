@@ -33,6 +33,8 @@ import com.hooshang.tmdb.core.ui.shimmer.ifShimmerActive
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.feature.home.ui.component.PagerMovieItem
 import com.hooshang.tmdb.feature.home.ui.component.TMDBPagerIndicator
+import com.hooshang.tmdb.feature.home.ui.contracts.HomeAction
+import com.hooshang.tmdb.feature.home.ui.contracts.HomeState
 import com.hooshang.tmdb.navigation.AppScreens
 import kotlinx.collections.immutable.toPersistentList
 
@@ -54,6 +56,9 @@ private fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel
 ) {
+    val homeState by viewModel.state.collectAsState()
+    val pagerState = rememberPagerState(initialPage = 2)
+
     val onAction: (HomeAction) -> Unit = remember {
         { action ->
             when (action) {
@@ -62,16 +67,17 @@ private fun HomeScreen(
                         popUpTo(AppScreens.Home.route)
                         launchSingleTop = true
                     }
+
+                else -> {
+                    viewModel.onAction(action)
+                }
             }
         }
     }
 
     LaunchedEffect(Unit) {
-        viewModel.showLastSnackBar()
+        onAction(HomeAction.ShowLastSnackBar)
     }
-
-    val homeState by viewModel.state.collectAsState()
-    val pagerState = rememberPagerState(initialPage = 2)
 
     HomeScreen(
         homeState = homeState,

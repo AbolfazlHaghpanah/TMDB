@@ -9,10 +9,12 @@ import com.hooshang.tmdb.core.utils.SnackBarManager
 import com.hooshang.tmdb.core.utils.SnackBarMassage
 import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
 import com.hooshang.tmdb.feature.home.domain.use_case.HomeUseCase
+import com.hooshang.tmdb.feature.home.ui.contracts.HomeAction
+import com.hooshang.tmdb.feature.home.ui.contracts.HomeEffect
+import com.hooshang.tmdb.feature.home.ui.contracts.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,10 +25,6 @@ class HomeViewModel @Inject constructor(
     private val homeUseCase: HomeUseCase
 ) : BaseViewModel<HomeAction, HomeState, HomeEffect>() {
 
-//    private val _homeState = MutableStateFlow(setInitialState())
-//    val homeState = _homeState.asStateFlow()
-
-
     private val _snackBarMassage = MutableStateFlow<SnackBarMassage?>(null)
 
     init {
@@ -36,7 +34,16 @@ class HomeViewModel @Inject constructor(
         observePopularMovies()
     }
 
-    override fun onAction(action: HomeAction) {}
+    override fun onAction(action: HomeAction) {
+        when (action) {
+            is HomeAction.ShowLastSnackBar -> {
+                viewModelScope.launch {
+                    showLastSnackBar()
+                }
+            }
+            else -> {}
+        }
+    }
 
     override fun setInitialState(): HomeState {
         return HomeState()
