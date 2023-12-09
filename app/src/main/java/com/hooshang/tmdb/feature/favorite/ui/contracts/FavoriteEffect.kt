@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.feature.favorite.ui
+package com.hooshang.tmdb.feature.favorite.ui.contracts
 
 import com.hooshang.tmdb.core.ui.ViewEffect
 

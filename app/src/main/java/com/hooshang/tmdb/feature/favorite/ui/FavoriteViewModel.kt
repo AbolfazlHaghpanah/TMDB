@@ -8,6 +8,9 @@ import com.hooshang.tmdb.core.utils.SnackBarMassage
 import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
 import com.hooshang.tmdb.feature.favorite.domain.model.FavoriteMovieDomainModel
 import com.hooshang.tmdb.feature.favorite.domain.use_case.FavoriteUseCase
+import com.hooshang.tmdb.feature.favorite.ui.contracts.FavoriteActions
+import com.hooshang.tmdb.feature.favorite.ui.contracts.FavoriteEffect
+import com.hooshang.tmdb.feature.favorite.ui.contracts.FavoriteState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
@@ -64,16 +67,6 @@ class FavoriteViewModel @Inject constructor(
     }
 
     private fun List<FavoriteMovieDomainModel>.toFavoriteState(): FavoriteState {
-        return FavoriteState(
-            this.map {
-                FavoriteMovie(
-                    id = it.id,
-                    backdropPath = it.backdropPath,
-                    voteAverage = it.voteAverage,
-                    genres = it.genres,
-                    title = it.title
-                )
-            }.toPersistentList()
-        )
+        return FavoriteState(movies = this.toPersistentList())
     }
 }

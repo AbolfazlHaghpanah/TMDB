@@ -27,6 +27,8 @@ import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.feature.favorite.ui.component.EmptyIcon
 import com.hooshang.tmdb.feature.favorite.ui.component.MovieItems
+import com.hooshang.tmdb.feature.favorite.ui.contracts.FavoriteActions
+import com.hooshang.tmdb.feature.favorite.ui.contracts.FavoriteState
 import com.hooshang.tmdb.navigation.AppScreens
 
 @Composable

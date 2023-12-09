@@ -18,7 +18,7 @@ abstract class BaseViewModel<A : ViewAction, S : ViewState, E : ViewEffect> : Vi
     abstract fun onAction(action: A)
     abstract fun setInitialState(): S
 
-    private val _state = MutableStateFlow(setInitialState())
+    private val _state = MutableStateFlow(this.setInitialState())
     val state = _state.asStateFlow()
 
     private val _effect = Channel<E>()
