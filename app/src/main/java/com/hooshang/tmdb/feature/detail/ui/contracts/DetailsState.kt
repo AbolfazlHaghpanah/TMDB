@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.feature.detail.ui.contract
+package com.hooshang.tmdb.feature.detail.ui.contracts
 
 import androidx.compose.runtime.Immutable
 import com.hooshang.tmdb.core.ui.ViewState

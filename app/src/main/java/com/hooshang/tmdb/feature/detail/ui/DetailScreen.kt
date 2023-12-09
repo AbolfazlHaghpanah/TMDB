@@ -25,8 +25,8 @@ import com.hooshang.tmdb.core.ui.component.MovieRow
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.hooshang.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
-import com.hooshang.tmdb.feature.detail.ui.contract.DetailsAction
-import com.hooshang.tmdb.feature.detail.ui.contract.DetailsState
+import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsAction
+import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsState
 import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import com.hooshang.tmdb.navigation.AppScreens
 import kotlinx.collections.immutable.toPersistentList

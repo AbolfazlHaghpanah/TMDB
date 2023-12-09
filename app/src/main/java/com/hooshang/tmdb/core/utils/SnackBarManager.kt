@@ -12,7 +12,7 @@ class SnackBarManager {
         snackBarMassage: SnackBarMassage?
     ) {
         _snackBarMessage.send(
-            if (snackBarMassage?.isHaveToShow == true) snackBarMassage else null
+            if (snackBarMassage?.shouldShow == true) snackBarMassage else null
         )
     }
 
@@ -27,7 +27,7 @@ data class SnackBarMassage(
     val snackBarAction: (() -> Unit)? = null,
     val snackBarActionLabel: String? = null,
     val snackBarDuration: SnackbarDuration = SnackbarDuration.Long,
-    val isHaveToShow: Boolean = true
+    val shouldShow: Boolean = true
 ){
     fun performAction(){
         snackBarAction?.invoke()

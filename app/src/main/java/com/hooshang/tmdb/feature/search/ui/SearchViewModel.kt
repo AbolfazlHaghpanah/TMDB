@@ -8,7 +8,6 @@ import com.hooshang.tmdb.core.utils.SnackBarMassage
 import com.hooshang.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainModel
 import com.hooshang.tmdb.feature.search.domain.use_case.SearchUseCase
 import com.hooshang.tmdb.feature.search.ui.contracts.SearchAction
-import com.hooshang.tmdb.feature.search.ui.contracts.SearchEffect
 import com.hooshang.tmdb.feature.search.ui.contracts.SearchState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
@@ -21,22 +20,19 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val searchUseCase: SearchUseCase,
     private val snackBarManager: SnackBarManager
-) : BaseViewModel<SearchAction, SearchState, SearchEffect>() {
+) : BaseViewModel<SearchAction, SearchState>() {
 
     private val _snackBarMessage = MutableStateFlow<SnackBarMassage?>(null)
-
     private var _currentSearchString: String = ""
 
     override fun onAction(action: SearchAction) {
         when (action) {
             is SearchAction.OnSearch -> search(action.input)
-
             is SearchAction.ShowLastSnackBar -> {
                 viewModelScope.launch {
                     showLastSnackBar()
                 }
             }
-
             else -> {}
         }
     }
@@ -73,7 +69,7 @@ class SearchViewModel @Inject constructor(
                             snackBarAction = {
                                 search(_currentSearchString)
                             },
-                            isHaveToShow = true,
+                            shouldShow = true,
                             snackBarActionLabel = "try again"
                         )
                     )
@@ -95,7 +91,7 @@ class SearchViewModel @Inject constructor(
 
     private suspend fun dismissSnackBar() {
         _snackBarMessage.emit(
-            _snackBarMessage.value?.copy(isHaveToShow = false)
+            _snackBarMessage.value?.copy(shouldShow = false)
         )
     }
 }

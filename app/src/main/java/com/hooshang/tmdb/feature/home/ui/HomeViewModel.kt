@@ -10,7 +10,6 @@ import com.hooshang.tmdb.core.utils.SnackBarMassage
 import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
 import com.hooshang.tmdb.feature.home.domain.use_case.HomeUseCase
 import com.hooshang.tmdb.feature.home.ui.contracts.HomeAction
-import com.hooshang.tmdb.feature.home.ui.contracts.HomeEffect
 import com.hooshang.tmdb.feature.home.ui.contracts.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +22,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val snackBarManager: SnackBarManager,
     private val homeUseCase: HomeUseCase
-) : BaseViewModel<HomeAction, HomeState, HomeEffect>() {
+) : BaseViewModel<HomeAction, HomeState>() {
 
     private val _snackBarMassage = MutableStateFlow<SnackBarMassage?>(null)
 
@@ -186,7 +185,7 @@ class HomeViewModel @Inject constructor(
     private fun dismissSnackBar() {
         viewModelScope.launch {
             _snackBarMassage.emit(
-                _snackBarMassage.value?.copy(isHaveToShow = false)
+                _snackBarMassage.value?.copy(shouldShow = false)
             )
         }
     }

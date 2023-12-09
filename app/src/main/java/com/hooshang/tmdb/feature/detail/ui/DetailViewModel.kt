@@ -10,9 +10,8 @@ import com.hooshang.tmdb.core.utils.SnackBarMassage
 import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import com.hooshang.tmdb.feature.detail.domain.usecase.DetailUseCase
-import com.hooshang.tmdb.feature.detail.ui.contract.DetailsAction
-import com.hooshang.tmdb.feature.detail.ui.contract.DetailsEffect
-import com.hooshang.tmdb.feature.detail.ui.contract.DetailsState
+import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsAction
+import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +24,7 @@ class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val detailUseCase: DetailUseCase,
     private val snackBarManager: SnackBarManager
-) : BaseViewModel<DetailsAction, DetailsState, DetailsEffect>() {
+) : BaseViewModel<DetailsAction, DetailsState>() {
 
     private val id: Int = savedStateHandle.get<String>("id")?.toInt() ?: 0
     private val _snackBarMessage = MutableStateFlow<SnackBarMassage?>(null)
@@ -113,7 +112,7 @@ class DetailViewModel @Inject constructor(
                         _snackBarMessage.emit(
                             SnackBarMassage(
                                 snackBarMessage = error,
-                                isHaveToShow = true,
+                                shouldShow = true,
                                 snackBarAction = {
                                     fetchMovieDetail()
                                 },
