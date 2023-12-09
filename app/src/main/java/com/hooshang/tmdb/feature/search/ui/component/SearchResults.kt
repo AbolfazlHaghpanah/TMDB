@@ -35,6 +35,7 @@ import com.hooshang.tmdb.core.ui.component.TextIcon
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.core.utils.imageUrl
 import com.hooshang.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainModel
+import com.hooshang.tmdb.feature.search.ui.contracts.SearchAction
 import kotlinx.collections.immutable.PersistentList
 import java.math.RoundingMode
 import java.util.Locale
@@ -42,7 +43,7 @@ import java.util.Locale
 @Composable
 fun SearchResults(
     searchResult: PersistentList<SearchMovieWithGenreDomainModel>,
-    onSearchElementClick: (Int) -> Unit
+    onSearchElementClick: (SearchAction) -> Unit
 ) {
     LazyColumn(
         contentPadding = PaddingValues(
@@ -54,7 +55,7 @@ fun SearchResults(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.clickable {
-                    onSearchElementClick(searchElement.movieDomainModel.id)
+                    onSearchElementClick(SearchAction.NavigateToDetail(searchElement.movieDomainModel.id))
                 }
             ) {
 
