@@ -12,5 +12,7 @@ data class SimilarMovieResultResponse(
     @SerialName("vote_average")
     val voteAverage: Float,
     @SerialName("poster_path")
-    val posterPath: String?
+    val posterPath: String?,
+    @SerialName("backdrop_path")
+    val backdropPath: String?,
 )
