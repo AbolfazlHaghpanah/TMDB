@@ -38,7 +38,8 @@ fun TMDBSnackBar(
                 ),
                 text = message,
                 style = TMDBTheme.typography.subtitle2,
-                color = TMDBTheme.colors.white
+                color = TMDBTheme.colors.white,
+                maxLines = 1
             )
             if (actionLabel != null && performAction != null) {
                 TextButton(onClick = performAction) {
