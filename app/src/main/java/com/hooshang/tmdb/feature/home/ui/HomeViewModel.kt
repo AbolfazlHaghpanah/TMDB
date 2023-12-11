@@ -3,6 +3,7 @@ package com.hooshang.tmdb.feature.home.ui
 import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.viewModelScope
 import com.hooshang.tmdb.core.ui.BaseViewModel
+import com.hooshang.tmdb.core.utils.Result
 import com.hooshang.tmdb.core.utils.Result.Error
 import com.hooshang.tmdb.core.utils.Result.Success
 import com.hooshang.tmdb.core.utils.SnackBarManager
@@ -27,10 +28,12 @@ class HomeViewModel @Inject constructor(
     private val _snackBarMassage = MutableStateFlow<SnackBarMassage?>(null)
 
     init {
-        getGenre()
-        observeTopMovies()
-        observeNowPlaying()
-        observePopularMovies()
+        viewModelScope.launch {
+            getGenre()
+            observeTopMovies()
+            observeNowPlaying()
+            observePopularMovies()
+        }
     }
 
     override fun onAction(action: HomeAction) {
@@ -40,6 +43,11 @@ class HomeViewModel @Inject constructor(
                     showLastSnackBar()
                 }
             }
+
+            is HomeAction.Refresh -> {
+                tryAgainApi()
+            }
+
             else -> {}
         }
     }
@@ -54,25 +62,21 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    private fun observeNowPlaying() {
-
+    private suspend fun observeNowPlaying() {
         viewModelScope.launch(Dispatchers.IO) {
-            homeUseCase.getNowPlayingUseCase()
+            homeUseCase.observeNowPlayingUseCase()
                 .catch {
                     sendDataBaseError(it)
                 }.collect { movies ->
                     setState { copy(nowPlayingMovies = movies) }
                 }
-
         }
-        getNowPlaying()
+        fetchNowPlaying()
     }
 
-    private fun observePopularMovies() {
-
+    private suspend fun observePopularMovies() {
         viewModelScope.launch(Dispatchers.IO) {
-
-            homeUseCase.getPopularUseCase()
+            homeUseCase.observePopularUseCase()
                 .catch {
                     sendDataBaseError(it)
                 }
@@ -80,12 +84,12 @@ class HomeViewModel @Inject constructor(
                     setState { copy(popularMovies = movies) }
                 }
         }
-        getPopular()
+        fetchPopular()
     }
 
-    private fun observeTopMovies() {
+    private suspend fun observeTopMovies() {
         viewModelScope.launch(Dispatchers.IO) {
-            homeUseCase.getTopUseCase()
+            homeUseCase.observeTopUseCase()
                 .catch {
                     sendDataBaseError(it)
                 }
@@ -93,38 +97,77 @@ class HomeViewModel @Inject constructor(
                     setState { copy(topRatedMovies = movies) }
                 }
         }
-        getTopMovies()
+        fetchTopMovies()
     }
 
-    private fun getNowPlaying() {
+    private fun fetchNowPlaying() {
         viewModelScope.launch(Dispatchers.IO) {
             resultWrapper {
                 homeUseCase.fetchNowPlayingUseCase()
             }.collect { result ->
-                if (result is Error) sendNetworkError(result.message)
-                else if (result is Success<*>) dismissSnackBar()
+                when (result) {
+                    is Result.Loading -> {
+                        setState { copy(isLoading = true) }
+                    }
+
+                    is Error -> {
+                        setState { copy(isLoading = false) }
+                        sendNetworkError(result.message)
+                    }
+
+                    is Success<*> -> {
+                        setState { copy(isLoading = false) }
+                        dismissSnackBar()
+                    }
+                }
             }
         }
     }
 
-    private fun getPopular() {
+    private fun fetchPopular() {
         viewModelScope.launch(Dispatchers.IO) {
             resultWrapper {
                 homeUseCase.fetchPopularMovieUseCase()
             }.collect { result ->
-                if (result is Error) sendNetworkError(result.message)
-                else if (result is Success<*>) dismissSnackBar()
+                when (result) {
+                    is Result.Loading -> {
+                        setState { copy(isLoading = true) }
+                    }
+
+                    is Error -> {
+                        setState { copy(isLoading = false) }
+                        sendNetworkError(result.message)
+                    }
+
+                    is Success<*> -> {
+                        setState { copy(isLoading = false) }
+                        dismissSnackBar()
+                    }
+                }
             }
         }
     }
 
-    private fun getTopMovies() {
+    private fun fetchTopMovies() {
         viewModelScope.launch(Dispatchers.IO) {
             resultWrapper {
                 homeUseCase.fetchTopMovieUseCase()
             }.collect { result ->
-                if (result is Error) sendNetworkError(result.message)
-                else if (result is Success<*>) dismissSnackBar()
+                when (result) {
+                    is Result.Loading -> {
+                        setState { copy(isLoading = true) }
+                    }
+
+                    is Error -> {
+                        setState { copy(isLoading = false) }
+                        sendNetworkError(result.message)
+                    }
+
+                    is Success<*> -> {
+                        setState { copy(isLoading = false) }
+                        dismissSnackBar()
+                    }
+                }
             }
         }
     }
@@ -134,8 +177,21 @@ class HomeViewModel @Inject constructor(
             resultWrapper {
                 homeUseCase.fetchGenresUseCase()
             }.collect { result ->
-                if (result is Error) sendNetworkError(result.message)
-                else if (result is Success<*>) dismissSnackBar()
+                when (result) {
+                    is Result.Loading -> {
+                        setState { copy(isLoading = true) }
+                    }
+
+                    is Error -> {
+                        setState { copy(isLoading = false) }
+                        sendNetworkError(result.message)
+                    }
+
+                    is Success<*> -> {
+                        setState { copy(isLoading = false) }
+                        dismissSnackBar()
+                    }
+                }
             }
         }
     }
@@ -175,11 +231,11 @@ class HomeViewModel @Inject constructor(
     private fun tryAgainApi() {
         viewModelScope.launch {
             snackBarManager.dismissSnackBar()
+            getGenre()
+            observeTopMovies()
+            observeNowPlaying()
+            observePopularMovies()
         }
-        getGenre()
-        observeTopMovies()
-        observeNowPlaying()
-        observePopularMovies()
     }
 
     private fun dismissSnackBar() {

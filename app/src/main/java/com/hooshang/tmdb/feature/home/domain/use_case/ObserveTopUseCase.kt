@@ -4,7 +4,7 @@ import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import com.hooshang.tmdb.feature.home.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.Flow
 
-class GetTopUseCase(
+class ObserveTopUseCase(
     private val homeRepository: HomeRepository
 ) {
     suspend operator fun invoke(): Flow<List<HomeMovieDomainModel>> {

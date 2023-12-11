@@ -3,12 +3,19 @@ package com.hooshang.tmdb.feature.home.ui
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.NonRestartableComposable
@@ -50,15 +57,12 @@ fun HomeScreen(
 }
 
 @NonRestartableComposable
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
 private fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel
 ) {
-    val homeState by viewModel.state.collectAsStateWithLifecycle()
-    val pagerState = rememberPagerState(initialPage = 2)
-
     val onAction: (HomeAction) -> Unit = remember {
         { action ->
             when (action) {
@@ -75,6 +79,15 @@ private fun HomeScreen(
         }
     }
 
+    val homeState by viewModel.state.collectAsStateWithLifecycle()
+    val pagerState = rememberPagerState(initialPage = 2)
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = homeState.isLoading,
+        onRefresh = {
+            onAction(HomeAction.Refresh)
+        }
+    )
+
     LaunchedEffect(Unit) {
         onAction(HomeAction.ShowLastSnackBar)
     }
@@ -83,90 +96,104 @@ private fun HomeScreen(
         homeState = homeState,
         pagerState = pagerState,
         onAction = onAction,
+        pullRefreshState = pullRefreshState
     )
 }
 
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
 private fun HomeScreen(
     homeState: HomeState,
     pagerState: PagerState,
+    pullRefreshState: PullRefreshState,
     onAction: (HomeAction) -> Unit,
 ) {
-    LazyColumn(
-        modifier = Modifier.statusBarsPadding()
+
+    Box(
+        modifier = Modifier
+            .statusBarsPadding()
+            .pullRefresh(pullRefreshState)
+            .fillMaxSize()
     ) {
+        LazyColumn {
 
-        item {
-            HorizontalPager(
-                modifier = Modifier
-                    .padding(top = 24.dp)
-                    .height(180.dp),
-                state = pagerState,
-                count = if (homeState.nowPlayingMovies.size > 5) 5 else fakeMovie.size,
-                itemSpacing = 12.dp,
-                contentPadding = PaddingValues(horizontal = 40.dp)
-            ) { page ->
+            item {
+                HorizontalPager(
+                    modifier = Modifier
+                        .padding(top = 24.dp)
+                        .height(180.dp),
+                    state = pagerState,
+                    count = if (homeState.nowPlayingMovies.size > 5) 5 else fakeMovie.size,
+                    itemSpacing = 12.dp,
+                    contentPadding = PaddingValues(horizontal = 40.dp)
+                ) { page ->
 
-                val pagerSize = animateDpAsState(
-                    targetValue = if (page == pagerState.currentPage) 180.dp else 160.dp,
-                    label = ""
-                )
-
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                    PagerMovieItem(
-                        isLoading = homeState.nowPlayingMovies.size <= 5,
-                        modifier = Modifier
-                            .clip(TMDBTheme.shapes.large)
-                            .clickable {
-                                if (homeState.nowPlayingMovies.size >= 5) onAction(
-                                    HomeAction.NavigateToDetail(id = homeState.nowPlayingMovies[page].movieId)
-                                )
-                            }
-                            .height(pagerSize.value),
-                        movie = if (homeState.nowPlayingMovies.size >= 5) {
-                            homeState.nowPlayingMovies[page]
-                        } else {
-                            fakeMovie[0]
-                        }
+                    val pagerSize = animateDpAsState(
+                        targetValue = if (page == pagerState.currentPage) 180.dp else 160.dp,
+                        label = ""
                     )
+
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
+                        PagerMovieItem(
+                            isLoading = homeState.nowPlayingMovies.size <= 5,
+                            modifier = Modifier
+                                .clip(TMDBTheme.shapes.large)
+                                .clickable {
+                                    if (homeState.nowPlayingMovies.size >= 5) onAction(
+                                        HomeAction.NavigateToDetail(id = homeState.nowPlayingMovies[page].movieId)
+                                    )
+                                }
+                                .height(pagerSize.value),
+                            movie = if (homeState.nowPlayingMovies.size >= 5) {
+                                homeState.nowPlayingMovies[page]
+                            } else {
+                                fakeMovie[0]
+                            }
+                        )
+                    }
                 }
+            }
+
+            item {
+                TMDBPagerIndicator(
+                    modifier = Modifier
+                        .ifShimmerActive(homeState.nowPlayingMovies.isEmpty()),
+                    pageCount = pagerState.pageCount,
+                    selectedPage = pagerState.currentPage
+                )
+            }
+
+            item {
+                MovieRow(
+                    onClick = { id ->
+                        onAction(HomeAction.NavigateToDetail(id = id))
+                    },
+                    title = stringResource(R.string.most_popular),
+                    movies = homeState.popularMovies.toPersistentList()
+                )
+            }
+
+            item {
+                MovieRow(
+                    onClick = { id ->
+                        onAction(HomeAction.NavigateToDetail(id = id))
+                    },
+                    title = stringResource(R.string.top_rated),
+                    movies = homeState.topRatedMovies.toPersistentList()
+                )
             }
         }
 
-        item {
-            TMDBPagerIndicator(
-                modifier = Modifier
-                    .ifShimmerActive(homeState.nowPlayingMovies.isEmpty()),
-                pageCount = pagerState.pageCount,
-                selectedPage = pagerState.currentPage
-            )
-        }
-
-        item {
-            MovieRow(
-                onClick = { id ->
-                    onAction(HomeAction.NavigateToDetail(id = id))
-                },
-                title = stringResource(R.string.most_popular),
-                movies = homeState.popularMovies.toPersistentList()
-            )
-        }
-
-        item {
-            MovieRow(
-                onClick = { id ->
-                    onAction(HomeAction.NavigateToDetail(id = id))
-                },
-                title = stringResource(R.string.top_rated),
-                movies = homeState.topRatedMovies.toPersistentList()
-            )
-        }
+        PullRefreshIndicator(
+            modifier = Modifier.align(Alignment.TopCenter),
+            refreshing = homeState.isLoading,
+            state = pullRefreshState
+        )
     }
 }
 

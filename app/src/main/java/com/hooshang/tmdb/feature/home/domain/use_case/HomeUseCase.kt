@@ -5,7 +5,7 @@ data class HomeUseCase(
     val fetchPopularMovieUseCase: FetchPopularMovieUseCase,
     val fetchNowPlayingUseCase: FetchNowPlayingUseCase,
     val fetchTopMovieUseCase: FetchTopMovieUseCase,
-    val getNowPlayingUseCase: GetNowPlayingUseCase,
-    val getPopularUseCase: GetPopularUseCase,
-    val getTopUseCase: GetTopUseCase
+    val observeNowPlayingUseCase: ObserveNowPlayingUseCase,
+    val observePopularUseCase: ObservePopularUseCase,
+    val observeTopUseCase: ObserveTopUseCase
 )
