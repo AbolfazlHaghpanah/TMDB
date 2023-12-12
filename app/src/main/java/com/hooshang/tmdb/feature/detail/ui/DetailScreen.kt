@@ -68,7 +68,7 @@ private fun DetailScreen(
     }
 
     LaunchedEffect(Unit) {
-        onAction(DetailsAction.ShowLastSnackBar)
+        onAction(DetailsAction.DismissSnackBar)
     }
 
     DetailScreen(
