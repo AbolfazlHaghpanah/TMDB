@@ -5,5 +5,4 @@ import com.hooshang.tmdb.core.ui.ViewAction
 sealed interface FavoriteActions : ViewAction {
     data class OpenBottomSheet(val id: Int) : FavoriteActions
     data class NavigateToDetails(val id: Int) : FavoriteActions
-    data class RemoveFromFavorite(val id: Int) : FavoriteActions
 }

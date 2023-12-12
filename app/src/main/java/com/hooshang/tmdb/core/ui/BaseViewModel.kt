@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 interface ViewAction
 interface ViewState
 abstract class BaseViewModel<A : ViewAction, S : ViewState> : ViewModel() {
-    abstract fun onAction(action: A)
+    open fun onAction(action: A) = Unit
     abstract fun setInitialState(): S
 
     private val _state = MutableStateFlow(this.setInitialState())

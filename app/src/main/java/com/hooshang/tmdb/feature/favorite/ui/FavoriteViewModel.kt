@@ -27,13 +27,6 @@ class FavoriteViewModel @Inject constructor(
         observeFavoriteMovies()
     }
 
-    override fun onAction(action: FavoriteActions) {
-        when (action) {
-            is FavoriteActions.RemoveFromFavorite -> removeFromFavorite(action.id)
-            else -> {}
-        }
-    }
-
     override fun setInitialState(): FavoriteState {
         return FavoriteState()
     }
@@ -55,23 +48,6 @@ class FavoriteViewModel @Inject constructor(
                 }.collect { domainModel ->
                     setState { domainModel.toFavoriteState() }
                 }
-        }
-    }
-
-    private fun removeFromFavorite(id: Int) {
-        viewModelScope.launch {
-            try {
-                favoriteUseCase.deleteFromFavoriteUseCase(id)
-            } catch (t: Throwable) {
-                snackBarManager.sendMessage(
-                    SnackBarMassage(
-                        snackBarMessage = databaseErrorCatchMessage(t),
-                        snackBarDuration = SnackbarDuration.Indefinite,
-                        snackBarAction = { observeFavoriteMovies() },
-                        snackBarActionLabel = "Try Again"
-                    )
-                )
-            }
         }
     }
 

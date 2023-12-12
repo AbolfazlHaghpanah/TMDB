@@ -24,7 +24,7 @@ class TMDBModalBottomSheetViewModel @Inject constructor(
         setState { copy(id = savedStateHandle.get<String>("id")?.toIntOrNull() ?: -1) }
     }
 
-    fun deleteMovie() {
+    private fun deleteMovie() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 favoriteUseCase.deleteFromFavoriteUseCase(state.value.id)
