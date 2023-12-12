@@ -17,7 +17,6 @@ import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -87,10 +86,6 @@ private fun HomeScreen(
             onAction(HomeAction.Refresh)
         }
     )
-
-    LaunchedEffect(Unit) {
-        onAction(HomeAction.ShowLastSnackBar)
-    }
 
     HomeScreen(
         homeState = homeState,

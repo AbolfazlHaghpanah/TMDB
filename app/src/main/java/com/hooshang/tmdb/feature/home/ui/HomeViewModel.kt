@@ -14,7 +14,6 @@ import com.hooshang.tmdb.feature.home.ui.contracts.HomeAction
 import com.hooshang.tmdb.feature.home.ui.contracts.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,26 +23,15 @@ class HomeViewModel @Inject constructor(
     private val snackBarManager: SnackBarManager,
     private val homeUseCase: HomeUseCase
 ) : BaseViewModel<HomeAction, HomeState>() {
-
-    private val _snackBarMassage = MutableStateFlow<SnackBarMassage?>(null)
-
     init {
-        viewModelScope.launch {
-            getGenre()
-            observeTopMovies()
-            observeNowPlaying()
-            observePopularMovies()
-        }
+        getGenre()
+        observeTopMovies()
+        observeNowPlaying()
+        observePopularMovies()
     }
 
     override fun onAction(action: HomeAction) {
         when (action) {
-            is HomeAction.ShowLastSnackBar -> {
-                viewModelScope.launch {
-                    showLastSnackBar()
-                }
-            }
-
             is HomeAction.Refresh -> {
                 tryAgainApi()
             }
@@ -56,13 +44,7 @@ class HomeViewModel @Inject constructor(
         return HomeState()
     }
 
-    private suspend fun showLastSnackBar() {
-        snackBarManager.sendMessage(
-            _snackBarMassage.value
-        )
-    }
-
-    private suspend fun observeNowPlaying() {
+    private fun observeNowPlaying() {
         viewModelScope.launch(Dispatchers.IO) {
             homeUseCase.observeNowPlayingUseCase()
                 .catch {
@@ -74,7 +56,7 @@ class HomeViewModel @Inject constructor(
         fetchNowPlaying()
     }
 
-    private suspend fun observePopularMovies() {
+    private fun observePopularMovies() {
         viewModelScope.launch(Dispatchers.IO) {
             homeUseCase.observePopularUseCase()
                 .catch {
@@ -87,7 +69,7 @@ class HomeViewModel @Inject constructor(
         fetchPopular()
     }
 
-    private suspend fun observeTopMovies() {
+    private fun observeTopMovies() {
         viewModelScope.launch(Dispatchers.IO) {
             homeUseCase.observeTopUseCase()
                 .catch {
@@ -117,7 +99,6 @@ class HomeViewModel @Inject constructor(
 
                     is Success<*> -> {
                         setState { copy(isLoading = false) }
-                        dismissSnackBar()
                     }
                 }
             }
@@ -141,7 +122,6 @@ class HomeViewModel @Inject constructor(
 
                     is Success<*> -> {
                         setState { copy(isLoading = false) }
-                        dismissSnackBar()
                     }
                 }
             }
@@ -165,7 +145,6 @@ class HomeViewModel @Inject constructor(
 
                     is Success<*> -> {
                         setState { copy(isLoading = false) }
-                        dismissSnackBar()
                     }
                 }
             }
@@ -189,7 +168,6 @@ class HomeViewModel @Inject constructor(
 
                     is Success<*> -> {
                         setState { copy(isLoading = false) }
-                        dismissSnackBar()
                     }
                 }
             }
@@ -199,50 +177,40 @@ class HomeViewModel @Inject constructor(
     private suspend fun sendDataBaseError(
         throwable: Throwable
     ) {
-        _snackBarMassage.emit(
-            SnackBarMassage(
+        snackBarManager.sendMessage(
+            snackBarMassage = SnackBarMassage(
                 snackBarMessage = databaseErrorCatchMessage(throwable),
                 snackBarActionLabel = "Try Again",
-                snackBarAction = { tryAgainApi() },
-                snackBarDuration = SnackbarDuration.Short
+                snackBarAction = { tryAgainDataBase() },
+                snackBarDuration = SnackbarDuration.Indefinite
             )
-        )
-        snackBarManager.sendMessage(
-            snackBarMassage = _snackBarMassage.value
         )
     }
 
     private suspend fun sendNetworkError(
         error: String
     ) {
-        _snackBarMassage.emit(
+        snackBarManager.sendMessage(
             SnackBarMassage(
                 snackBarMessage = error,
-                snackBarActionLabel = "Try Again",
-                snackBarAction = { tryAgainApi() },
+                snackBarActionLabel = null,
+                snackBarAction = null,
                 snackBarDuration = SnackbarDuration.Short
             )
         )
-        snackBarManager.sendMessage(
-            _snackBarMassage.value
-        )
+    }
+
+    private fun tryAgainDataBase() {
+        observeNowPlaying()
+        observePopularMovies()
+        observeTopMovies()
     }
 
     private fun tryAgainApi() {
-        viewModelScope.launch {
-            snackBarManager.dismissSnackBar()
-            getGenre()
-            observeTopMovies()
-            observeNowPlaying()
-            observePopularMovies()
-        }
-    }
-
-    private fun dismissSnackBar() {
-        viewModelScope.launch {
-            _snackBarMassage.emit(
-                _snackBarMassage.value?.copy(shouldShow = false)
-            )
-        }
+        getGenre()
+        fetchPopular()
+        fetchNowPlaying()
+        fetchPopular()
+        fetchTopMovies()
     }
 }
