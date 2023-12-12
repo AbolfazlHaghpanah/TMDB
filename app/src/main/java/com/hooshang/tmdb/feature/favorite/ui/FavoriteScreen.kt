@@ -58,7 +58,6 @@ private fun FavoriteScreen(
                 is FavoriteActions.NavigateToDetails -> {
                     navController.navigate(AppScreens.Detail.createRoute(actions.id))
                 }
-
                 else -> {
                     viewModel.onAction(actions)
                 }

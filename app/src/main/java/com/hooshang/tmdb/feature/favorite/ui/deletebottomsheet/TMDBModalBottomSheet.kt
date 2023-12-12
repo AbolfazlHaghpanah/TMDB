@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.feature.favorite.ui.component.TrashIcon
+import com.hooshang.tmdb.feature.favorite.ui.deletebottomsheet.contracts.DeleteBottomSheetAction
 
 @Composable
 fun TMDBModalBottomSheet(
@@ -35,28 +36,22 @@ fun TMDBModalBottomSheet(
     navController: NavController,
     viewModel: TMDBModalBottomSheetViewModel
 ) {
-    val onDismiss: () -> Unit = remember {
-        {
-            navController.popBackStack()
+
+    val onAction: (DeleteBottomSheetAction) -> Unit = remember {
+        { action ->
+            when (action) {
+                is DeleteBottomSheetAction.Dismiss -> navController.popBackStack()
+                else -> viewModel.onAction(action)
+            }
         }
     }
 
-    val onDelete = remember {
-        {
-            viewModel.deleteMovie()
-        }
-    }
-
-    TMDBModalBottomSheet(
-        onDismiss = onDismiss,
-        onDelete = onDelete
-    )
+    TMDBModalBottomSheet(onAction = onAction)
 }
 
 @Composable
 private fun TMDBModalBottomSheet(
-    onDismiss: () -> Unit,
-    onDelete: () -> Unit
+    onAction: (DeleteBottomSheetAction) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -86,7 +81,7 @@ private fun TMDBModalBottomSheet(
                 .padding(24.dp)
                 .fillMaxWidth(),
             shape = TMDBTheme.shapes.rounded,
-            onClick = onDismiss
+            onClick = { onAction(DeleteBottomSheetAction.Dismiss) }
 
         ) {
             Text(
@@ -98,8 +93,8 @@ private fun TMDBModalBottomSheet(
 
         TextButton(
             onClick = {
-                onDelete()
-                onDismiss()
+                onAction(DeleteBottomSheetAction.DeleteFromFavorite)
+                onAction(DeleteBottomSheetAction.Dismiss)
             }
         ) {
 
