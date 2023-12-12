@@ -35,40 +35,12 @@ class DetailViewModel @Inject constructor(
         when (action) {
             is DetailsAction.AddToFavorite -> addToFavorite()
             is DetailsAction.RemoveFromFavorite -> removeFromFavorite()
-            is DetailsAction.DismissSnackBar -> viewModelScope.launch { snackBarManager.dismissSnackBar() }
             else -> {}
         }
     }
 
     override fun setInitialState(): DetailsState {
         return DetailsState()
-    }
-
-    private fun addToFavorite() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                detailUseCase.addFavoriteUseCase(
-                    state.value.movie.id,
-                    state.value.movie.genres.map { it.first }
-                )
-            } catch (t: Throwable) {
-                sendDataBaseError(
-                    throwable = t,
-                    onTryAgain = { addToFavorite() })
-            }
-        }
-    }
-
-    private fun removeFromFavorite() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                detailUseCase.removeFavoriteUseCase(id)
-            } catch (t: Throwable) {
-                sendDataBaseError(
-                    throwable = t,
-                    onTryAgain = { removeFromFavorite() })
-            }
-        }
     }
 
     private fun observeDetailMovieWithAllRelations() {
@@ -106,6 +78,33 @@ class DetailViewModel @Inject constructor(
                         sendNetworkError(result.message)
                     }
                 }
+            }
+        }
+    }
+
+    private fun addToFavorite() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                detailUseCase.addFavoriteUseCase(
+                    state.value.movie.id,
+                    state.value.movie.genres.map { it.first }
+                )
+            } catch (t: Throwable) {
+                sendDataBaseError(
+                    throwable = t,
+                    onTryAgain = { addToFavorite() })
+            }
+        }
+    }
+
+    private fun removeFromFavorite() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                detailUseCase.removeFavoriteUseCase(id)
+            } catch (t: Throwable) {
+                sendDataBaseError(
+                    throwable = t,
+                    onTryAgain = { removeFromFavorite() })
             }
         }
     }

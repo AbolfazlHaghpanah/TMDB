@@ -30,6 +30,8 @@ class HomeViewModel @Inject constructor(
         observePopularMovies()
     }
 
+
+
     override fun onAction(action: HomeAction) {
         when (action) {
             is HomeAction.Refresh -> {

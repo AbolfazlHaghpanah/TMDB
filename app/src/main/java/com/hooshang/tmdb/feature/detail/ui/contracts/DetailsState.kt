@@ -20,6 +20,6 @@ data class DetailsState(
         similar = listOf(),
         isFavorite = false
     ),
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
 ) : ViewState
 

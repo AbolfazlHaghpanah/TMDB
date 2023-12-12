@@ -11,7 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -67,10 +66,6 @@ private fun DetailScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        onAction(DetailsAction.DismissSnackBar)
-    }
-
     DetailScreen(
         detailsState = movieDetail,
         onAction = onAction
@@ -90,11 +85,11 @@ private fun DetailScreen(
         modifier = Modifier.background(TMDBTheme.colors.background)
     ) { paddingValues ->
 
-        if (detailsState.isLoading || detailsState.movie.genres.isEmpty()) {
+        if (detailsState.isLoading) {
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth()
             )
-        } else if (detailsState.movie.id != -1) {
+        } else if (detailsState.movie.id != -1 && detailsState.movie.genres.isNotEmpty()) {
             Column(
                 modifier = Modifier
                     .background(TMDBTheme.colors.background)
