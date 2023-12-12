@@ -32,10 +32,7 @@ class HomeViewModel @Inject constructor(
 
     override fun onAction(action: HomeAction) {
         when (action) {
-            is HomeAction.Refresh -> {
-                tryAgainApi()
-            }
-
+            is HomeAction.Refresh -> tryAgainApi()
             else -> {}
         }
     }
