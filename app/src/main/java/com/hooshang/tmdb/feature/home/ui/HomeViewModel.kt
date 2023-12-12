@@ -30,8 +30,6 @@ class HomeViewModel @Inject constructor(
         observePopularMovies()
     }
 
-
-
     override fun onAction(action: HomeAction) {
         when (action) {
             is HomeAction.Refresh -> {
@@ -182,8 +180,6 @@ class HomeViewModel @Inject constructor(
         snackBarManager.sendMessage(
             snackBarMassage = SnackBarMassage(
                 snackBarMessage = databaseErrorCatchMessage(throwable),
-                snackBarActionLabel = "Try Again",
-                snackBarAction = { tryAgainDataBase() },
                 snackBarDuration = SnackbarDuration.Indefinite
             )
         )

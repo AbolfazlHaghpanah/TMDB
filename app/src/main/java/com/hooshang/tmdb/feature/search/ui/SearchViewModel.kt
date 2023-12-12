@@ -1,5 +1,6 @@
 package com.hooshang.tmdb.feature.search.ui
 
+import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.viewModelScope
 import com.hooshang.tmdb.core.ui.BaseViewModel
 import com.hooshang.tmdb.core.utils.Result
@@ -22,17 +23,11 @@ class SearchViewModel @Inject constructor(
     private val snackBarManager: SnackBarManager
 ) : BaseViewModel<SearchAction, SearchState>() {
 
-    private val _snackBarMessage = MutableStateFlow<SnackBarMassage?>(null)
     private var _currentSearchString: String = ""
 
     override fun onAction(action: SearchAction) {
         when (action) {
             is SearchAction.OnSearch -> search(action.input)
-            is SearchAction.ShowLastSnackBar -> {
-                viewModelScope.launch {
-                    showLastSnackBar()
-                }
-            }
             else -> {}
         }
     }
@@ -58,19 +53,17 @@ class SearchViewModel @Inject constructor(
                 is Result.Success<*> -> {
                     val data = result.response as List<SearchMovieWithGenreDomainModel>
                     setState { copy(isLoading = false, searchResults = data.toPersistentList()) }
-                    dismissSnackBar()
                 }
 
                 is Result.Error -> {
-                    val data = result.message
-                    _snackBarMessage.emit(
+                    snackBarManager.sendMessage(
                         SnackBarMassage(
-                            snackBarMessage = data,
+                            snackBarMessage = result.message,
                             snackBarAction = {
                                 search(_currentSearchString)
                             },
-                            shouldShow = true,
-                            snackBarActionLabel = "try again"
+                            snackBarActionLabel = "try again",
+                            snackBarDuration = SnackbarDuration.Indefinite
                         )
                     )
                     setState { copy(isLoading = false, isError = true) }
@@ -81,17 +74,5 @@ class SearchViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    private suspend fun showLastSnackBar() {
-        snackBarManager.sendMessage(
-            _snackBarMessage.value
-        )
-    }
-
-    private suspend fun dismissSnackBar() {
-        _snackBarMessage.emit(
-            _snackBarMessage.value?.copy(shouldShow = false)
-        )
     }
 }
