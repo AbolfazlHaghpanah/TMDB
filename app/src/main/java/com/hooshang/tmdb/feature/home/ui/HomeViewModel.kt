@@ -180,7 +180,7 @@ class HomeViewModel @Inject constructor(
         snackBarManager.sendMessage(
             snackBarMassage = SnackBarMassage(
                 snackBarMessage = databaseErrorCatchMessage(throwable),
-                snackBarDuration = SnackbarDuration.Indefinite
+                snackBarDuration = SnackbarDuration.Short
             )
         )
     }
@@ -196,12 +196,6 @@ class HomeViewModel @Inject constructor(
                 snackBarDuration = SnackbarDuration.Short
             )
         )
-    }
-
-    private fun tryAgainDataBase() {
-        observeNowPlaying()
-        observePopularMovies()
-        observeTopMovies()
     }
 
     private fun tryAgainApi() {
