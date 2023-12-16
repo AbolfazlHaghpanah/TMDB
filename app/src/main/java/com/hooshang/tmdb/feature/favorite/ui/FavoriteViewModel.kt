@@ -27,22 +27,8 @@ class FavoriteViewModel @Inject constructor(
         observeFavoriteMovies()
     }
 
-    override fun onAction(action: FavoriteActions) {
-        when (action) {
-            is FavoriteActions.TryAgain -> onTryAgain()
-            else -> {}
-        }
-    }
-
     override fun setInitialState(): FavoriteState {
         return FavoriteState()
-    }
-
-    private fun onTryAgain() {
-        viewModelScope.launch {
-            snackBarManager.dismissSnackBar()
-        }
-        observeFavoriteMovies()
     }
 
     private fun observeFavoriteMovies() {
@@ -54,7 +40,7 @@ class FavoriteViewModel @Inject constructor(
                             snackBarMessage = databaseErrorCatchMessage(it),
                             snackBarDuration = SnackbarDuration.Indefinite,
                             snackBarAction = {
-                                onTryAgain()
+                                observeFavoriteMovies()
                             },
                             snackBarActionLabel = "Try Again"
                         )

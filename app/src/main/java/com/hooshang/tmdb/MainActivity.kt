@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -63,6 +64,12 @@ class MainActivity : ComponentActivity() {
             val snackBarHostState = remember {
                 SnackbarHostState()
             }
+
+            navController.addOnDestinationChangedListener(
+                listener = { _, _, _ ->
+                    snackBarHostState.currentSnackbarData?.dismiss()
+                }
+            )
 
             LaunchedEffect(Unit) {
                 snackBarManager.snackBarMessage.collectLatest { snackBarMessage ->

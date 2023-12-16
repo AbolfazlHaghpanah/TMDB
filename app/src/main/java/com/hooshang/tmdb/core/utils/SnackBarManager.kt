@@ -11,9 +11,7 @@ class SnackBarManager {
     suspend fun sendMessage(
         snackBarMassage: SnackBarMassage?
     ) {
-        _snackBarMessage.send(
-            if (snackBarMassage?.shouldShow == true) snackBarMassage else null
-        )
+        _snackBarMessage.send(snackBarMassage)
     }
 
     suspend fun dismissSnackBar() {
@@ -27,9 +25,8 @@ data class SnackBarMassage(
     val snackBarAction: (() -> Unit)? = null,
     val snackBarActionLabel: String? = null,
     val snackBarDuration: SnackbarDuration = SnackbarDuration.Long,
-    val shouldShow: Boolean = true
-){
-    fun performAction(){
+) {
+    fun performAction() {
         snackBarAction?.invoke()
     }
 }

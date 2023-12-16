@@ -55,10 +55,6 @@ private fun SearchScreen(
         }
     }
 
-    LaunchedEffect(key1 = searchState.isLoading, key2 = searchState.isError) {
-        onAction(SearchAction.ShowLastSnackBar)
-    }
-
     SearchScreen(
         searchState = searchState,
         onAction = onAction

@@ -12,9 +12,9 @@ import com.hooshang.tmdb.feature.home.domain.use_case.FetchGenresUseCase
 import com.hooshang.tmdb.feature.home.domain.use_case.FetchNowPlayingUseCase
 import com.hooshang.tmdb.feature.home.domain.use_case.FetchPopularMovieUseCase
 import com.hooshang.tmdb.feature.home.domain.use_case.FetchTopMovieUseCase
-import com.hooshang.tmdb.feature.home.domain.use_case.GetNowPlayingUseCase
-import com.hooshang.tmdb.feature.home.domain.use_case.GetPopularUseCase
-import com.hooshang.tmdb.feature.home.domain.use_case.GetTopUseCase
+import com.hooshang.tmdb.feature.home.domain.use_case.ObserveNowPlayingUseCase
+import com.hooshang.tmdb.feature.home.domain.use_case.ObservePopularUseCase
+import com.hooshang.tmdb.feature.home.domain.use_case.ObserveTopUseCase
 import com.hooshang.tmdb.feature.home.domain.use_case.HomeUseCase
 import dagger.Module
 import dagger.Provides
@@ -65,9 +65,9 @@ object HomeModule {
             fetchNowPlayingUseCase = FetchNowPlayingUseCase(homeRepository),
             fetchPopularMovieUseCase = FetchPopularMovieUseCase(homeRepository),
             fetchTopMovieUseCase = FetchTopMovieUseCase(homeRepository),
-            getNowPlayingUseCase = GetNowPlayingUseCase(homeRepository),
-            getPopularUseCase = GetPopularUseCase(homeRepository),
-            getTopUseCase = GetTopUseCase(homeRepository),
+            observeNowPlayingUseCase = ObserveNowPlayingUseCase(homeRepository),
+            observePopularUseCase = ObservePopularUseCase(homeRepository),
+            observeTopUseCase = ObserveTopUseCase(homeRepository),
         )
     }
 }

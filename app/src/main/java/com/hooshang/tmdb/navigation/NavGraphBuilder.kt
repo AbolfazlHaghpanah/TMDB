@@ -23,12 +23,12 @@ fun NavGraphBuilder.mainNavGraph(
         DetailsScreen(navController = navController)
     }
 
-    composable(AppScreens.Favorite.route) {
-        FavoriteScreen(navController = navController)
-    }
-
     composable(AppScreens.Search.route) {
         SearchScreen(navController = navController)
+    }
+
+    composable(AppScreens.Favorite.route) {
+        FavoriteScreen(navController = navController)
     }
 
     bottomSheet(AppScreens.BottomSheet.route) {

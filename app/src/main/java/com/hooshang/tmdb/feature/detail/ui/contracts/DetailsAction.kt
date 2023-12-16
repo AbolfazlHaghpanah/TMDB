@@ -7,5 +7,4 @@ sealed interface DetailsAction : ViewAction {
     data object RemoveFromFavorite : DetailsAction
     data class NavigateToDetails(val id: Int) : DetailsAction
     data object Back : DetailsAction
-    data object ShowLastSnackBar : DetailsAction
 }
