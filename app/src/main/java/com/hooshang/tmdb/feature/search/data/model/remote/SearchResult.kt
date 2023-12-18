@@ -1,14 +1,17 @@
 package com.hooshang.tmdb.feature.search.data.model.remote
 
+import androidx.annotation.Keep
 import com.hooshang.tmdb.feature.search.domain.model.SearchMovieDomainModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Keep
 @Serializable
 data class SearchResult(
     val results: List<SearchResultElement>
 )
 
+@Keep
 @Serializable
 data class SearchResultElement(
     val id: Int,

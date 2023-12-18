@@ -1,10 +1,12 @@
 package com.hooshang.tmdb.feature.detail.data.model.remote
 
+import androidx.annotation.Keep
 import com.hooshang.tmdb.feature.detail.data.model.local.entity.CreditEntity
 import com.hooshang.tmdb.feature.detail.data.model.local.entity.DetailEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Keep
 @Serializable
 data class MovieDetailResponse(
     val id: Int,

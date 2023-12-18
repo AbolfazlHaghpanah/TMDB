@@ -27,7 +27,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -70,33 +71,20 @@ dependencies {
     debugImplementation(libs.ui.test.manifest)
 
     //lifecycle
-    implementation(libs.lifecycleExtensions)
-    implementation(libs.lifecycleLiveData)
-    implementation(libs.lifecycleViewModel)
-    implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.lifecycleRuntimeCompose)
+    implementation(libs.bundles.lifecycle)
 
     //accompanist
-    implementation(libs.accompanistFlowLayout)
-    implementation(libs.accompanistPager)
-    implementation(libs.accompanistPagerIndicators)
-    implementation(libs.accompanistSystemUiController)
-    implementation(libs.accompanistNavigation)
+    implementation(libs.bundles.accompanist)
 
     //network
-    implementation(libs.retrofit)
-    implementation(libs.okhttpInterceptor)
-    implementation(libs.kotlinSerialization)
-    implementation(libs.kotlinSerialization.convertor)
+    implementation(libs.bundles.network)
 
     //room
-    implementation(libs.room)
-    implementation(libs.roomKtx)
+    implementation(libs.bundles.room)
     kapt(libs.roomCompiler)
 
     //hilt
-    implementation(libs.hilt)
-    implementation(libs.composeHiltNavigation)
+    implementation(libs.bundles.hilt)
     kapt(libs.hilt.android.compiler)
 
     //coil
