@@ -31,25 +31,21 @@ class DetailLocalDataSource @Inject constructor(
         return detailDao.addFavoriteMovieGenre(genre)
     }
 
-    suspend fun deleteFavoriteMovieGenre(favoriteMovieGenreCrossRef: FavoriteMovieGenreCrossRef) {
-        return detailDao.deleteFavoriteMovieGenre(favoriteMovieGenreCrossRef)
-    }
-
-    fun addDetailMovieWithCreditCrossRef(detailMovieWithCreditCrossRef: DetailMovieWithCreditCrossRef) {
+    fun addDetailMovieWithCreditCrossRef(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>) {
         return detailDao.addDetailMovieWithCreditCrossRef(detailMovieWithCreditCrossRef)
     }
 
-    fun addDetailMovieWithGenreCrossRef(detailMovieWithGenreCrossRef: DetailMovieWithGenreCrossRef) {
+    fun addDetailMovieWithGenreCrossRef(detailMovieWithGenreCrossRef: List<DetailMovieWithGenreCrossRef>) {
         return detailDao.addDetailMovieWithGenreCrossRef(detailMovieWithGenreCrossRef)
     }
 
-    fun addDetailMovieWithSimilarMoviesCrossRef(detailMovieWithSimilarMoviesCrossRef: DetailMovieWithSimilarMoviesCrossRef) {
+    fun addDetailMovieWithSimilarMoviesCrossRef(detailMovieWithSimilarMoviesCrossRef: List<DetailMovieWithSimilarMoviesCrossRef>) {
         return detailDao.addDetailMovieWithSimilarMoviesCrossRef(
             detailMovieWithSimilarMoviesCrossRef
         )
     }
 
-    fun addMovieWithGenreCrossRef(movieWithGenre: MovieWithGenreCrossRef) {
+    fun addMovieWithGenreCrossRef(movieWithGenre: List<MovieWithGenreCrossRef>) {
         return detailDao.addMovieWithGenreCrossRef(movieWithGenre)
     }
 
@@ -57,15 +53,11 @@ class DetailLocalDataSource @Inject constructor(
         return detailDao.addCredits(credit)
     }
 
-    suspend fun deleteFavorite(movieEntity: FavoriteMovieEntity) {
-        return detailDao.deleteFavorite(movieEntity)
-    }
-
     suspend fun addToFavorite(movieEntity: FavoriteMovieEntity) {
         return detailDao.addToFavorite(movieEntity)
     }
 
-    suspend fun addMovie(movie: MovieEntity) {
+    suspend fun addMovie(movie: List<MovieEntity>) {
         return movieDao.addMovie(movie)
     }
 }

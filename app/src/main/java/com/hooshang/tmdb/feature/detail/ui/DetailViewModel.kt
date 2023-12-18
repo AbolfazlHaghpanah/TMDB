@@ -1,5 +1,6 @@
 package com.hooshang.tmdb.feature.detail.ui
 
+import android.util.Log
 import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -15,6 +16,8 @@ import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -51,7 +54,13 @@ class DetailViewModel @Inject constructor(
                         throwable = it,
                         onTryAgain = { observeDetailMovieWithAllRelations() })
                 }
-                .collect { domainModel ->
+                .distinctUntilChanged()
+                .collectLatest { domainModel ->
+                    Log.d(
+                        "asd",
+                        "$domainModel " +
+                                " "
+                    )
                     setState { domainModel.toDetailState() }
                 }
         }
