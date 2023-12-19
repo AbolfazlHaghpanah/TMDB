@@ -28,26 +28,26 @@ interface DetailDao {
 
     //    cross references
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addFavoriteMovieGenre(genre: FavoriteMovieGenreCrossRef)
+    suspend fun insertFavoriteMovieGenre(genre: FavoriteMovieGenreCrossRef)
 
     @Delete
     suspend fun deleteFavoriteMovieGenre(favoriteMovieGenreCrossRef: FavoriteMovieGenreCrossRef)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addDetailMovieWithCreditCrossRef(detailMovieWithCreditCrossRef: DetailMovieWithCreditCrossRef)
+    fun insertDetailMoviesWithCredits(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addDetailMovieWithGenreCrossRef(detailMovieWithGenreCrossRef: DetailMovieWithGenreCrossRef)
+    fun insertDetailMoviesWithGenres(detailMovieWithGenreCrossRef: List<DetailMovieWithGenreCrossRef>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addDetailMovieWithSimilarMoviesCrossRef(detailMovieWithSimilarMoviesCrossRef: DetailMovieWithSimilarMoviesCrossRef)
+    fun insertDetailMoviesWithSimilarMovies(detailMovieWithSimilarMoviesCrossRef: List<DetailMovieWithSimilarMoviesCrossRef>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addMovieWithGenreCrossRef(movieWithGenre: MovieWithGenreCrossRef)
+    fun insertMoviesWithGenres(movieWithGenre: List<MovieWithGenreCrossRef>)
 
     //    other entities
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addCredits(credit: List<CreditEntity>)
+    fun insertCredits(credit: List<CreditEntity>)
 
     @Delete
     suspend fun deleteFavorite(movieEntity: FavoriteMovieEntity)

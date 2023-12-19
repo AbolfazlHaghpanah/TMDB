@@ -6,45 +6,56 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.hooshang.tmdb.core.data.model.local.GenreEntity
 import com.hooshang.tmdb.feature.home.data.model.local.entity.NowPlayingEntity
-import com.hooshang.tmdb.feature.home.data.model.local.relation.NowPlayingWithMovie
 import com.hooshang.tmdb.feature.home.data.model.local.entity.PopularMovieEntity
-import com.hooshang.tmdb.feature.home.data.model.local.relation.PopularMovieAndGenreWithMovie
-import com.hooshang.tmdb.feature.home.data.model.local.relation.crossref.PopularMovieGenreCrossRef
 import com.hooshang.tmdb.feature.home.data.model.local.entity.TopMovieEntity
+import com.hooshang.tmdb.feature.home.data.model.local.relation.NowPlayingWithMovie
+import com.hooshang.tmdb.feature.home.data.model.local.relation.PopularMovieAndGenreWithMovie
 import com.hooshang.tmdb.feature.home.data.model.local.relation.TopMovieAndGenreWithMovie
+import com.hooshang.tmdb.feature.home.data.model.local.relation.crossref.PopularMovieGenreCrossRef
 import com.hooshang.tmdb.feature.home.data.model.local.relation.crossref.TopMovieGenreCrossRef
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface HomeDao {
-
-    //    cross references
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addTopMoviesGenre(genre: TopMovieGenreCrossRef)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addPopularMoviesGenre(genre: PopularMovieGenreCrossRef)
+    @Query("SELECT * FROM NOW_PLAYING")
+    fun observeNowPlayingMovies(): Flow<List<NowPlayingWithMovie>>
 
     @Query("SELECT * FROM POPULAR_MOVIES")
-    fun observePopularMovie(): Flow<List<PopularMovieAndGenreWithMovie>>
+    fun observePopularMovies(): Flow<List<PopularMovieAndGenreWithMovie>>
 
     @Query("SELECT * FROM TOP_MOVIE")
-    fun observeTopMovie(): Flow<List<TopMovieAndGenreWithMovie>>
-
-    @Query("SELECT * FROM NOW_PLAYING")
-    fun observeNowPlayingMovie(): Flow<List<NowPlayingWithMovie>>
-
-    //    other entities
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addNowPlayingMovie(movie: NowPlayingEntity)
+    fun observeTopMovies(): Flow<List<TopMovieAndGenreWithMovie>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addPopularMovie(movie: PopularMovieEntity)
+    suspend fun addGenres(genre: List<GenreEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addTopMovie(movie: TopMovieEntity)
+    suspend fun addNowPlayingMovies(movie: List<NowPlayingEntity>)
 
-    //genres
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addGenre(genre: GenreEntity)
+    suspend fun addPopularMovies(movie: List<PopularMovieEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addPopularMoviesGenre(genre: List<PopularMovieGenreCrossRef>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addTopMovies(movie: List<TopMovieEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addTopMoviesGenre(genre: List<TopMovieGenreCrossRef>)
+
+    @Query("DELETE FROM now_playing")
+    fun removeNowPlayingMovies()
+
+    @Query("DELETE FROM popularmoviegenrecrossref")
+    fun removePopularMoviesGenre()
+
+    @Query("DELETE FROM popular_movies")
+    fun removePopularMovies()
+
+    @Query("DELETE FROM top_movie")
+    fun removeTopMovies()
+
+    @Query("DELETE FROM topmoviegenrecrossref")
+    fun removeTopMoviesGenre()
 }

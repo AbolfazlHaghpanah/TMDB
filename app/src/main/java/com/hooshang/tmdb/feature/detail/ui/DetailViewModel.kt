@@ -15,6 +15,7 @@ import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -51,6 +52,7 @@ class DetailViewModel @Inject constructor(
                         throwable = it,
                         onTryAgain = { observeDetailMovieWithAllRelations() })
                 }
+                .distinctUntilChanged()
                 .collect { domainModel ->
                     setState { domainModel.toDetailState() }
                 }

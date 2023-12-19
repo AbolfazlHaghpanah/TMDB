@@ -1,9 +1,11 @@
 package com.hooshang.tmdb.feature.detail.data.model.remote
 
+import com.hooshang.tmdb.core.data.model.local.MovieEntity
 import com.hooshang.tmdb.feature.detail.data.model.local.entity.CreditEntity
 import com.hooshang.tmdb.feature.detail.data.model.local.entity.DetailEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.math.RoundingMode
 
 @Serializable
 data class MovieDetailResponse(
@@ -52,5 +54,16 @@ data class MovieDetailResponse(
         }
 
         return castAndCrew
+    }
+
+    fun toMovieEntity(): MovieEntity {
+        return MovieEntity(
+            id = id,
+            posterPath = posterPath ?: "",
+            voteAverage = voteAverage.toBigDecimal()
+                .setScale(1, RoundingMode.FLOOR)?.toDouble() ?: 0.0,
+            backdropPath = backdropPath ?: "",
+            title = title
+        )
     }
 }

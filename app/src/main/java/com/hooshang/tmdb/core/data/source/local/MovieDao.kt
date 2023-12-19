@@ -9,5 +9,5 @@ import com.hooshang.tmdb.core.data.model.local.MovieEntity
 interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addMovie(movie: MovieEntity)
+    suspend fun insertMovies(movie: List<MovieEntity>)
 }

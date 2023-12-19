@@ -23,7 +23,7 @@ class DetailRepositoryImpl @Inject constructor(
     override suspend fun addToFavorite(movieId: Int, genres: List<Int>) =
         withContext(Dispatchers.IO) {
             genres.forEach {
-                localDataSource.addFavoriteMovieGenre(
+                localDataSource.insertFavoriteMovieGenre(
                     FavoriteMovieGenreCrossRef(
                         movieId,
                         it
@@ -42,73 +42,63 @@ class DetailRepositoryImpl @Inject constructor(
 
     override suspend fun fetchMovieDetail(id: Int) = withContext(Dispatchers.IO) {
         val movieDetailDto = remoteDataSource.getMovieDetail(id)
-        localDataSource.addMovie(
-            MovieEntity(
-                id = movieDetailDto.id,
-                posterPath = movieDetailDto.posterPath ?: "",
-                voteAverage = movieDetailDto.voteAverage.toDouble(),
-                backdropPath = movieDetailDto.backdropPath ?: "",
-                title = movieDetailDto.title
-            )
-        )
+
+        localDataSource.insertMovies(listOf(movieDetailDto.toMovieEntity()))
 
         localDataSource.addDetail(movieDetailDto.toDetailEntity())
 
         localDataSource.addCredits(movieDetailDto.toCreditsEntity())
 
-        movieDetailDto.credits.cast.forEach {
-            localDataSource.addDetailMovieWithCreditCrossRef(
+        localDataSource.insertDetailMoviesWithCredits(
+            movieDetailDto.credits.cast.map {
                 DetailMovieWithCreditCrossRef(
                     detailMovieId = movieDetailDto.id,
                     creditId = it.id
                 )
-            )
-        }
-        movieDetailDto.credits.crew.forEach {
-            localDataSource.addDetailMovieWithCreditCrossRef(
+            } + movieDetailDto.credits.crew.map {
                 DetailMovieWithCreditCrossRef(
                     detailMovieId = movieDetailDto.id,
                     creditId = it.id
                 )
-            )
-        }
+            }
+        )
 
-        movieDetailDto.genreResponses.forEach {
-            localDataSource.addDetailMovieWithGenreCrossRef(
+        localDataSource.insertDetailMoviesWithGenres(
+            movieDetailDto.genreResponses.map {
                 DetailMovieWithGenreCrossRef(
                     detailMovieId = movieDetailDto.id,
                     genreId = it.id
                 )
-            )
-        }
+            }
+        )
 
-        movieDetailDto.similar.results.forEach {
-            localDataSource.addDetailMovieWithSimilarMoviesCrossRef(
+        localDataSource.insertDetailMoviesWithSimilarMovies(
+            movieDetailDto.similar.results.map {
                 DetailMovieWithSimilarMoviesCrossRef(
                     detailMovieId = movieDetailDto.id,
                     id = it.id
                 )
-            )
-            localDataSource.addMovie(
-                MovieEntity(
-                    id = it.id,
-                    title = it.title,
-                    backdropPath = it.backdropPath ?: "",
-                    voteAverage = it.voteAverage.toDouble(),
-                    posterPath = it.posterPath ?: ""
-                )
-            )
-        }
+            }
+        )
 
-        movieDetailDto.similar.results.forEach { similarMovieResult ->
-            similarMovieResult.genreIds.forEach { genreId ->
-                localDataSource.addMovieWithGenreCrossRef(
-                    MovieWithGenreCrossRef(
-                        id = similarMovieResult.id,
-                        genreId = genreId
-                    )
+        localDataSource.insertMovies(
+            movieDetailDto.similar.results.map { similarMovieResult ->
+                localDataSource.insertMoviesWithGenres(
+                    similarMovieResult.genreIds.map {
+                        MovieWithGenreCrossRef(
+                            id = similarMovieResult.id,
+                            genreId = it
+                        )
+                    }
+                )
+                MovieEntity(
+                    id = similarMovieResult.id,
+                    title = similarMovieResult.title,
+                    backdropPath = similarMovieResult.backdropPath ?: "",
+                    voteAverage = similarMovieResult.voteAverage.toDouble(),
+                    posterPath = similarMovieResult.posterPath ?: ""
                 )
             }
-        }
+        )
     }
 }
