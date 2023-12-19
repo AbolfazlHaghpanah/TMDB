@@ -49,7 +49,7 @@ class DetailRepositoryImpl @Inject constructor(
 
         localDataSource.addCredits(movieDetailDto.toCreditsEntity())
 
-        localDataSource.insertDetailMovieWithCredits(
+        localDataSource.insertDetailMoviesWithCredits(
             movieDetailDto.credits.cast.map {
                 DetailMovieWithCreditCrossRef(
                     detailMovieId = movieDetailDto.id,
@@ -63,7 +63,7 @@ class DetailRepositoryImpl @Inject constructor(
             }
         )
 
-        localDataSource.insertDetailMovieWithGenres(
+        localDataSource.insertDetailMoviesWithGenres(
             movieDetailDto.genreResponses.map {
                 DetailMovieWithGenreCrossRef(
                     detailMovieId = movieDetailDto.id,
@@ -72,7 +72,7 @@ class DetailRepositoryImpl @Inject constructor(
             }
         )
 
-        localDataSource.insertDetailMovieWithSimilarMovies(
+        localDataSource.insertDetailMoviesWithSimilarMovies(
             movieDetailDto.similar.results.map {
                 DetailMovieWithSimilarMoviesCrossRef(
                     detailMovieId = movieDetailDto.id,
@@ -83,7 +83,7 @@ class DetailRepositoryImpl @Inject constructor(
 
         localDataSource.insertMovies(
             movieDetailDto.similar.results.map { similarMovieResult ->
-                localDataSource.insertMovieWithGenres(
+                localDataSource.insertMoviesWithGenres(
                     similarMovieResult.genreIds.map {
                         MovieWithGenreCrossRef(
                             id = similarMovieResult.id,

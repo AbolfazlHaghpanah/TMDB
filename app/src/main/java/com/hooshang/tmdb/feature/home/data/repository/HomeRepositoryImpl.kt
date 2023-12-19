@@ -17,7 +17,7 @@ class HomeRepositoryImpl @Inject constructor(
 ) : HomeRepository {
 
     override suspend fun getNowPlaying() = withContext(Dispatchers.IO) {
-        localDataSource.getNowPlaying()
+        localDataSource.getNowPlayings()
     }
 
     override suspend fun getTopMovie() = withContext(Dispatchers.IO) {
@@ -25,7 +25,7 @@ class HomeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPopularMovie() = withContext(Dispatchers.IO) {
-        localDataSource.getPopularMovie()
+        localDataSource.getPopularMovies()
     }
 
     override suspend fun fetchGenres() = withContext(Dispatchers.IO) {
@@ -37,7 +37,7 @@ class HomeRepositoryImpl @Inject constructor(
     override suspend fun fetchNowPlaying() = withContext(Dispatchers.IO) {
         val data = remoteDataSource.getNowPlaying().results
 
-        localDataSource.getNowPlaying()
+        localDataSource.getNowPlayings()
             .onEach { localMovies ->
                 if (localMovies.map { it.movieId }.compare(data.map { it.id })) {
                     localDataSource.removeNowPlayingMovies()
@@ -49,7 +49,7 @@ class HomeRepositoryImpl @Inject constructor(
             data.map { it.toMovieEntity() }
         )
 
-        localDataSource.insertNowPlayingMovie(
+        localDataSource.insertNowPlayingMovies(
             data.map { it.toNowPlayingEntity() }
         )
     }
@@ -87,7 +87,7 @@ class HomeRepositoryImpl @Inject constructor(
     override suspend fun fetchPopularMovie() = withContext(Dispatchers.IO) {
         val data = remoteDataSource.getPopular().results
 
-        localDataSource.getPopularMovie()
+        localDataSource.getPopularMovies()
             .onEach { localMovies ->
                 if (localMovies.map { it.movieId }.compare(data.map { it.id })) {
                     localDataSource.removePopularMovies()
@@ -101,7 +101,7 @@ class HomeRepositoryImpl @Inject constructor(
             }
         )
 
-        localDataSource.insertPopularMovie(
+        localDataSource.insertPopularMovies(
             data.map { movie ->
                 localDataSource.insertPopularMoviesGenres(
                     movie.genreIds.orEmpty().map { genreId ->

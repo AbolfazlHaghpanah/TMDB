@@ -31,22 +31,22 @@ class DetailLocalDataSource @Inject constructor(
         return detailDao.insertFavoriteMovieGenre(genre)
     }
 
-    fun insertDetailMovieWithCredits(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>) {
-        return detailDao.insertDetailMovieWithCredits(detailMovieWithCreditCrossRef)
+    fun insertDetailMoviesWithCredits(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>) {
+        return detailDao.insertDetailMoviesWithCredits(detailMovieWithCreditCrossRef)
     }
 
-    fun insertDetailMovieWithGenres(detailMovieWithGenreCrossRef: List<DetailMovieWithGenreCrossRef>) {
-        return detailDao.insertDetailMovieWithGenres(detailMovieWithGenreCrossRef)
+    fun insertDetailMoviesWithGenres(detailMovieWithGenreCrossRef: List<DetailMovieWithGenreCrossRef>) {
+        return detailDao.insertDetailMoviesWithGenres(detailMovieWithGenreCrossRef)
     }
 
-    fun insertDetailMovieWithSimilarMovies(detailMovieWithSimilarMoviesCrossRef: List<DetailMovieWithSimilarMoviesCrossRef>) {
-        return detailDao.insertDetailMovieWithSimilarMovies(
+    fun insertDetailMoviesWithSimilarMovies(detailMovieWithSimilarMoviesCrossRef: List<DetailMovieWithSimilarMoviesCrossRef>) {
+        return detailDao.insertDetailMoviesWithSimilarMovies(
             detailMovieWithSimilarMoviesCrossRef
         )
     }
 
-    fun insertMovieWithGenres(movieWithGenre: List<MovieWithGenreCrossRef>) {
-        return detailDao.insertMovieWithGenres(movieWithGenre)
+    fun insertMoviesWithGenres(movieWithGenre: List<MovieWithGenreCrossRef>) {
+        return detailDao.insertMoviesWithGenres(movieWithGenre)
     }
 
     fun addCredits(credit: List<CreditEntity>) {
