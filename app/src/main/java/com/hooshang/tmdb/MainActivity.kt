@@ -20,14 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.hooshang.tmdb.core.ui.component.TMDBBottomNavigation
 import com.hooshang.tmdb.core.ui.component.TMDBSnackBar
 import com.hooshang.tmdb.core.ui.theme.TMDBTheme
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 import com.hooshang.tmdb.core.utils.SnackBarManager
 import com.hooshang.tmdb.navigation.AppScreens
 import com.hooshang.tmdb.navigation.mainNavGraph
@@ -90,7 +89,7 @@ class MainActivity : ComponentActivity() {
 
                 ModalBottomSheetLayout(
                     bottomSheetNavigator = bottomSheetNavigator,
-                    sheetShape = TMDBTheme.shapes.veryLarge,
+                    sheetShape = Theme.shapes.veryLarge,
                     scrimColor = Color.Transparent
                 ) {
 

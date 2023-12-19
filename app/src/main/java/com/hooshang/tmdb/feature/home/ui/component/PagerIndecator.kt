@@ -15,7 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 
 @Composable
 fun TMDBPagerIndicator(
@@ -49,8 +49,8 @@ fun TMDBPagerIndicator(
                 Box(
                     modifier = Modifier
                         .background(
-                            TMDBTheme.colors.primary.copy(alpha = color),
-                            TMDBTheme.shapes.rounded
+                            Theme.colors.primary.copy(alpha = color),
+                            Theme.shapes.rounded
                         )
                         .width(activeSize)
                         .height(10.dp),

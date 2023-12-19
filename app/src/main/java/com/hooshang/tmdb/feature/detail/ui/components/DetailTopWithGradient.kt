@@ -51,7 +51,7 @@ import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.component.TextIcon
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 import com.hooshang.tmdb.core.utils.imageUrl
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import java.math.RoundingMode
@@ -85,9 +85,9 @@ fun DetailTopWithGradient(
             MovieInfo(detailsState)
 
             Text(
-                text = stringResource(R.string.overview),
-                color = TMDBTheme.colors.white,
-                style = TMDBTheme.typography.subtitle1,
+                text = stringResource(R.string.label_overview),
+                color = Theme.colors.white,
+                style = Theme.typography.subtitle1,
                 modifier = Modifier
                     .align(Alignment.Start)
                     .padding(bottom = 8.dp, top = 24.dp, start = 24.dp)
@@ -105,9 +105,9 @@ private fun ForegroundImage(movieDetailPosterPath: String) {
             .fillMaxWidth()
             .aspectRatio(1.1f)
             .padding(start = 85.dp, end = 85.dp)
-            .clip(TMDBTheme.shapes.medium),
+            .clip(Theme.shapes.medium),
         contentScale = ContentScale.Crop,
-        error = painterResource(id = R.drawable.videoimageerror)
+        error = painterResource(id = R.drawable.img_video_image_error)
     )
 }
 
@@ -115,8 +115,8 @@ private fun ForegroundImage(movieDetailPosterPath: String) {
 private fun BackgroundImage(movieDetailPosterPath: String) {
     val gradient = Brush.verticalGradient(
         colors = listOf(
-            TMDBTheme.colors.background.copy(alpha = 0.57f),
-            TMDBTheme.colors.background.copy(alpha = 1f)
+            Theme.colors.background.copy(alpha = 0.57f),
+            Theme.colors.background.copy(alpha = 1f)
         )
     )
 
@@ -132,7 +132,7 @@ private fun BackgroundImage(movieDetailPosterPath: String) {
                 }
             },
         contentScale = ContentScale.Crop,
-        error = painterResource(id = R.drawable.videoimageerror)
+        error = painterResource(id = R.drawable.img_video_image_error)
     )
 }
 
@@ -144,32 +144,32 @@ private fun MovieInfo(movieDetailDomainModel: MovieDetailDomainModel) {
             .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
         TextIcon(
-            iconId = TMDBTheme.icons.calendar,
+            iconId = Theme.icons.calendar,
             text = movieDetailDomainModel.releaseDate.split(
                 "-"
             )[0]
         )
         Divider(
-            color = TMDBTheme.colors.gray,
+            color = Theme.colors.gray,
             modifier = Modifier
                 .width(1.dp)
                 .height(16.dp)
                 .align(Alignment.CenterVertically)
         )
         TextIcon(
-            iconId = TMDBTheme.icons.clock,
+            iconId = Theme.icons.clock,
             text = "${movieDetailDomainModel.runtime} Minutes"
         )
         if (movieDetailDomainModel.genres.isNotEmpty()) {
             Divider(
-                color = TMDBTheme.colors.gray,
+                color = Theme.colors.gray,
                 modifier = Modifier
                     .width(1.dp)
                     .height(16.dp)
                     .align(Alignment.CenterVertically)
             )
             TextIcon(
-                iconId = TMDBTheme.icons.film,
+                iconId = Theme.icons.film,
                 text = movieDetailDomainModel.genres[0].second
             )
         }
@@ -186,9 +186,9 @@ private fun MovieInfo(movieDetailDomainModel: MovieDetailDomainModel) {
 
         TextIcon(
             text = roundedVote.toString(),
-            iconId = TMDBTheme.icons.star,
-            iconColor = TMDBTheme.colors.secondary,
-            textColor = TMDBTheme.colors.secondary
+            iconId = Theme.icons.star,
+            iconColor = Theme.colors.secondary,
+            textColor = Theme.colors.secondary
         )
     }
 }
@@ -225,20 +225,20 @@ private fun TopBar(
         TMDBIconButton(
             onClick = onBackArrowClick,
             Modifier
-                .clip(TMDBTheme.shapes.rounded)
-                .background(TMDBTheme.colors.surface)
+                .clip(Theme.shapes.rounded)
+                .background(Theme.colors.surface)
                 .align(Alignment.CenterStart),
         ) {
             IconWrapper(
-                icon = TMDBTheme.icons.arrowBack,
-                tintColor = TMDBTheme.colors.white
+                icon = Theme.icons.arrowBack,
+                tintColor = Theme.colors.white
             )
         }
 
         Text(
             text = movieDetailDomainModel.title,
-            style = TMDBTheme.typography.subtitle1,
-            color = TMDBTheme.colors.white,
+            style = Theme.typography.subtitle1,
+            color = Theme.colors.white,
             textAlign = TextAlign.Start,
             modifier = Modifier
                 .align(Alignment.Center)
@@ -252,28 +252,28 @@ private fun TopBar(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             val suitableIcon =
-                if (!movieDetailDomainModel.isFavorite) TMDBTheme.icons.heartBorder else TMDBTheme.icons.heart
+                if (!movieDetailDomainModel.isFavorite) Theme.icons.heartBorder else Theme.icons.heart
             TMDBIconButton(
                 onClick = onFavoriteIconClick,
                 Modifier
-                    .clip(TMDBTheme.shapes.rounded)
-                    .background(TMDBTheme.colors.surface),
+                    .clip(Theme.shapes.rounded)
+                    .background(Theme.colors.surface),
             ) {
                 IconWrapper(
                     icon = suitableIcon,
-                    tintColor = TMDBTheme.colors.error
+                    tintColor = Theme.colors.error
                 )
             }
 
             TMDBIconButton(
                 onClick = { showDialog = true },
                 Modifier
-                    .clip(TMDBTheme.shapes.rounded)
-                    .background(TMDBTheme.colors.surface),
+                    .clip(Theme.shapes.rounded)
+                    .background(Theme.colors.surface),
             ) {
                 IconWrapper(
-                    icon = TMDBTheme.icons.share,
-                    tintColor = TMDBTheme.colors.primary
+                    icon = Theme.icons.share,
+                    tintColor = Theme.colors.primary
                 )
             }
         }
@@ -305,11 +305,11 @@ private fun ShareDialog(
     val twitterIndex = 2
 
     val isInstagramIdNotNull =
-        externalIds[instagramIndex] != stringResource(R.string.null_text)
+        externalIds[instagramIndex] != stringResource(R.string.cmp_null_text)
     val isTwitterIdNotNull =
-        externalIds[twitterIndex] != stringResource(R.string.null_text)
+        externalIds[twitterIndex] != stringResource(R.string.cmp_null_text)
     val isIMDBIdNotNull =
-        externalIds[imdbIndex] != stringResource(R.string.null_text)
+        externalIds[imdbIndex] != stringResource(R.string.cmp_null_text)
 
     Dialog(
         onDismissRequest = { changeShowDialog(false) }
@@ -317,8 +317,8 @@ private fun ShareDialog(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .clip(TMDBTheme.shapes.large)
-                .background(TMDBTheme.colors.surface)
+                .clip(Theme.shapes.large)
+                .background(Theme.colors.surface)
                 .fillMaxWidth()
                 .aspectRatio(1.4f)
                 .padding(top = 12.dp)
@@ -330,15 +330,15 @@ private fun ShareDialog(
                     .align(Alignment.End)
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(TMDBTheme.icons.close),
+                    imageVector = ImageVector.vectorResource(Theme.icons.close),
                     contentDescription = "close",
-                    tint = TMDBTheme.colors.gray
+                    tint = Theme.colors.gray
                 )
             }
             Text(
-                text = stringResource(R.string.open_in),
-                style = TMDBTheme.typography.h6,
-                color = TMDBTheme.colors.white,
+                text = stringResource(R.string.label_open_in),
+                style = Theme.typography.h6,
+                color = Theme.colors.white,
                 modifier = Modifier.padding(
                     bottom = 15.dp
                 )
@@ -347,7 +347,7 @@ private fun ShareDialog(
             Divider(
                 modifier = Modifier
                     .padding(horizontal = 30.dp),
-                color = TMDBTheme.colors.background
+                color = Theme.colors.background
             )
 
             Row(
@@ -363,7 +363,7 @@ private fun ShareDialog(
                 ) {
                     ImageWrapper(
                         shouldNotHaveAlpha = isInstagramIdNotNull,
-                        image = R.drawable.instagram,
+                        image = R.drawable.ic_instagram,
                         contentDescription = "share instagram link"
                     )
                 }
@@ -375,7 +375,7 @@ private fun ShareDialog(
                 ) {
                     ImageWrapper(
                         shouldNotHaveAlpha = isTwitterIdNotNull,
-                        image = R.drawable.twitter,
+                        image = R.drawable.ic_twitter,
                         contentDescription = "share twitter link"
                     )
                 }
@@ -387,7 +387,7 @@ private fun ShareDialog(
                 ) {
                     ImageWrapper(
                         shouldNotHaveAlpha = isIMDBIdNotNull,
-                        image = R.drawable.imdb,
+                        image = R.drawable.ic_imdb,
                         contentDescription = "share IMDB link"
                     )
                 }
@@ -400,7 +400,7 @@ private fun ShareDialog(
                 }) {
                     ImageWrapper(
                         shouldNotHaveAlpha = true,
-                        image = R.drawable.tmdb,
+                        image = R.drawable.ic_tmdb,
                         contentDescription = "share TMDB link"
                     )
                 }

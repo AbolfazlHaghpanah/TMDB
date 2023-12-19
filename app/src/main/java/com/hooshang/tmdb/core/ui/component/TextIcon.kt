@@ -3,7 +3,6 @@ package com.hooshang.tmdb.core.ui.component
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,7 +13,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 
 @Composable
 fun TextIcon(
@@ -34,12 +33,12 @@ fun TextIcon(
         Icon(
             imageVector = ImageVector.vectorResource(id = iconId),
             contentDescription = null,
-            tint = iconColor ?: TMDBTheme.colors.gray,
+            tint = iconColor ?: Theme.colors.gray,
         )
         Text(
             text = text,
-            color = textColor ?: TMDBTheme.colors.gray,
-            style = TMDBTheme.typography.body2
+            color = textColor ?: Theme.colors.gray,
+            style = Theme.typography.body2
         )
     }
 }

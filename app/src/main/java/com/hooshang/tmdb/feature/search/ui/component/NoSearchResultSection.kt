@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.hooshang.tmdb.R
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 
 @Composable
 fun NoSearchResultSection() {
@@ -28,22 +28,22 @@ fun NoSearchResultSection() {
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            imageVector = ImageVector.vectorResource(TMDBTheme.icons.noResult),
+            imageVector = ImageVector.vectorResource(Theme.icons.noResult),
             contentDescription = null
         )
         Text(
-            text = stringResource(R.string.movie_search_error1),
-            style = TMDBTheme.typography.subtitle1,
-            color = TMDBTheme.colors.whiteGray,
+            text = stringResource(R.string.desc_movie_search_error),
+            style = Theme.typography.subtitle1,
+            color = Theme.colors.whiteGray,
             minLines = 2,
             modifier = Modifier
                 .width(168.dp)
                 .padding(top = 16.dp, bottom = 20.dp)
         )
         Text(
-            text = stringResource(R.string.find_movie_by_title),
-            style = TMDBTheme.typography.caption,
-            color = TMDBTheme.colors.gray
+            text = stringResource(R.string.desc_find_movie_by_title),
+            style = Theme.typography.caption,
+            color = Theme.colors.gray
         )
     }
 }

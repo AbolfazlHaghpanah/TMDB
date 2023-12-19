@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.hooshang.tmdb.core.ui.shimmer.fakeMovie
 import com.hooshang.tmdb.core.ui.shimmer.ifShimmerActive
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import com.hooshang.tmdb.feature.home.ui.component.MovieCard
 import kotlinx.collections.immutable.PersistentList
@@ -30,8 +30,8 @@ fun MovieRow(
                 .padding(start = 24.dp, top = 16.dp)
                 .ifShimmerActive(movies.isEmpty()),
             text = title,
-            style = TMDBTheme.typography.subtitle1,
-            color = TMDBTheme.colors.white
+            style = Theme.typography.subtitle1,
+            color = Theme.colors.white
         )
 
         LazyRow(

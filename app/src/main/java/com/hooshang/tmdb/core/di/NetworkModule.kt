@@ -1,6 +1,7 @@
 package com.hooshang.tmdb.core.di
 
-import com.hooshang.tmdb.core.utils.apiVersion
+import com.hooshang.tmdb.core.utils.baseUrl
+import com.hooshang.tmdb.core.utils.tmdbApiKey
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -35,10 +36,13 @@ internal object NetworkModule {
             .readTimeout(timeOut, TimeUnit.SECONDS)
             .writeTimeout(timeOut, TimeUnit.SECONDS)
             .connectTimeout(timeOut, TimeUnit.SECONDS)
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader("Authorization", tmdbApiKey)
+                    .build()
+                chain.proceed(request)
+            }
             .build()
-
-    @Provides
-    fun provideBaseUrl(): String = "https://api.themoviedb.org/$apiVersion/"
 
     @Provides
     fun provideJson(): Json = Json {
@@ -56,7 +60,6 @@ internal object NetworkModule {
     @Singleton
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
-        baseUrl: String,
         json: Json,
         contentType: MediaType
     ): Retrofit =

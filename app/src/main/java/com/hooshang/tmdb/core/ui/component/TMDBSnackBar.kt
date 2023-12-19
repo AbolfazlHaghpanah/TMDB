@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 
 @Composable
 fun TMDBSnackBar(
@@ -22,8 +22,8 @@ fun TMDBSnackBar(
     Snackbar(
         modifier = Modifier
             .padding(16.dp),
-        backgroundColor = TMDBTheme.colors.surface,
-        shape = TMDBTheme.shapes.large,
+        backgroundColor = Theme.colors.surface,
+        shape = Theme.shapes.large,
     ) {
         Row(
             modifier = Modifier
@@ -37,8 +37,8 @@ fun TMDBSnackBar(
                     else 1f
                 ),
                 text = message,
-                style = TMDBTheme.typography.subtitle2,
-                color = TMDBTheme.colors.white,
+                style = Theme.typography.subtitle2,
+                color = Theme.colors.white,
                 maxLines = 1
             )
             if (actionLabel != null && performAction != null) {
@@ -46,8 +46,8 @@ fun TMDBSnackBar(
                     Text(
                         modifier = Modifier,
                         text = actionLabel,
-                        style = TMDBTheme.typography.subtitle2,
-                        color = TMDBTheme.colors.primary
+                        style = Theme.typography.subtitle2,
+                        color = Theme.colors.primary
                     )
                 }
             }

@@ -1,22 +1,23 @@
 <resources>
-    <string name="app_name">TMDB</string>
-    <string name="overview">Overview</string>
-    <string name="cast_and_crew">Cast and Crew</string>
-    <string name="similar_movies">Similar Movies</string>
-    <string name="actor">Actor</string>
-    <string name="most_popular">Most Popular</string>
-    <string name="top_rated">Top Rated</string>
-    <string name="favorites">Favorites</string>
-    <string name="there_is_no_movie_yet">There is no movie yet!</string>
-    <string name="are_you_sure">Are you sure ?</string>
-    <string name="delete_alert">By doing this, the favorite movie will be deleted from your storage list</string>
-    <string name="cancel">Cancel</string>
-    <string name="delete">Delete</string>
-    <string name="imdb">imdb-</string>
-    <string name="instagram">instagram-</string>
-    <string name="twitter">twitter-</string>
-    <string name="open_in">Open In</string>
-    <string name="null_text">null</string>
-    <string name="movie_search_error1">we are sorry,we can not find the movie :(</string>
-    <string name="find_movie_by_title">"Find your movie by Type title "</string>
+    <string name="label_app_name">TMDB</string>
+    <string name="label_overview">Overview</string>
+    <string name="label_cast_and_crew">Cast and Crew</string>
+    <string name="label_similar_movies">Similar Movies</string>
+    <string name="label_actor">Actor</string>
+    <string name="label_most_popular">Most Popular</string>
+    <string name="label_top_rated">Top Rated</string>
+    <string name="label_favorites">Favorites</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_delete">Delete</string>
+    <string name="label_open_in">Open In</string>
+    <string name="desc_movie_search_error">we are sorry,we can not find the movie :(</string>
+    <string name="desc_find_movie_by_title">"Find your movie by Type title "</string>
+    <string name="desc_there_is_no_movie_yet">There is no movie yet!</string>
+    <string name="desc_are_you_sure">Are you sure ?</string>
+    <string name="desc_delete_alert">By doing this, the favorite movie will be deleted from your storage list</string>
+    <string name="prefix_imdb">imdb-</string>
+    <string name="prefix_instagram">instagram-</string>
+    <string name="prefix_twitter">twitter-</string>
+    <string name="cmp_null_text">null</string>
+
 </resources>

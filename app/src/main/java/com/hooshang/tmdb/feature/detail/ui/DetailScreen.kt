@@ -21,7 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.component.MovieRow
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 import com.hooshang.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.hooshang.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
 import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsAction
@@ -80,9 +80,9 @@ private fun DetailScreen(
     val scrollState = rememberScrollState()
 
     Scaffold(
-        contentColor = TMDBTheme.colors.background.copy(alpha = 1f),
-        backgroundColor = TMDBTheme.colors.background.copy(alpha = 1f),
-        modifier = Modifier.background(TMDBTheme.colors.background)
+        contentColor = Theme.colors.background.copy(alpha = 1f),
+        backgroundColor = Theme.colors.background.copy(alpha = 1f),
+        modifier = Modifier.background(Theme.colors.background)
     ) { paddingValues ->
 
         if (detailsState.isLoading) {
@@ -92,7 +92,7 @@ private fun DetailScreen(
         } else if (detailsState.movie.id != -1 && detailsState.movie.genres.isNotEmpty()) {
             Column(
                 modifier = Modifier
-                    .background(TMDBTheme.colors.background)
+                    .background(Theme.colors.background)
                     .navigationBarsPadding()
                     .fillMaxSize()
                     .padding(paddingValues)
@@ -115,7 +115,7 @@ private fun DetailScreen(
                 if (detailsState.movie.similar.isNotEmpty()) {
                     MovieRow(
                         onClick = { onAction(DetailsAction.NavigateToDetails(it)) },
-                        title = stringResource(R.string.similar_movies),
+                        title = stringResource(R.string.label_similar_movies),
                         movies = detailsState.movie.similar.map {
                             HomeMovieDomainModel(
                                 title = it.title,

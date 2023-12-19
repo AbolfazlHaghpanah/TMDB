@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import com.hooshang.tmdb.core.ui.shimmer.ifShimmerActive
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 import com.hooshang.tmdb.core.utils.imageUrl
 import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 
@@ -32,7 +32,7 @@ fun PagerMovieItem(
 ) {
     Card(
         modifier = modifier,
-        shape = TMDBTheme.shapes.large,
+        shape = Theme.shapes.large,
         elevation = 24.dp
     ) {
         Box(
@@ -55,7 +55,7 @@ fun PagerMovieItem(
                     .fillMaxSize()
                     .then(
                         if (isLoading) {
-                            Modifier.background(TMDBTheme.colors.surface)
+                            Modifier.background(Theme.colors.surface)
                         } else {
                             Modifier.background(
                                 Brush.verticalGradient(
@@ -79,15 +79,15 @@ fun PagerMovieItem(
                 Text(
                     modifier = Modifier.ifShimmerActive(isLoading),
                     text = movie.title,
-                    style = TMDBTheme.typography.subtitle1,
-                    color = TMDBTheme.colors.white
+                    style = Theme.typography.subtitle1,
+                    color = Theme.colors.white
                 )
 
                 Text(
                     modifier = Modifier.ifShimmerActive(isLoading),
                     text = movie.releaseDate,
-                    style = TMDBTheme.typography.caption,
-                    color = TMDBTheme.colors.white
+                    style = Theme.typography.caption,
+                    color = Theme.colors.white
                 )
             }
         }

@@ -22,7 +22,7 @@ import coil.compose.AsyncImage
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.component.TextIcon
 import com.hooshang.tmdb.core.ui.shimmer.ifShimmerActive
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 import com.hooshang.tmdb.core.utils.imageUrl
 
 @Composable
@@ -37,11 +37,11 @@ fun MovieCard(
 ) {
     Column(
         modifier = modifier
-            .clip(TMDBTheme.shapes.medium)
+            .clip(Theme.shapes.medium)
             .clickable(onClick = onClick)
             .background(
-                TMDBTheme.colors.surface,
-                TMDBTheme.shapes.medium
+                Theme.colors.surface,
+                Theme.shapes.medium
             )
             .width(140.dp)
     ) {
@@ -55,14 +55,14 @@ fun MovieCard(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(8.dp)
-                    .clip(TMDBTheme.shapes.small)
-                    .background(TMDBTheme.colors.surface.copy(alpha = 0.7f))
+                    .clip(Theme.shapes.small)
+                    .background(Theme.colors.surface.copy(alpha = 0.7f))
                     .padding(8.dp, 4.dp)
                     .ifShimmerActive(isShimmer),
                 text = vote,
-                iconId = TMDBTheme.icons.star,
-                iconColor = TMDBTheme.colors.secondary,
-                textColor = TMDBTheme.colors.secondary
+                iconId = Theme.icons.star,
+                iconColor = Theme.colors.secondary,
+                textColor = Theme.colors.secondary
             )
 
             AsyncImage(
@@ -71,7 +71,7 @@ fun MovieCard(
                 model = imageUrl + image,
                 contentScale = ContentScale.Crop,
                 contentDescription = null,
-                error = if (isShimmer) null else painterResource(id = R.drawable.videoimageerror)
+                error = if (isShimmer) null else painterResource(id = R.drawable.img_video_image_error)
             )
         }
 
@@ -80,10 +80,10 @@ fun MovieCard(
                 .padding(top = 12.dp, start = 8.dp, end = 8.dp, bottom = 4.dp)
                 .ifShimmerActive(isShimmer),
             text = title,
-            style = TMDBTheme.typography.body1,
+            style = Theme.typography.body1,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            color = TMDBTheme.colors.white
+            color = Theme.colors.white
         )
 
         Text(
@@ -92,9 +92,9 @@ fun MovieCard(
                 .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
                 .ifShimmerActive(isShimmer),
             text = genres,
-            style = TMDBTheme.typography.overLine,
+            style = Theme.typography.overLine,
             maxLines = 1,
-            color = TMDBTheme.colors.gray,
+            color = Theme.colors.gray,
             overflow = TextOverflow.Ellipsis
         )
     }

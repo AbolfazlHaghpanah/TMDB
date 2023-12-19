@@ -2,14 +2,14 @@ package com.hooshang.tmdb.core.ui.theme.designsystem
 
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.dp
 
 @Immutable
-data class TMDBShapes(
+data class Shapes(
     val verySmall: CornerBasedShape = RoundedCornerShape(4.dp),
     val small: CornerBasedShape = RoundedCornerShape(8.dp),
     val medium: CornerBasedShape = RoundedCornerShape(12.dp),
@@ -19,11 +19,14 @@ data class TMDBShapes(
     val rounded: CornerBasedShape = RoundedCornerShape(50)
 ) {
     @Composable
-    fun toShapes(): Shapes {
-        return MaterialTheme.shapes.copy(
-            small = small,
-            medium = medium,
-            large = large
-        )
-    }
+    fun toShapes(): Shapes = Shapes(
+        small = small,
+        medium = medium,
+        large = large
+    )
+
+}
+
+val LocalShape = staticCompositionLocalOf {
+    com.hooshang.tmdb.core.ui.theme.designsystem.Shapes()
 }

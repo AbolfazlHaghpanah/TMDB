@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hooshang.tmdb.R
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 import com.hooshang.tmdb.core.utils.imageUrl
 import com.hooshang.tmdb.feature.detail.domain.model.CastOrCrewDomainModel
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
@@ -33,15 +33,15 @@ import kotlinx.collections.immutable.toPersistentList
 fun OverviewContentWithCastAndCrew(movieDetailDomainModel: MovieDetailDomainModel) {
     Text(
         text = movieDetailDomainModel.overview,
-        color = TMDBTheme.colors.whiteGray,
-        style = TMDBTheme.typography.subtitle2,
+        color = Theme.colors.whiteGray,
+        style = Theme.typography.subtitle2,
         modifier = Modifier.padding(horizontal = 24.dp)
     )
 
     Text(
-        text = stringResource(R.string.cast_and_crew),
-        style = TMDBTheme.typography.subtitle1,
-        color = TMDBTheme.colors.white,
+        text = stringResource(R.string.label_cast_and_crew),
+        style = Theme.typography.subtitle1,
+        color = Theme.colors.white,
         modifier = Modifier
             .padding(
                 top = 24.dp,
@@ -78,16 +78,16 @@ private fun CastCrewLazyRow(
                 ) {
                     Text(
                         text = castOrCrew.name,
-                        style = TMDBTheme.typography.body1,
-                        color = TMDBTheme.colors.white,
+                        style = Theme.typography.body1,
+                        color = Theme.colors.white,
                         modifier = Modifier
                             .widthIn(60.dp, 112.dp)
                             .basicMarquee()
                     )
                     Text(
-                        text = castOrCrew.job ?: stringResource(R.string.actor),
-                        style = TMDBTheme.typography.overLine,
-                        color = TMDBTheme.colors.gray
+                        text = castOrCrew.job ?: stringResource(R.string.label_actor),
+                        style = Theme.typography.overLine,
+                        color = Theme.colors.gray
                     )
                 }
             }
@@ -103,7 +103,7 @@ private fun CreditImageWrapper(castOrCrewProfilePath: String?) {
         contentScale = ContentScale.FillBounds,
         modifier = Modifier
             .size(40.dp)
-            .clip(TMDBTheme.shapes.rounded),
-        error = painterResource(id = R.drawable.profileerror)
+            .clip(Theme.shapes.rounded),
+        error = painterResource(id = R.drawable.img_profile_error)
     )
 }

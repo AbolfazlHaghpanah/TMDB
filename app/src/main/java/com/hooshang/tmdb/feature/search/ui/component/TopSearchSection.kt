@@ -20,7 +20,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.hooshang.tmdb.R
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 
 @Composable
 fun TopSearchSection(
@@ -37,14 +37,14 @@ fun TopSearchSection(
                 onSearchChange(it)
             },
             maxLines = 2,
-            shape = TMDBTheme.shapes.veryLarge,
+            shape = Theme.shapes.veryLarge,
             leadingIcon = {
                 IconWrapper()
             },
             modifier = Modifier
-                .clip(TMDBTheme.shapes.veryLarge)
-                .border(0.dp, TMDBTheme.colors.surface)
-                .background(color = TMDBTheme.colors.surface, shape = TMDBTheme.shapes.veryLarge)
+                .clip(Theme.shapes.veryLarge)
+                .border(0.dp, Theme.colors.surface)
+                .background(color = Theme.colors.surface, shape = Theme.shapes.veryLarge)
                 .weight(2f),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 unfocusedBorderColor = Color.Transparent
@@ -60,9 +60,9 @@ fun TopSearchSection(
                 .align(alignment = Alignment.CenterVertically)
         ) {
             Text(
-                text = stringResource(id = R.string.cancel),
-                style = TMDBTheme.typography.caption,
-                color = TMDBTheme.colors.white,
+                text = stringResource(id = R.string.label_cancel),
+                style = Theme.typography.caption,
+                color = Theme.colors.white,
                 textAlign = TextAlign.End
             )
         }
@@ -73,7 +73,7 @@ fun TopSearchSection(
 @Composable
 private fun IconWrapper() {
     Icon(
-        imageVector = ImageVector.vectorResource(id = TMDBTheme.icons.search),
+        imageVector = ImageVector.vectorResource(id = Theme.icons.search),
         contentDescription = null
     )
 }

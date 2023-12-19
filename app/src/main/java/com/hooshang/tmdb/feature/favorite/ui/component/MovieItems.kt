@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hooshang.tmdb.core.ui.component.TextIcon
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 import com.hooshang.tmdb.core.utils.imageUrl
 import com.hooshang.tmdb.feature.favorite.domain.model.FavoriteMovieDomainModel
 
@@ -41,8 +41,8 @@ fun MovieItems(
         modifier = modifier
             .fillMaxWidth()
             .height(110.dp)
-            .clip(TMDBTheme.shapes.large)
-            .background(TMDBTheme.colors.surface, TMDBTheme.shapes.large)
+            .clip(Theme.shapes.large)
+            .background(Theme.colors.surface, Theme.shapes.large)
             .padding(12.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -65,7 +65,7 @@ private fun ImageSection(
 ) {
     AsyncImage(
         modifier = Modifier
-            .clip(TMDBTheme.shapes.small)
+            .clip(Theme.shapes.small)
             .fillMaxHeight()
             .width(130.dp),
         model = imageUrl + image,
@@ -95,7 +95,7 @@ private fun InfoSection(
         ) {
             Text(
                 text = title,
-                style = TMDBTheme.typography.body1,
+                style = Theme.typography.body1,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -106,16 +106,16 @@ private fun InfoSection(
                 modifier = Modifier
                     .padding(end = 48.dp),
                 text = genres,
-                style = TMDBTheme.typography.caption,
+                style = Theme.typography.caption,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
 
             TextIcon(
                 text = vote,
-                iconId = TMDBTheme.icons.star,
-                iconColor = TMDBTheme.colors.secondary,
-                textColor = TMDBTheme.colors.secondary
+                iconId = Theme.icons.star,
+                iconColor = Theme.colors.secondary,
+                textColor = Theme.colors.secondary
             )
         }
 
@@ -129,16 +129,16 @@ private fun BoxScope.FavoriteIcon(
 ) {
     IconButton(
         modifier = Modifier
-            .clip(TMDBTheme.shapes.rounded)
+            .clip(Theme.shapes.rounded)
             .align(Alignment.BottomEnd),
         onClick = onDelete
     ) {
         Icon(
             modifier = Modifier
                 .size(26.dp),
-            painter = painterResource(id = TMDBTheme.icons.heart),
+            painter = painterResource(id = Theme.icons.heart),
             contentDescription = null,
-            tint = TMDBTheme.colors.error
+            tint = Theme.colors.error
         )
     }
 }

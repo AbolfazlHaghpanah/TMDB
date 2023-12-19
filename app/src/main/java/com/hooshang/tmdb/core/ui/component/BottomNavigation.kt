@@ -22,7 +22,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.hooshang.tmdb.R
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 import com.hooshang.tmdb.navigation.AppScreens
 
 @Composable
@@ -38,7 +38,7 @@ fun TMDBBottomNavigation(
         BottomNavigation(
             modifier = Modifier
                 .navigationBarsPadding(),
-            backgroundColor = TMDBTheme.colors.background,
+            backgroundColor = Theme.colors.background,
             elevation = 24.dp
         ) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -71,8 +71,8 @@ fun TMDBBottomNavigation(
                             style = MaterialTheme.typography.caption
                         )
                     },
-                    selectedContentColor = TMDBTheme.colors.primary,
-                    unselectedContentColor = TMDBTheme.colors.gray,
+                    selectedContentColor = Theme.colors.primary,
+                    unselectedContentColor = Theme.colors.gray,
                 )
             }
         }
@@ -95,13 +95,13 @@ sealed class BottomNavigationItems(
     val route: String
 ) {
     data object Home :
-        BottomNavigationItems("Home", R.drawable.home, AppScreens.Home.route)
+        BottomNavigationItems("Home", R.drawable.ic_home, AppScreens.Home.route)
 
     data object Search :
-        BottomNavigationItems("Search", R.drawable.search, AppScreens.Search.route)
+        BottomNavigationItems("Search", R.drawable.ic_search, AppScreens.Search.route)
 
     data object Favorite :
-        BottomNavigationItems("Favorite", R.drawable.heart, AppScreens.Favorite.route)
+        BottomNavigationItems("Favorite", R.drawable.ic_heart, AppScreens.Favorite.route)
 
 }
 
