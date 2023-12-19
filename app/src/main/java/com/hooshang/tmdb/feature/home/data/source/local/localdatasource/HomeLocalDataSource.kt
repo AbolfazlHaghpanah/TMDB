@@ -50,7 +50,7 @@ class HomeLocalDataSource @Inject constructor(
         genres.forEach {
             homeDao.addPopularMoviesGenre(PopularMovieGenreCrossRef(movie.id, it))
         }
-        movieDao.addMovie(movie)
+        movieDao.addMovie(listOf(movie))
     }
 
     suspend fun storeTopMovie(
@@ -62,7 +62,7 @@ class HomeLocalDataSource @Inject constructor(
         genres.forEach {
             homeDao.addTopMoviesGenre(TopMovieGenreCrossRef(movie.id, it))
         }
-        movieDao.addMovie(movie)
+        movieDao.addMovie(listOf(movie))
     }
 
     suspend fun addNowPlaying(
@@ -70,6 +70,6 @@ class HomeLocalDataSource @Inject constructor(
         movie: MovieEntity
     ) {
         homeDao.addNowPlayingMovie(nowPlaying)
-        movieDao.addMovie(movie)
+        movieDao.addMovie(listOf(movie))
     }
 }

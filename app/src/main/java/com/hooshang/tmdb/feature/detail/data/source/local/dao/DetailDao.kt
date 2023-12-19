@@ -34,16 +34,16 @@ interface DetailDao {
     suspend fun deleteFavoriteMovieGenre(favoriteMovieGenreCrossRef: FavoriteMovieGenreCrossRef)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addDetailMovieWithCreditCrossRef(detailMovieWithCreditCrossRef: DetailMovieWithCreditCrossRef)
+    fun addDetailMovieWithCreditCrossRef(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addDetailMovieWithGenreCrossRef(detailMovieWithGenreCrossRef: DetailMovieWithGenreCrossRef)
+    fun addDetailMovieWithGenreCrossRef(detailMovieWithGenreCrossRef: List<DetailMovieWithGenreCrossRef>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addDetailMovieWithSimilarMoviesCrossRef(detailMovieWithSimilarMoviesCrossRef: DetailMovieWithSimilarMoviesCrossRef)
+    fun addDetailMovieWithSimilarMoviesCrossRef(detailMovieWithSimilarMoviesCrossRef: List<DetailMovieWithSimilarMoviesCrossRef>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addMovieWithGenreCrossRef(movieWithGenre: MovieWithGenreCrossRef)
+    fun addMovieWithGenreCrossRef(movieWithGenre: List<MovieWithGenreCrossRef>)
 
     //    other entities
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,11 +35,12 @@ class FavoriteViewModel @Inject constructor(
     private fun observeFavoriteMovies() {
         viewModelScope.launch(Dispatchers.IO) {
             favoriteUseCase.getFavoriteUseCase()
+                .distinctUntilChanged()
                 .catch {
                     snackBarManager.sendMessage(
                         SnackBarMassage(
                             snackBarMessage = databaseErrorCatchMessage(it),
-                            snackBarDuration = SnackbarDuration.Indefinite,
+                            snackBarDuration = SnackbarDuration.Short,
                             snackBarAction = {
                                 observeFavoriteMovies()
                             },
