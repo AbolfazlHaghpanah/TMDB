@@ -1,12 +1,12 @@
 package com.hooshang.tmdb.feature.detail.data.repository
 
 import com.hooshang.tmdb.core.data.model.local.MovieEntity
-import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithCreditCrossRef
-import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithGenreCrossRef
-import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
-import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.MovieWithGenreCrossRef
-import com.hooshang.tmdb.feature.detail.data.source.local.localdatasource.DetailLocalDataSource
-import com.hooshang.tmdb.feature.detail.data.source.remote.remotedatasource.DetailRemoteDataSource
+import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithCreditCrossRef
+import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithGenreCrossRef
+import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
+import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.MovieWithGenreCrossRef
+import com.hooshang.tmdb.feature.detail.data.datasource.localdatasource.DetailLocalDataSource
+import com.hooshang.tmdb.feature.detail.data.datasource.remotedatasource.DetailRemoteDataSource
 import com.hooshang.tmdb.feature.detail.domain.repository.DetailRepository
 import com.hooshang.tmdb.feature.favorite.data.model.local.entity.FavoriteMovieEntity
 import com.hooshang.tmdb.feature.favorite.data.model.local.relation.FavoriteMovieGenreCrossRef

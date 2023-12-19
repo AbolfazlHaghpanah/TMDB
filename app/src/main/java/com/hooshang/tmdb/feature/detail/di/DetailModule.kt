@@ -1,8 +1,8 @@
 package com.hooshang.tmdb.feature.detail.di
 
 import com.hooshang.tmdb.core.data.AppDatabase
-import com.hooshang.tmdb.feature.detail.data.source.local.dao.DetailDao
-import com.hooshang.tmdb.feature.detail.data.source.remote.api.DetailApi
+import com.hooshang.tmdb.feature.detail.data.db.dao.DetailDao
+import com.hooshang.tmdb.feature.detail.data.network.api.DetailApi
 import com.hooshang.tmdb.feature.detail.domain.repository.DetailRepository
 import com.hooshang.tmdb.feature.detail.domain.usecase.AddFavoriteUseCase
 import com.hooshang.tmdb.feature.detail.domain.usecase.DetailUseCase
