@@ -23,7 +23,7 @@ class DetailRepositoryImpl @Inject constructor(
     override suspend fun addToFavorite(movieId: Int, genres: List<Int>) =
         withContext(Dispatchers.IO) {
             genres.forEach {
-                localDataSource.addFavoriteMovieGenre(
+                localDataSource.insertFavoriteMovieGenre(
                     FavoriteMovieGenreCrossRef(
                         movieId,
                         it
@@ -43,13 +43,13 @@ class DetailRepositoryImpl @Inject constructor(
     override suspend fun fetchMovieDetail(id: Int) = withContext(Dispatchers.IO) {
         val movieDetailDto = remoteDataSource.getMovieDetail(id)
 
-        localDataSource.addMovie(listOf(movieDetailDto.toMovieEntity()))
+        localDataSource.insertMovies(listOf(movieDetailDto.toMovieEntity()))
 
         localDataSource.addDetail(movieDetailDto.toDetailEntity())
 
         localDataSource.addCredits(movieDetailDto.toCreditsEntity())
 
-        localDataSource.addDetailMovieWithCreditCrossRef(
+        localDataSource.insertDetailMovieWithCredits(
             movieDetailDto.credits.cast.map {
                 DetailMovieWithCreditCrossRef(
                     detailMovieId = movieDetailDto.id,
@@ -63,7 +63,7 @@ class DetailRepositoryImpl @Inject constructor(
             }
         )
 
-        localDataSource.addDetailMovieWithGenreCrossRef(
+        localDataSource.insertDetailMovieWithGenres(
             movieDetailDto.genreResponses.map {
                 DetailMovieWithGenreCrossRef(
                     detailMovieId = movieDetailDto.id,
@@ -72,7 +72,7 @@ class DetailRepositoryImpl @Inject constructor(
             }
         )
 
-        localDataSource.addDetailMovieWithSimilarMoviesCrossRef(
+        localDataSource.insertDetailMovieWithSimilarMovies(
             movieDetailDto.similar.results.map {
                 DetailMovieWithSimilarMoviesCrossRef(
                     detailMovieId = movieDetailDto.id,
@@ -81,9 +81,9 @@ class DetailRepositoryImpl @Inject constructor(
             }
         )
 
-        localDataSource.addMovie(
+        localDataSource.insertMovies(
             movieDetailDto.similar.results.map { similarMovieResult ->
-                localDataSource.addMovieWithGenreCrossRef(
+                localDataSource.insertMovieWithGenres(
                     similarMovieResult.genreIds.map {
                         MovieWithGenreCrossRef(
                             id = similarMovieResult.id,

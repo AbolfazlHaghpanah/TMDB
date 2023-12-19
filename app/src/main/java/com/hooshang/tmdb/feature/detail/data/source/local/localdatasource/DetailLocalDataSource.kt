@@ -27,39 +27,37 @@ class DetailLocalDataSource @Inject constructor(
         return detailDao.addDetail(detailEntity)
     }
 
-    suspend fun addFavoriteMovieGenre(genre: FavoriteMovieGenreCrossRef) {
-        return detailDao.addFavoriteMovieGenre(genre)
+    suspend fun insertFavoriteMovieGenre(genre: FavoriteMovieGenreCrossRef) {
+        return detailDao.insertFavoriteMovieGenre(genre)
     }
 
-    //    TODO rename for example => addDetailMovieWithCreditCrossReferences for all list insertions
-    fun addDetailMovieWithCreditCrossRef(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>) {
-        return detailDao.addDetailMovieWithCreditCrossRef(detailMovieWithCreditCrossRef)
+    fun insertDetailMovieWithCredits(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>) {
+        return detailDao.insertDetailMovieWithCredits(detailMovieWithCreditCrossRef)
     }
 
-    fun addDetailMovieWithGenreCrossRef(detailMovieWithGenreCrossRef: List<DetailMovieWithGenreCrossRef>) {
-        return detailDao.addDetailMovieWithGenreCrossRef(detailMovieWithGenreCrossRef)
+    fun insertDetailMovieWithGenres(detailMovieWithGenreCrossRef: List<DetailMovieWithGenreCrossRef>) {
+        return detailDao.insertDetailMovieWithGenres(detailMovieWithGenreCrossRef)
     }
 
-    fun addDetailMovieWithSimilarMoviesCrossRef(detailMovieWithSimilarMoviesCrossRef: List<DetailMovieWithSimilarMoviesCrossRef>) {
-        return detailDao.addDetailMovieWithSimilarMoviesCrossRef(
+    fun insertDetailMovieWithSimilarMovies(detailMovieWithSimilarMoviesCrossRef: List<DetailMovieWithSimilarMoviesCrossRef>) {
+        return detailDao.insertDetailMovieWithSimilarMovies(
             detailMovieWithSimilarMoviesCrossRef
         )
     }
 
-    fun addMovieWithGenreCrossRef(movieWithGenre: List<MovieWithGenreCrossRef>) {
-        return detailDao.addMovieWithGenreCrossRef(movieWithGenre)
+    fun insertMovieWithGenres(movieWithGenre: List<MovieWithGenreCrossRef>) {
+        return detailDao.insertMovieWithGenres(movieWithGenre)
     }
 
     fun addCredits(credit: List<CreditEntity>) {
-        return detailDao.addCredits(credit)
+        return detailDao.insertCredits(credit)
     }
 
     suspend fun addToFavorite(movieEntity: FavoriteMovieEntity) {
         return detailDao.addToFavorite(movieEntity)
     }
 
-    //    TODO rename for example => addMovies, rename parameter to movies
-    suspend fun addMovie(movie: List<MovieEntity>) {
-        return movieDao.addMovie(movie)
+    suspend fun insertMovies(movie: List<MovieEntity>) {
+        return movieDao.insertMovies(movie)
     }
 }

@@ -54,7 +54,7 @@ class HomeLocalDataSource @Inject constructor(
     suspend fun insertMovies(
         movie: List<MovieEntity>
     ) {
-        movieDao.addMovie(movie)
+        movieDao.insertMovies(movie)
     }
 
     suspend fun insertTopMovies(
