@@ -17,24 +17,17 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface HomeDao {
-
-    //    cross references
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addTopMoviesGenre(genre: List<TopMovieGenreCrossRef>)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addPopularMoviesGenre(genre: List<PopularMovieGenreCrossRef>)
-
+    @Query("SELECT * FROM NOW_PLAYING")
+    fun observeNowPlayingMovie(): Flow<List<NowPlayingWithMovie>>
     @Query("SELECT * FROM POPULAR_MOVIES")
     fun observePopularMovie(): Flow<List<PopularMovieAndGenreWithMovie>>
 
     @Query("SELECT * FROM TOP_MOVIE")
     fun observeTopMovie(): Flow<List<TopMovieAndGenreWithMovie>>
 
-    @Query("SELECT * FROM NOW_PLAYING")
-    fun observeNowPlayingMovie(): Flow<List<NowPlayingWithMovie>>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addGenre(genre: List<GenreEntity>)
 
-    //    other entities
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addNowPlayingMovie(movie: List<NowPlayingEntity>)
 
@@ -42,9 +35,26 @@ interface HomeDao {
     suspend fun addPopularMovie(movie: List<PopularMovieEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addPopularMoviesGenre(genre: List<PopularMovieGenreCrossRef>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTopMovie(movie: List<TopMovieEntity>)
 
-    //genres
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addGenre(genre: List<GenreEntity>)
+    suspend fun addTopMoviesGenre(genre: List<TopMovieGenreCrossRef>)
+
+    @Query("DELETE FROM now_playing")
+    fun removeNowPlayingMovies()
+
+    @Query("DELETE FROM popularmoviegenrecrossref")
+    fun removePopularMoviesGenre()
+
+    @Query("DELETE FROM popular_movies")
+    fun removePopularMovies()
+
+    @Query("DELETE FROM top_movie")
+    fun removeTopMovies()
+
+    @Query("DELETE FROM topmoviegenrecrossref")
+    fun removeTopMovieGenre()
 }

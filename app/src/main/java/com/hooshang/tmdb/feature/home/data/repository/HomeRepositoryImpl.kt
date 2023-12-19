@@ -6,6 +6,8 @@ import com.hooshang.tmdb.feature.home.data.source.local.localdatasource.HomeLoca
 import com.hooshang.tmdb.feature.home.data.source.remote.remotedatasource.HomeRemoteDataSource
 import com.hooshang.tmdb.feature.home.domain.repository.HomeRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -35,6 +37,14 @@ class HomeRepositoryImpl @Inject constructor(
     override suspend fun fetchNowPlaying() = withContext(Dispatchers.IO) {
         val data = remoteDataSource.getNowPlaying().results
 
+        localDataSource.getNowPlaying()
+            .onEach { localMovies ->
+                if (localMovies.map { it.movieId }.compare(data.map { it.id })) {
+                    localDataSource.removeNowPlayingMovies()
+                }
+            }
+            .first()
+
         localDataSource.insertMovies(
             data.map { it.toMovieEntity() }
         )
@@ -46,6 +56,14 @@ class HomeRepositoryImpl @Inject constructor(
 
     override suspend fun fetchTopMovie() = withContext(Dispatchers.IO) {
         val data = remoteDataSource.getTopMovie().results
+
+        localDataSource.getTopMovie()
+            .onEach { localMovies ->
+                if (localMovies.map { it.movieId }.compare(data.map { it.id })) {
+                    localDataSource.removeTopMovies()
+                }
+            }
+            .first()
 
         localDataSource.insertMovies(
             data.map { it.toMovieEntity() }
@@ -69,6 +87,14 @@ class HomeRepositoryImpl @Inject constructor(
     override suspend fun fetchPopularMovie() = withContext(Dispatchers.IO) {
         val data = remoteDataSource.getPopular().results
 
+        localDataSource.getPopularMovie()
+            .onEach { localMovies ->
+                if (localMovies.map { it.movieId }.compare(data.map { it.id })) {
+                    localDataSource.removePopularMovies()
+                }
+            }
+            .first()
+
         localDataSource.insertMovies(
             data.map {
                 it.toMovieEntity()
@@ -89,5 +115,8 @@ class HomeRepositoryImpl @Inject constructor(
             }
         )
     }
+
+    private fun List<Int>.compare(currentData: List<Int>): Boolean =
+        !(this.size == currentData.size && this.toSet() == currentData.toSet())
 }
 

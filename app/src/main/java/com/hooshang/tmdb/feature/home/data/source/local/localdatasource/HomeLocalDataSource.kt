@@ -74,4 +74,21 @@ class HomeLocalDataSource @Inject constructor(
     ) {
         homeDao.addNowPlayingMovie(nowPlaying)
     }
+
+    fun removeNowPlayingMovies(
+    ) {
+        homeDao.removeNowPlayingMovies()
+    }
+
+    fun removePopularMovies(
+    ) {
+        homeDao.removePopularMovies()
+        homeDao.removePopularMoviesGenre()
+    }
+
+    fun removeTopMovies(
+    ) {
+        homeDao.removeTopMovies()
+        homeDao.removeTopMovieGenre()
+    }
 }
