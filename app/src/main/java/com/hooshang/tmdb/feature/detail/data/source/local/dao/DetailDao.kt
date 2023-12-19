@@ -33,6 +33,7 @@ interface DetailDao {
     @Delete
     suspend fun deleteFavoriteMovieGenre(favoriteMovieGenreCrossRef: FavoriteMovieGenreCrossRef)
 
+    //    TODO rename for example => addDetailMovieWithCreditCrossReferences for all list insertions and rename parameter
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addDetailMovieWithCreditCrossRef(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>)
 

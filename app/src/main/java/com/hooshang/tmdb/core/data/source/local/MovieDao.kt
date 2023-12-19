@@ -8,6 +8,7 @@ import com.hooshang.tmdb.core.data.model.local.MovieEntity
 @Dao
 interface MovieDao {
 
+    //    TODO rename for example => addMovies
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addMovie(movie: List<MovieEntity>)
 }

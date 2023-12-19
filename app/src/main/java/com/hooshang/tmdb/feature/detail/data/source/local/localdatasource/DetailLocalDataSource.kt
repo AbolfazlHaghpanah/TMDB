@@ -1,8 +1,7 @@
 package com.hooshang.tmdb.feature.detail.data.source.local.localdatasource
 
-import com.hooshang.tmdb.core.data.source.local.MovieDao
 import com.hooshang.tmdb.core.data.model.local.MovieEntity
-import com.hooshang.tmdb.feature.detail.data.source.local.dao.DetailDao
+import com.hooshang.tmdb.core.data.source.local.MovieDao
 import com.hooshang.tmdb.feature.detail.data.model.local.entity.CreditEntity
 import com.hooshang.tmdb.feature.detail.data.model.local.entity.DetailEntity
 import com.hooshang.tmdb.feature.detail.data.model.local.relation.DetailMovieWithAllRelations
@@ -10,6 +9,7 @@ import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.
 import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithGenreCrossRef
 import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
 import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.MovieWithGenreCrossRef
+import com.hooshang.tmdb.feature.detail.data.source.local.dao.DetailDao
 import com.hooshang.tmdb.feature.favorite.data.model.local.entity.FavoriteMovieEntity
 import com.hooshang.tmdb.feature.favorite.data.model.local.relation.FavoriteMovieGenreCrossRef
 import kotlinx.coroutines.flow.Flow
@@ -31,6 +31,7 @@ class DetailLocalDataSource @Inject constructor(
         return detailDao.addFavoriteMovieGenre(genre)
     }
 
+    //    TODO rename for example => addDetailMovieWithCreditCrossReferences for all list insertions
     fun addDetailMovieWithCreditCrossRef(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>) {
         return detailDao.addDetailMovieWithCreditCrossRef(detailMovieWithCreditCrossRef)
     }
@@ -57,6 +58,7 @@ class DetailLocalDataSource @Inject constructor(
         return detailDao.addToFavorite(movieEntity)
     }
 
+    //    TODO rename for example => addMovies, rename parameter to movies
     suspend fun addMovie(movie: List<MovieEntity>) {
         return movieDao.addMovie(movie)
     }
