@@ -15,6 +15,7 @@ import com.hooshang.tmdb.feature.home.ui.contracts.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,6 +29,9 @@ class HomeViewModel @Inject constructor(
         observeTopMovies()
         observeNowPlaying()
         observePopularMovies()
+        fetchNowPlaying()
+        fetchPopular()
+        fetchTopMovies()
     }
 
     override fun onAction(action: HomeAction) {
@@ -44,18 +48,19 @@ class HomeViewModel @Inject constructor(
     private fun observeNowPlaying() {
         viewModelScope.launch(Dispatchers.IO) {
             homeUseCase.observeNowPlayingUseCase()
+                .distinctUntilChanged()
                 .catch {
                     sendDataBaseError(it)
                 }.collect { movies ->
                     setState { copy(nowPlayingMovies = movies) }
                 }
         }
-        fetchNowPlaying()
     }
 
     private fun observePopularMovies() {
         viewModelScope.launch(Dispatchers.IO) {
             homeUseCase.observePopularUseCase()
+                .distinctUntilChanged()
                 .catch {
                     sendDataBaseError(it)
                 }
@@ -63,12 +68,12 @@ class HomeViewModel @Inject constructor(
                     setState { copy(popularMovies = movies) }
                 }
         }
-        fetchPopular()
     }
 
     private fun observeTopMovies() {
         viewModelScope.launch(Dispatchers.IO) {
             homeUseCase.observeTopUseCase()
+                .distinctUntilChanged()
                 .catch {
                     sendDataBaseError(it)
                 }
@@ -76,7 +81,6 @@ class HomeViewModel @Inject constructor(
                     setState { copy(topRatedMovies = movies) }
                 }
         }
-        fetchTopMovies()
     }
 
     private fun fetchNowPlaying() {

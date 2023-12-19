@@ -1,5 +1,6 @@
 package com.hooshang.tmdb.core.ui.component
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,6 +19,7 @@ import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import com.hooshang.tmdb.feature.home.ui.component.MovieCard
 import kotlinx.collections.immutable.PersistentList
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MovieRow(
     onClick: (Int) -> Unit,
@@ -44,6 +46,7 @@ fun MovieRow(
                 key = { it.movieId }
             ) { movieWithGenreDatabaseWrapper ->
                 MovieCard(
+                    modifier = Modifier.animateItemPlacement(),
                     onClick = { onClick(movieWithGenreDatabaseWrapper.movieId) },
                     title = movieWithGenreDatabaseWrapper.title,
                     image = movieWithGenreDatabaseWrapper.posterPath,

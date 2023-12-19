@@ -33,43 +33,45 @@ class HomeLocalDataSource @Inject constructor(
             .map { movieFlow -> movieFlow.map { it.toDomainModel() } }
     }
 
-    suspend fun storeGenres(
+    suspend fun insertGenres(
         genres: List<GenreEntity>
     ) {
-        genres.forEach {
-            homeDao.addGenre(it)
-        }
+        homeDao.addGenre(genres)
     }
 
-    suspend fun storePopularMovie(
-        popularMovie: PopularMovieEntity,
-        movie: MovieEntity,
-        genres: List<Int>
+    suspend fun insertPopularMovie(
+        popularMovie: List<PopularMovieEntity>
     ) {
         homeDao.addPopularMovie(popularMovie)
-        genres.forEach {
-            homeDao.addPopularMoviesGenre(PopularMovieGenreCrossRef(movie.id, it))
-        }
-        movieDao.addMovie(listOf(movie))
     }
 
-    suspend fun storeTopMovie(
-        topMovie: TopMovieEntity,
-        movie: MovieEntity,
-        genres: List<Int>
+    suspend fun insertPopularMoviesGenres(
+        movies: List<PopularMovieGenreCrossRef>
     ) {
-        homeDao.addTopMovie(topMovie)
-        genres.forEach {
-            homeDao.addTopMoviesGenre(TopMovieGenreCrossRef(movie.id, it))
-        }
-        movieDao.addMovie(listOf(movie))
+        homeDao.addPopularMoviesGenre(movies)
     }
 
-    suspend fun addNowPlaying(
-        nowPlaying: NowPlayingEntity,
-        movie: MovieEntity
+    suspend fun insertMovies(
+        movie: List<MovieEntity>
+    ) {
+        movieDao.addMovie(movie)
+    }
+
+    suspend fun insertTopMovies(
+        movies: List<TopMovieEntity>
+    ) {
+        homeDao.addTopMovie(movies)
+    }
+
+    suspend fun insertTopMoviesGenres(
+        moviesAndGenres: List<TopMovieGenreCrossRef>
+    ) {
+        homeDao.addTopMoviesGenre(moviesAndGenres)
+    }
+
+    suspend fun insertNowPlayingMovie(
+        nowPlaying: List<NowPlayingEntity>
     ) {
         homeDao.addNowPlayingMovie(nowPlaying)
-        movieDao.addMovie(listOf(movie))
     }
 }

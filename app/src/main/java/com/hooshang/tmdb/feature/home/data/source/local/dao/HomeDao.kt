@@ -20,10 +20,10 @@ interface HomeDao {
 
     //    cross references
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addTopMoviesGenre(genre: TopMovieGenreCrossRef)
+    suspend fun addTopMoviesGenre(genre: List<TopMovieGenreCrossRef>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addPopularMoviesGenre(genre: PopularMovieGenreCrossRef)
+    suspend fun addPopularMoviesGenre(genre: List<PopularMovieGenreCrossRef>)
 
     @Query("SELECT * FROM POPULAR_MOVIES")
     fun observePopularMovie(): Flow<List<PopularMovieAndGenreWithMovie>>
@@ -36,15 +36,15 @@ interface HomeDao {
 
     //    other entities
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addNowPlayingMovie(movie: NowPlayingEntity)
+    suspend fun addNowPlayingMovie(movie: List<NowPlayingEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addPopularMovie(movie: PopularMovieEntity)
+    suspend fun addPopularMovie(movie: List<PopularMovieEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addTopMovie(movie: TopMovieEntity)
+    suspend fun addTopMovie(movie: List<TopMovieEntity>)
 
     //genres
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addGenre(genre: GenreEntity)
+    suspend fun addGenre(genre: List<GenreEntity>)
 }
