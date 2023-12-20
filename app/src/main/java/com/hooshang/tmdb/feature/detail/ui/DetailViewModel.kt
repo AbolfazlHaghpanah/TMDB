@@ -11,9 +11,12 @@ import com.hooshang.tmdb.core.utils.SnackBarMassage
 import com.hooshang.tmdb.core.utils.StringResWrapper
 import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
-import com.hooshang.tmdb.feature.detail.domain.usecase.DetailUseCase
+import com.hooshang.tmdb.feature.detail.domain.usecase.AddFavoriteUseCase
+import com.hooshang.tmdb.feature.detail.domain.usecase.FetchDetailUseCase
+import com.hooshang.tmdb.feature.detail.domain.usecase.ObserveDetailUseCase
 import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsAction
 import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsState
+import com.hooshang.tmdb.feature.favorite.domain.use_case.DeleteFromFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -24,7 +27,10 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val detailUseCase: DetailUseCase,
+    private val addFavoriteUseCase: AddFavoriteUseCase,
+    private val fetchDetailUseCase: FetchDetailUseCase,
+    private val observeDetailUseCase: ObserveDetailUseCase,
+    private val deleteFromFavoriteUseCase: DeleteFromFavoriteUseCase,
     private val snackBarManager: SnackBarManager
 ) : BaseViewModel<DetailsAction, DetailsState>() {
 
@@ -47,7 +53,7 @@ class DetailViewModel @Inject constructor(
 
     private fun observeDetailMovieWithAllRelations() {
         viewModelScope.launch(Dispatchers.IO) {
-            detailUseCase.observeDetailUseCase(id)
+            observeDetailUseCase(id)
                 .catch {
                     snackBarManager.sendMessage(
                         snackBarMassage = SnackBarMassage(
@@ -69,7 +75,7 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch {
             snackBarManager.dismissSnackBar()
             resultWrapper {
-                detailUseCase.fetchDetailUseCase(id)
+                fetchDetailUseCase(id)
             }.collect { result ->
                 when (result) {
                     is Result.Loading -> {
@@ -98,7 +104,7 @@ class DetailViewModel @Inject constructor(
     private fun addToFavorite() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                detailUseCase.addFavoriteUseCase(
+                addFavoriteUseCase(
                     state.value.movie.id,
                     state.value.movie.genres.map { it.first }
                 )
@@ -118,7 +124,7 @@ class DetailViewModel @Inject constructor(
     private fun removeFromFavorite() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                detailUseCase.removeFavoriteUseCase(id)
+                deleteFromFavoriteUseCase(id)
             } catch (t: Throwable) {
                 snackBarManager.sendMessage(
                     snackBarMassage = SnackBarMassage(
