@@ -1,16 +1,19 @@
 package com.hooshang.tmdb.feature.detail.data.repository
 
 import com.hooshang.tmdb.core.data.model.local.MovieEntity
+import com.hooshang.tmdb.feature.detail.data.datasource.localdatasource.DetailLocalDataSource
+import com.hooshang.tmdb.feature.detail.data.datasource.remotedatasource.DetailRemoteDataSource
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithCreditCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithGenreCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.MovieWithGenreCrossRef
-import com.hooshang.tmdb.feature.detail.data.datasource.localdatasource.DetailLocalDataSource
-import com.hooshang.tmdb.feature.detail.data.datasource.remotedatasource.DetailRemoteDataSource
+import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import com.hooshang.tmdb.feature.detail.domain.repository.DetailRepository
 import com.hooshang.tmdb.feature.favorite.data.model.local.entity.FavoriteMovieEntity
 import com.hooshang.tmdb.feature.favorite.data.model.local.relation.FavoriteMovieGenreCrossRef
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -33,10 +36,14 @@ class DetailRepositoryImpl @Inject constructor(
             localDataSource.addToFavorite(FavoriteMovieEntity(movieId))
         }
 
-    override suspend fun observeDetailMovieWithAllRelations(id: Int) = withContext(Dispatchers.IO) {
-
-        localDataSource.observeMovieDetail(id).filterNotNull().map {
+    override suspend fun observeDetailMovieWithAllRelations(id: Int): Flow<MovieDetailDomainModel> {
+        val data = localDataSource.observeMovieDetail(id).filterNotNull().map {
             it.toMovieDetail()
+        }
+        val isFavorite = localDataSource.isExistInFavorite(id)
+
+        return data.combine(isFavorite) { dataFlow, isFavoriteFlow ->
+            dataFlow.copy(isFavorite = isFavoriteFlow)
         }
     }
 

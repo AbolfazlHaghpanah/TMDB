@@ -10,10 +10,7 @@ import com.hooshang.tmdb.feature.detail.data.db.entity.DetailEntity
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithCreditCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithGenreCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
-import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.MovieWithGenreCrossRef
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
-import com.hooshang.tmdb.feature.detail.domain.model.SimilarMovieDomainModel
-import com.hooshang.tmdb.feature.favorite.data.model.local.entity.FavoriteMovieEntity
 
 data class DetailMovieWithAllRelations(
     @Embedded val detailEntity: DetailEntity,
@@ -41,11 +38,6 @@ data class DetailMovieWithAllRelations(
         entityColumn = "id"
     )
     val movie: MovieEntity?,
-    @Relation(
-        parentColumn = "detailMovieId",
-        entityColumn = "movieId"
-    )
-    val favorite: FavoriteMovieEntity?
 ) {
     fun toMovieDetail(): MovieDetailDomainModel = MovieDetailDomainModel(
         id = detailEntity.detailMovieId,
@@ -59,25 +51,6 @@ data class DetailMovieWithAllRelations(
         runtime = detailEntity.runtime,
         externalIds = detailEntity.externalIds,
         similar = similarMovies?.map { it.toSimilarMovie() } ?: listOf(),
-        isFavorite = favorite != null
-    )
-}
-
-data class SimilarMovieWithGenre(
-    @Embedded val similarMovie: MovieEntity,
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "genreId",
-        entity = GenreEntity::class,
-        associateBy = Junction(MovieWithGenreCrossRef::class)
-    )
-    val genres: List<GenreEntity>
-) {
-    fun toSimilarMovie(): SimilarMovieDomainModel = SimilarMovieDomainModel(
-        id = similarMovie.id,
-        posterPath = similarMovie.posterPath,
-        voteAverage = similarMovie.voteAverage.toFloat(),
-        title = similarMovie.title,
-        genreIds = genres.joinToString(separator = "|") { it.genreName }
+        isFavorite = detailEntity.isFavorite
     )
 }

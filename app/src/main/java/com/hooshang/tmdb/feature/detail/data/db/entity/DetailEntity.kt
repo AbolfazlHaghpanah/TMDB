@@ -9,5 +9,6 @@ data class DetailEntity(
     val overview: String,
     val releaseDate: String,
     val runtime: Int,
-    val externalIds: List<String>
+    val externalIds: List<String>,
+    val isFavorite : Boolean
 )

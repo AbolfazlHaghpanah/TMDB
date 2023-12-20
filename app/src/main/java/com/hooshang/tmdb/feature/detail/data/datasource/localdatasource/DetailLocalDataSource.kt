@@ -60,4 +60,8 @@ class DetailLocalDataSource @Inject constructor(
     suspend fun insertMovies(movie: List<MovieEntity>) {
         return movieDao.insertMovies(movie)
     }
+
+    fun isExistInFavorite(id : Int):Flow<Boolean>  {
+        return detailDao.isExistInFavorite(id)
+    }
 }

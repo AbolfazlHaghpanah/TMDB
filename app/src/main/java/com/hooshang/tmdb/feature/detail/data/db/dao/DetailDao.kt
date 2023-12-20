@@ -19,14 +19,12 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DetailDao {
 
-    //   movie detail
     @Query("select * from detail_movies where detailMovieId = :detailMovieId")
     fun observeMovieDetail(detailMovieId: Int): Flow<DetailMovieWithAllRelations>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovieDetails(detailEntity: DetailEntity)
 
-    //    cross references
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoriteMovieGenre(genre: FavoriteMovieGenreCrossRef)
 
@@ -45,7 +43,6 @@ interface DetailDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMoviesWithGenres(movieWithGenre: List<MovieWithGenreCrossRef>)
 
-    //    other entities
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCredits(credit: List<CreditEntity>)
 
@@ -54,4 +51,7 @@ interface DetailDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addToFavorite(movieEntity: FavoriteMovieEntity)
+
+    @Query("select exists (select 1 from FAVORITE_MOVIE where movieId =:id)")
+    fun isExistInFavorite(id: Int): Flow<Boolean>
 }

@@ -38,7 +38,8 @@ data class MovieDetailResponse(
                 "${externalIdsResponse?.imdbId}",
                 "${externalIdsResponse?.instagramId}",
                 "${externalIdsResponse?.twitterId}"
-            )
+            ),
+            isFavorite = false
         )
     }
 
