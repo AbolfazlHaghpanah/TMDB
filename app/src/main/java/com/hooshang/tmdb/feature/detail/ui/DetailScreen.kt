@@ -18,9 +18,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.hooshang.tmdb.R
-import com.hooshang.tmdb.core.ui.component.MovieRow
+import com.hooshang.tmdb.feature.home.ui.component.MovieRow
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
-import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 import com.hooshang.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.hooshang.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
 import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsAction
@@ -102,7 +101,7 @@ private fun DetailScreen(
 
             if (detailsState.movie.similar.isNotEmpty()) {
                 MovieRow(
-                    title = stringResource(R.string.similar_movies),
+                    title = stringResource(R.string.label_similar_movies),
                     movies = detailsState.movie.similar.map {
                         HomeMovieDomainModel(
                             title = it.title,

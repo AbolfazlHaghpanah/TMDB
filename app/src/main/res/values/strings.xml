@@ -10,6 +10,9 @@
     <string name="label_cancel">Cancel</string>
     <string name="label_delete">Delete</string>
     <string name="label_open_in">Open In</string>
+    <string name="label_close">close</string>
+    <string name="label_minutes">Minutes</string>
+    <string name="label_try_again">Try Again</string>
     <string name="desc_movie_search_error">we are sorry,we can not find the movie :(</string>
     <string name="desc_find_movie_by_title">"Find your movie by Type title "</string>
     <string name="desc_there_is_no_movie_yet">There is no movie yet!</string>
@@ -18,12 +21,12 @@
     <string name="prefix_imdb">imdb-</string>
     <string name="prefix_instagram">instagram-</string>
     <string name="prefix_twitter">twitter-</string>
+    <string name="prefix_share_instagram_link">share instagram link</string>
+    <string name="prefix_share_twitter_link">share twitter link</string>
+    <string name="prefix_share_imdb_link">share IMDB link</string>
+    <string name="prefix_share_tmdb_link">share TMDB link</string>
     <string name="cmp_null_text">null</string>
-    <string name="share_instagram_link">share instagram link</string>
-    <string name="share_twitter_link">share twitter link</string>
-    <string name="share_imdb_link">share IMDB link</string>
-    <string name="share_tmdb_link">share TMDB link</string>
-    <string name="close">close</string>
-    <string name="minutes">Minutes</string>
-    <string name="try_again">Try Again</string>
+    <string name="label_home">Home</string>
+    <string name="label_search">Search</string>
+    <string name="label_favorite">Favorite</string>
 </resources>

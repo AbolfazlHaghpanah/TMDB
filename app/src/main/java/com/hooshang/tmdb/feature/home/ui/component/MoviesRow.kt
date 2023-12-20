@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.core.ui.component
+package com.hooshang.tmdb.feature.home.ui.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -12,11 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.hooshang.tmdb.core.ui.component.MovieCard
 import com.hooshang.tmdb.core.ui.shimmer.fakeMovie
-import com.hooshang.tmdb.core.ui.shimmer.ifShimmerActive
 import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
+import com.hooshang.tmdb.core.utils.ifShimmerActive
 import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
-import com.hooshang.tmdb.feature.home.ui.component.MovieCard
 import kotlinx.collections.immutable.PersistentList
 
 @OptIn(ExperimentalFoundationApi::class)

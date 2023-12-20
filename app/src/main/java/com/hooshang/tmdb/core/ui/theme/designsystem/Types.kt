@@ -11,7 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.hooshang.tmdb.R
 
-val montserratFont = FontFamily(Font(R.font.montserrat_regular))
+val montserratFont = FontFamily(Font(R.font.montserrat_regular, FontWeight.Normal))
 
 @Immutable
 data class Type(
@@ -65,6 +65,7 @@ data class Type(
 ) {
     @Composable
     fun toTypography(): Typography = Typography(
+        defaultFontFamily = montserratFont,
         h6 = h6,
         subtitle1 = subtitle1,
         subtitle2 = subtitle2,

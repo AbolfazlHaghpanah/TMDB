@@ -1,7 +1,7 @@
 package com.hooshang.tmdb.core.di
 
-import com.hooshang.tmdb.core.utils.baseUrl
-import com.hooshang.tmdb.core.utils.tmdbApiKey
+import com.hooshang.tmdb.core.utils.base_url
+import com.hooshang.tmdb.core.utils.tmdb_api_key
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -38,7 +38,7 @@ internal object NetworkModule {
             .connectTimeout(timeOut, TimeUnit.SECONDS)
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
-                    .addHeader("Authorization", tmdbApiKey)
+                    .addHeader("Authorization", tmdb_api_key)
                     .build()
                 chain.proceed(request)
             }
@@ -65,7 +65,7 @@ internal object NetworkModule {
     ): Retrofit =
         Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(baseUrl)
+            .baseUrl(base_url)
             .addConverterFactory(json.asConverterFactory(contentType))
             .build()
 

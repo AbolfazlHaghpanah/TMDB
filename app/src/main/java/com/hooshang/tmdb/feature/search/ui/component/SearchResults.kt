@@ -33,7 +33,7 @@ import coil.compose.AsyncImage
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.component.TextIcon
 import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
-import com.hooshang.tmdb.core.utils.imageUrl
+import com.hooshang.tmdb.core.utils.image_url
 import com.hooshang.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainModel
 import com.hooshang.tmdb.feature.search.ui.contracts.SearchAction
 import kotlinx.collections.immutable.PersistentList
@@ -167,7 +167,7 @@ private fun PosterWithTotalVote(
 @Composable
 private fun SimilarMovieImageWrapper(similarMoviePosterPath: String) {
     AsyncImage(
-        model = "$imageUrl${similarMoviePosterPath}",
+        model = "$image_url${similarMoviePosterPath}",
         contentDescription = null,
         contentScale = ContentScale.Crop,
         modifier = Modifier

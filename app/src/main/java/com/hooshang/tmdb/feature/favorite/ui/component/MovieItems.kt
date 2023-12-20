@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hooshang.tmdb.core.ui.component.TextIcon
 import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
-import com.hooshang.tmdb.core.utils.imageUrl
+import com.hooshang.tmdb.core.utils.image_url
 import com.hooshang.tmdb.feature.favorite.domain.model.FavoriteMovieDomainModel
 
 @Composable
@@ -68,7 +68,7 @@ private fun ImageSection(
             .clip(Theme.shapes.small)
             .fillMaxHeight()
             .width(130.dp),
-        model = imageUrl + image,
+        model = image_url + image,
         contentDescription = null,
         contentScale = ContentScale.Crop
     )

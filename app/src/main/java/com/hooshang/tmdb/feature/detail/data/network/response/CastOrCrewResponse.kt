@@ -1,7 +1,6 @@
 package com.hooshang.tmdb.feature.detail.data.network.response
 
 import androidx.annotation.Keep
-import com.hooshang.tmdb.feature.detail.data.model.local.entity.CreditEntity
 import com.hooshang.tmdb.feature.detail.data.db.entity.CreditEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

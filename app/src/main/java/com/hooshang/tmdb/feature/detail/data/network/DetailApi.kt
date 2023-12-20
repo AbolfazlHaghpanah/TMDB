@@ -1,7 +1,5 @@
-package com.hooshang.tmdb.feature.detail.data.network.api
+package com.hooshang.tmdb.feature.detail.data.network
 
-import com.hooshang.tmdb.feature.detail.data.model.remote.MovieDetailResponse
-import com.hooshang.tmdb.core.utils.tmdpApiKey
 import com.hooshang.tmdb.feature.detail.data.network.response.MovieDetailResponse
 import retrofit2.Response
 import retrofit2.http.GET

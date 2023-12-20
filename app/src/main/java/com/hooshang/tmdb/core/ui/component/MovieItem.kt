@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.feature.home.ui.component
+package com.hooshang.tmdb.core.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,20 +20,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hooshang.tmdb.R
-import com.hooshang.tmdb.core.ui.component.TextIcon
-import com.hooshang.tmdb.core.ui.shimmer.ifShimmerActive
 import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
-import com.hooshang.tmdb.core.utils.imageUrl
+import com.hooshang.tmdb.core.utils.ifShimmerActive
+import com.hooshang.tmdb.core.utils.image_url
 
 @Composable
 fun MovieCard(
-    modifier: Modifier = Modifier,
-    isShimmer: Boolean = false,
-    onClick: () -> Unit,
     title: String,
     image: String,
     genres: String,
-    vote: String
+    vote: String,
+    modifier: Modifier = Modifier,
+    isShimmer: Boolean = false,
+    onClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -68,7 +67,7 @@ fun MovieCard(
             AsyncImage(
                 modifier = Modifier
                     .fillMaxSize(),
-                model = imageUrl + image,
+                model = image_url + image,
                 contentScale = ContentScale.Crop,
                 contentDescription = null,
                 error = if (isShimmer) null else painterResource(id = R.drawable.img_video_image_error)

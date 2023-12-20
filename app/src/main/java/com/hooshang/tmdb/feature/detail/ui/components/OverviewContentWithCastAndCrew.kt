@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
-import com.hooshang.tmdb.core.utils.imageUrl
+import com.hooshang.tmdb.core.utils.image_url
 import com.hooshang.tmdb.feature.detail.domain.model.CastOrCrewDomainModel
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import kotlinx.collections.immutable.PersistentList
@@ -38,8 +38,8 @@ fun OverviewContentWithCastAndCrew(movieDetailDomainModel: MovieDetailDomainMode
     Text(
         modifier = Modifier.padding(horizontal = 24.dp),
         text = movieDetailDomainModel.overview,
-        color = TMDBTheme.colors.whiteGray,
-        style = TMDBTheme.typography.subtitle2,
+        color = Theme.colors.whiteGray,
+        style = Theme.typography.subtitle2,
     )
 
     Text(
@@ -48,9 +48,9 @@ fun OverviewContentWithCastAndCrew(movieDetailDomainModel: MovieDetailDomainMode
                 top = 24.dp,
                 start = 24.dp
             ),
-        text = stringResource(R.string.cast_and_crew),
-        style = TMDBTheme.typography.subtitle1,
-        color = TMDBTheme.colors.white,
+        text = stringResource(R.string.label_cast_and_crew),
+        style = Theme.typography.subtitle1,
+        color = Theme.colors.white,
     )
 
     if ((castAndCrewCombinedList.size) > 0) {
@@ -84,14 +84,14 @@ private fun CastCrewLazyRow(
                             .widthIn(60.dp, 112.dp)
                             .basicMarquee(),
                         text = castOrCrew.name,
-                        style = TMDBTheme.typography.body1,
-                        color = TMDBTheme.colors.white,
+                        style = Theme.typography.body1,
+                        color = Theme.colors.white,
                     )
 
                     Text(
-                        text = castOrCrew.job ?: stringResource(R.string.actor),
-                        style = TMDBTheme.typography.overLine,
-                        color = TMDBTheme.colors.gray
+                        text = castOrCrew.job ?: stringResource(R.string.label_actor),
+                        style = Theme.typography.overLine,
+                        color = Theme.colors.gray
                     )
                 }
             }
@@ -103,12 +103,12 @@ private fun CastCrewLazyRow(
 @Composable
 private fun CreditImageWrapper(castOrCrewProfilePath: String?) {
     AsyncImage(
-        model = "$imageUrl${castOrCrewProfilePath}",
+        model = "$image_url${castOrCrewProfilePath}",
         contentDescription = null,
         contentScale = ContentScale.FillBounds,
         modifier = Modifier
             .size(40.dp)
-            .clip(TMDBTheme.shapes.rounded),
-        error = painterResource(id = R.drawable.profileerror)
+            .clip(Theme.shapes.rounded),
+        error = painterResource(id = R.drawable.img_profile_error)
     )
 }

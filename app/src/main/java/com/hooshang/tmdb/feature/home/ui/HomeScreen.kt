@@ -33,10 +33,10 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.hooshang.tmdb.R
-import com.hooshang.tmdb.core.ui.component.MovieRow
 import com.hooshang.tmdb.core.ui.shimmer.fakeMovie
-import com.hooshang.tmdb.core.ui.shimmer.ifShimmerActive
 import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
+import com.hooshang.tmdb.core.utils.ifShimmerActive
+import com.hooshang.tmdb.feature.home.ui.component.MovieRow
 import com.hooshang.tmdb.feature.home.ui.component.PagerMovieItem
 import com.hooshang.tmdb.feature.home.ui.component.TMDBPagerIndicator
 import com.hooshang.tmdb.feature.home.ui.contracts.HomeAction

@@ -12,23 +12,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 
 @Composable
 fun TextIcon(
-    modifier: Modifier = Modifier,
     text: String,
     @DrawableRes iconId: Int,
+    modifier: Modifier = Modifier,
     iconColor: Color? = null,
     textColor: Color? = null
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier
-            .zIndex(1f)
-            .then(modifier)
+            .then(modifier),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = iconId),

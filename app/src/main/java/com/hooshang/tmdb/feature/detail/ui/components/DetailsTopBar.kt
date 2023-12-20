@@ -28,7 +28,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
+import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -61,14 +61,14 @@ fun TopBar(
     ) {
         TMDBIconButton(
             modifier = Modifier
-                .clip(TMDBTheme.shapes.rounded)
-                .background(TMDBTheme.colors.surface)
+                .clip(Theme.shapes.rounded)
+                .background(Theme.colors.surface)
                 .align(Alignment.CenterStart),
             onClick = onBackArrowClick,
         ) {
             IconWrapper(
-                icon = TMDBTheme.icons.arrowBack,
-                tintColor = TMDBTheme.colors.white
+                icon = Theme.icons.arrowBack,
+                tintColor = Theme.colors.white
             )
         }
 
@@ -78,8 +78,8 @@ fun TopBar(
                 .widthIn(50.dp, 200.dp)
                 .basicMarquee(),
             text = movieDetailDomainModel.title,
-            style = TMDBTheme.typography.subtitle1,
-            color = TMDBTheme.colors.white,
+            style = Theme.typography.subtitle1,
+            color = Theme.colors.white,
             textAlign = TextAlign.Start,
             maxLines = 1
         )
@@ -89,28 +89,28 @@ fun TopBar(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             val suitableIcon =
-                if (!movieDetailDomainModel.isFavorite) TMDBTheme.icons.heartBorder else TMDBTheme.icons.heart
+                if (!movieDetailDomainModel.isFavorite) Theme.icons.heartBorder else Theme.icons.heart
             TMDBIconButton(
                 modifier = Modifier
-                    .clip(TMDBTheme.shapes.rounded)
-                    .background(TMDBTheme.colors.surface),
+                    .clip(Theme.shapes.rounded)
+                    .background(Theme.colors.surface),
                 onClick = onFavoriteIconClick
             ) {
                 IconWrapper(
                     icon = suitableIcon,
-                    tintColor = TMDBTheme.colors.error
+                    tintColor = Theme.colors.error
                 )
             }
 
             TMDBIconButton(
                 modifier = Modifier
-                    .clip(TMDBTheme.shapes.rounded)
-                    .background(TMDBTheme.colors.surface),
+                    .clip(Theme.shapes.rounded)
+                    .background(Theme.colors.surface),
                 onClick = { showDialog = true },
             ) {
                 IconWrapper(
-                    icon = TMDBTheme.icons.share,
-                    tintColor = TMDBTheme.colors.primary
+                    icon = Theme.icons.share,
+                    tintColor = Theme.colors.primary
                 )
             }
         }

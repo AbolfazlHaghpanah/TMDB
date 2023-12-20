@@ -46,7 +46,7 @@ class FavoriteViewModel @Inject constructor(
                             snackBarAction = {
                                 observeFavoriteMovies()
                             },
-                            snackBarActionLabel = StringResWrapper(R.string.try_again)
+                            snackBarActionLabel = StringResWrapper(R.string.label_try_again)
                         )
                     )
                 }.collect { domainModel ->

@@ -58,7 +58,7 @@ class DetailViewModel @Inject constructor(
                     snackBarManager.sendMessage(
                         snackBarMassage = SnackBarMassage(
                             snackBarMessage = databaseErrorCatchMessage(it),
-                            snackBarActionLabel = StringResWrapper(R.string.try_again),
+                            snackBarActionLabel = StringResWrapper(R.string.label_try_again),
                             snackBarAction = { observeDetailMovieWithAllRelations() },
                             snackBarDuration = SnackbarDuration.Short
                         )
@@ -92,7 +92,7 @@ class DetailViewModel @Inject constructor(
                             SnackBarMassage(
                                 snackBarMessage = result.message,
                                 snackBarAction = { fetchMovieDetail() },
-                                snackBarActionLabel = StringResWrapper(R.string.try_again)
+                                snackBarActionLabel = StringResWrapper(R.string.label_try_again)
                             )
                         )
                     }
@@ -112,7 +112,7 @@ class DetailViewModel @Inject constructor(
                 snackBarManager.sendMessage(
                     snackBarMassage = SnackBarMassage(
                         snackBarMessage = databaseErrorCatchMessage(t),
-                        snackBarActionLabel = StringResWrapper(R.string.try_again),
+                        snackBarActionLabel = StringResWrapper(R.string.label_try_again),
                         snackBarAction = { addToFavorite() },
                         snackBarDuration = SnackbarDuration.Short
                     )
@@ -129,7 +129,7 @@ class DetailViewModel @Inject constructor(
                 snackBarManager.sendMessage(
                     snackBarMassage = SnackBarMassage(
                         snackBarMessage = databaseErrorCatchMessage(t),
-                        snackBarActionLabel = StringResWrapper(R.string.try_again),
+                        snackBarActionLabel = StringResWrapper(R.string.label_try_again),
                         snackBarAction = { removeFromFavorite() },
                         snackBarDuration = SnackbarDuration.Short
                     )

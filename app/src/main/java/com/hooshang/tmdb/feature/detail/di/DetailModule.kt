@@ -2,7 +2,7 @@ package com.hooshang.tmdb.feature.detail.di
 
 import com.hooshang.tmdb.core.data.AppDatabase
 import com.hooshang.tmdb.feature.detail.data.db.dao.DetailDao
-import com.hooshang.tmdb.feature.detail.data.network.api.DetailApi
+import com.hooshang.tmdb.feature.detail.data.network.DetailApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
