@@ -2,10 +2,10 @@ package com.hooshang.tmdb.feature.home.di
 
 import com.hooshang.tmdb.core.data.AppDatabase
 import com.hooshang.tmdb.core.data.source.local.MovieDao
-import com.hooshang.tmdb.feature.home.data.source.local.dao.HomeDao
-import com.hooshang.tmdb.feature.home.data.source.local.localdatasource.HomeLocalDataSource
-import com.hooshang.tmdb.feature.home.data.source.remote.api.HomeApi
-import com.hooshang.tmdb.feature.home.data.source.remote.remotedatasource.HomeRemoteDataSource
+import com.hooshang.tmdb.feature.home.data.db.HomeDao
+import com.hooshang.tmdb.feature.home.data.datasource.local.HomeLocalDataSourceImpl
+import com.hooshang.tmdb.feature.home.data.network.HomeApi
+import com.hooshang.tmdb.feature.home.data.datasource.remote.HomeRemoteDataSourceImpl
 import com.hooshang.tmdb.feature.home.data.repository.HomeRepositoryImpl
 import com.hooshang.tmdb.feature.home.domain.repository.HomeRepository
 import com.hooshang.tmdb.feature.home.domain.use_case.FetchGenresUseCase
@@ -48,12 +48,12 @@ object HomeModule {
     @Singleton
     @Provides
     fun provideHomeRepository(
-        homeLocalDataSource: HomeLocalDataSource,
-        homeRemoteDataSource: HomeRemoteDataSource
+        homeLocalDataSourceImpl: HomeLocalDataSourceImpl,
+        homeRemoteDataSourceImpl: HomeRemoteDataSourceImpl
     ): HomeRepository {
         return HomeRepositoryImpl(
-            homeLocalDataSource,
-            homeRemoteDataSource
+            homeLocalDataSourceImpl,
+            homeRemoteDataSourceImpl
         )
     }
 

@@ -1,9 +1,9 @@
 package com.hooshang.tmdb.feature.home.data.repository
 
-import com.hooshang.tmdb.feature.home.data.model.local.relation.crossref.PopularMovieGenreCrossRef
-import com.hooshang.tmdb.feature.home.data.model.local.relation.crossref.TopMovieGenreCrossRef
-import com.hooshang.tmdb.feature.home.data.source.local.localdatasource.HomeLocalDataSource
-import com.hooshang.tmdb.feature.home.data.source.remote.remotedatasource.HomeRemoteDataSource
+import com.hooshang.tmdb.feature.home.data.db.relation.crossref.PopularMovieGenreCrossRef
+import com.hooshang.tmdb.feature.home.data.db.relation.crossref.TopMovieGenreCrossRef
+import com.hooshang.tmdb.feature.home.data.datasource.local.HomeLocalDataSourceImpl
+import com.hooshang.tmdb.feature.home.data.datasource.remote.HomeRemoteDataSourceImpl
 import com.hooshang.tmdb.feature.home.domain.repository.HomeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -12,8 +12,8 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(
-    private val localDataSource: HomeLocalDataSource,
-    private val remoteDataSource: HomeRemoteDataSource
+    private val localDataSource: HomeLocalDataSourceImpl,
+    private val remoteDataSource: HomeRemoteDataSourceImpl
 ) : HomeRepository {
 
     override suspend fun getNowPlaying() = withContext(Dispatchers.IO) {

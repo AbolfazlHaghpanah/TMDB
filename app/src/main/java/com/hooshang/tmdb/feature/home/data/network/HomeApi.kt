@@ -1,7 +1,7 @@
-package com.hooshang.tmdb.feature.home.data.source.remote.api
+package com.hooshang.tmdb.feature.home.data.network
 
-import com.hooshang.tmdb.feature.home.data.model.remote.GenreResponse
-import com.hooshang.tmdb.feature.home.data.model.remote.MovieResponse
+import com.hooshang.tmdb.feature.home.data.network.model.GenreResponse
+import com.hooshang.tmdb.feature.home.data.network.model.MovieResponse
 import retrofit2.Response
 import retrofit2.http.GET
 

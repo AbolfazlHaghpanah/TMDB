@@ -1,11 +1,11 @@
-package com.hooshang.tmdb.feature.home.data.model.remote
+package com.hooshang.tmdb.feature.home.data.network.model
 
 import androidx.annotation.Keep
 import com.hooshang.tmdb.core.data.model.local.MovieEntity
 import com.hooshang.tmdb.core.utils.dateConvertor
-import com.hooshang.tmdb.feature.home.data.model.local.entity.NowPlayingEntity
-import com.hooshang.tmdb.feature.home.data.model.local.entity.PopularMovieEntity
-import com.hooshang.tmdb.feature.home.data.model.local.entity.TopMovieEntity
+import com.hooshang.tmdb.feature.home.data.db.entity.NowPlayingEntity
+import com.hooshang.tmdb.feature.home.data.db.entity.PopularMovieEntity
+import com.hooshang.tmdb.feature.home.data.db.entity.TopMovieEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -17,13 +17,13 @@ import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.MovieWith
 import com.hooshang.tmdb.feature.favorite.data.source.local.dao.FavoriteMovieDao
 import com.hooshang.tmdb.feature.favorite.data.model.local.entity.FavoriteMovieEntity
 import com.hooshang.tmdb.feature.favorite.data.model.local.relation.FavoriteMovieGenreCrossRef
-import com.hooshang.tmdb.feature.home.data.source.local.dao.HomeDao
-import com.hooshang.tmdb.feature.home.data.model.local.entity.NowPlayingEntity
-import com.hooshang.tmdb.feature.home.data.model.local.entity.PopularMovieEntity
-import com.hooshang.tmdb.feature.home.data.model.local.entity.TopMovieEntity
-import com.hooshang.tmdb.feature.home.data.model.local.relation.crossref.PopularMovieGenreCrossRef
-import com.hooshang.tmdb.feature.home.data.model.local.relation.crossref.TopMovieGenreCrossRef
-import com.hooshang.tmdb.feature.search.data.db.dao.SearchDao
+import com.hooshang.tmdb.feature.home.data.db.HomeDao
+import com.hooshang.tmdb.feature.home.data.db.entity.NowPlayingEntity
+import com.hooshang.tmdb.feature.home.data.db.entity.PopularMovieEntity
+import com.hooshang.tmdb.feature.home.data.db.entity.TopMovieEntity
+import com.hooshang.tmdb.feature.home.data.db.relation.crossref.PopularMovieGenreCrossRef
+import com.hooshang.tmdb.feature.home.data.db.relation.crossref.TopMovieGenreCrossRef
+import com.hooshang.tmdb.feature.search.data.source.local.dao.SearchDao
 
 @TypeConverters(ListStringToStringConverter::class)
 @Database(

@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.feature.home.data.model.remote
+package com.hooshang.tmdb.feature.home.data.network.model
 
 import androidx.annotation.Keep
 import kotlinx.serialization.Serializable
