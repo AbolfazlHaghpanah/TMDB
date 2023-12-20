@@ -3,10 +3,12 @@ package com.hooshang.tmdb.feature.detail.ui
 import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.BaseViewModel
 import com.hooshang.tmdb.core.utils.Result
 import com.hooshang.tmdb.core.utils.SnackBarManager
 import com.hooshang.tmdb.core.utils.SnackBarMassage
+import com.hooshang.tmdb.core.utils.StringResWrapper
 import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import com.hooshang.tmdb.feature.detail.domain.usecase.DetailUseCase
@@ -30,6 +32,7 @@ class DetailViewModel @Inject constructor(
 
     init {
         observeDetailMovieWithAllRelations()
+        fetchMovieDetail()
     }
 
     override fun onAction(action: DetailsAction) {
@@ -40,24 +43,26 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    override fun setInitialState(): DetailsState {
-        return DetailsState()
-    }
+    override fun setInitialState(): DetailsState = DetailsState()
 
     private fun observeDetailMovieWithAllRelations() {
         viewModelScope.launch(Dispatchers.IO) {
             detailUseCase.observeDetailUseCase(id)
                 .catch {
-                    sendDataBaseError(
-                        throwable = it,
-                        onTryAgain = { observeDetailMovieWithAllRelations() })
+                    snackBarManager.sendMessage(
+                        snackBarMassage = SnackBarMassage(
+                            snackBarMessage = databaseErrorCatchMessage(it),
+                            snackBarActionLabel = StringResWrapper(R.string.try_again),
+                            snackBarAction = { observeDetailMovieWithAllRelations() },
+                            snackBarDuration = SnackbarDuration.Short
+                        )
+                    )
                 }
                 .distinctUntilChanged()
                 .collect { domainModel ->
                     setState { domainModel.toDetailState() }
                 }
         }
-        fetchMovieDetail()
     }
 
     private fun fetchMovieDetail() {
@@ -77,7 +82,13 @@ class DetailViewModel @Inject constructor(
 
                     is Result.Error -> {
                         setState { copy(isLoading = false) }
-                        sendNetworkError(result.message)
+                        snackBarManager.sendMessage(
+                            SnackBarMassage(
+                                snackBarMessage = result.message,
+                                snackBarAction = { fetchMovieDetail() },
+                                snackBarActionLabel = StringResWrapper(R.string.try_again)
+                            )
+                        )
                     }
                 }
             }
@@ -92,9 +103,14 @@ class DetailViewModel @Inject constructor(
                     state.value.movie.genres.map { it.first }
                 )
             } catch (t: Throwable) {
-                sendDataBaseError(
-                    throwable = t,
-                    onTryAgain = { addToFavorite() })
+                snackBarManager.sendMessage(
+                    snackBarMassage = SnackBarMassage(
+                        snackBarMessage = databaseErrorCatchMessage(t),
+                        snackBarActionLabel = StringResWrapper(R.string.try_again),
+                        snackBarAction = { addToFavorite() },
+                        snackBarDuration = SnackbarDuration.Short
+                    )
+                )
             }
         }
     }
@@ -104,37 +120,16 @@ class DetailViewModel @Inject constructor(
             try {
                 detailUseCase.removeFavoriteUseCase(id)
             } catch (t: Throwable) {
-                sendDataBaseError(
-                    throwable = t,
-                    onTryAgain = { removeFromFavorite() })
+                snackBarManager.sendMessage(
+                    snackBarMassage = SnackBarMassage(
+                        snackBarMessage = databaseErrorCatchMessage(t),
+                        snackBarActionLabel = StringResWrapper(R.string.try_again),
+                        snackBarAction = { removeFromFavorite() },
+                        snackBarDuration = SnackbarDuration.Short
+                    )
+                )
             }
         }
-    }
-
-    private suspend fun sendDataBaseError(
-        throwable: Throwable,
-        onTryAgain: () -> Unit
-    ) {
-        snackBarManager.sendMessage(
-            snackBarMassage = SnackBarMassage(
-                snackBarMessage = databaseErrorCatchMessage(throwable),
-                snackBarActionLabel = "Try Again",
-                snackBarAction = onTryAgain,
-                snackBarDuration = SnackbarDuration.Short
-            )
-        )
-    }
-
-    private suspend fun sendNetworkError(
-        message: String?
-    ) {
-        snackBarManager.sendMessage(
-            SnackBarMassage(
-                snackBarMessage = message,
-                snackBarAction = { fetchMovieDetail() },
-                snackBarActionLabel = "try again"
-            )
-        )
     }
 
     private fun MovieDetailDomainModel.toDetailState(): DetailsState {

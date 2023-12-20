@@ -24,4 +24,5 @@
     <string name="share_tmdb_link">share TMDB link</string>
     <string name="close">close</string>
     <string name="minutes">Minutes</string>
+    <string name="try_again">Try Again</string>
 </resources>
