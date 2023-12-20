@@ -1,16 +1,16 @@
-package com.hooshang.tmdb.feature.detail.data.model.local.relation
+package com.hooshang.tmdb.feature.detail.data.db.relation
 
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 import com.hooshang.tmdb.core.data.model.local.GenreEntity
 import com.hooshang.tmdb.core.data.model.local.MovieEntity
-import com.hooshang.tmdb.feature.detail.data.model.local.entity.CreditEntity
-import com.hooshang.tmdb.feature.detail.data.model.local.entity.DetailEntity
-import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithCreditCrossRef
-import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithGenreCrossRef
-import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
-import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.MovieWithGenreCrossRef
+import com.hooshang.tmdb.feature.detail.data.db.entity.CreditEntity
+import com.hooshang.tmdb.feature.detail.data.db.entity.DetailEntity
+import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithCreditCrossRef
+import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithGenreCrossRef
+import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
+import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.MovieWithGenreCrossRef
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import com.hooshang.tmdb.feature.detail.domain.model.SimilarMovieDomainModel
 import com.hooshang.tmdb.feature.favorite.data.model.local.entity.FavoriteMovieEntity

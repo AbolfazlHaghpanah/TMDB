@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.feature.detail.data.model.local.entity
+package com.hooshang.tmdb.feature.detail.data.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

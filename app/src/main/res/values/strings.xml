@@ -19,5 +19,11 @@
     <string name="prefix_instagram">instagram-</string>
     <string name="prefix_twitter">twitter-</string>
     <string name="cmp_null_text">null</string>
-
+    <string name="share_instagram_link">share instagram link</string>
+    <string name="share_twitter_link">share twitter link</string>
+    <string name="share_imdb_link">share IMDB link</string>
+    <string name="share_tmdb_link">share TMDB link</string>
+    <string name="close">close</string>
+    <string name="minutes">Minutes</string>
+    <string name="try_again">Try Again</string>
 </resources>

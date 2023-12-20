@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.feature.detail.data.source.local.converter
+package com.hooshang.tmdb.feature.detail.data.db.converter
 
 import androidx.room.TypeConverter
 import kotlinx.serialization.encodeToString

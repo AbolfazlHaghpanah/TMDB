@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence
+package com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence
 
 import androidx.room.Entity
 

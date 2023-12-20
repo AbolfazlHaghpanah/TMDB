@@ -1,8 +1,8 @@
-package com.hooshang.tmdb.feature.detail.data.source.remote.remotedatasource
+package com.hooshang.tmdb.feature.detail.data.datasource.remotedatasource
 
 import com.hooshang.tmdb.core.data.source.remote.bodyOrThrow
-import com.hooshang.tmdb.feature.detail.data.model.remote.MovieDetailResponse
-import com.hooshang.tmdb.feature.detail.data.source.remote.api.DetailApi
+import com.hooshang.tmdb.feature.detail.data.network.response.MovieDetailResponse
+import com.hooshang.tmdb.feature.detail.data.network.api.DetailApi
 import javax.inject.Inject
 
 class DetailRemoteDataSource @Inject constructor(

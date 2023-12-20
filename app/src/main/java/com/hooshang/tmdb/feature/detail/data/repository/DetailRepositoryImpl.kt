@@ -1,12 +1,12 @@
 package com.hooshang.tmdb.feature.detail.data.repository
 
 import com.hooshang.tmdb.core.data.model.local.MovieEntity
-import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithCreditCrossRef
-import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithGenreCrossRef
-import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
-import com.hooshang.tmdb.feature.detail.data.model.local.relation.crossrefrence.MovieWithGenreCrossRef
-import com.hooshang.tmdb.feature.detail.data.source.local.localdatasource.DetailLocalDataSource
-import com.hooshang.tmdb.feature.detail.data.source.remote.remotedatasource.DetailRemoteDataSource
+import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithCreditCrossRef
+import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithGenreCrossRef
+import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
+import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.MovieWithGenreCrossRef
+import com.hooshang.tmdb.feature.detail.data.datasource.localdatasource.DetailLocalDataSource
+import com.hooshang.tmdb.feature.detail.data.datasource.remotedatasource.DetailRemoteDataSource
 import com.hooshang.tmdb.feature.detail.domain.repository.DetailRepository
 import com.hooshang.tmdb.feature.favorite.data.model.local.entity.FavoriteMovieEntity
 import com.hooshang.tmdb.feature.favorite.data.model.local.relation.FavoriteMovieGenreCrossRef
@@ -23,7 +23,7 @@ class DetailRepositoryImpl @Inject constructor(
     override suspend fun addToFavorite(movieId: Int, genres: List<Int>) =
         withContext(Dispatchers.IO) {
             genres.forEach {
-                localDataSource.addFavoriteMovieGenre(
+                localDataSource.insertFavoriteMovieGenre(
                     FavoriteMovieGenreCrossRef(
                         movieId,
                         it
@@ -43,13 +43,13 @@ class DetailRepositoryImpl @Inject constructor(
     override suspend fun fetchMovieDetail(id: Int) = withContext(Dispatchers.IO) {
         val movieDetailDto = remoteDataSource.getMovieDetail(id)
 
-        localDataSource.addMovie(listOf(movieDetailDto.toMovieEntity()))
+        localDataSource.insertMovies(listOf(movieDetailDto.toMovieEntity()))
 
-        localDataSource.addDetail(movieDetailDto.toDetailEntity())
+        localDataSource.insertMovieDetails(movieDetailDto.toDetailEntity())
 
-        localDataSource.addCredits(movieDetailDto.toCreditsEntity())
+        localDataSource.insertCredits(movieDetailDto.toCreditsEntity())
 
-        localDataSource.addDetailMovieWithCreditCrossRef(
+        localDataSource.insertDetailMoviesWithCredits(
             movieDetailDto.credits.cast.map {
                 DetailMovieWithCreditCrossRef(
                     detailMovieId = movieDetailDto.id,
@@ -63,7 +63,7 @@ class DetailRepositoryImpl @Inject constructor(
             }
         )
 
-        localDataSource.addDetailMovieWithGenreCrossRef(
+        localDataSource.insertDetailMoviesWithGenres(
             movieDetailDto.genreResponses.map {
                 DetailMovieWithGenreCrossRef(
                     detailMovieId = movieDetailDto.id,
@@ -72,7 +72,7 @@ class DetailRepositoryImpl @Inject constructor(
             }
         )
 
-        localDataSource.addDetailMovieWithSimilarMoviesCrossRef(
+        localDataSource.insertDetailMoviesWithSimilarMovies(
             movieDetailDto.similar.results.map {
                 DetailMovieWithSimilarMoviesCrossRef(
                     detailMovieId = movieDetailDto.id,
@@ -81,9 +81,9 @@ class DetailRepositoryImpl @Inject constructor(
             }
         )
 
-        localDataSource.addMovie(
+        localDataSource.insertMovies(
             movieDetailDto.similar.results.map { similarMovieResult ->
-                localDataSource.addMovieWithGenreCrossRef(
+                localDataSource.insertMoviesWithGenres(
                     similarMovieResult.genreIds.map {
                         MovieWithGenreCrossRef(
                             id = similarMovieResult.id,

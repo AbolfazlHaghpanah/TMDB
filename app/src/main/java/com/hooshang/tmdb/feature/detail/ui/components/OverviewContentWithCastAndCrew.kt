@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,27 +32,29 @@ import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun OverviewContentWithCastAndCrew(movieDetailDomainModel: MovieDetailDomainModel) {
+    val castAndCrewCombinedList =
+        movieDetailDomainModel.credits.toPersistentList()
+
     Text(
+        modifier = Modifier.padding(horizontal = 24.dp),
         text = movieDetailDomainModel.overview,
-        color = Theme.colors.whiteGray,
-        style = Theme.typography.subtitle2,
-        modifier = Modifier.padding(horizontal = 24.dp)
+        color = TMDBTheme.colors.whiteGray,
+        style = TMDBTheme.typography.subtitle2,
     )
 
     Text(
-        text = stringResource(R.string.label_cast_and_crew),
-        style = Theme.typography.subtitle1,
-        color = Theme.colors.white,
         modifier = Modifier
             .padding(
                 top = 24.dp,
                 start = 24.dp
-            )
+            ),
+        text = stringResource(R.string.cast_and_crew),
+        style = TMDBTheme.typography.subtitle1,
+        color = TMDBTheme.colors.white,
     )
-    val castAndCrewCombinedList =
-        movieDetailDomainModel.credits.toMutableList()
+
     if ((castAndCrewCombinedList.size) > 0) {
-        CastCrewLazyRow(castAndCrewCombinedList.toPersistentList())
+        CastCrewLazyRow(castAndCrewCombinedList)
     }
 }
 
@@ -60,7 +63,6 @@ fun OverviewContentWithCastAndCrew(movieDetailDomainModel: MovieDetailDomainMode
 private fun CastCrewLazyRow(
     castOrCrewDomainModelElements: PersistentList<CastOrCrewDomainModel>
 ) {
-
     LazyRow(
         contentPadding = PaddingValues(
             start = 24.dp,
@@ -73,21 +75,23 @@ private fun CastCrewLazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 CreditImageWrapper(castOrCrew.profilePath)
+
                 Column(
                     modifier = Modifier.padding(end = 12.dp)
                 ) {
                     Text(
-                        text = castOrCrew.name,
-                        style = Theme.typography.body1,
-                        color = Theme.colors.white,
                         modifier = Modifier
                             .widthIn(60.dp, 112.dp)
-                            .basicMarquee()
+                            .basicMarquee(),
+                        text = castOrCrew.name,
+                        style = TMDBTheme.typography.body1,
+                        color = TMDBTheme.colors.white,
                     )
+
                     Text(
-                        text = castOrCrew.job ?: stringResource(R.string.label_actor),
-                        style = Theme.typography.overLine,
-                        color = Theme.colors.gray
+                        text = castOrCrew.job ?: stringResource(R.string.actor),
+                        style = TMDBTheme.typography.overLine,
+                        color = TMDBTheme.colors.gray
                     )
                 }
             }
@@ -95,6 +99,7 @@ private fun CastCrewLazyRow(
     }
 }
 
+@NonRestartableComposable
 @Composable
 private fun CreditImageWrapper(castOrCrewProfilePath: String?) {
     AsyncImage(
@@ -103,7 +108,7 @@ private fun CreditImageWrapper(castOrCrewProfilePath: String?) {
         contentScale = ContentScale.FillBounds,
         modifier = Modifier
             .size(40.dp)
-            .clip(Theme.shapes.rounded),
-        error = painterResource(id = R.drawable.img_profile_error)
+            .clip(TMDBTheme.shapes.rounded),
+        error = painterResource(id = R.drawable.profileerror)
     )
 }

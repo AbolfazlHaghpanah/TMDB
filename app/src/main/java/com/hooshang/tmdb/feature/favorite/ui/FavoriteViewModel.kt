@@ -2,9 +2,11 @@ package com.hooshang.tmdb.feature.favorite.ui
 
 import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.viewModelScope
+import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.BaseViewModel
 import com.hooshang.tmdb.core.utils.SnackBarManager
 import com.hooshang.tmdb.core.utils.SnackBarMassage
+import com.hooshang.tmdb.core.utils.StringResWrapper
 import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
 import com.hooshang.tmdb.feature.favorite.domain.model.FavoriteMovieDomainModel
 import com.hooshang.tmdb.feature.favorite.domain.use_case.FavoriteUseCase
@@ -44,7 +46,7 @@ class FavoriteViewModel @Inject constructor(
                             snackBarAction = {
                                 observeFavoriteMovies()
                             },
-                            snackBarActionLabel = "Try Again"
+                            snackBarActionLabel = StringResWrapper(R.string.try_again)
                         )
                     )
                 }.collect { domainModel ->

@@ -19,10 +19,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.ModalBottomSheetLayout
+import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.hooshang.tmdb.core.ui.component.TMDBBottomNavigation
 import com.hooshang.tmdb.core.ui.component.TMDBSnackBar
 import com.hooshang.tmdb.core.ui.theme.TMDBTheme
@@ -30,9 +34,6 @@ import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 import com.hooshang.tmdb.core.utils.SnackBarManager
 import com.hooshang.tmdb.navigation.AppScreens
 import com.hooshang.tmdb.navigation.mainNavGraph
-import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
-import com.google.accompanist.navigation.material.ModalBottomSheetLayout
-import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
@@ -63,6 +64,7 @@ class MainActivity : ComponentActivity() {
             val snackBarHostState = remember {
                 SnackbarHostState()
             }
+            val context = LocalContext.current
 
             navController.addOnDestinationChangedListener(
                 listener = { _, _, _ ->
@@ -75,7 +77,7 @@ class MainActivity : ComponentActivity() {
                     if (snackBarMessage?.snackBarMessage.isNullOrEmpty().not()) {
                         val snackBarResult = snackBarHostState.showSnackbar(
                             message = snackBarMessage?.snackBarMessage!!,
-                            actionLabel = snackBarMessage.snackBarActionLabel,
+                            actionLabel = snackBarMessage.snackBarActionLabel?.asString(context),
                             duration = snackBarMessage.snackBarDuration
                         )
                         if (snackBarResult == SnackbarResult.ActionPerformed) {
