@@ -45,9 +45,9 @@ class DetailRepositoryImpl @Inject constructor(
 
         localDataSource.insertMovies(listOf(movieDetailDto.toMovieEntity()))
 
-        localDataSource.addDetail(movieDetailDto.toDetailEntity())
+        localDataSource.insertMovieDetails(movieDetailDto.toDetailEntity())
 
-        localDataSource.addCredits(movieDetailDto.toCreditsEntity())
+        localDataSource.insertCredits(movieDetailDto.toCreditsEntity())
 
         localDataSource.insertDetailMoviesWithCredits(
             movieDetailDto.credits.cast.map {

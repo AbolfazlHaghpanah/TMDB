@@ -24,7 +24,7 @@ interface DetailDao {
     fun observeMovieDetail(detailMovieId: Int): Flow<DetailMovieWithAllRelations>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addDetail(detailEntity: DetailEntity)
+    suspend fun insertMovieDetails(detailEntity: DetailEntity)
 
     //    cross references
     @Insert(onConflict = OnConflictStrategy.REPLACE)

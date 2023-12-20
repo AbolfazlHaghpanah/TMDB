@@ -23,8 +23,8 @@ class DetailLocalDataSource @Inject constructor(
         return detailDao.observeMovieDetail(detailMovieId)
     }
 
-    suspend fun addDetail(detailEntity: DetailEntity) {
-        return detailDao.addDetail(detailEntity)
+    suspend fun insertMovieDetails(detailEntity: DetailEntity) {
+        return detailDao.insertMovieDetails(detailEntity)
     }
 
     suspend fun insertFavoriteMovieGenre(genre: FavoriteMovieGenreCrossRef) {
@@ -49,7 +49,7 @@ class DetailLocalDataSource @Inject constructor(
         return detailDao.insertMoviesWithGenres(movieWithGenre)
     }
 
-    fun addCredits(credit: List<CreditEntity>) {
+    fun insertCredits(credit: List<CreditEntity>) {
         return detailDao.insertCredits(credit)
     }
 

@@ -13,10 +13,15 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="imdb">imdb-</string>
-    <string name="instagram">instagram-</string>
     <string name="twitter">twitter-</string>
     <string name="open_in">Open In</string>
     <string name="null_text">null</string>
     <string name="movie_search_error1">we are sorry,we can not find the movie :(</string>
     <string name="find_movie_by_title">"Find your movie by Type title "</string>
+    <string name="share_instagram_link">share instagram link</string>
+    <string name="share_twitter_link">share twitter link</string>
+    <string name="share_imdb_link">share IMDB link</string>
+    <string name="share_tmdb_link">share TMDB link</string>
+    <string name="close">close</string>
+    <string name="minutes">Minutes</string>
 </resources>
