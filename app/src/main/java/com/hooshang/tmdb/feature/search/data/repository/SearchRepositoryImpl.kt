@@ -1,8 +1,8 @@
 package com.hooshang.tmdb.feature.search.data.repository
 
 import com.hooshang.tmdb.core.data.model.local.GenreEntity
-import com.hooshang.tmdb.feature.search.data.source.local.localdatasource.SearchLocalDataSource
-import com.hooshang.tmdb.feature.search.data.source.remote.remotedatasource.SearchRemoteDataSource
+import com.hooshang.tmdb.feature.search.data.datasource.localdatasource.SearchLocalDataSource
+import com.hooshang.tmdb.feature.search.data.datasource.remotedatasource.SearchRemoteDataSource
 import com.hooshang.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainModel
 import com.hooshang.tmdb.feature.search.domain.repository.SearchRepository
 import kotlinx.coroutines.flow.first

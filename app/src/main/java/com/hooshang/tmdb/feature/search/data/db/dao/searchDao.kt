@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.feature.search.data.source.local.dao
+package com.hooshang.tmdb.feature.search.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Query

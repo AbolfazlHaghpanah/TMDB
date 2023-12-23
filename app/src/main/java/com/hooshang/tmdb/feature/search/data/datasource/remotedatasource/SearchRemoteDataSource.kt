@@ -1,7 +1,7 @@
-package com.hooshang.tmdb.feature.search.data.source.remote.remotedatasource
+package com.hooshang.tmdb.feature.search.data.datasource.remotedatasource
 
 import com.hooshang.tmdb.core.data.source.remote.bodyOrThrow
-import com.hooshang.tmdb.feature.search.data.source.remote.api.SearchApi
+import com.hooshang.tmdb.feature.search.data.network.api.SearchApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

@@ -1,7 +1,7 @@
-package com.hooshang.tmdb.feature.search.data.source.remote.api
+package com.hooshang.tmdb.feature.search.data.network.api
 
 import com.hooshang.tmdb.core.utils.tmdpApiKey
-import com.hooshang.tmdb.feature.search.data.model.remote.SearchResult
+import com.hooshang.tmdb.feature.search.data.network.response.SearchResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -13,5 +13,5 @@ interface SearchApi {
     suspend fun getSearchResults(
         @Header("Authorization") apiKey: String = tmdpApiKey,
         @Query("query") query: String
-    ): Response<SearchResult>
+    ): Response<SearchResponse>
 }

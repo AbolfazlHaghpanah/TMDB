@@ -1,31 +1,25 @@
-package com.hooshang.tmdb.feature.search.data.model.remote
+package com.hooshang.tmdb.feature.search.data.network.response
 
 import com.hooshang.tmdb.feature.search.domain.model.SearchMovieDomainModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SearchResult(
-    val results: List<SearchResultElement>
+data class SearchResponse(
+    val results: List<SearchResult>
 )
-
 @Serializable
-data class SearchResultElement(
+data class SearchResult(
     val id: Int,
     val title: String,
-
     @SerialName("original_language")
     val originalLanguage: String,
-
     @SerialName("vote_average")
     val voteAverage: Float,
-
     @SerialName("poster_path")
     val posterPath: String?,
-
     @SerialName("release_date")
     val releaseDate: String,
-
     @SerialName("genre_ids")
     val genreIds: List<Int>
 ) {
