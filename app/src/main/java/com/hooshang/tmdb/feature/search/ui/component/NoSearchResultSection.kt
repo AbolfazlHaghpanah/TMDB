@@ -3,8 +3,7 @@ package com.hooshang.tmdb.feature.search.ui.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
@@ -21,9 +20,7 @@ import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 @Composable
 fun NoSearchResultSection() {
     Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .aspectRatio(2.1f),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -31,15 +28,17 @@ fun NoSearchResultSection() {
             imageVector = ImageVector.vectorResource(TMDBTheme.icons.noResult),
             contentDescription = null
         )
+
         Text(
+            modifier = Modifier
+                .width(168.dp)
+                .padding(top = 16.dp, bottom = 20.dp),
             text = stringResource(R.string.movie_search_error1),
             style = TMDBTheme.typography.subtitle1,
             color = TMDBTheme.colors.whiteGray,
-            minLines = 2,
-            modifier = Modifier
-                .width(168.dp)
-                .padding(top = 16.dp, bottom = 20.dp)
+            minLines = 2
         )
+
         Text(
             text = stringResource(R.string.find_movie_by_title),
             style = TMDBTheme.typography.caption,

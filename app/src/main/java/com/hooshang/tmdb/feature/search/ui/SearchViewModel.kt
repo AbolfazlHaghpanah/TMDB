@@ -24,7 +24,7 @@ class SearchViewModel @Inject constructor(
     private val snackBarManager: SnackBarManager
 ) : BaseViewModel<SearchAction, SearchState>() {
 
-    private var _currentSearchString: String = ""
+    private var currentSearchString: String = ""
 
     override fun onAction(action: SearchAction) {
         when (action) {
@@ -38,10 +38,10 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun search(value: String) {
-        _currentSearchString = value
+        currentSearchString = value
         viewModelScope.launch(Dispatchers.IO) {
             resultWrapper {
-                searchUseCase(_currentSearchString)
+                searchUseCase(currentSearchString)
             }.collect {
                 emiSearchResult(it)
             }
@@ -61,7 +61,7 @@ class SearchViewModel @Inject constructor(
                         SnackBarMassage(
                             snackBarMessage = result.message,
                             snackBarAction = {
-                                search(_currentSearchString)
+                                search(currentSearchString)
                             },
                             snackBarActionLabel = StringResWrapper(R.string.try_again),
                             snackBarDuration = SnackbarDuration.Indefinite
