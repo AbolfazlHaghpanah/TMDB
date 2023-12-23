@@ -10,7 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
@@ -62,18 +63,16 @@ private fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel
 ) {
-    val onAction: (HomeAction) -> Unit = remember {
-        { action ->
-            when (action) {
-                is HomeAction.NavigateToDetail ->
-                    navController.navigate(AppScreens.Detail.createRoute(action.id)) {
-                        popUpTo(AppScreens.Home.route)
-                        launchSingleTop = true
-                    }
-
-                else -> {
-                    viewModel.onAction(action)
+    val onAction: (HomeAction) -> Unit = { action ->
+        when (action) {
+            is HomeAction.NavigateToDetail ->
+                navController.navigate(AppScreens.Detail.createRoute(action.id)) {
+                    popUpTo(AppScreens.Home.route)
+                    launchSingleTop = true
                 }
+
+            else -> {
+                viewModel.onAction(action)
             }
         }
     }
@@ -104,6 +103,7 @@ private fun HomeScreen(
     pullRefreshState: PullRefreshState,
     onAction: (HomeAction) -> Unit,
 ) {
+    val scrollState = rememberScrollState()
 
     Box(
         modifier = Modifier
@@ -111,77 +111,72 @@ private fun HomeScreen(
             .pullRefresh(pullRefreshState)
             .fillMaxSize()
     ) {
-        LazyColumn {
+        Column(
+            Modifier.verticalScroll(scrollState)
+        ) {
+            HorizontalPager(
+                modifier = Modifier
+                    .padding(top = 24.dp)
+                    .height(180.dp),
+                state = pagerState,
+                count = 5,
+                itemSpacing = 12.dp,
+                contentPadding = PaddingValues(horizontal = 40.dp)
+            ) { page ->
+                val pagerSize = animateDpAsState(
+                    targetValue = if (page == pagerState.currentPage) 180.dp else 160.dp,
+                    label = ""
+                )
 
-            item {
-                HorizontalPager(
-                    modifier = Modifier
-                        .padding(top = 24.dp)
-                        .height(180.dp),
-                    state = pagerState,
-                    count = if (homeState.nowPlayingMovies.size > 5) 5 else fakeMovie.size,
-                    itemSpacing = 12.dp,
-                    contentPadding = PaddingValues(horizontal = 40.dp)
-                ) { page ->
-
-                    val pagerSize = animateDpAsState(
-                        targetValue = if (page == pagerState.currentPage) 180.dp else 160.dp,
-                        label = ""
-                    )
-
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-
-                        PagerMovieItem(
-                            isLoading = homeState.nowPlayingMovies.size <= 5,
-                            modifier = Modifier
-                                .clip(TMDBTheme.shapes.large)
-                                .clickable {
-                                    if (homeState.nowPlayingMovies.size >= 5) onAction(
-                                        HomeAction.NavigateToDetail(id = homeState.nowPlayingMovies[page].movieId)
-                                    )
-                                }
-                                .height(pagerSize.value),
-                            movie = if (homeState.nowPlayingMovies.size >= 5) {
-                                homeState.nowPlayingMovies[page]
-                            } else {
-                                fakeMovie[0]
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    PagerMovieItem(
+                        modifier = Modifier
+                            .clip(Theme.shapes.large)
+                            .clickable {
+                                if (homeState.nowPlayingMovies.isNotEmpty()) onAction(
+                                    HomeAction.NavigateToDetail(id = homeState.nowPlayingMovies[page].movieId)
+                                )
                             }
-                        )
-                    }
+                            .height(pagerSize.value),
+                        isLoading = homeState.nowPlayingMovies.isEmpty(),
+                        movie = if (homeState.nowPlayingMovies.size > page) {
+                            homeState.nowPlayingMovies[page]
+                        } else {
+                            fakeMovie[0]
+                        }
+                    )
                 }
             }
 
-            item {
-                TMDBPagerIndicator(
-                    modifier = Modifier
-                        .ifShimmerActive(homeState.nowPlayingMovies.isEmpty()),
-                    pageCount = pagerState.pageCount,
-                    selectedPage = pagerState.currentPage
-                )
-            }
+            TMDBPagerIndicator(
+                modifier = Modifier
+                    .ifShimmerActive(homeState.nowPlayingMovies.isEmpty()),
+                pageCount = pagerState.pageCount,
+                selectedPage = pagerState.currentPage
+            )
 
-            item {
-                MovieRow(
-                    onClick = { id ->
+            MovieRow(
+                onClick = { id ->
+                    if (homeState.nowPlayingMovies.isNotEmpty()) {
                         onAction(HomeAction.NavigateToDetail(id = id))
-                    },
-                    title = stringResource(R.string.label_most_popular),
-                    movies = homeState.popularMovies.toPersistentList()
-                )
-            }
+                    }
+                },
+                title = stringResource(id = R.string.label_most_popular),
+                movies = homeState.popularMovies.toPersistentList()
+            )
 
-            item {
-                MovieRow(
-                    onClick = { id ->
+            MovieRow(
+                onClick = { id ->
+                    if (homeState.nowPlayingMovies.isNotEmpty()) {
                         onAction(HomeAction.NavigateToDetail(id = id))
-                    },
-                    title = stringResource(R.string.label_top_rated),
-                    movies = homeState.topRatedMovies.toPersistentList()
-                )
-            }
+                    }
+                },
+                title = stringResource(id = R.string.label_top_rated),
+                movies = homeState.topRatedMovies.toPersistentList()
+            )
         }
 
         PullRefreshIndicator(
@@ -191,11 +186,3 @@ private fun HomeScreen(
         )
     }
 }
-
-
-
-
-
-
-
-

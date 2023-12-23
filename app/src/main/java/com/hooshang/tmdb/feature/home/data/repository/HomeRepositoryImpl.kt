@@ -1,45 +1,41 @@
 package com.hooshang.tmdb.feature.home.data.repository
 
+import com.hooshang.tmdb.feature.home.data.datasource.local.HomeLocalDataSource
+import com.hooshang.tmdb.feature.home.data.datasource.remote.HomeRemoteDataSource
 import com.hooshang.tmdb.feature.home.data.db.relation.crossref.PopularMovieGenreCrossRef
 import com.hooshang.tmdb.feature.home.data.db.relation.crossref.TopMovieGenreCrossRef
-import com.hooshang.tmdb.feature.home.data.datasource.local.HomeLocalDataSourceImpl
-import com.hooshang.tmdb.feature.home.data.datasource.remote.HomeRemoteDataSourceImpl
 import com.hooshang.tmdb.feature.home.domain.repository.HomeRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(
-    private val localDataSource: HomeLocalDataSourceImpl,
-    private val remoteDataSource: HomeRemoteDataSourceImpl
+    private val localDataSource: HomeLocalDataSource,
+    private val remoteDataSource: HomeRemoteDataSource
 ) : HomeRepository {
+    override suspend fun getNowPlaying() = localDataSource.observeNowPlayingMovies()
+        .map { movieFlow -> movieFlow.map { it.toDomainModel() } }
 
-    override suspend fun getNowPlaying() = withContext(Dispatchers.IO) {
-        localDataSource.getNowPlayings()
-    }
+    override suspend fun getTopMovie() =
+        localDataSource.observeTopMovies().map { movieFlow -> movieFlow.map { it.toDomainModel() } }
 
-    override suspend fun getTopMovie() = withContext(Dispatchers.IO) {
-        localDataSource.getTopMovie()
-    }
+    override suspend fun getPopularMovie() = localDataSource.observePopularMovies()
+        .map { movieFlow -> movieFlow.map { it.toDomainModel() } }
 
-    override suspend fun getPopularMovie() = withContext(Dispatchers.IO) {
-        localDataSource.getPopularMovies()
-    }
+    override suspend fun fetchGenres() = localDataSource.insertGenres(
+        remoteDataSource.getGenres().genres.map { it.toGenreEntity() }
+    )
 
-    override suspend fun fetchGenres() = withContext(Dispatchers.IO) {
-        localDataSource.insertGenres(
-            remoteDataSource.getGenres().genres.map { it.toGenreEntity() }
-        )
-    }
 
-    override suspend fun fetchNowPlaying() = withContext(Dispatchers.IO) {
-        val data = remoteDataSource.getNowPlaying().results
+    override suspend fun fetchNowPlaying() = run {
+        val data = remoteDataSource.getNowPlayingMovies().results
 
-        localDataSource.getNowPlayings()
-            .onEach { localMovies ->
-                if (localMovies.map { it.movieId }.compare(data.map { it.id })) {
+        localDataSource.observeNowPlayingMovies()
+            .onEach { localMovies
+                ->
+                if (localMovies.map { it.movie?.id ?: -1 }
+                        .compare(data.map { it.id })) {
                     localDataSource.removeNowPlayingMovies()
                 }
             }
@@ -54,12 +50,13 @@ class HomeRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun fetchTopMovie() = withContext(Dispatchers.IO) {
-        val data = remoteDataSource.getTopMovie().results
+    override suspend fun fetchTopMovie() = run {
+        val data = remoteDataSource.getTopMovies().results
 
-        localDataSource.getTopMovie()
+        localDataSource.observeTopMovies()
             .onEach { localMovies ->
-                if (localMovies.map { it.movieId }.compare(data.map { it.id })) {
+                if (localMovies.map { it.movie?.id ?: -1 }
+                        .compare(data.map { it.id })) {
                     localDataSource.removeTopMovies()
                 }
             }
@@ -84,12 +81,12 @@ class HomeRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun fetchPopularMovie() = withContext(Dispatchers.IO) {
-        val data = remoteDataSource.getPopular().results
+    override suspend fun fetchPopularMovie() = run {
+        val data = remoteDataSource.getMostPopularMovies().results
 
-        localDataSource.getPopularMovies()
+        localDataSource.observePopularMovies()
             .onEach { localMovies ->
-                if (localMovies.map { it.movieId }.compare(data.map { it.id })) {
+                if (localMovies.map { it.movie?.id ?: -1 }.compare(data.map { it.id })) {
                     localDataSource.removePopularMovies()
                 }
             }

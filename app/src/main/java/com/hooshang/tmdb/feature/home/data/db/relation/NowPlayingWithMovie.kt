@@ -14,15 +14,13 @@ data class NowPlayingWithMovie(
     )
     val movie: MovieEntity?,
 ) {
-    fun toDomainModel(): HomeMovieDomainModel {
-        return HomeMovieDomainModel(
-            genres = "",
-            movieId = movie?.id ?: 1,
-            title = movie?.title ?: "",
-            posterPath = movie?.posterPath ?: "",
-            voteAverage = movie?.voteAverage ?: 0.0,
-            releaseDate = nowPlayingMovie?.releaseDate ?: "",
-            backdropPath = movie?.backdropPath ?: ""
-        )
-    }
+    fun toDomainModel(): HomeMovieDomainModel = HomeMovieDomainModel(
+        genres = "",
+        movieId = movie?.id ?: 1,
+        title = movie?.title ?: "",
+        posterPath = movie?.posterPath ?: "",
+        voteAverage = movie?.voteAverage ?: 0.0,
+        releaseDate = nowPlayingMovie?.releaseDate ?: "",
+        backdropPath = movie?.backdropPath ?: ""
+    )
 }

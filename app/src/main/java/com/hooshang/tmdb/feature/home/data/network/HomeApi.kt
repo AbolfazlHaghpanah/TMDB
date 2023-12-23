@@ -8,14 +8,14 @@ import retrofit2.http.GET
 
 interface HomeApi {
     @GET("genre/movie/list?language=en")
-    suspend fun getGenre(): Response<GenreResponse>
+    suspend fun getGenres(): Response<GenreResponse>
 
     @GET("movie/now_playing")
-    suspend fun getNowPlaying(): Response<MovieResponse>
+    suspend fun getNowPlayingMovies(): Response<MovieResponse>
 
     @GET("movie/popular")
-    suspend fun getMostPopular(): Response<MovieResponse>
+    suspend fun getMostPopularMovies(): Response<MovieResponse>
 
     @GET("movie/top_rated")
-    suspend fun getTopRated(): Response<MovieResponse>
+    suspend fun getTopMovies(): Response<MovieResponse>
 }

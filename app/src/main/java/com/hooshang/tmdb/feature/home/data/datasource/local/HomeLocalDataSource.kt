@@ -5,15 +5,17 @@ import com.hooshang.tmdb.core.data.model.local.MovieEntity
 import com.hooshang.tmdb.feature.home.data.db.entity.NowPlayingEntity
 import com.hooshang.tmdb.feature.home.data.db.entity.PopularMovieEntity
 import com.hooshang.tmdb.feature.home.data.db.entity.TopMovieEntity
+import com.hooshang.tmdb.feature.home.data.db.relation.NowPlayingWithMovie
+import com.hooshang.tmdb.feature.home.data.db.relation.PopularMovieAndGenreWithMovie
+import com.hooshang.tmdb.feature.home.data.db.relation.TopMovieAndGenreWithMovie
 import com.hooshang.tmdb.feature.home.data.db.relation.crossref.PopularMovieGenreCrossRef
 import com.hooshang.tmdb.feature.home.data.db.relation.crossref.TopMovieGenreCrossRef
-import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import kotlinx.coroutines.flow.Flow
 
 interface HomeLocalDataSource {
-    fun getNowPlayings(): Flow<List<HomeMovieDomainModel>>
-    fun getTopMovie(): Flow<List<HomeMovieDomainModel>>
-    fun getPopularMovies(): Flow<List<HomeMovieDomainModel>>
+    fun observeNowPlayingMovies(): Flow<List<NowPlayingWithMovie>>
+    fun observeTopMovies(): Flow<List<TopMovieAndGenreWithMovie>>
+    fun observePopularMovies(): Flow<List<PopularMovieAndGenreWithMovie>>
     suspend fun insertGenres(genres: List<GenreEntity>)
     suspend fun insertPopularMovies(popularMovie: List<PopularMovieEntity>)
     suspend fun insertPopularMoviesGenres(movies: List<PopularMovieGenreCrossRef>)

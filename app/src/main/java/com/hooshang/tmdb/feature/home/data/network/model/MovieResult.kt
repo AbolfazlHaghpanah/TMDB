@@ -25,32 +25,24 @@ data class MovieResult(
     @SerialName("vote_average")
     val voteAverage: Double?
 ) {
-    fun toMovieEntity(): MovieEntity {
-        return MovieEntity(
-            id = id,
-            title = title,
-            posterPath = posterPath ?: "",
-            voteAverage = voteAverage ?: 0.0,
-            backdropPath = backdropPath ?: ""
-        )
-    }
+    fun toMovieEntity(): MovieEntity = MovieEntity(
+        id = id,
+        title = title,
+        posterPath = posterPath ?: "",
+        voteAverage = voteAverage ?: 0.0,
+        backdropPath = backdropPath ?: ""
+    )
 
-    fun toPopularMovieEntity(): PopularMovieEntity {
-        return PopularMovieEntity(
-            movieId = id,
-        )
-    }
+    fun toPopularMovieEntity(): PopularMovieEntity = PopularMovieEntity(
+        movieId = id,
+    )
 
-    fun toTopPlayingEntity(): TopMovieEntity {
-        return TopMovieEntity(
-            movieId = id,
-        )
-    }
+    fun toTopPlayingEntity(): TopMovieEntity = TopMovieEntity(
+        movieId = id,
+    )
 
-    fun toNowPlayingEntity(): NowPlayingEntity {
-        return NowPlayingEntity(
-            movieId = id,
-            releaseDate = dateConvertor(releaseDate ?: "0000,00,00"),
-        )
-    }
+    fun toNowPlayingEntity(): NowPlayingEntity = NowPlayingEntity(
+        movieId = id,
+        releaseDate = dateConvertor(releaseDate ?: "0000,00,00"),
+    )
 }

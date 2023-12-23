@@ -23,15 +23,13 @@ data class PopularMovieAndGenreWithMovie(
     )
     val genres: List<GenreEntity>?
 ) {
-    fun toDomainModel(): HomeMovieDomainModel {
-        return HomeMovieDomainModel(
-            genres = genres?.joinToString(separator = "|") { it.genreName }?:"",
-            movieId = movie?.id ?: 1,
-            title = movie?.title ?: "",
-            posterPath = movie?.posterPath ?: "",
-            voteAverage = movie?.voteAverage ?: 0.0,
-            releaseDate = "",
-            backdropPath = movie?.backdropPath ?: ""
-        )
-    }
+    fun toDomainModel(): HomeMovieDomainModel = HomeMovieDomainModel(
+        genres = genres?.joinToString(separator = "|") { it.genreName } ?: "",
+        movieId = movie?.id ?: 1,
+        title = movie?.title ?: "",
+        posterPath = movie?.posterPath ?: "",
+        voteAverage = movie?.voteAverage ?: 0.0,
+        releaseDate = "",
+        backdropPath = movie?.backdropPath ?: ""
+    )
 }

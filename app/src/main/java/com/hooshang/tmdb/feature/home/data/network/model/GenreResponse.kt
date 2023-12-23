@@ -16,10 +16,8 @@ data class GenresResponse(
     val id: Int,
     val name: String
 ) {
-    fun toGenreEntity(): GenreEntity {
-        return GenreEntity(
-            genreId = id,
-            genreName = name
-        )
-    }
+    fun toGenreEntity(): GenreEntity = GenreEntity(
+        genreId = id,
+        genreName = name
+    )
 }

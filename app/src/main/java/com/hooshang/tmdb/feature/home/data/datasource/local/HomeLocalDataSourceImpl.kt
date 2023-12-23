@@ -3,52 +3,47 @@ package com.hooshang.tmdb.feature.home.data.datasource.local
 import com.hooshang.tmdb.core.data.model.local.GenreEntity
 import com.hooshang.tmdb.core.data.model.local.MovieEntity
 import com.hooshang.tmdb.core.data.source.local.MovieDao
-import com.hooshang.tmdb.feature.home.data.db.HomeDao
+import com.hooshang.tmdb.feature.home.data.db.dao.HomeDao
 import com.hooshang.tmdb.feature.home.data.db.entity.NowPlayingEntity
 import com.hooshang.tmdb.feature.home.data.db.entity.PopularMovieEntity
 import com.hooshang.tmdb.feature.home.data.db.entity.TopMovieEntity
+import com.hooshang.tmdb.feature.home.data.db.relation.NowPlayingWithMovie
+import com.hooshang.tmdb.feature.home.data.db.relation.PopularMovieAndGenreWithMovie
+import com.hooshang.tmdb.feature.home.data.db.relation.TopMovieAndGenreWithMovie
 import com.hooshang.tmdb.feature.home.data.db.relation.crossref.PopularMovieGenreCrossRef
 import com.hooshang.tmdb.feature.home.data.db.relation.crossref.TopMovieGenreCrossRef
-import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class HomeLocalDataSourceImpl @Inject constructor(
     private val homeDao: HomeDao,
     private val movieDao: MovieDao,
 ) : HomeLocalDataSource {
-    override fun getNowPlayings(): Flow<List<HomeMovieDomainModel>> {
-        return homeDao.observeNowPlayingMovies()
-            .map { movieFlow -> movieFlow.map { it.toDomainModel() } }
-    }
+    override fun observeNowPlayingMovies(): Flow<List<NowPlayingWithMovie>> =
+        homeDao.observeNowPlayingMovies()
 
-    override fun getTopMovie(): Flow<List<HomeMovieDomainModel>> {
-        return homeDao.observeTopMovies()
-            .map { movieFlow -> movieFlow.map { it.toDomainModel() } }
-    }
+    override fun observeTopMovies(): Flow<List<TopMovieAndGenreWithMovie>> =
+        homeDao.observeTopMovies()
 
-    override fun getPopularMovies(): Flow<List<HomeMovieDomainModel>> {
-        return homeDao.observePopularMovies()
-            .map { movieFlow -> movieFlow.map { it.toDomainModel() } }
-    }
+    override fun observePopularMovies(): Flow<List<PopularMovieAndGenreWithMovie>> =
+        homeDao.observePopularMovies()
 
     override suspend fun insertGenres(
         genres: List<GenreEntity>
     ) {
-        homeDao.addGenres(genres)
+        homeDao.insertGenres(genres)
     }
 
     override suspend fun insertPopularMovies(
         popularMovie: List<PopularMovieEntity>
     ) {
-        homeDao.addPopularMovies(popularMovie)
+        homeDao.insertPopularMovies(popularMovie)
     }
 
     override suspend fun insertPopularMoviesGenres(
         movies: List<PopularMovieGenreCrossRef>
     ) {
-        homeDao.addPopularMoviesGenre(movies)
+        homeDao.insertPopularMoviesGenre(movies)
     }
 
     override suspend fun insertMovies(
@@ -60,19 +55,19 @@ class HomeLocalDataSourceImpl @Inject constructor(
     override suspend fun insertTopMovies(
         movies: List<TopMovieEntity>
     ) {
-        homeDao.addTopMovies(movies)
+        homeDao.insertTopMovies(movies)
     }
 
     override suspend fun insertTopMoviesGenres(
         moviesAndGenres: List<TopMovieGenreCrossRef>
     ) {
-        homeDao.addTopMoviesGenre(moviesAndGenres)
+        homeDao.insertTopMoviesGenre(moviesAndGenres)
     }
 
     override suspend fun insertNowPlayingMovies(
         nowPlaying: List<NowPlayingEntity>
     ) {
-        homeDao.addNowPlayingMovies(nowPlaying)
+        homeDao.insertNowPlayingMovies(nowPlaying)
     }
 
     override fun removeNowPlayingMovies() {

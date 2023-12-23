@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.feature.home.data.db
+package com.hooshang.tmdb.feature.home.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -27,22 +27,22 @@ interface HomeDao {
     fun observeTopMovies(): Flow<List<TopMovieAndGenreWithMovie>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addGenres(genre: List<GenreEntity>)
+    suspend fun insertGenres(genre: List<GenreEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addNowPlayingMovies(movie: List<NowPlayingEntity>)
+    suspend fun insertNowPlayingMovies(movie: List<NowPlayingEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addPopularMovies(movie: List<PopularMovieEntity>)
+    suspend fun insertPopularMovies(movie: List<PopularMovieEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addPopularMoviesGenre(genre: List<PopularMovieGenreCrossRef>)
+    suspend fun insertPopularMoviesGenre(genre: List<PopularMovieGenreCrossRef>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addTopMovies(movie: List<TopMovieEntity>)
+    suspend fun insertTopMovies(movie: List<TopMovieEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addTopMoviesGenre(genre: List<TopMovieGenreCrossRef>)
+    suspend fun insertTopMoviesGenre(genre: List<TopMovieGenreCrossRef>)
 
     @Query("DELETE FROM now_playing_movies")
     fun removeNowPlayingMovies()

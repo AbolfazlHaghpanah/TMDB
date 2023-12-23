@@ -17,7 +17,7 @@ import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.MovieWith
 import com.hooshang.tmdb.feature.favorite.data.source.local.dao.FavoriteMovieDao
 import com.hooshang.tmdb.feature.favorite.data.model.local.entity.FavoriteMovieEntity
 import com.hooshang.tmdb.feature.favorite.data.model.local.relation.FavoriteMovieGenreCrossRef
-import com.hooshang.tmdb.feature.home.data.db.HomeDao
+import com.hooshang.tmdb.feature.home.data.db.dao.HomeDao
 import com.hooshang.tmdb.feature.home.data.db.entity.NowPlayingEntity
 import com.hooshang.tmdb.feature.home.data.db.entity.PopularMovieEntity
 import com.hooshang.tmdb.feature.home.data.db.entity.TopMovieEntity

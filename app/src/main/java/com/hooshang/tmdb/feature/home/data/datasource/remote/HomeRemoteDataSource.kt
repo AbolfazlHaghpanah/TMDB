@@ -5,7 +5,7 @@ import com.hooshang.tmdb.feature.home.data.network.model.MovieResponse
 
 interface HomeRemoteDataSource {
     suspend fun getGenres(): GenreResponse
-    suspend fun getNowPlaying(): MovieResponse
-    suspend fun getTopMovie(): MovieResponse
-    suspend fun getPopular(): MovieResponse
+    suspend fun getNowPlayingMovies(): MovieResponse
+    suspend fun getTopMovies(): MovieResponse
+    suspend fun getMostPopularMovies(): MovieResponse
 }
