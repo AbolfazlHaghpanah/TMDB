@@ -11,10 +11,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.hooshang.tmdb.R
+import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.feature.search.ui.component.LoadingSection
 import com.hooshang.tmdb.feature.search.ui.component.NoSearchResultSection
 import com.hooshang.tmdb.feature.search.ui.component.SearchResults
@@ -92,7 +97,11 @@ private fun SearchScreen(
                     onClick = { onAction(SearchAction.NavigateToDetail(it)) }
                 )
             } else if (searchText.isNotEmpty() && searchState.isError.not()) {
-                NoSearchResultSection()
+                NoSearchResultSection(
+                    image = ImageVector.vectorResource(TMDBTheme.icons.noResult),
+                    title = stringResource(R.string.movie_search_error1),
+                    description = stringResource(R.string.find_movie_by_title)
+                )
             }
         }
     }
