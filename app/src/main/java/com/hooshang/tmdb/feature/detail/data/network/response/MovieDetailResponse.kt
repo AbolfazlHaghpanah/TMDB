@@ -26,7 +26,7 @@ data class MovieDetailResponse(
     @SerialName("external_ids")
     val externalIdsResponse: ExternalIdsResponse?,
     val credits: CastWithCrewResponse,
-    val similar: SimilarResultsResponse
+    val similar: SimilarResponse
 ) {
     fun toDetailEntity(): DetailEntity =
         DetailEntity(

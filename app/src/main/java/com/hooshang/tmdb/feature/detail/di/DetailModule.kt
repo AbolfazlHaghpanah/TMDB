@@ -1,8 +1,13 @@
 package com.hooshang.tmdb.feature.detail.di
 
 import com.hooshang.tmdb.core.data.AppDatabase
+import com.hooshang.tmdb.feature.detail.data.datasource.localdatasource.DetailLocalDataSource
+import com.hooshang.tmdb.feature.detail.data.datasource.localdatasource.DetailLocalDataSourceImpl
 import com.hooshang.tmdb.feature.detail.data.db.dao.DetailDao
 import com.hooshang.tmdb.feature.detail.data.network.api.DetailApi
+import com.hooshang.tmdb.feature.detail.data.repository.DetailRepositoryImpl
+import com.hooshang.tmdb.feature.detail.domain.repository.DetailRepository
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,17 +17,28 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DetailModule {
+abstract class DetailModule {
+    @Binds
+    abstract fun provideDetailRepository(
+        detailRepositoryImpl: DetailRepositoryImpl
+    ): DetailRepository
 
-    @Singleton
-    @Provides
-    fun provideDetailApi(retrofit: Retrofit): DetailApi {
-        return retrofit.create(DetailApi::class.java)
-    }
+    @Binds
+    abstract fun provideDetailLocalDataSource(
+        detailLocalDataSourceImpl: DetailLocalDataSourceImpl
+    ): DetailLocalDataSource
 
-    @Singleton
-    @Provides
-    fun provideDetailDao(appDatabase: AppDatabase): DetailDao {
-        return appDatabase.DetailDao()
+    companion object {
+        @Singleton
+        @Provides
+        fun provideDetailApi(retrofit: Retrofit): DetailApi {
+            return retrofit.create(DetailApi::class.java)
+        }
+
+        @Singleton
+        @Provides
+        fun provideDetailDao(appDatabase: AppDatabase): DetailDao {
+            return appDatabase.DetailDao()
+        }
     }
 }

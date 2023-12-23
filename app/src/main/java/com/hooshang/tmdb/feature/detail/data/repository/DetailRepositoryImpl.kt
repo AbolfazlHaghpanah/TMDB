@@ -11,11 +11,9 @@ import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import com.hooshang.tmdb.feature.detail.domain.repository.DetailRepository
 import com.hooshang.tmdb.feature.favorite.data.model.local.entity.FavoriteMovieEntity
 import com.hooshang.tmdb.feature.favorite.data.model.local.relation.FavoriteMovieGenreCrossRef
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DetailRepositoryImpl @Inject constructor(
@@ -23,13 +21,13 @@ class DetailRepositoryImpl @Inject constructor(
     private val remoteDataSource: DetailRemoteDataSource
 ) : DetailRepository {
     override suspend fun observeMovieDetails(id: Int): Flow<MovieDetailDomainModel> {
-        val dataflow = localDataSource.observeMovieDetail(id)
+        val dataFlow = localDataSource.observeMovieDetail(id)
         val isFavoriteFlow = localDataSource.isExistInFavorite(id)
         val creditsFlow = localDataSource.observeCredits(id)
         val similarFlow = localDataSource.observeSimilar(id)
 
         return combine(
-            dataflow,
+            dataFlow,
             isFavoriteFlow,
             creditsFlow,
             similarFlow
@@ -42,8 +40,7 @@ class DetailRepositoryImpl @Inject constructor(
         }.filterNotNull()
     }
 
-    override suspend fun addToFavorite(movieId: Int, genres: List<Int>) =
-        withContext(Dispatchers.IO) {
+    override suspend fun addToFavorite(movieId: Int, genres: List<Int>) {
             localDataSource.insertFavoriteMovieGenre(
                 genres.map {
                     FavoriteMovieGenreCrossRef(
@@ -55,7 +52,7 @@ class DetailRepositoryImpl @Inject constructor(
             localDataSource.addToFavorite(FavoriteMovieEntity(movieId))
         }
 
-    override suspend fun fetchMovieDetail(id: Int) = withContext(Dispatchers.IO) {
+    override suspend fun fetchMovieDetail(id: Int) {
         val movieDetailDto = remoteDataSource.getMovieDetail(id)
 
         localDataSource.insertMovies(listOf(movieDetailDto.toMovieEntity()))

@@ -19,12 +19,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DetailDao {
-
     @Query("select * from detail_movies where detailMovieId = :detailMovieId")
     fun observeMovieDetail(detailMovieId: Int): Flow<DetailMovieWithMovieAndGenre>
-
-    @Query("select * from credits where creditId in (:ids)")
-    fun observeCredits(ids: List<Int>): Flow<List<CreditEntity>>
 
     @Query(
         """
@@ -51,29 +47,29 @@ interface DetailDao {
     suspend fun insertMovieDetails(detailEntity: DetailEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertDetailMoviesWithGenres(detailMovieWithGenreCrossRef: List<DetailMovieWithGenreCrossRef>)
+    suspend fun insertDetailMoviesWithGenres(detailMovieWithGenreCrossRef: List<DetailMovieWithGenreCrossRef>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCredits(credit: List<CreditEntity>)
+    suspend fun insertCredits(credit: List<CreditEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertDetailMoviesWithCredits(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>)
+    suspend fun insertDetailMoviesWithCredits(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertDetailMoviesWithSimilarMovies(detailMovieWithSimilarMoviesCrossRef: List<DetailMovieWithSimilarMoviesCrossRef>)
+    suspend fun insertDetailMoviesWithSimilarMovies(detailMovieWithSimilarMoviesCrossRef: List<DetailMovieWithSimilarMoviesCrossRef>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMoviesWithGenres(movieWithGenre: List<MovieWithGenreCrossRef>)
+    suspend fun insertMoviesWithGenres(movieWithGenre: List<MovieWithGenreCrossRef>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addToFavorite(movie: FavoriteMovieEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoriteMovieGenre(genres: List<FavoriteMovieGenreCrossRef>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addToFavorite(movieEntity: FavoriteMovieEntity)
+    @Delete
+    suspend fun deleteFavorite(movieEntity: FavoriteMovieEntity)
 
     @Delete
     suspend fun deleteFavoriteMovieGenre(favoriteMovieGenreCrossRef: FavoriteMovieGenreCrossRef)
-
-    @Delete
-    suspend fun deleteFavorite(movieEntity: FavoriteMovieEntity)
 }
