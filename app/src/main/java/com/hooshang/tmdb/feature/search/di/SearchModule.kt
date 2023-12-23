@@ -20,19 +20,18 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class SearchModule {
-
     @Binds
-    abstract fun provideSearchRepository(
+    abstract fun bindsSearchRepository(
         searchRepositoryImpl: SearchRepositoryImpl
     ): SearchRepository
 
     @Binds
-    abstract fun provideSearchLocalDataSource(
+    abstract fun bindsSearchLocalDataSource(
         searchLocalDataSourceImpl: SearchLocalDataSourceImpl
     ): SearchLocalDataSource
 
     @Binds
-    abstract fun provideSearchRemoteDataSource(
+    abstract fun bindsSearchRemoteDataSource(
         searchRemoteDataSourceImpl: SearchRemoteDataSourceImpl
     ): SearchRemoteDataSource
 
