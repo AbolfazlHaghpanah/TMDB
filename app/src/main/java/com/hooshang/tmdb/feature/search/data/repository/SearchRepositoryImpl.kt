@@ -13,8 +13,8 @@ class SearchRepositoryImpl @Inject constructor(
     private val searchRemoteDataSource: SearchRemoteDataSource
 ) : SearchRepository {
 
-    override suspend fun searchMovie(value: String): List<SearchMovieWithGenreDomainModel> {
-        return searchRemoteDataSource.searchMovie(value).results
+    override suspend fun searchMovie(query: String): List<SearchMovieWithGenreDomainModel> {
+        return searchRemoteDataSource.searchMovie(query).results
             .map { it.toDomainModel() }
             .map {
                 SearchMovieWithGenreDomainModel(

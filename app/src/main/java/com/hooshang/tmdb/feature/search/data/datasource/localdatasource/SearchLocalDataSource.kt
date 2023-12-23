@@ -1,14 +1,8 @@
 package com.hooshang.tmdb.feature.search.data.datasource.localdatasource
 
-import com.hooshang.tmdb.feature.search.data.db.dao.SearchDao
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import com.hooshang.tmdb.core.data.model.local.GenreEntity
+import kotlinx.coroutines.flow.Flow
 
-class SearchLocalDataSource @Inject constructor(
-    private val searchDao: SearchDao
-) {
-    suspend fun getGenres() = withContext(Dispatchers.IO) {
-        searchDao.observeGenres()
-    }
+interface SearchLocalDataSource {
+    fun getGenres(): Flow<List<GenreEntity>>
 }

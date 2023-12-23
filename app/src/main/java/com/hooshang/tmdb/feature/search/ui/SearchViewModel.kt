@@ -43,12 +43,12 @@ class SearchViewModel @Inject constructor(
             resultWrapper {
                 searchUseCase(currentSearchString)
             }.collect {
-                emiSearchResult(it)
+                getSearchResult(it)
             }
         }
     }
 
-    private suspend fun emiSearchResult(result: Result) {
+    private suspend fun getSearchResult(result: Result) {
         viewModelScope.launch {
             when (result) {
                 is Result.Success<*> -> {
