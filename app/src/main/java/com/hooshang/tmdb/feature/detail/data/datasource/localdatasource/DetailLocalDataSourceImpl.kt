@@ -20,56 +20,43 @@ class DetailLocalDataSourceImpl  @Inject constructor(
     private val detailDao: DetailDao,
     private val movieDao: MovieDao
 ) : DetailLocalDataSource {
-    override fun observeMovieDetail(detailMovieId: Int): Flow<DetailMovieWithMovieAndGenre?> {
-        return detailDao.observeMovieDetail(detailMovieId)
-    }
+    override fun observeMovieDetail(detailMovieId: Int): Flow<DetailMovieWithMovieAndGenre?> =
+        detailDao.observeMovieDetail(detailMovieId)
 
-    override fun observeCredits(id: Int): Flow<List<CreditEntity>> {
-        return detailDao.observeCredits(id)
-    }
+    override fun observeCredits(id: Int): Flow<List<CreditEntity>> =
+        detailDao.observeCredits(id)
 
-    override fun observeSimilar(id: Int): Flow<List<SimilarMovieWithGenre>> {
-        return detailDao.observeSimilarMovie(id)
-    }
+    override fun observeSimilar(id: Int): Flow<List<SimilarMovieWithGenre>> =
+        detailDao.observeSimilarMovie(id)
 
-    override fun isExistInFavorite(id: Int): Flow<Boolean> {
-        return detailDao.isExistInFavorite(id)
-    }
+    override fun isExistInFavorite(id: Int): Flow<Boolean> =
+        detailDao.isExistInFavorite(id)
 
-    override suspend fun insertMovieDetails(detailEntity: DetailEntity) {
-        return detailDao.insertMovieDetails(detailEntity)
-    }
+    override suspend fun insertMovieDetails(detailEntity: DetailEntity) =
+        detailDao.insertMovieDetails(detailEntity)
 
-    override suspend fun insertDetailMoviesWithGenres(detailMovieWithGenreCrossRef: List<DetailMovieWithGenreCrossRef>) {
-        return detailDao.insertDetailMoviesWithGenres(detailMovieWithGenreCrossRef)
-    }
+    override suspend fun insertDetailMoviesWithGenres(detailMovieWithGenreCrossRef: List<DetailMovieWithGenreCrossRef>) =
+        detailDao.insertDetailMoviesWithGenres(detailMovieWithGenreCrossRef)
 
-    override suspend fun insertFavoriteMovieGenre(genres: List<FavoriteMovieGenreCrossRef>) {
-        return detailDao.insertFavoriteMovieGenre(genres)
-    }
+    override suspend fun insertFavoriteMovieGenre(genres: List<FavoriteMovieGenreCrossRef>) =
+        detailDao.insertFavoriteMovieGenre(genres)
 
-    override suspend fun insertDetailMoviesWithSimilarMovies(detailMovieWithSimilarMoviesCrossRef: List<DetailMovieWithSimilarMoviesCrossRef>) {
-        return detailDao.insertDetailMoviesWithSimilarMovies(detailMovieWithSimilarMoviesCrossRef)
-    }
+    override suspend fun insertDetailMoviesWithSimilarMovies(detailMovieWithSimilarMoviesCrossRef: List<DetailMovieWithSimilarMoviesCrossRef>) =
+        detailDao.insertDetailMoviesWithSimilarMovies(detailMovieWithSimilarMoviesCrossRef)
 
-    override suspend fun insertMoviesWithGenres(movieWithGenre: List<MovieWithGenreCrossRef>) {
-        return detailDao.insertMoviesWithGenres(movieWithGenre)
-    }
+    override suspend fun insertMoviesWithGenres(movieWithGenre: List<MovieWithGenreCrossRef>) =
+        detailDao.insertMoviesWithGenres(movieWithGenre)
 
-    override suspend fun insertCredits(credit: List<CreditEntity>) {
-        return detailDao.insertCredits(credit)
-    }
+    override suspend fun insertCredits(credit: List<CreditEntity>) =
+        detailDao.insertCredits(credit)
 
-    override suspend fun insertDetailMoviesWithCredits(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>) {
-        return detailDao.insertDetailMoviesWithCredits(detailMovieWithCreditCrossRef)
-    }
+    override suspend fun insertDetailMoviesWithCredits(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>) =
+        detailDao.insertDetailMoviesWithCredits(detailMovieWithCreditCrossRef)
 
-    override suspend fun addToFavorite(movieEntity: FavoriteMovieEntity) {
-        return detailDao.addToFavorite(movieEntity)
-    }
+    override suspend fun addToFavorite(movieEntity: FavoriteMovieEntity) =
+        detailDao.addToFavorite(movieEntity)
 
-    override suspend fun insertMovies(movie: List<MovieEntity>) {
-        return movieDao.insertMovies(movie)
-    }
+    override suspend fun insertMovies(movie: List<MovieEntity>) =
+        movieDao.insertMovies(movie)
 
 }

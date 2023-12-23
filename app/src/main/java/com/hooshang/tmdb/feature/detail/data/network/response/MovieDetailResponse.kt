@@ -54,5 +54,4 @@ data class MovieDetailResponse(
             backdropPath = backdropPath ?: "",
             title = title
         )
-
 }

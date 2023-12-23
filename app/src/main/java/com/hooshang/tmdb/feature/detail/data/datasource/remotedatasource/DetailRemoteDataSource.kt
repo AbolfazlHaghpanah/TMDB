@@ -8,9 +8,7 @@ import javax.inject.Inject
 class DetailRemoteDataSource @Inject constructor(
     private val detailApi: DetailApi
 ) {
-    suspend fun getMovieDetail(id: Int): MovieDetailResponse {
-        return bodyOrThrow {
-            detailApi.getMovieDetail(id = id)
-        }
+    suspend fun getMovieDetail(id: Int): MovieDetailResponse = bodyOrThrow {
+        detailApi.getMovieDetail(id = id)
     }
 }
