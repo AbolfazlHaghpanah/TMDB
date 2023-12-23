@@ -9,6 +9,6 @@ class ObserveDetailUseCase @Inject constructor(
     private val detailRepository: DetailRepository
 ) {
     suspend operator fun invoke(id: Int): Flow<MovieDetailDomainModel> {
-        return detailRepository.observeDetailMovieWithAllRelations(id)
+        return detailRepository.observeMovieDetails(id)
     }
 }

@@ -15,7 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -23,29 +22,38 @@ class DetailRepositoryImpl @Inject constructor(
     private val localDataSource: DetailLocalDataSource,
     private val remoteDataSource: DetailRemoteDataSource
 ) : DetailRepository {
+    override suspend fun observeMovieDetails(id: Int): Flow<MovieDetailDomainModel> {
+        val dataflow = localDataSource.observeMovieDetail(id)
+        val isFavoriteFlow = localDataSource.isExistInFavorite(id)
+        val creditsFlow = localDataSource.observeCredits(id)
+        val similarFlow = localDataSource.observeSimilar(id)
+
+        return combine(
+            dataflow,
+            isFavoriteFlow,
+            creditsFlow,
+            similarFlow
+        ) { data, isFavorite, credits, similar ->
+            data?.toDomainModel()?.copy(
+                isFavorite = isFavorite,
+                credits = credits.map { it.toDomainModel() },
+                similar = similar.map { it.toDomainModel() }
+            )
+        }.filterNotNull()
+    }
+
     override suspend fun addToFavorite(movieId: Int, genres: List<Int>) =
         withContext(Dispatchers.IO) {
-            genres.forEach {
-                localDataSource.insertFavoriteMovieGenre(
+            localDataSource.insertFavoriteMovieGenre(
+                genres.map {
                     FavoriteMovieGenreCrossRef(
-                        movieId,
-                        it
+                        movieId = movieId,
+                        genreId = it
                     )
-                )
-            }
+                }
+            )
             localDataSource.addToFavorite(FavoriteMovieEntity(movieId))
         }
-
-    override suspend fun observeDetailMovieWithAllRelations(id: Int): Flow<MovieDetailDomainModel> {
-        val data = localDataSource.observeMovieDetail(id).filterNotNull().map {
-            it.toMovieDetail()
-        }
-        val isFavorite = localDataSource.isExistInFavorite(id)
-
-        return data.combine(isFavorite) { dataFlow, isFavoriteFlow ->
-            dataFlow.copy(isFavorite = isFavoriteFlow)
-        }
-    }
 
     override suspend fun fetchMovieDetail(id: Int) = withContext(Dispatchers.IO) {
         val movieDetailDto = remoteDataSource.getMovieDetail(id)

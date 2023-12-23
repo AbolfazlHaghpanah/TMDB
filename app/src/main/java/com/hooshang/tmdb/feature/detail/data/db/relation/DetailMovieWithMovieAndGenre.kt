@@ -5,14 +5,11 @@ import androidx.room.Junction
 import androidx.room.Relation
 import com.hooshang.tmdb.core.data.model.local.GenreEntity
 import com.hooshang.tmdb.core.data.model.local.MovieEntity
-import com.hooshang.tmdb.feature.detail.data.db.entity.CreditEntity
 import com.hooshang.tmdb.feature.detail.data.db.entity.DetailEntity
-import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithCreditCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithGenreCrossRef
-import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 
-data class DetailMovieWithAllRelations(
+data class DetailMovieWithMovieAndGenre(
     @Embedded val detailEntity: DetailEntity,
     @Relation(
         parentColumn = "detailMovieId",
@@ -22,24 +19,11 @@ data class DetailMovieWithAllRelations(
     val genres: List<GenreEntity>?,
     @Relation(
         parentColumn = "detailMovieId",
-        entityColumn = "creditId",
-        associateBy = Junction(DetailMovieWithCreditCrossRef::class)
-    )
-    val credits: List<CreditEntity>?,
-    @Relation(
-        parentColumn = "detailMovieId",
-        entityColumn = "id",
-        entity = MovieEntity::class,
-        associateBy = Junction(DetailMovieWithSimilarMoviesCrossRef::class)
-    )
-    val similarMovies: List<SimilarMovieWithGenre>?,
-    @Relation(
-        parentColumn = "detailMovieId",
         entityColumn = "id"
     )
     val movie: MovieEntity?,
 ) {
-    fun toMovieDetail(): MovieDetailDomainModel = MovieDetailDomainModel(
+    fun toDomainModel(): MovieDetailDomainModel = MovieDetailDomainModel(
         id = detailEntity.detailMovieId,
         title = movie?.title ?: "",
         overview = detailEntity.overview,
@@ -47,10 +31,10 @@ data class DetailMovieWithAllRelations(
         posterPath = movie?.posterPath ?: "",
         releaseDate = detailEntity.releaseDate.split("-")[0],
         genres = genres?.map { Pair(it.genreId, it.genreName) } ?: listOf(),
-        credits = credits?.map { it.toCastOrCrew() } ?: listOf(),
+        credits = listOf(),
         runtime = detailEntity.runtime,
         externalIds = detailEntity.externalIds,
-        similar = similarMovies?.map { it.toSimilarMovie() } ?: listOf(),
+        similar = listOf(),
         isFavorite = detailEntity.isFavorite
     )
 }

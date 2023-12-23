@@ -18,7 +18,7 @@ data class SimilarMovieWithGenre(
     )
     val genres: List<GenreEntity>
 ) {
-    fun toSimilarMovie(): SimilarMovieDomainModel = SimilarMovieDomainModel(
+    fun toDomainModel(): SimilarMovieDomainModel = SimilarMovieDomainModel(
         id = similarMovie.id,
         posterPath = similarMovie.posterPath,
         voteAverage = similarMovie.voteAverage.toFloat(),
