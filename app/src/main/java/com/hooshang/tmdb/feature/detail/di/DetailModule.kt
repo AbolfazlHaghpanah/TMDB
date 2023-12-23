@@ -3,6 +3,8 @@ package com.hooshang.tmdb.feature.detail.di
 import com.hooshang.tmdb.core.data.AppDatabase
 import com.hooshang.tmdb.feature.detail.data.datasource.localdatasource.DetailLocalDataSource
 import com.hooshang.tmdb.feature.detail.data.datasource.localdatasource.DetailLocalDataSourceImpl
+import com.hooshang.tmdb.feature.detail.data.datasource.remotedatasource.DetailRemoteDataSource
+import com.hooshang.tmdb.feature.detail.data.datasource.remotedatasource.DetailRemoteDataSourceImpl
 import com.hooshang.tmdb.feature.detail.data.db.dao.DetailDao
 import com.hooshang.tmdb.feature.detail.data.network.DetailApi
 import com.hooshang.tmdb.feature.detail.data.repository.DetailRepositoryImpl
@@ -19,14 +21,19 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class DetailModule {
     @Binds
-    abstract fun provideDetailRepository(
+    abstract fun bindsDetailRepository(
         detailRepositoryImpl: DetailRepositoryImpl
     ): DetailRepository
 
     @Binds
-    abstract fun provideDetailLocalDataSource(
+    abstract fun bindsDetailLocalDataSource(
         detailLocalDataSourceImpl: DetailLocalDataSourceImpl
     ): DetailLocalDataSource
+
+    @Binds
+    abstract fun bindsDetailRemoteDataSource(
+        detailRemoteDataSourceImpl: DetailRemoteDataSourceImpl
+    ): DetailRemoteDataSource
 
     companion object {
         @Singleton
