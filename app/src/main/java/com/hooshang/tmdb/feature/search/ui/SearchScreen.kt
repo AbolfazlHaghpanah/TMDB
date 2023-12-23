@@ -38,22 +38,21 @@ private fun SearchScreen(
 ) {
     val searchState by searchViewModel.state.collectAsStateWithLifecycle()
 
-    val onAction: (action: SearchAction) -> Unit =
-        { action ->
-            when (action) {
-                is SearchAction.NavigateToDetail -> {
-                    navController.navigate(
-                        AppScreens.Detail.createRoute(
-                            action.id
-                        )
+    val onAction: (action: SearchAction) -> Unit = { action ->
+        when (action) {
+            is SearchAction.NavigateToDetail -> {
+                navController.navigate(
+                    AppScreens.Detail.createRoute(
+                        action.id
                     )
-                }
+                )
+            }
 
-                else -> {
-                    searchViewModel.onAction(action)
-                }
+            else -> {
+                searchViewModel.onAction(action)
             }
         }
+    }
 
     SearchScreen(
         searchState = searchState,

@@ -33,9 +33,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    override fun setInitialState(): SearchState {
-        return SearchState()
-    }
+    override fun setInitialState(): SearchState = SearchState()
 
     private fun search(value: String) {
         currentSearchString = value
@@ -49,30 +47,29 @@ class SearchViewModel @Inject constructor(
     }
 
     private suspend fun getSearchResult(result: Result) {
-        viewModelScope.launch {
-            when (result) {
-                is Result.Success<*> -> {
-                    val data = result.response as List<SearchMovieWithGenreDomainModel>
-                    setState { copy(isLoading = false, searchResults = data.toPersistentList()) }
-                }
 
-                is Result.Error -> {
-                    snackBarManager.sendMessage(
-                        SnackBarMassage(
-                            snackBarMessage = result.message,
-                            snackBarAction = {
-                                search(currentSearchString)
-                            },
-                            snackBarActionLabel = StringResWrapper(R.string.try_again),
-                            snackBarDuration = SnackbarDuration.Indefinite
-                        )
+        when (result) {
+            is Result.Success<*> -> {
+                val data = result.response as List<SearchMovieWithGenreDomainModel>
+                setState { copy(isLoading = false, searchResults = data.toPersistentList()) }
+            }
+
+            is Result.Error -> {
+                snackBarManager.sendMessage(
+                    SnackBarMassage(
+                        snackBarMessage = result.message,
+                        snackBarAction = {
+                            search(currentSearchString)
+                        },
+                        snackBarActionLabel = StringResWrapper(R.string.try_again),
+                        snackBarDuration = SnackbarDuration.Indefinite
                     )
-                    setState { copy(isLoading = false, isError = true) }
-                }
+                )
+                setState { copy(isLoading = false, isError = true) }
+            }
 
-                is Result.Loading -> {
-                    setState { copy(isLoading = true) }
-                }
+            is Result.Loading -> {
+                setState { copy(isLoading = true) }
             }
         }
     }
