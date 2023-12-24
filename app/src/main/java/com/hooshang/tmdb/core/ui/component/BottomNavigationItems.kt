@@ -12,22 +12,22 @@ sealed class BottomNavigationItems(
 ) {
     data object Home :
         BottomNavigationItems(
-            StringResWrapper(R.string.label_home),
-            R.drawable.ic_home,
-            AppScreens.Home.route
+            label = StringResWrapper(R.string.label_home),
+            icon = R.drawable.ic_home,
+            route = AppScreens.Home.route
         )
 
     data object Search :
         BottomNavigationItems(
-            StringResWrapper(R.string.label_search),
-            R.drawable.ic_search,
-            AppScreens.Search.route
+            label = StringResWrapper(R.string.label_search),
+            icon = R.drawable.ic_search,
+            route = AppScreens.Search.route
         )
 
     data object Favorite :
         BottomNavigationItems(
-            StringResWrapper(R.string.label_favorite),
-            R.drawable.ic_heart,
-            AppScreens.Favorite.route
+            label = StringResWrapper(R.string.label_favorite),
+            icon = R.drawable.ic_heart,
+            route = AppScreens.Favorite.route
         )
 }
