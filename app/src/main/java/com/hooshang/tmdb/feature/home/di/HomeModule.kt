@@ -38,7 +38,7 @@ abstract class HomeModule {
     companion object {
         @Singleton
         @Provides
-        fun provideTopMovieDao(appDatabase: AppDatabase): MovieDao {
+        fun provideMovieDao(appDatabase: AppDatabase): MovieDao {
             return appDatabase.MovieDao()
         }
 

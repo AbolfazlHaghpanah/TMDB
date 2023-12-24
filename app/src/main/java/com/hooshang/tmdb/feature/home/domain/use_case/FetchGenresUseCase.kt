@@ -9,9 +9,7 @@ class FetchGenresUseCase @Inject constructor(
     private val homeRepository: HomeRepository,
     private val dispatcher: CoroutineContext
 ) {
-    suspend operator fun invoke() {
-        withContext(dispatcher) {
-            homeRepository.fetchGenres()
-        }
+    suspend operator fun invoke() = withContext(dispatcher) {
+        homeRepository.fetchGenres()
     }
 }

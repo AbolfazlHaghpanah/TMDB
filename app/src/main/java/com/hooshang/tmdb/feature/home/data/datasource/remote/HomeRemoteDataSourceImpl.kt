@@ -10,19 +10,11 @@ class HomeRemoteDataSourceImpl @Inject constructor(
     private val homeApi: HomeApi
 ) : HomeRemoteDataSource {
 
-    override suspend fun getGenres(): GenreResponse {
-        return bodyOrThrow { homeApi.getGenres() }
-    }
+    suspend fun getGenres(): GenreResponse = bodyOrThrow { homeApi.getGenre() }
 
-    override suspend fun getNowPlayingMovies(): MovieResponse {
-        return bodyOrThrow { homeApi.getNowPlayingMovies() }
-    }
+    suspend fun getNowPlaying(): MovieResponse = bodyOrThrow { homeApi.getNowPlaying() }
 
-    override suspend fun getTopMovies(): MovieResponse {
-        return bodyOrThrow { homeApi.getTopMovies() }
-    }
+    suspend fun getTopMovie(): MovieResponse = bodyOrThrow { homeApi.getTopRated() }
 
-    override suspend fun getMostPopularMovies(): MovieResponse {
-        return bodyOrThrow { homeApi.getMostPopularMovies() }
-    }
+    suspend fun getPopular(): MovieResponse = bodyOrThrow { homeApi.getMostPopular() }
 }
