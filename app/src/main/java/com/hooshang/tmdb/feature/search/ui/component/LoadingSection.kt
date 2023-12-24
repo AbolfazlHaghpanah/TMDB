@@ -7,7 +7,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
+import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 
 @Composable
 fun LoadingSection() {
@@ -16,7 +16,7 @@ fun LoadingSection() {
         modifier = Modifier.fillMaxHeight()
     ) {
         CircularProgressIndicator(
-            color = Theme.colors.primary,
+            color = TMDBTheme.colors.primary,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
     }

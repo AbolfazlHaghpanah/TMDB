@@ -34,7 +34,7 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.shimmer.fakeMovie
-import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
+import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.core.utils.ifShimmerActive
 import com.hooshang.tmdb.feature.home.ui.component.MovieRow
 import com.hooshang.tmdb.feature.home.ui.component.PagerMovieItem
@@ -137,7 +137,7 @@ private fun HomeScreen(
                         PagerMovieItem(
                             isLoading = homeState.nowPlayingMovies.size <= 5,
                             modifier = Modifier
-                                .clip(Theme.shapes.large)
+                                .clip(TMDBTheme.shapes.large)
                                 .clickable {
                                     if (homeState.nowPlayingMovies.size >= 5) onAction(
                                         HomeAction.NavigateToDetail(id = homeState.nowPlayingMovies[page].movieId)

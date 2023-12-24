@@ -3,7 +3,7 @@ package com.hooshang.tmdb.core.ui.theme.designsystem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 
-object Theme {
+object TMDBTheme {
     val colors: Color
         @Composable
         @ReadOnlyComposable

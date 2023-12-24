@@ -4,7 +4,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import com.hooshang.tmdb.core.ui.shimmer.shimmerThemeProvider
-import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
+import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
@@ -15,7 +15,7 @@ import com.valentinilk.shimmer.shimmer
         return composed {
             if (isActive) {
                 Modifier
-                    .clip(Theme.shapes.rounded)
+                    .clip(TMDBTheme.shapes.rounded)
                     .shimmer(
                         rememberShimmer(
                             shimmerBounds = ShimmerBounds.View,

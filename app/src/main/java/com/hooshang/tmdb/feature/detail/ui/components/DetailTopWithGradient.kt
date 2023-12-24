@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.component.TextIcon
-import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
+import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.core.utils.image_url
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 
@@ -63,8 +63,8 @@ fun DetailTopWithGradient(
                     .align(Alignment.Start)
                     .padding(bottom = 8.dp, top = 24.dp, start = 24.dp),
                 text = stringResource(R.string.label_overview),
-                color = Theme.colors.white,
-                style = Theme.typography.subtitle1
+                color = TMDBTheme.colors.white,
+                style = TMDBTheme.typography.subtitle1
             )
         }
     }
@@ -80,7 +80,7 @@ private fun ForegroundImage(
             .fillMaxWidth()
             .aspectRatio(1.1f)
             .padding(start = 85.dp, end = 85.dp)
-            .clip(Theme.shapes.medium),
+            .clip(TMDBTheme.shapes.medium),
         model = "$image_url${movieDetailPosterPath}",
         contentDescription = null,
         contentScale = ContentScale.Crop,
@@ -92,8 +92,8 @@ private fun ForegroundImage(
 private fun BackgroundImage(movieDetailPosterPath: String) {
     val gradient = Brush.verticalGradient(
         colors = listOf(
-            Theme.colors.background.copy(alpha = 0.57f),
-            Theme.colors.background.copy(alpha = 1f)
+            TMDBTheme.colors.background.copy(alpha = 0.57f),
+            TMDBTheme.colors.background.copy(alpha = 1f)
         )
     )
 
@@ -121,14 +121,14 @@ private fun MovieInfo(movieDetailDomainModel: MovieDetailDomainModel) {
             .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
         TextIcon(
-            iconId = Theme.icons.calendar,
+            iconId = TMDBTheme.icons.calendar,
             text = movieDetailDomainModel.releaseDate.split(
                 "-"
             )[0]
         )
 
         Divider(
-            color = Theme.colors.gray,
+            color = TMDBTheme.colors.gray,
             modifier = Modifier
                 .width(1.dp)
                 .height(16.dp)
@@ -136,7 +136,7 @@ private fun MovieInfo(movieDetailDomainModel: MovieDetailDomainModel) {
         )
 
         TextIcon(
-            iconId = Theme.icons.clock,
+            iconId = TMDBTheme.icons.clock,
             text = "${movieDetailDomainModel.runtime} " + stringResource(R.string.label_minutes)
         )
 
@@ -146,11 +146,11 @@ private fun MovieInfo(movieDetailDomainModel: MovieDetailDomainModel) {
                     .width(1.dp)
                     .height(16.dp)
                     .align(Alignment.CenterVertically),
-                color = Theme.colors.gray
+                color = TMDBTheme.colors.gray
             )
 
             TextIcon(
-                iconId = Theme.icons.film,
+                iconId = TMDBTheme.icons.film,
                 text = movieDetailDomainModel.genres[0].second
             )
         }
@@ -161,9 +161,9 @@ private fun MovieInfo(movieDetailDomainModel: MovieDetailDomainModel) {
             .padding(top = 8.dp)
             .padding(horizontal = 8.dp),
         text = movieDetailDomainModel.voteAverage.toString(),
-        iconId = Theme.icons.star,
-        iconColor = Theme.colors.secondary,
-        textColor = Theme.colors.secondary
+        iconId = TMDBTheme.icons.star,
+        iconColor = TMDBTheme.colors.secondary,
+        textColor = TMDBTheme.colors.secondary
     )
 }
 

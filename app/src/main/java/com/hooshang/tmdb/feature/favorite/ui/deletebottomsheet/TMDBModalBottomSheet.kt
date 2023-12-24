@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.hooshang.tmdb.R
-import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
+import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.feature.favorite.ui.component.TrashIcon
 import com.hooshang.tmdb.feature.favorite.ui.deletebottomsheet.contracts.DeleteBottomSheetAction
 
@@ -63,16 +63,16 @@ private fun TMDBModalBottomSheet(
 
         Text(
             text = stringResource(R.string.desc_are_you_sure),
-            style = Theme.typography.h6,
-            color = Theme.colors.white
+            style = TMDBTheme.typography.h6,
+            color = TMDBTheme.colors.white
         )
 
         Text(
             modifier = Modifier
                 .padding(top = 18.dp, bottom = 48.dp, start = 56.dp, end = 56.dp),
             text = stringResource(R.string.desc_delete_alert),
-            style = Theme.typography.caption,
-            color = Theme.colors.gray,
+            style = TMDBTheme.typography.caption,
+            color = TMDBTheme.colors.gray,
             textAlign = TextAlign.Center
         )
 
@@ -80,14 +80,14 @@ private fun TMDBModalBottomSheet(
             modifier = Modifier
                 .padding(24.dp)
                 .fillMaxWidth(),
-            shape = Theme.shapes.rounded,
+            shape = TMDBTheme.shapes.rounded,
             onClick = { onAction(DeleteBottomSheetAction.Dismiss) }
 
         ) {
             Text(
                 modifier = Modifier.padding(vertical = 10.dp),
                 text = stringResource(R.string.label_cancel),
-                style = Theme.typography.button
+                style = TMDBTheme.typography.button
             )
         }
 
@@ -100,8 +100,8 @@ private fun TMDBModalBottomSheet(
 
             Text(
                 text = stringResource(R.string.label_delete),
-                style = Theme.typography.button,
-                color = Theme.colors.error
+                style = TMDBTheme.typography.button,
+                color = TMDBTheme.colors.error
             )
         }
     }

@@ -13,7 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.hooshang.tmdb.R
-import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
+import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 
 @Composable
 fun EmptyIcon() {
@@ -30,7 +30,7 @@ fun EmptyIcon() {
 
             Text(
                 text = stringResource(R.string.desc_there_is_no_movie_yet),
-                style = Theme.typography.subtitle1
+                style = TMDBTheme.typography.subtitle1
             )
         }
     }
@@ -39,7 +39,7 @@ fun EmptyIcon() {
 @Composable
 private fun FolderIcon() {
     Image(
-        painter = painterResource(id = Theme.icons.folder),
+        painter = painterResource(id = TMDBTheme.icons.folder),
         contentDescription = null
     )
 }

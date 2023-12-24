@@ -24,7 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.hooshang.tmdb.R
-import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
+import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.feature.favorite.ui.component.EmptyIcon
 import com.hooshang.tmdb.feature.favorite.ui.component.MovieItems
 import com.hooshang.tmdb.feature.favorite.ui.contracts.FavoriteActions
@@ -79,14 +79,14 @@ private fun FavoriteScreen(
             .statusBarsPadding(),
         topBar = {
             TopAppBar(
-                backgroundColor = Theme.colors.background
+                backgroundColor = TMDBTheme.colors.background
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.label_favorites),
-                    style = Theme.typography.subtitle1,
+                    style = TMDBTheme.typography.subtitle1,
                     textAlign = TextAlign.Center,
-                    color = Theme.colors.white
+                    color = TMDBTheme.colors.white
                 )
             }
         }

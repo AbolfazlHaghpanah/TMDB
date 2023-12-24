@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hooshang.tmdb.R
-import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
+import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.core.utils.ifShimmerActive
 import com.hooshang.tmdb.core.utils.image_url
 
@@ -36,11 +36,11 @@ fun MovieCard(
 ) {
     Column(
         modifier = modifier
-            .clip(Theme.shapes.medium)
+            .clip(TMDBTheme.shapes.medium)
             .clickable(onClick = onClick)
             .background(
-                Theme.colors.surface,
-                Theme.shapes.medium
+                TMDBTheme.colors.surface,
+                TMDBTheme.shapes.medium
             )
             .width(140.dp)
     ) {
@@ -54,14 +54,14 @@ fun MovieCard(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(8.dp)
-                    .clip(Theme.shapes.small)
-                    .background(Theme.colors.surface.copy(alpha = 0.7f))
+                    .clip(TMDBTheme.shapes.small)
+                    .background(TMDBTheme.colors.surface.copy(alpha = 0.7f))
                     .padding(8.dp, 4.dp)
                     .ifShimmerActive(isShimmer),
                 text = vote,
-                iconId = Theme.icons.star,
-                iconColor = Theme.colors.secondary,
-                textColor = Theme.colors.secondary
+                iconId = TMDBTheme.icons.star,
+                iconColor = TMDBTheme.colors.secondary,
+                textColor = TMDBTheme.colors.secondary
             )
 
             AsyncImage(
@@ -79,10 +79,10 @@ fun MovieCard(
                 .padding(top = 12.dp, start = 8.dp, end = 8.dp, bottom = 4.dp)
                 .ifShimmerActive(isShimmer),
             text = title,
-            style = Theme.typography.body1,
+            style = TMDBTheme.typography.body1,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            color = Theme.colors.white
+            color = TMDBTheme.colors.white
         )
 
         Text(
@@ -91,9 +91,9 @@ fun MovieCard(
                 .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
                 .ifShimmerActive(isShimmer),
             text = genres,
-            style = Theme.typography.overLine,
+            style = TMDBTheme.typography.overLine,
             maxLines = 1,
-            color = Theme.colors.gray,
+            color = TMDBTheme.colors.gray,
             overflow = TextOverflow.Ellipsis
         )
     }

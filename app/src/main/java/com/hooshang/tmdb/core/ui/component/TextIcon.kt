@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
+import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 
 @Composable
 fun TextIcon(
@@ -31,12 +31,12 @@ fun TextIcon(
         Icon(
             imageVector = ImageVector.vectorResource(id = iconId),
             contentDescription = null,
-            tint = iconColor ?: Theme.colors.gray,
+            tint = iconColor ?: TMDBTheme.colors.gray,
         )
         Text(
             text = text,
-            color = textColor ?: Theme.colors.gray,
-            style = Theme.typography.body2
+            color = textColor ?: TMDBTheme.colors.gray,
+            style = TMDBTheme.typography.body2
         )
     }
 }

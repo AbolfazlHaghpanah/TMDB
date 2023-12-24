@@ -23,7 +23,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.hooshang.tmdb.R
-import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
+import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.core.utils.imdb_uri
 import com.hooshang.tmdb.core.utils.instagram_uri
 import com.hooshang.tmdb.core.utils.tmdb_uri
@@ -54,8 +54,8 @@ fun ShareDialog(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .clip(Theme.shapes.large)
-                .background(Theme.colors.surface)
+                .clip(TMDBTheme.shapes.large)
+                .background(TMDBTheme.colors.surface)
                 .fillMaxWidth()
                 .aspectRatio(1.4f)
                 .padding(top = 12.dp)
@@ -67,16 +67,16 @@ fun ShareDialog(
                 onClick = { onDismiss() },
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(Theme.icons.close),
+                    imageVector = ImageVector.vectorResource(TMDBTheme.icons.close),
                     contentDescription = stringResource(R.string.label_close),
-                    tint = Theme.colors.gray
+                    tint = TMDBTheme.colors.gray
                 )
             }
 
             Text(
                 text = stringResource(R.string.label_open_in),
-                style = Theme.typography.h6,
-                color = Theme.colors.white,
+                style = TMDBTheme.typography.h6,
+                color = TMDBTheme.colors.white,
                 modifier = Modifier.padding(
                     bottom = 15.dp
                 )
@@ -85,7 +85,7 @@ fun ShareDialog(
             Divider(
                 modifier = Modifier
                     .padding(horizontal = 30.dp),
-                color = Theme.colors.background
+                color = TMDBTheme.colors.background
             )
 
             Row(

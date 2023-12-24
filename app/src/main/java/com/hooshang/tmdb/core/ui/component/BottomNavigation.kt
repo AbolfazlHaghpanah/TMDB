@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
+import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 
 @Composable
 fun TMDBBottomNavigation(
@@ -26,7 +26,7 @@ fun TMDBBottomNavigation(
     BottomNavigation(
         modifier = Modifier
             .navigationBarsPadding(),
-        backgroundColor = Theme.colors.background,
+        backgroundColor = TMDBTheme.colors.background,
         elevation = 24.dp
     ) {
 
@@ -51,8 +51,8 @@ fun TMDBBottomNavigation(
                         style = MaterialTheme.typography.caption
                     )
                 },
-                selectedContentColor = Theme.colors.primary,
-                unselectedContentColor = Theme.colors.gray,
+                selectedContentColor = TMDBTheme.colors.primary,
+                unselectedContentColor = TMDBTheme.colors.gray,
             )
         }
     }

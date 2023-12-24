@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.component.TextIcon
-import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
+import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.core.utils.image_url
 import com.hooshang.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainModel
 import com.hooshang.tmdb.feature.search.ui.contracts.SearchAction
@@ -84,8 +84,8 @@ private fun MovieInfo(
     ) {
         Text(
             text = searchElement.movieDomainModel.title,
-            style = Theme.typography.subtitle1,
-            color = Theme.colors.white,
+            style = TMDBTheme.typography.subtitle1,
+            color = TMDBTheme.colors.white,
             modifier = Modifier.widthIn(100.dp, 200.dp),
             maxLines = 1
         )
@@ -98,16 +98,16 @@ private fun MovieInfo(
             if (searchElement.movieDomainModel.releaseDate.split("-").size > 1) {
                 TextIcon(
                     text = searchElement.movieDomainModel.releaseDate.split("-")[0],
-                    iconId = Theme.icons.calendar
+                    iconId = TMDBTheme.icons.calendar
                 )
             }
             Box(
-                Modifier.border(1.dp, Theme.colors.primary)
+                Modifier.border(1.dp, TMDBTheme.colors.primary)
             ) {
                 Text(
                     text = searchElement.movieDomainModel.originalLanguage.uppercase(Locale.getDefault()),
-                    style = Theme.typography.caption,
-                    color = Theme.colors.primary,
+                    style = TMDBTheme.typography.caption,
+                    color = TMDBTheme.colors.primary,
                     modifier = Modifier
                         .width(24.dp)
                         .padding(vertical = 6.dp),
@@ -123,17 +123,17 @@ private fun MovieInfo(
                 modifier = Modifier.padding(top = 16.dp)
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(Theme.icons.film),
+                    imageVector = ImageVector.vectorResource(TMDBTheme.icons.film),
                     contentDescription = null,
-                    tint = Theme.colors.gray
+                    tint = TMDBTheme.colors.gray
                 )
 
                 Text(
                     text = searchElement.genres,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = Theme.typography.caption,
-                    color = Theme.colors.gray
+                    style = TMDBTheme.typography.caption,
+                    color = TMDBTheme.colors.gray
                 )
             }
         }
@@ -153,13 +153,13 @@ private fun PosterWithTotalVote(
         TextIcon(
             modifier = Modifier
                 .padding(8.dp)
-                .clip(Theme.shapes.small)
-                .background(Theme.colors.surface.copy(alpha = 0.7f))
+                .clip(TMDBTheme.shapes.small)
+                .background(TMDBTheme.colors.surface.copy(alpha = 0.7f))
                 .padding(8.dp, 4.dp),
             text = roundedVote.toString(),
-            iconId = Theme.icons.star,
-            iconColor = Theme.colors.secondary,
-            textColor = Theme.colors.secondary
+            iconId = TMDBTheme.icons.star,
+            iconColor = TMDBTheme.colors.secondary,
+            textColor = TMDBTheme.colors.secondary
         )
     }
 }
@@ -172,7 +172,7 @@ private fun SimilarMovieImageWrapper(similarMoviePosterPath: String) {
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .clip(
-                Theme.shapes.medium
+                TMDBTheme.shapes.medium
             )
             .width(112.dp)
             .aspectRatio(0.8f),
