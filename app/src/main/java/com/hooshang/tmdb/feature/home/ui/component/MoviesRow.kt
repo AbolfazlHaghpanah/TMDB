@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.hooshang.tmdb.core.ui.component.MovieCard
 import com.hooshang.tmdb.core.ui.shimmer.fakeMovie
+import com.hooshang.tmdb.core.ui.shimmer.ifShimmerActive
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.hooshang.tmdb.core.utils.ifShimmerActive
 import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 import kotlinx.collections.immutable.PersistentList
 
