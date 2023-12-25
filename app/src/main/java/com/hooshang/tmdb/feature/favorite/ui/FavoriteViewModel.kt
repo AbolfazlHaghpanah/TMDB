@@ -9,7 +9,7 @@ import com.hooshang.tmdb.core.utils.SnackBarMassage
 import com.hooshang.tmdb.core.utils.StringResWrapper
 import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
 import com.hooshang.tmdb.feature.favorite.domain.model.FavoriteMovieDomainModel
-import com.hooshang.tmdb.feature.favorite.domain.use_case.FavoriteUseCase
+import com.hooshang.tmdb.feature.favorite.domain.use_case.ObserveFavoriteUseCase
 import com.hooshang.tmdb.feature.favorite.ui.contracts.FavoriteActions
 import com.hooshang.tmdb.feature.favorite.ui.contracts.FavoriteState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,21 +22,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
-    private val favoriteUseCase: FavoriteUseCase,
+    private val observeFavoriteUseCase: ObserveFavoriteUseCase,
     private val snackBarManager: SnackBarManager
 ) : BaseViewModel<FavoriteActions, FavoriteState>() {
-
     init {
         observeFavoriteMovies()
     }
 
-    override fun setInitialState(): FavoriteState {
-        return FavoriteState()
-    }
+    override fun setInitialState(): FavoriteState = FavoriteState()
 
     private fun observeFavoriteMovies() {
         viewModelScope.launch(Dispatchers.IO) {
-            favoriteUseCase.getFavoriteUseCase()
+            observeFavoriteUseCase()
                 .distinctUntilChanged()
                 .catch {
                     snackBarManager.sendMessage(

@@ -4,6 +4,6 @@ import com.hooshang.tmdb.feature.favorite.domain.model.FavoriteMovieDomainModel
 import kotlinx.coroutines.flow.Flow
 
 interface FavoriteRepository {
-    suspend fun getFavorites(): Flow<List<FavoriteMovieDomainModel>>
+    suspend fun observeFavorites(): Flow<List<FavoriteMovieDomainModel>>
     suspend fun deleteFromFavorite(id: Int)
 }

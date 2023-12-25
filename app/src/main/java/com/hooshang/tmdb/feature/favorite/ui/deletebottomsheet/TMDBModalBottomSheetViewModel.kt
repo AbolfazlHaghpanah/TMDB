@@ -6,7 +6,7 @@ import com.hooshang.tmdb.core.ui.BaseViewModel
 import com.hooshang.tmdb.core.utils.SnackBarManager
 import com.hooshang.tmdb.core.utils.SnackBarMassage
 import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
-import com.hooshang.tmdb.feature.favorite.domain.use_case.FavoriteUseCase
+import com.hooshang.tmdb.feature.favorite.domain.use_case.DeleteFromFavoriteUseCase
 import com.hooshang.tmdb.feature.favorite.ui.deletebottomsheet.contracts.DeleteBottomSheetAction
 import com.hooshang.tmdb.feature.favorite.ui.deletebottomsheet.contracts.DeleteBottomSheetState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TMDBModalBottomSheetViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val favoriteUseCase: FavoriteUseCase,
+    private val deleteFromFavoriteUseCase: DeleteFromFavoriteUseCase,
     private val snackBarManager: SnackBarManager
 ) : BaseViewModel<DeleteBottomSheetAction, DeleteBottomSheetState>() {
     init {
@@ -27,7 +27,7 @@ class TMDBModalBottomSheetViewModel @Inject constructor(
     private fun deleteMovie() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                favoriteUseCase.deleteFromFavoriteUseCase(state.value.id)
+                deleteFromFavoriteUseCase(state.value.id)
             } catch (t: Throwable) {
                 snackBarManager.sendMessage(SnackBarMassage(databaseErrorCatchMessage(t)))
             }
@@ -35,13 +35,11 @@ class TMDBModalBottomSheetViewModel @Inject constructor(
     }
 
     override fun onAction(action: DeleteBottomSheetAction) {
-        when(action){
+        when (action) {
             is DeleteBottomSheetAction.DeleteFromFavorite -> deleteMovie()
             else -> {}
         }
     }
 
-    override fun setInitialState(): DeleteBottomSheetState {
-        return DeleteBottomSheetState()
-    }
+    override fun setInitialState(): DeleteBottomSheetState = DeleteBottomSheetState()
 }
