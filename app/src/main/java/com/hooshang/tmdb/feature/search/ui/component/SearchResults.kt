@@ -78,6 +78,7 @@ private fun SearchMovieItem(
 private fun MovieInfo(
     movie: SearchMovieWithGenreDomainModel,
 ) {
+//    TODO modifier as first element
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier

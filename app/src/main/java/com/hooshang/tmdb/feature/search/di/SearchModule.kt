@@ -20,6 +20,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class SearchModule {
+    //    TODO shouldn't @Singleton be used?
     @Binds
     abstract fun bindsSearchRepository(
         searchRepositoryImpl: SearchRepositoryImpl
