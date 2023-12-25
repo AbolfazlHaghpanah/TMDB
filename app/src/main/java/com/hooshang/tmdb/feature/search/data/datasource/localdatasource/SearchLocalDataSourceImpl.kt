@@ -6,5 +6,5 @@ import javax.inject.Inject
 class SearchLocalDataSourceImpl @Inject constructor(
     private val searchDao: SearchDao
 ) : SearchLocalDataSource {
-    override fun getGenres() = searchDao.observeGenres()
+    override fun observeGenres() = searchDao.observeGenres()
 }

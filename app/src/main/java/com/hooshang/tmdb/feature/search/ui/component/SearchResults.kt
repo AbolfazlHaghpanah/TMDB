@@ -78,12 +78,11 @@ private fun SearchMovieItem(
 private fun MovieInfo(
     movie: SearchMovieWithGenreDomainModel,
 ) {
-//    TODO modifier as first element
     Column(
-        verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp)
+            .padding(top = 8.dp),
+        verticalArrangement = Arrangement.Center,
     ) {
         Text(
             text = movie.movieDomainModel.title,

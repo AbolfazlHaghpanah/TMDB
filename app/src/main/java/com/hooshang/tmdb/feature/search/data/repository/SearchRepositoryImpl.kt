@@ -28,7 +28,7 @@ class SearchRepositoryImpl @Inject constructor(
         val genres = mutableListOf<GenreEntity>()
 
         searchLocalDataSource
-            .getGenres()
+            .observeGenres()
             .first()
             .onEach { genre ->
                 if (ids.contains(genre.genreId)) genres.add(genre)

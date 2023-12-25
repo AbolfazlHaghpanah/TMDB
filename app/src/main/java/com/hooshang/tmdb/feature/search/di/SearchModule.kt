@@ -15,12 +15,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class SearchModule {
-    //    TODO shouldn't @Singleton be used?
     @Binds
     abstract fun bindsSearchRepository(
         searchRepositoryImpl: SearchRepositoryImpl
@@ -37,13 +35,11 @@ abstract class SearchModule {
     ): SearchRemoteDataSource
 
     companion object {
-        @Singleton
         @Provides
         fun provideSearchApi(retrofit: Retrofit): SearchApi {
             return retrofit.create(SearchApi::class.java)
         }
 
-        @Singleton
         @Provides
         fun provideSearchDao(appDatabase: AppDatabase): SearchDao {
             return appDatabase.SearchDao()
