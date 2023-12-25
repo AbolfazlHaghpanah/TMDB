@@ -22,9 +22,9 @@ import kotlinx.collections.immutable.PersistentList
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MovieRow(
-    onClick: (Int) -> Unit,
     title: String,
-    movies: PersistentList<HomeMovieDomainModel>
+    movies: PersistentList<HomeMovieDomainModel>,
+    onClick: (Int) -> Unit
 ) {
     Column {
         Text(

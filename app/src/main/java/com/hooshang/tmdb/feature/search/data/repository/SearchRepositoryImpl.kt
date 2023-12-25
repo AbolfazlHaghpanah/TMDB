@@ -1,8 +1,8 @@
 package com.hooshang.tmdb.feature.search.data.repository
 
 import com.hooshang.tmdb.core.data.model.local.GenreEntity
-import com.hooshang.tmdb.feature.search.data.source.local.localdatasource.SearchLocalDataSource
-import com.hooshang.tmdb.feature.search.data.source.remote.remotedatasource.SearchRemoteDataSource
+import com.hooshang.tmdb.feature.search.data.datasource.localdatasource.SearchLocalDataSource
+import com.hooshang.tmdb.feature.search.data.datasource.remotedatasource.SearchRemoteDataSource
 import com.hooshang.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainModel
 import com.hooshang.tmdb.feature.search.domain.repository.SearchRepository
 import kotlinx.coroutines.flow.first
@@ -13,8 +13,8 @@ class SearchRepositoryImpl @Inject constructor(
     private val searchRemoteDataSource: SearchRemoteDataSource
 ) : SearchRepository {
 
-    override suspend fun searchMovie(value: String): List<SearchMovieWithGenreDomainModel> {
-        return searchRemoteDataSource.searchMovie(value).results
+    override suspend fun searchMovie(query: String): List<SearchMovieWithGenreDomainModel> {
+        return searchRemoteDataSource.searchMovie(query).results
             .map { it.toDomainModel() }
             .map {
                 SearchMovieWithGenreDomainModel(
@@ -28,7 +28,7 @@ class SearchRepositoryImpl @Inject constructor(
         val genres = mutableListOf<GenreEntity>()
 
         searchLocalDataSource
-            .getGenres()
+            .observeGenres()
             .first()
             .onEach { genre ->
                 if (ids.contains(genre.genreId)) genres.add(genre)

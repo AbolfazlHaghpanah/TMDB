@@ -1,9 +1,0 @@
-package com.hooshang.tmdb.feature.detail.data.model.remote
-
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class CastWithCrewResponse(
-    val cast: List<CastOrCrewResponse>,
-    val crew: List<CastOrCrewResponse>
-)

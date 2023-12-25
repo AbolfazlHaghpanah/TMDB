@@ -23,7 +23,7 @@ class SnackBarManager {
 data class SnackBarMassage(
     val snackBarMessage: String?,
     val snackBarAction: (() -> Unit)? = null,
-    val snackBarActionLabel: String? = null,
+    val snackBarActionLabel: StringResWrapper? = null,
     val snackBarDuration: SnackbarDuration = SnackbarDuration.Long,
 ) {
     fun performAction() {

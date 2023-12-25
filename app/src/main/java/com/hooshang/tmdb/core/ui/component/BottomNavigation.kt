@@ -102,7 +102,6 @@ sealed class BottomNavigationItems(
 
     data object Favorite :
         BottomNavigationItems("Favorite", R.drawable.heart, AppScreens.Favorite.route)
-
 }
 
 val bottomNavItems = listOf(
