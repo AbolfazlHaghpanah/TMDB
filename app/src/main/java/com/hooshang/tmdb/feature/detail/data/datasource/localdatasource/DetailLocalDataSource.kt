@@ -20,7 +20,7 @@ interface DetailLocalDataSource {
 
     fun observeSimilar(id: Int): Flow<List<SimilarMovieWithGenre>>
 
-    fun isExistInFavorite(id: Int): Flow<Boolean>
+    fun existInFavorite(id: Int): Flow<Boolean>
 
     suspend fun insertMovieDetails(detailEntity: DetailEntity)
 

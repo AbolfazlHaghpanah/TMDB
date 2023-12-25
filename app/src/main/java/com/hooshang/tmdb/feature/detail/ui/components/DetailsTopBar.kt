@@ -1,6 +1,5 @@
 package com.hooshang.tmdb.feature.detail.ui.components
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,19 +20,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TopBar(
-    movieDetailDomainModel: MovieDetailDomainModel,
+    title: String,
+    movieId: Int,
+    externalIds: List<String>,
+    isFavorite: Boolean,
     onBackArrowClick: () -> Unit,
     onFavoriteIconClick: () -> Unit
 ) {
@@ -43,9 +42,9 @@ fun TopBar(
 
     if (showDialog) {
         ShareDialog(
-            externalIds = movieDetailDomainModel.externalIds,
-            movieId = movieDetailDomainModel.id,
-            movieTitle = movieDetailDomainModel.title,
+            externalIds = externalIds,
+            movieId = movieId,
+            movieTitle = title,
             onClock = { requestString ->
                 uriHandler.openUri(uri = requestString)
             },
@@ -66,9 +65,10 @@ fun TopBar(
                 .align(Alignment.CenterStart),
             onClick = onBackArrowClick,
         ) {
-            IconWrapper(
-                icon = TMDBTheme.icons.arrowBack,
-                tintColor = TMDBTheme.colors.white
+            Icon(
+                imageVector = ImageVector.vectorResource(TMDBTheme.icons.arrowBack),
+                contentDescription = null,
+                tint = TMDBTheme.colors.white
             )
         }
 
@@ -77,7 +77,7 @@ fun TopBar(
                 .align(Alignment.Center)
                 .widthIn(50.dp, 200.dp)
                 .basicMarquee(),
-            text = movieDetailDomainModel.title,
+            text = title,
             style = TMDBTheme.typography.subtitle1,
             color = TMDBTheme.colors.white,
             textAlign = TextAlign.Start,
@@ -88,17 +88,22 @@ fun TopBar(
             modifier = Modifier.align(Alignment.CenterEnd),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            val suitableIcon =
-                if (!movieDetailDomainModel.isFavorite) TMDBTheme.icons.heartBorder else TMDBTheme.icons.heart
             TMDBIconButton(
                 modifier = Modifier
                     .clip(TMDBTheme.shapes.rounded)
                     .background(TMDBTheme.colors.surface),
                 onClick = onFavoriteIconClick
             ) {
-                IconWrapper(
-                    icon = suitableIcon,
-                    tintColor = TMDBTheme.colors.error
+                Icon(
+                    imageVector = ImageVector.vectorResource(
+                        if (!isFavorite) {
+                            TMDBTheme.icons.heartBorder
+                        } else {
+                            TMDBTheme.icons.heart
+                        }
+                    ),
+                    contentDescription = null,
+                    tint = TMDBTheme.colors.error
                 )
             }
 
@@ -108,24 +113,12 @@ fun TopBar(
                     .background(TMDBTheme.colors.surface),
                 onClick = { showDialog = true },
             ) {
-                IconWrapper(
-                    icon = TMDBTheme.icons.share,
-                    tintColor = TMDBTheme.colors.primary
+                Icon(
+                    imageVector = ImageVector.vectorResource(TMDBTheme.icons.share),
+                    contentDescription = null,
+                    tint = TMDBTheme.colors.primary
                 )
             }
         }
     }
-}
-
-@NonRestartableComposable
-@Composable
-private fun IconWrapper(
-    @DrawableRes icon: Int,
-    tintColor: Color
-) {
-    Icon(
-        imageVector = ImageVector.vectorResource(id = icon),
-        contentDescription = null,
-        tint = tintColor
-    )
 }

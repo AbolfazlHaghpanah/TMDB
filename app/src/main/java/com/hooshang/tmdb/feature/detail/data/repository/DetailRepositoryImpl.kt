@@ -22,7 +22,7 @@ class DetailRepositoryImpl @Inject constructor(
 ) : DetailRepository {
     override suspend fun observeMovieDetails(id: Int): Flow<MovieDetailDomainModel> {
         val dataFlow = localDataSource.observeMovieDetail(id)
-        val isFavoriteFlow = localDataSource.isExistInFavorite(id)
+        val isFavoriteFlow = localDataSource.existInFavorite(id)
         val creditsFlow = localDataSource.observeCredits(id)
         val similarFlow = localDataSource.observeSimilar(id)
 

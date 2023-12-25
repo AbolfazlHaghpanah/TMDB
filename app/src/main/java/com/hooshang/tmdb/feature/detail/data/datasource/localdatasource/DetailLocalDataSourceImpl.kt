@@ -29,8 +29,8 @@ class DetailLocalDataSourceImpl  @Inject constructor(
     override fun observeSimilar(id: Int): Flow<List<SimilarMovieWithGenre>> =
         detailDao.observeSimilarMovie(id)
 
-    override fun isExistInFavorite(id: Int): Flow<Boolean> =
-        detailDao.isExistInFavorite(id)
+    override fun existInFavorite(id: Int): Flow<Boolean> =
+        detailDao.existInFavorite(id)
 
     override suspend fun insertMovieDetails(detailEntity: DetailEntity) =
         detailDao.insertMovieDetails(detailEntity)

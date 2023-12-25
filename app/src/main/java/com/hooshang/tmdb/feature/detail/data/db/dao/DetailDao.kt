@@ -41,7 +41,7 @@ interface DetailDao {
     fun observeSimilarMovie(id: Int): Flow<List<SimilarMovieWithGenre>>
 
     @Query("select exists (select 1 from FAVORITE_MOVIE where movieId =:id)")
-    fun isExistInFavorite(id: Int): Flow<Boolean>
+    fun existInFavorite(id: Int): Flow<Boolean>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovieDetails(detailEntity: DetailEntity)

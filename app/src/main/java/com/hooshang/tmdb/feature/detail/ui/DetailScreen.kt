@@ -1,28 +1,35 @@
 package com.hooshang.tmdb.feature.detail.ui
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.hooshang.tmdb.R
-import com.hooshang.tmdb.feature.detail.ui.components.DetailTopWithGradient
-import com.hooshang.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
+import com.hooshang.tmdb.feature.detail.ui.components.BackgroundImage
+import com.hooshang.tmdb.feature.detail.ui.components.CastOrCrewSection
+import com.hooshang.tmdb.feature.detail.ui.components.ForegroundImage
+import com.hooshang.tmdb.feature.detail.ui.components.MovieInfo
+import com.hooshang.tmdb.feature.detail.ui.components.OverviewSection
+import com.hooshang.tmdb.feature.detail.ui.components.SimilarMoviesSection
+import com.hooshang.tmdb.feature.detail.ui.components.TopBar
 import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsAction
 import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsState
-import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
-import com.hooshang.tmdb.feature.home.ui.component.MovieRow
 import com.hooshang.tmdb.navigation.AppScreens
 import kotlinx.collections.immutable.toPersistentList
 
@@ -70,8 +77,8 @@ private fun DetailScreen(
 @Composable
 private fun DetailScreen(
     detailsState: DetailsState,
-    onAction: (DetailsAction) -> Unit,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    onAction: (DetailsAction) -> Unit
 ) {
     if (detailsState.isLoading) {
         LinearProgressIndicator(
@@ -84,32 +91,57 @@ private fun DetailScreen(
                 .fillMaxSize()
                 .verticalScroll(scrollState)
         ) {
-            DetailTopWithGradient(
-                detailsState = detailsState.movie,
-                onBackArrowClick = { onAction(DetailsAction.Back) },
-                onFavoriteIconClick = {
-                    onAction(
-                        if (detailsState.movie.isFavorite) DetailsAction.RemoveFromFavorite
-                        else DetailsAction.AddToFavorite
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                BackgroundImage(detailsState.movie.posterPath)
+
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    TopBar(
+                        title = detailsState.movie.title,
+                        movieId = detailsState.movie.id,
+                        externalIds = detailsState.movie.externalIds,
+                        isFavorite = detailsState.movie.isFavorite,
+                        onBackArrowClick = { onAction(DetailsAction.Back) },
+                        onFavoriteIconClick = {
+                            onAction(
+                                if (detailsState.movie.isFavorite) {
+                                    DetailsAction.RemoveFromFavorite
+                                } else {
+                                    DetailsAction.AddToFavorite
+                                }
+                            )
+                        }
+                    )
+
+                    ForegroundImage(
+                        modifier = Modifier.padding(top = 30.dp, bottom = 50.dp),
+                        movieDetailPosterPath = detailsState.movie.posterPath
+                    )
+
+                    MovieInfo(
+                        releaseDate = detailsState.movie.releaseDate.split("-")[0],
+                        runtime = detailsState.movie.runtime,
+                        genre = detailsState.movie.genres[0].second,
+                        voteAverage = detailsState.movie.voteAverage.toString()
                     )
                 }
-            )
+            }
 
-            OverviewContentWithCastAndCrew(detailsState.movie)
+            OverviewSection(detailsState.movie.overview)
+
+            if (detailsState.movie.credits.isNotEmpty()) {
+                CastOrCrewSection(detailsState.movie.credits.toPersistentList())
+            }
 
             if (detailsState.movie.similar.isNotEmpty()) {
-                MovieRow(
-                    title = stringResource(R.string.label_similar_movies),
-                    movies = detailsState.movie.similar.map {
-                        HomeMovieDomainModel(
-                            title = it.title,
-                            voteAverage = it.voteAverage.toDouble(),
-                            posterPath = it.posterPath ?: "",
-                            movieId = it.id,
-                            genres = it.genreIds,
-                            backdropPath = it.posterPath ?: ""
-                        )
-                    }.toPersistentList(),
+                SimilarMoviesSection(
+                    title = stringResource(R.string.similar_movies),
+                    movies = detailsState.movie.similar.toPersistentList(),
                     onClick = { onAction(DetailsAction.NavigateToDetails(it)) }
                 )
             }

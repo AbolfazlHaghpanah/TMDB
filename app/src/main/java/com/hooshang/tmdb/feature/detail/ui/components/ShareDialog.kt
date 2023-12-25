@@ -31,9 +31,9 @@ import com.hooshang.tmdb.core.utils.twitter_uri
 
 @Composable
 fun ShareDialog(
-    externalIds: List<String>,
     movieId: Int?,
     movieTitle: String?,
+    externalIds: List<String>,
     onClock: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
