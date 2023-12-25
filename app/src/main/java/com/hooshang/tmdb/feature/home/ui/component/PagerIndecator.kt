@@ -14,20 +14,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.hooshang.tmdb.core.ui.theme.designsystem.Theme
 
 @Composable
 fun TMDBPagerIndicator(
-    modifier: Modifier = Modifier,
     pageCount: Int,
-    selectedPage: Int
+    selectedPage: Int,
+    isLoading: Boolean,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 14.dp)
-            .then(modifier),
+            .padding(vertical = 14.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -44,11 +45,14 @@ fun TMDBPagerIndicator(
             Box(
                 modifier = Modifier
                     .background(
-                        Theme.colors.primary.copy(alpha = color),
+                        color = if (isLoading) Color.DarkGray.copy(alpha = color) else Theme.colors.primary.copy(
+                            alpha = color
+                        ),
                         Theme.shapes.rounded
                     )
                     .width(activeSize)
-                    .height(10.dp),
+                    .height(10.dp)
+                    .then(modifier),
             )
         }
     }

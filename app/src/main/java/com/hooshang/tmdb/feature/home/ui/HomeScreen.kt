@@ -154,8 +154,9 @@ private fun HomeScreen(
             TMDBPagerIndicator(
                 modifier = Modifier
                     .ifShimmerActive(homeState.nowPlayingMovies.isEmpty()),
-                pageCount = pagerState.pageCount,
-                selectedPage = pagerState.currentPage
+                pageCount = 5,
+                selectedPage = pagerState.currentPage,
+                isLoading = homeState.nowPlayingMovies.isEmpty()
             )
 
             MovieRow(

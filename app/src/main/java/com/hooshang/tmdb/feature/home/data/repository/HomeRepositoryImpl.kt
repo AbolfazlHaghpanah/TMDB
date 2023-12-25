@@ -28,7 +28,7 @@ class HomeRepositoryImpl @Inject constructor(
     )
 
 
-    override suspend fun fetchNowPlaying() = run {
+    override suspend fun fetchNowPlaying() {
         val data = remoteDataSource.getNowPlayingMovies().results
 
         localDataSource.observeNowPlayingMovies()
@@ -50,7 +50,7 @@ class HomeRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun fetchTopMovie() = run {
+    override suspend fun fetchTopMovie() {
         val data = remoteDataSource.getTopMovies().results
 
         localDataSource.observeTopMovies()
@@ -81,7 +81,7 @@ class HomeRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun fetchPopularMovie() = run {
+    override suspend fun fetchPopularMovie() {
         val data = remoteDataSource.getMostPopularMovies().results
 
         localDataSource.observePopularMovies()
