@@ -91,12 +91,13 @@ private fun InfoSection(
 
         Row {
             Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.weight(0.75f)
             ) {
                 Text(
                     modifier = Modifier
                         .padding(end = 48.dp)
-                        .width(120.dp),
+                        .fillMaxWidth(),
                     text = genres,
                     style = TMDBTheme.typography.caption,
                     maxLines = 1,
@@ -113,7 +114,8 @@ private fun InfoSection(
 
             IconButton(
                 modifier = Modifier
-                    .clip(TMDBTheme.shapes.rounded),
+                    .clip(TMDBTheme.shapes.rounded)
+                    .weight(0.25f),
                 onClick = onDelete
             ) {
                 Icon(
