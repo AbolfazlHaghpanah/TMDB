@@ -1,6 +1,5 @@
 package com.hooshang.tmdb.feature.detail.ui
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,7 +47,6 @@ private fun DetailScreen(
     detailViewModel: DetailViewModel
 ) {
     val movieDetail by detailViewModel.state.collectAsStateWithLifecycle()
-    val scrollState = rememberScrollState()
 
     val onAction: (DetailsAction) -> Unit = { action ->
         when (action) {
@@ -70,16 +68,16 @@ private fun DetailScreen(
     DetailScreen(
         detailsState = movieDetail,
         onAction = onAction,
-        scrollState = scrollState
     )
 }
 
 @Composable
 private fun DetailScreen(
     detailsState: DetailsState,
-    scrollState: ScrollState,
     onAction: (DetailsAction) -> Unit
 ) {
+    val scrollState = rememberScrollState()
+
     if (detailsState.isLoading) {
         LinearProgressIndicator(
             modifier = Modifier.fillMaxWidth()
@@ -92,8 +90,7 @@ private fun DetailScreen(
                 .verticalScroll(scrollState)
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) {
                 BackgroundImage(detailsState.movie.posterPath)
 
