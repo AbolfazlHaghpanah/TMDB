@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
@@ -31,7 +30,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.shimmer.fakeMovie
@@ -78,19 +76,10 @@ private fun HomeScreen(
     }
 
     val homeState by viewModel.state.collectAsStateWithLifecycle()
-    val pagerState = rememberPagerState(initialPage = 2)
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = homeState.isLoading,
-        onRefresh = {
-            onAction(HomeAction.Refresh)
-        }
-    )
 
     HomeScreen(
         homeState = homeState,
-        pagerState = pagerState,
-        onAction = onAction,
-        pullRefreshState = pullRefreshState
+        onAction = onAction
     )
 }
 
@@ -99,11 +88,16 @@ private fun HomeScreen(
 @Composable
 private fun HomeScreen(
     homeState: HomeState,
-    pagerState: PagerState,
-    pullRefreshState: PullRefreshState,
     onAction: (HomeAction) -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val pagerState = rememberPagerState(initialPage = 2)
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = homeState.isLoading,
+        onRefresh = {
+            onAction(HomeAction.Refresh)
+        }
+    )
 
     Box(
         modifier = Modifier
