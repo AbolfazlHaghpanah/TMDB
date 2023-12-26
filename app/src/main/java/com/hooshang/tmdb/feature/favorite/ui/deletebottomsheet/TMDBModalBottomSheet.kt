@@ -1,6 +1,7 @@
 package com.hooshang.tmdb.feature.favorite.ui.deletebottomsheet
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,6 +25,7 @@ import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.feature.favorite.ui.deletebottomsheet.contracts.DeleteBottomSheetAction
 
 @Composable
+@NonRestartableComposable
 fun TMDBModalBottomSheet(
     navController: NavController
 ) {
@@ -57,6 +60,7 @@ private fun TMDBModalBottomSheet(
             .padding(bottom = 64.dp)
             .fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Image(
             modifier = Modifier

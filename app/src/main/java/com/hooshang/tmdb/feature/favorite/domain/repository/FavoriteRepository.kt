@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface FavoriteRepository {
     suspend fun observeFavorites(): Flow<List<FavoriteMovieDomainModel>>
-    suspend fun deleteFromFavorite(id: Int)
+    suspend fun removeFavorite(id: Int)
 }

@@ -9,7 +9,7 @@ class FavoriteRepositoryImpl @Inject constructor(
 ) : FavoriteRepository {
     override suspend fun observeFavorites() = favoriteLocalDataSource.observeFavoriteMovies()
 
-    override suspend fun deleteFromFavorite(id: Int) {
+    override suspend fun removeFavorite(id: Int) {
         favoriteLocalDataSource.removeMovie(id)
     }
 }
