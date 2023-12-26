@@ -22,6 +22,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -41,6 +42,7 @@ import com.hooshang.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainM
 import kotlinx.collections.immutable.PersistentList
 import java.util.Locale
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchResults(
     searchResult: PersistentList<SearchMovieWithGenreDomainModel>,
