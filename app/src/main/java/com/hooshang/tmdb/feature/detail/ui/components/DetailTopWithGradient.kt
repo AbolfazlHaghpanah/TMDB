@@ -80,15 +80,12 @@ fun MovieInfo(
         modifier = Modifier
             .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
-
         if (releaseDate.isNotEmpty()) {
             TextIcon(
                 iconId = TMDBTheme.icons.calendar,
                 text = releaseDate
             )
-        }
 
-        if (releaseDate.isNotEmpty() || runtime != 0) {
             Divider(
                 color = TMDBTheme.colors.gray,
                 modifier = Modifier
@@ -99,13 +96,6 @@ fun MovieInfo(
         }
 
         if (runtime != 0) {
-            TextIcon(
-                iconId = TMDBTheme.icons.clock,
-                text = "$runtime " + stringResource(R.string.minutes)
-            )
-        }
-
-        if (genre.isNotEmpty()) {
             Divider(
                 modifier = Modifier
                     .width(1.dp)
@@ -114,6 +104,13 @@ fun MovieInfo(
                 color = TMDBTheme.colors.gray
             )
 
+            TextIcon(
+                iconId = TMDBTheme.icons.clock,
+                text = "$runtime " + stringResource(R.string.minutes)
+            )
+        }
+
+        if (genre.isNotEmpty()) {
             TextIcon(
                 iconId = TMDBTheme.icons.film,
                 text = genre

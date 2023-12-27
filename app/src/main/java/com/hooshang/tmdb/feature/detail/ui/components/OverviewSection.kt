@@ -90,7 +90,7 @@ fun CastOrCrewSection(
                     )
 
                     Text(
-                        text = castOrCrew.job ?: "",
+                        text = castOrCrew.job,
                         style = TMDBTheme.typography.overLine,
                         color = TMDBTheme.colors.gray
                     )
