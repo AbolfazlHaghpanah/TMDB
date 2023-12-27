@@ -24,7 +24,7 @@ class SearchViewModel @Inject constructor(
     private val snackBarManager: SnackBarManager
 ) : BaseViewModel<SearchAction, SearchState>() {
 
-    private var _currentSearchString: String = ""
+    private var currentSearchString: String = ""
 
     override fun onAction(action: SearchAction) {
         when (action) {
@@ -33,46 +33,43 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    override fun setInitialState(): SearchState {
-        return SearchState()
-    }
+    override fun setInitialState(): SearchState = SearchState()
 
     private fun search(value: String) {
-        _currentSearchString = value
+        currentSearchString = value
         viewModelScope.launch(Dispatchers.IO) {
             resultWrapper {
-                searchUseCase(_currentSearchString)
+                searchUseCase(currentSearchString)
             }.collect {
-                emiSearchResult(it)
+                getSearchResult(it)
             }
         }
     }
 
-    private suspend fun emiSearchResult(result: Result) {
-        viewModelScope.launch {
-            when (result) {
-                is Result.Success<*> -> {
-                    val data = result.result as List<SearchMovieWithGenreDomainModel>
-                    setState { copy(isLoading = false, searchResults = data.toPersistentList()) }
-                }
+    private suspend fun getSearchResult(result: Result) {
 
-                is Result.Error -> {
-                    snackBarManager.sendMessage(
-                        SnackBarMassage(
-                            snackBarMessage = result.message,
-                            snackBarAction = {
-                                search(_currentSearchString)
-                            },
-                            snackBarActionLabel = StringResWrapper(R.string.label_try_again),
-                            snackBarDuration = SnackbarDuration.Indefinite
-                        )
+        when (result) {
+            is Result.Success<*> -> {
+                val data = result.response as List<SearchMovieWithGenreDomainModel>
+                setState { copy(isLoading = false, searchResults = data.toPersistentList()) }
+            }
+
+            is Result.Error -> {
+                snackBarManager.sendMessage(
+                    SnackBarMassage(
+                        snackBarMessage = result.message,
+                        snackBarAction = {
+                            search(currentSearchString)
+                        },
+                        snackBarActionLabel = StringResWrapper(R.string.try_again),
+                        snackBarDuration = SnackbarDuration.Indefinite
                     )
-                    setState { copy(isLoading = false, isError = true) }
-                }
+                )
+                setState { copy(isLoading = false, isError = true) }
+            }
 
-                is Result.Loading -> {
-                    setState { copy(isLoading = true) }
-                }
+            is Result.Loading -> {
+                setState { copy(isLoading = true) }
             }
         }
     }

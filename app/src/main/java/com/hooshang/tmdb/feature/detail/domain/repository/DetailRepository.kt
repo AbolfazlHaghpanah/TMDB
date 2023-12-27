@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface DetailRepository {
     suspend fun addToFavorite(movieId: Int, genres: List<Int>)
-    suspend fun observeDetailMovieWithAllRelations(id: Int): Flow<MovieDetailDomainModel>
+    suspend fun observeMovieDetails(id: Int): Flow<MovieDetailDomainModel>
     suspend fun fetchMovieDetail(id: Int)
 }

@@ -43,47 +43,51 @@ import java.util.Locale
 @Composable
 fun SearchResults(
     searchResult: PersistentList<SearchMovieWithGenreDomainModel>,
-    onSearchElementClick: (SearchAction) -> Unit
+    onClick: (Int) -> Unit
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(
-            top = 32.dp
-        ),
+        contentPadding = PaddingValues(top = 32.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        items(searchResult) { searchElement ->
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.clickable {
-                    onSearchElementClick(SearchAction.NavigateToDetail(searchElement.movieDomainModel.id))
-                }
-            ) {
-
-                PosterWithTotalVote(movie = searchElement)
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                MovieInfo(
-                    searchElement = searchElement,
-                )
-            }
+        items(searchResult) { movie ->
+            SearchMovieItem(
+                movie = movie,
+                onClick = { onClick(movie.movieDomainModel.id) }
+            )
         }
     }
 }
 
 @Composable
-private fun MovieInfo(
-    searchElement: SearchMovieWithGenreDomainModel,
+private fun SearchMovieItem(
+    movie: SearchMovieWithGenreDomainModel,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
+    Row(
+        modifier = modifier.clickable(onClick = onClick),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        PosterWithTotalVote(movie)
 
+        Spacer(modifier = Modifier.weight(1f))
+
+        MovieInfo(movie)
+    }
+}
+
+@Composable
+private fun MovieInfo(
+    movie: SearchMovieWithGenreDomainModel,
+) {
     Column(
-        verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp)
+            .padding(top = 8.dp),
+        verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = searchElement.movieDomainModel.title,
+            text = movie.movieDomainModel.title,
             style = TMDBTheme.typography.subtitle1,
             color = TMDBTheme.colors.white,
             modifier = Modifier.widthIn(100.dp, 200.dp),
@@ -91,36 +95,33 @@ private fun MovieInfo(
         )
 
         Row(
+            modifier = Modifier.padding(top = 32.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(top = 32.dp)
         ) {
-            if (searchElement.movieDomainModel.releaseDate.split("-").size > 1) {
+            if (movie.movieDomainModel.releaseDate.split("-").size > 1) {
                 TextIcon(
-                    text = searchElement.movieDomainModel.releaseDate.split("-")[0],
+                    text = movie.movieDomainModel.releaseDate.split("-")[0],
                     iconId = TMDBTheme.icons.calendar
                 )
             }
-            Box(
-                Modifier.border(1.dp, TMDBTheme.colors.primary)
-            ) {
-                Text(
-                    text = searchElement.movieDomainModel.originalLanguage.uppercase(Locale.getDefault()),
-                    style = TMDBTheme.typography.caption,
-                    color = TMDBTheme.colors.primary,
-                    modifier = Modifier
-                        .width(24.dp)
-                        .padding(vertical = 6.dp),
-                    textAlign = TextAlign.Center
-                )
-            }
+
+            Text(
+                modifier = Modifier
+                    .border(1.dp, TMDBTheme.colors.primary, TMDBTheme.shapes.verySmall)
+                    .padding(4.dp),
+                text = movie.movieDomainModel.originalLanguage.uppercase(Locale.getDefault()),
+                style = TMDBTheme.typography.caption,
+                color = TMDBTheme.colors.primary,
+                textAlign = TextAlign.Center
+            )
         }
 
-        if (searchElement.genres.isNotEmpty()) {
+        if (movie.genres.isNotEmpty()) {
             Row(
+                modifier = Modifier.padding(top = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.padding(top = 16.dp)
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(TMDBTheme.icons.film),
@@ -129,7 +130,7 @@ private fun MovieInfo(
                 )
 
                 Text(
-                    text = searchElement.genres,
+                    text = movie.genres,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = TMDBTheme.typography.caption,
@@ -144,11 +145,17 @@ private fun MovieInfo(
 private fun PosterWithTotalVote(
     movie: SearchMovieWithGenreDomainModel
 ) {
-    val roundedVote = movie.movieDomainModel.voteAverage.toBigDecimal()
-        .setScale(1, RoundingMode.FLOOR).toDouble()
-
     Box {
-        SimilarMovieImageWrapper(movie.movieDomainModel.posterPath)
+        AsyncImage(
+            modifier = Modifier
+                .clip(TMDBTheme.shapes.medium)
+                .width(112.dp)
+                .aspectRatio(0.8f),
+            model = "$imageUrl${movie.movieDomainModel.posterPath}",
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            error = painterResource(id = R.drawable.videoimageerror)
+        )
 
         TextIcon(
             modifier = Modifier
@@ -156,26 +163,10 @@ private fun PosterWithTotalVote(
                 .clip(TMDBTheme.shapes.small)
                 .background(TMDBTheme.colors.surface.copy(alpha = 0.7f))
                 .padding(8.dp, 4.dp),
-            text = roundedVote.toString(),
+            text = String.format("%.1f", movie.movieDomainModel.voteAverage),
             iconId = TMDBTheme.icons.star,
             iconColor = TMDBTheme.colors.secondary,
             textColor = TMDBTheme.colors.secondary
         )
     }
-}
-
-@Composable
-private fun SimilarMovieImageWrapper(similarMoviePosterPath: String) {
-    AsyncImage(
-        model = "$image_url${similarMoviePosterPath}",
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .clip(
-                TMDBTheme.shapes.medium
-            )
-            .width(112.dp)
-            .aspectRatio(0.8f),
-        error = painterResource(id = R.drawable.img_video_image_error)
-    )
 }

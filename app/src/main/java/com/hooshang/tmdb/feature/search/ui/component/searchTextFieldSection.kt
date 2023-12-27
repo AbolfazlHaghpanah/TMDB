@@ -23,41 +23,41 @@ import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 
 @Composable
-fun TopSearchSection(
+fun SearchTextFieldSection(
     searchString: String,
     onSearchChange: (String) -> Unit
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
         OutlinedTextField(
-            value = searchString,
-            onValueChange = {
-                onSearchChange(it)
-            },
-            maxLines = 2,
-            shape = TMDBTheme.shapes.veryLarge,
-            leadingIcon = {
-                IconWrapper()
-            },
             modifier = Modifier
                 .clip(TMDBTheme.shapes.veryLarge)
                 .border(0.dp, TMDBTheme.colors.surface)
                 .background(color = TMDBTheme.colors.surface, shape = TMDBTheme.shapes.veryLarge)
-                .weight(2f),
+                .weight(1f),
+            value = searchString,
+            onValueChange = { onSearchChange(it) },
+            maxLines = 2,
+            shape = TMDBTheme.shapes.veryLarge,
+            leadingIcon = {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = TMDBTheme.icons.search),
+                    contentDescription = null
+                )
+            },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 unfocusedBorderColor = Color.Transparent
             )
         )
+
         TextButton(
+            modifier = Modifier.align(alignment = Alignment.CenterVertically),
             onClick = {
-                if (searchString != "") {
+                if (searchString.isNotEmpty()) {
                     onSearchChange("")
                 }
-            },
-            modifier = Modifier
-                .align(alignment = Alignment.CenterVertically)
+            }
         ) {
             Text(
                 text = stringResource(id = R.string.label_cancel),
@@ -67,13 +67,4 @@ fun TopSearchSection(
             )
         }
     }
-
-}
-
-@Composable
-private fun IconWrapper() {
-    Icon(
-        imageVector = ImageVector.vectorResource(id = TMDBTheme.icons.search),
-        contentDescription = null
-    )
 }

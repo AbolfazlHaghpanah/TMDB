@@ -23,7 +23,7 @@ import com.hooshang.tmdb.feature.home.data.model.local.entity.PopularMovieEntity
 import com.hooshang.tmdb.feature.home.data.model.local.entity.TopMovieEntity
 import com.hooshang.tmdb.feature.home.data.model.local.relation.crossref.PopularMovieGenreCrossRef
 import com.hooshang.tmdb.feature.home.data.model.local.relation.crossref.TopMovieGenreCrossRef
-import com.hooshang.tmdb.feature.search.data.source.local.dao.SearchDao
+import com.hooshang.tmdb.feature.search.data.db.dao.SearchDao
 
 @TypeConverters(ListStringToStringConverter::class)
 @Database(

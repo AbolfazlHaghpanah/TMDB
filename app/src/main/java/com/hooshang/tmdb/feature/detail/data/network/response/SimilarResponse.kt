@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Keep
 @Serializable
-data class SimilarResultsResponse(
+data class SimilarResponse(
     val results: List<SimilarMovieResultResponse>
 )

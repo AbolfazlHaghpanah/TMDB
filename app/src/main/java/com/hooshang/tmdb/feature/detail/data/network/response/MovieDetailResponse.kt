@@ -28,10 +28,10 @@ data class MovieDetailResponse(
     @SerialName("external_ids")
     val externalIdsResponse: ExternalIdsResponse?,
     val credits: CastWithCrewResponse,
-    val similar: SimilarResultsResponse
+    val similar: SimilarResponse
 ) {
-    fun toDetailEntity(): DetailEntity {
-        return DetailEntity(
+    fun toDetailEntity(): DetailEntity =
+        DetailEntity(
             detailMovieId = id,
             overview = overview,
             releaseDate = releaseDate,
@@ -40,26 +40,15 @@ data class MovieDetailResponse(
                 "${externalIdsResponse?.imdbId}",
                 "${externalIdsResponse?.instagramId}",
                 "${externalIdsResponse?.twitterId}"
-            )
+            ),
+            isFavorite = false
         )
-    }
 
-    fun toCreditsEntity(): List<CreditEntity> {
-        val castAndCrew = mutableListOf<CreditEntity>()
+    fun toCreditsEntity(): List<CreditEntity> =
+        credits.cast.map { it.toCreditEntity() } + credits.cast.map { it.toCreditEntity() }
 
-        credits.cast.forEach {
-            castAndCrew.add(it.toCreditEntity())
-        }
-
-        credits.crew.forEach {
-            castAndCrew.add(it.toCreditEntity())
-        }
-
-        return castAndCrew
-    }
-
-    fun toMovieEntity(): MovieEntity {
-        return MovieEntity(
+    fun toMovieEntity(): MovieEntity =
+        MovieEntity(
             id = id,
             posterPath = posterPath ?: "",
             voteAverage = voteAverage.toBigDecimal()
@@ -67,5 +56,4 @@ data class MovieDetailResponse(
             backdropPath = backdropPath ?: "",
             title = title
         )
-    }
 }

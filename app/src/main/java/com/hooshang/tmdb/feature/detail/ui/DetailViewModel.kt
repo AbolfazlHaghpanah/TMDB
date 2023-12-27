@@ -138,10 +138,9 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    private fun MovieDetailDomainModel.toDetailState(): DetailsState {
-        return DetailsState(
+    private fun MovieDetailDomainModel.toDetailState(): DetailsState =
+        DetailsState(
             movie = this,
             isLoading = false
         )
-    }
 }

@@ -7,28 +7,23 @@ import kotlinx.serialization.Serializable
 
 @Keep
 @Serializable
-data class SearchResult(
-    val results: List<SearchResultElement>
+data class SearchResponse(
+    val results: List<SearchResult>
 )
 
 @Keep
 @Serializable
-data class SearchResultElement(
+data class SearchResult(
     val id: Int,
     val title: String,
-
     @SerialName("original_language")
     val originalLanguage: String,
-
     @SerialName("vote_average")
     val voteAverage: Float,
-
     @SerialName("poster_path")
     val posterPath: String?,
-
     @SerialName("release_date")
     val releaseDate: String,
-
     @SerialName("genre_ids")
     val genreIds: List<Int>
 ) {

@@ -11,7 +11,7 @@ data class CreditEntity(
     val profilePath: String?,
     val job: String? = null
 ) {
-    fun toCastOrCrew(): CastOrCrewDomainModel = CastOrCrewDomainModel(
+    fun toDomainModel(): CastOrCrewDomainModel = CastOrCrewDomainModel(
         id = creditId,
         name = name,
         profilePath = profilePath,

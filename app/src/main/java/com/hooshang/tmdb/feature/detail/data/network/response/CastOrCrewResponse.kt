@@ -14,12 +14,10 @@ data class CastOrCrewResponse(
     val profilePath: String?,
     val job: String? = null
 ) {
-    fun toCreditEntity(): CreditEntity {
-        return CreditEntity(
-            creditId = id,
-            name = name,
-            job = job,
-            profilePath = profilePath
-        )
-    }
+    fun toCreditEntity(): CreditEntity = CreditEntity(
+        creditId = id,
+        name = name,
+        job = job,
+        profilePath = profilePath
+    )
 }
