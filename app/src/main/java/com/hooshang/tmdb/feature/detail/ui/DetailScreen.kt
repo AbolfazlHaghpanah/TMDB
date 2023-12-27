@@ -13,19 +13,16 @@ import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.hooshang.tmdb.R
-import com.hooshang.tmdb.feature.home.ui.component.MovieRow
-import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
-import com.hooshang.tmdb.core.ui.component.MovieRow
 import com.hooshang.tmdb.feature.detail.ui.components.DetailTopWithGradient
 import com.hooshang.tmdb.feature.detail.ui.components.OverviewContentWithCastAndCrew
 import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsAction
 import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsState
 import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
+import com.hooshang.tmdb.feature.home.ui.component.MovieRow
 import com.hooshang.tmdb.navigation.AppScreens
 import kotlinx.collections.immutable.toPersistentList
 

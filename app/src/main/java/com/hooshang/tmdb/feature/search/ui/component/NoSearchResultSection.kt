@@ -32,7 +32,6 @@ fun NoSearchResultSection(
         )
 
         Text(
-            text = stringResource(R.string.desc_movie_search_error),
             modifier = Modifier
                 .width(168.dp)
                 .padding(top = 16.dp, bottom = 20.dp),
@@ -43,7 +42,6 @@ fun NoSearchResultSection(
         )
 
         Text(
-            text = stringResource(R.string.desc_find_movie_by_title),
             text = description,
             style = TMDBTheme.typography.caption,
             color = TMDBTheme.colors.gray

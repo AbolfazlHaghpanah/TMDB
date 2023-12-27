@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.feature.search.data.model.remote
+package com.hooshang.tmdb.feature.search.data.network.response
 
 import androidx.annotation.Keep
 import com.hooshang.tmdb.feature.search.domain.model.SearchMovieDomainModel

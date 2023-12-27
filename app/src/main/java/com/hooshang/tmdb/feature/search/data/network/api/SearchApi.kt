@@ -1,10 +1,8 @@
 package com.hooshang.tmdb.feature.search.data.network.api
 
-import com.hooshang.tmdb.core.utils.tmdpApiKey
-import com.hooshang.tmdb.feature.search.data.model.remote.SearchResult
+import com.hooshang.tmdb.feature.search.data.network.response.SearchResponse
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Query
 
 

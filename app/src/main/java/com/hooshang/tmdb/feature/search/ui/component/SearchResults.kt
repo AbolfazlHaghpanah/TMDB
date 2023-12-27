@@ -35,9 +35,7 @@ import com.hooshang.tmdb.core.ui.component.TextIcon
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 import com.hooshang.tmdb.core.utils.image_url
 import com.hooshang.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainModel
-import com.hooshang.tmdb.feature.search.ui.contracts.SearchAction
 import kotlinx.collections.immutable.PersistentList
-import java.math.RoundingMode
 import java.util.Locale
 
 @Composable
@@ -151,10 +149,10 @@ private fun PosterWithTotalVote(
                 .clip(TMDBTheme.shapes.medium)
                 .width(112.dp)
                 .aspectRatio(0.8f),
-            model = "$imageUrl${movie.movieDomainModel.posterPath}",
+            model = "$image_url${movie.movieDomainModel.posterPath}",
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            error = painterResource(id = R.drawable.videoimageerror)
+            error = painterResource(id = R.drawable.img_video_image_error)
         )
 
         TextIcon(
