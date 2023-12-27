@@ -1,5 +1,6 @@
 package com.hooshang.tmdb.feature.home.data.model.remote
 
+import androidx.annotation.Keep
 import com.hooshang.tmdb.core.data.model.local.MovieEntity
 import com.hooshang.tmdb.core.utils.dateConvertor
 import com.hooshang.tmdb.feature.home.data.model.local.entity.NowPlayingEntity
@@ -8,6 +9,7 @@ import com.hooshang.tmdb.feature.home.data.model.local.entity.TopMovieEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Keep
 @Serializable
 data class MovieResult(
     val title: String,

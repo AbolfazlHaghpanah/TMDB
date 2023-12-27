@@ -60,7 +60,7 @@ fun SearchTextFieldSection(
             }
         ) {
             Text(
-                text = stringResource(id = R.string.cancel),
+                text = stringResource(id = R.string.label_cancel),
                 style = TMDBTheme.typography.caption,
                 color = TMDBTheme.colors.white,
                 textAlign = TextAlign.End

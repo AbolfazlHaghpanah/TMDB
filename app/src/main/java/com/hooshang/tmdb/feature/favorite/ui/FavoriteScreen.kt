@@ -83,7 +83,7 @@ private fun FavoriteScreen(
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.favorites),
+                    text = stringResource(R.string.label_favorites),
                     style = TMDBTheme.typography.subtitle1,
                     textAlign = TextAlign.Center,
                     color = TMDBTheme.colors.white

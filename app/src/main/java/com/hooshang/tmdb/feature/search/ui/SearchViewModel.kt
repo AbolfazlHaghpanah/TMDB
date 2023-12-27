@@ -50,7 +50,7 @@ class SearchViewModel @Inject constructor(
 
         when (result) {
             is Result.Success<*> -> {
-                val data = result.response as List<SearchMovieWithGenreDomainModel>
+                val data = result.result as List<SearchMovieWithGenreDomainModel>
                 setState { copy(isLoading = false, searchResults = data.toPersistentList()) }
             }
 
@@ -61,7 +61,7 @@ class SearchViewModel @Inject constructor(
                         snackBarAction = {
                             search(currentSearchString)
                         },
-                        snackBarActionLabel = StringResWrapper(R.string.try_again),
+                        snackBarActionLabel = StringResWrapper(R.string.label_try_again),
                         snackBarDuration = SnackbarDuration.Indefinite
                     )
                 )

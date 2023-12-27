@@ -5,6 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
@@ -15,18 +18,22 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
+import com.hooshang.tmdb.core.ui.component.BottomNavigationItems
 import com.hooshang.tmdb.core.ui.component.TMDBBottomNavigation
 import com.hooshang.tmdb.core.ui.component.TMDBSnackBar
 import com.hooshang.tmdb.core.ui.theme.TMDBTheme
@@ -57,6 +64,8 @@ class MainActivity : ComponentActivity() {
             )
         )
 
+//        StringResWrapper.setContext(this)
+
         setContent {
             val scaffoldState = rememberScaffoldState()
             val bottomSheetNavigator = rememberBottomSheetNavigator()
@@ -64,6 +73,7 @@ class MainActivity : ComponentActivity() {
             val snackBarHostState = remember {
                 SnackbarHostState()
             }
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
             val context = LocalContext.current
 
             navController.addOnDestinationChangedListener(
@@ -77,7 +87,7 @@ class MainActivity : ComponentActivity() {
                     if (snackBarMessage?.snackBarMessage.isNullOrEmpty().not()) {
                         val snackBarResult = snackBarHostState.showSnackbar(
                             message = snackBarMessage?.snackBarMessage!!,
-                            actionLabel = snackBarMessage.snackBarActionLabel?.asString(context),
+                            actionLabel = snackBarMessage.snackBarActionLabel?.asString(context = context),
                             duration = snackBarMessage.snackBarDuration
                         )
                         if (snackBarResult == SnackbarResult.ActionPerformed) {
@@ -100,11 +110,36 @@ class MainActivity : ComponentActivity() {
                             .imePadding(),
                         scaffoldState = scaffoldState,
                         bottomBar = {
-                            TMDBBottomNavigation(
-                                navController = navController,
-                                bottomBarState = navController.currentBackStackEntryAsState()
-                                    .value?.destination?.route != AppScreens.Detail.route
-                            )
+                            AnimatedVisibility(
+                                visible = navController.currentBackStackEntryAsState()
+                                    .value?.destination?.route != AppScreens.Detail.route,
+                                enter = fadeIn(),
+                                exit = fadeOut()
+                            ) {
+                                TMDBBottomNavigation(
+                                    items = listOf(
+                                        BottomNavigationItems.Home,
+                                        BottomNavigationItems.Search,
+                                        BottomNavigationItems.Favorite
+                                    ),
+                                    isSelected = { itemRoute ->
+                                        navBackStackEntry?.destination?.hierarchy?.any { it.route == itemRoute } == true
+                                    },
+                                    onNavItemClick = { route ->
+                                        navController.navigate(route) {
+                                            popUpTo(
+                                                navController
+                                                    .graph
+                                                    .findStartDestination().route!!
+                                            ) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    }
+                                )
+                            }
                         },
                         snackbarHost = {
                             SnackbarHost(snackBarHostState) {

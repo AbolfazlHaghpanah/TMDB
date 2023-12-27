@@ -99,8 +99,8 @@ private fun SearchScreen(
             } else if (searchText.isNotEmpty() && searchState.isError.not()) {
                 NoSearchResultSection(
                     image = ImageVector.vectorResource(TMDBTheme.icons.noResult),
-                    title = stringResource(R.string.movie_search_error1),
-                    description = stringResource(R.string.find_movie_by_title)
+                    title = stringResource(R.string.desc_movie_search_error),
+                    description = stringResource(R.string.desc_find_movie_by_title)
                 )
             }
         }

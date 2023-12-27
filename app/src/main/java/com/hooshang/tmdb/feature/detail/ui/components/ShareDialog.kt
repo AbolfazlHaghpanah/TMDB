@@ -24,10 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.hooshang.tmdb.core.utils.imdbUri
-import com.hooshang.tmdb.core.utils.instagramUri
-import com.hooshang.tmdb.core.utils.tmdbUri
-import com.hooshang.tmdb.core.utils.twitterUri
+import com.hooshang.tmdb.core.utils.imdb_uri
+import com.hooshang.tmdb.core.utils.instagram_uri
+import com.hooshang.tmdb.core.utils.tmdb_uri
+import com.hooshang.tmdb.core.utils.twitter_uri
 
 @Composable
 fun ShareDialog(
@@ -42,11 +42,11 @@ fun ShareDialog(
     val twitterIndex = 2
 
     val isInstagramIdNotNull =
-        externalIds[instagramIndex] != stringResource(R.string.null_text)
+        externalIds[instagramIndex] != stringResource(R.string.cmp_null_text)
     val isTwitterIdNotNull =
-        externalIds[twitterIndex] != stringResource(R.string.null_text)
+        externalIds[twitterIndex] != stringResource(R.string.cmp_null_text)
     val isIMDBIdNotNull =
-        externalIds[imdbIndex] != stringResource(R.string.null_text)
+        externalIds[imdbIndex] != stringResource(R.string.cmp_null_text)
 
     Dialog(
         onDismissRequest = { onDismiss() }
@@ -68,13 +68,13 @@ fun ShareDialog(
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(TMDBTheme.icons.close),
-                    contentDescription = stringResource(R.string.close),
+                    contentDescription = stringResource(R.string.label_close),
                     tint = TMDBTheme.colors.gray
                 )
             }
 
             Text(
-                text = stringResource(R.string.open_in),
+                text = stringResource(R.string.label_open_in),
                 style = TMDBTheme.typography.h6,
                 color = TMDBTheme.colors.white,
                 modifier = Modifier.padding(
@@ -96,39 +96,39 @@ fun ShareDialog(
                 TMDBIconButton(
                     enabled = isInstagramIdNotNull,
                     onClick = {
-                        onClock("$instagramUri${externalIds[instagramIndex]}")
+                        onClock("$instagram_uri${externalIds[instagramIndex]}")
                     }
                 ) {
                     ImageWrapper(
                         shouldNotHaveAlpha = isInstagramIdNotNull,
-                        image = R.drawable.instagram,
-                        contentDescription = stringResource(R.string.share_instagram_link)
+                        image = R.drawable.ic_instagram,
+                        contentDescription = stringResource(R.string.prefix_share_instagram_link)
                     )
                 }
 
                 TMDBIconButton(
                     enabled = isTwitterIdNotNull,
                     onClick = {
-                        onClock("$twitterUri${externalIds[twitterIndex]}")
+                        onClock("$twitter_uri${externalIds[twitterIndex]}")
                     }
                 ) {
                     ImageWrapper(
                         shouldNotHaveAlpha = isTwitterIdNotNull,
-                        image = R.drawable.twitter,
-                        contentDescription = stringResource(R.string.share_twitter_link)
+                        image = R.drawable.ic_twitter,
+                        contentDescription = stringResource(R.string.prefix_share_twitter_link)
                     )
                 }
 
                 TMDBIconButton(
                     enabled = isIMDBIdNotNull,
                     onClick = {
-                        onClock("$imdbUri${externalIds[imdbIndex]}")
+                        onClock("$imdb_uri${externalIds[imdbIndex]}")
                     }
                 ) {
                     ImageWrapper(
                         shouldNotHaveAlpha = isIMDBIdNotNull,
-                        image = R.drawable.imdb,
-                        contentDescription = stringResource(R.string.share_imdb_link)
+                        image = R.drawable.ic_imdb,
+                        contentDescription = stringResource(R.string.prefix_share_imdb_link)
                     )
                 }
 
@@ -137,14 +137,14 @@ fun ShareDialog(
                         val titleSplit = movieTitle?.split(" ")
                         val titleSplitPlusDash = titleSplit?.joinToString(separator = "-") { it }
                         if (titleSplitPlusDash != null) {
-                            onClock("$tmdbUri${movieId}-${titleSplitPlusDash}")
+                            onClock("$tmdb_uri${movieId}-${titleSplitPlusDash}")
                         }
                     }
                 ) {
                     ImageWrapper(
                         shouldNotHaveAlpha = true,
-                        image = R.drawable.tmdb,
-                        contentDescription = stringResource(R.string.share_tmdb_link)
+                        image = R.drawable.ic_tmdb,
+                        contentDescription = stringResource(R.string.prefix_share_tmdb_link)
                     )
                 }
             }

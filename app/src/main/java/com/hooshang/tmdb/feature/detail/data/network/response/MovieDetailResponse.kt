@@ -1,5 +1,6 @@
 package com.hooshang.tmdb.feature.detail.data.network.response
 
+import androidx.annotation.Keep
 import com.hooshang.tmdb.core.data.model.local.MovieEntity
 import com.hooshang.tmdb.feature.detail.data.db.entity.CreditEntity
 import com.hooshang.tmdb.feature.detail.data.db.entity.DetailEntity
@@ -7,6 +8,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.math.RoundingMode
 
+@Keep
 @Serializable
 data class MovieDetailResponse(
     val id: Int,

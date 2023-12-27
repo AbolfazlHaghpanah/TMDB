@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.hooshang.tmdb.core.utils.imageUrl
+import com.hooshang.tmdb.core.utils.image_url
 import com.hooshang.tmdb.feature.detail.domain.model.CastOrCrewDomainModel
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import kotlinx.collections.immutable.PersistentList
@@ -48,7 +48,7 @@ fun OverviewContentWithCastAndCrew(movieDetailDomainModel: MovieDetailDomainMode
                 top = 24.dp,
                 start = 24.dp
             ),
-        text = stringResource(R.string.cast_and_crew),
+        text = stringResource(R.string.label_cast_and_crew),
         style = TMDBTheme.typography.subtitle1,
         color = TMDBTheme.colors.white,
     )
@@ -89,7 +89,7 @@ private fun CastCrewLazyRow(
                     )
 
                     Text(
-                        text = castOrCrew.job ?: stringResource(R.string.actor),
+                        text = castOrCrew.job ?: stringResource(R.string.label_actor),
                         style = TMDBTheme.typography.overLine,
                         color = TMDBTheme.colors.gray
                     )
@@ -103,12 +103,12 @@ private fun CastCrewLazyRow(
 @Composable
 private fun CreditImageWrapper(castOrCrewProfilePath: String?) {
     AsyncImage(
-        model = "$imageUrl${castOrCrewProfilePath}",
+        model = "$image_url${castOrCrewProfilePath}",
         contentDescription = null,
         contentScale = ContentScale.FillBounds,
         modifier = Modifier
             .size(40.dp)
             .clip(TMDBTheme.shapes.rounded),
-        error = painterResource(id = R.drawable.profileerror)
+        error = painterResource(id = R.drawable.img_profile_error)
     )
 }

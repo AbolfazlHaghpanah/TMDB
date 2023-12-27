@@ -62,7 +62,7 @@ private fun TMDBModalBottomSheet(
         TrashIcon()
 
         Text(
-            text = stringResource(R.string.are_you_sure),
+            text = stringResource(R.string.desc_are_you_sure),
             style = TMDBTheme.typography.h6,
             color = TMDBTheme.colors.white
         )
@@ -70,7 +70,7 @@ private fun TMDBModalBottomSheet(
         Text(
             modifier = Modifier
                 .padding(top = 18.dp, bottom = 48.dp, start = 56.dp, end = 56.dp),
-            text = stringResource(R.string.delete_alert),
+            text = stringResource(R.string.desc_delete_alert),
             style = TMDBTheme.typography.caption,
             color = TMDBTheme.colors.gray,
             textAlign = TextAlign.Center
@@ -86,7 +86,7 @@ private fun TMDBModalBottomSheet(
         ) {
             Text(
                 modifier = Modifier.padding(vertical = 10.dp),
-                text = stringResource(R.string.cancel),
+                text = stringResource(R.string.label_cancel),
                 style = TMDBTheme.typography.button
             )
         }
@@ -99,7 +99,7 @@ private fun TMDBModalBottomSheet(
         ) {
 
             Text(
-                text = stringResource(R.string.delete),
+                text = stringResource(R.string.label_delete),
                 style = TMDBTheme.typography.button,
                 color = TMDBTheme.colors.error
             )

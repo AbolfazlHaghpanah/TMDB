@@ -21,7 +21,7 @@ import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import com.hooshang.tmdb.core.ui.shimmer.ifShimmerActive
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.hooshang.tmdb.core.utils.imageUrl
+import com.hooshang.tmdb.core.utils.image_url
 import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 
 @Composable
@@ -45,7 +45,7 @@ fun PagerMovieItem(
                 modifier = Modifier
                     .zIndex(-1f)
                     .fillMaxSize(),
-                model = imageUrl + movie.backdropPath,
+                model = image_url + movie.backdropPath,
                 contentScale = ContentScale.FillBounds,
                 contentDescription = null,
             )

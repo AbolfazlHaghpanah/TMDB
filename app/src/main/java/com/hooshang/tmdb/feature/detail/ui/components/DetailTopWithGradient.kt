@@ -26,7 +26,7 @@ import coil.compose.AsyncImage
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.component.TextIcon
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.hooshang.tmdb.core.utils.imageUrl
+import com.hooshang.tmdb.core.utils.image_url
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 
 @Composable
@@ -62,7 +62,7 @@ fun DetailTopWithGradient(
                 modifier = Modifier
                     .align(Alignment.Start)
                     .padding(bottom = 8.dp, top = 24.dp, start = 24.dp),
-                text = stringResource(R.string.overview),
+                text = stringResource(R.string.label_overview),
                 color = TMDBTheme.colors.white,
                 style = TMDBTheme.typography.subtitle1
             )
@@ -81,10 +81,10 @@ private fun ForegroundImage(
             .aspectRatio(1.1f)
             .padding(start = 85.dp, end = 85.dp)
             .clip(TMDBTheme.shapes.medium),
-        model = "$imageUrl${movieDetailPosterPath}",
+        model = "$image_url${movieDetailPosterPath}",
         contentDescription = null,
         contentScale = ContentScale.Crop,
-        error = painterResource(id = R.drawable.videoimageerror)
+        error = painterResource(id = R.drawable.img_video_image_error)
     )
 }
 
@@ -106,10 +106,10 @@ private fun BackgroundImage(movieDetailPosterPath: String) {
                     drawRect(gradient)
                 }
             },
-        model = "$imageUrl${movieDetailPosterPath}",
+        model = "$image_url${movieDetailPosterPath}",
         contentDescription = null,
         contentScale = ContentScale.Crop,
-        error = painterResource(id = R.drawable.videoimageerror)
+        error = painterResource(id = R.drawable.img_video_image_error)
     )
 }
 
@@ -137,7 +137,7 @@ private fun MovieInfo(movieDetailDomainModel: MovieDetailDomainModel) {
 
         TextIcon(
             iconId = TMDBTheme.icons.clock,
-            text = "${movieDetailDomainModel.runtime} " + stringResource(R.string.minutes)
+            text = "${movieDetailDomainModel.runtime} " + stringResource(R.string.label_minutes)
         )
 
         if (movieDetailDomainModel.genres.isNotEmpty()) {

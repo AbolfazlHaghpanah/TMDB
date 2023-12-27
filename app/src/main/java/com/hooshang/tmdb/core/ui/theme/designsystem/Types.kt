@@ -1,9 +1,9 @@
 package com.hooshang.tmdb.core.ui.theme.designsystem
 
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -11,10 +11,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.hooshang.tmdb.R
 
-val montserratFont = FontFamily(Font(R.font.montserrat_regular))
+val montserratFont = FontFamily(Font(R.font.montserrat_regular, FontWeight.Normal))
 
 @Immutable
-data class TMDBType(
+data class Type(
     val h6: TextStyle = TextStyle(
         fontFamily = montserratFont,
         fontWeight = FontWeight.Bold,
@@ -64,16 +64,19 @@ data class TMDBType(
     )
 ) {
     @Composable
-    fun toTypography(): Typography {
-        return MaterialTheme.typography.copy(
-            h6 = h6,
-            subtitle1 = subtitle1,
-            subtitle2 = subtitle2,
-            body1 = body1,
-            body2 = body2,
-            button = button,
-            caption = caption,
-            overline = overLine
-        )
-    }
+    fun toTypography(): Typography = Typography(
+        defaultFontFamily = montserratFont,
+        h6 = h6,
+        subtitle1 = subtitle1,
+        subtitle2 = subtitle2,
+        body1 = body1,
+        body2 = body2,
+        button = button,
+        caption = caption,
+        overline = overLine
+    )
+}
+
+val LocalTypography = staticCompositionLocalOf {
+    Type()
 }
