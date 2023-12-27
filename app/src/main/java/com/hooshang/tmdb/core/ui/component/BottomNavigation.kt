@@ -10,7 +10,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
@@ -21,8 +20,6 @@ fun TMDBBottomNavigation(
     isSelected: (String) -> Boolean,
     onNavItemClick: (String) -> Unit
 ) {
-    val context = LocalContext.current
-
     BottomNavigation(
         modifier = Modifier
             .navigationBarsPadding(),
@@ -42,12 +39,12 @@ fun TMDBBottomNavigation(
                     Icon(
                         modifier = Modifier,
                         imageVector = ImageVector.vectorResource(id = item.icon),
-                        contentDescription = item.label.asString(context),
+                        contentDescription = item.label.asString(),
                     )
                 },
                 label = {
                     Text(
-                        text = item.label.asString(context),
+                        text = item.label.asString(),
                         style = MaterialTheme.typography.caption
                     )
                 },
