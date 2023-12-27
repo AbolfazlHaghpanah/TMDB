@@ -21,7 +21,7 @@ interface DetailLocalDataSource {
 
     suspend fun insertDetailMoviesWithGenres(detailMovieWithGenreCrossRef: List<DetailMovieWithGenreCrossRef>)
 
-    suspend fun insertFavoriteMovieGenre(genres: List<FavoriteMovieGenreCrossRef>)
+    suspend fun insertFavoriteMovieGenres(genres: List<FavoriteMovieGenreCrossRef>)
 
     suspend fun insertDetailMoviesWithSimilarMovies(detailMovieWithSimilarMoviesCrossRef: List<DetailMovieWithSimilarMoviesCrossRef>)
 

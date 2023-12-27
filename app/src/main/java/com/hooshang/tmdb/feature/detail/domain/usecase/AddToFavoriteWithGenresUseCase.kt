@@ -10,6 +10,6 @@ class AddToFavoriteWithGenresUseCase @Inject constructor(
     private val coroutineContext : CoroutineContext
 ) {
     suspend operator fun invoke(movieId: Int, genres: List<Int>) = withContext(coroutineContext) {
-        repository.addToFavoriteWithGenre(movieId, genres)
+        repository.addToFavoriteWithGenres(movieId, genres)
     }
 }

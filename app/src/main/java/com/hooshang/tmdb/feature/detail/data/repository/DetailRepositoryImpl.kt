@@ -86,8 +86,8 @@ class DetailRepositoryImpl @Inject constructor(
 
     override suspend fun observeExistInFavorite(id: Int) = localDataSource.observeExistInFavorite(id)
 
-    override suspend fun addToFavoriteWithGenre(movieId: Int, genres: List<Int>) {
-        localDataSource.insertFavoriteMovieGenre(
+    override suspend fun addToFavoriteWithGenres(movieId: Int, genres: List<Int>) {
+        localDataSource.insertFavoriteMovieGenres(
             genres.map {
                 FavoriteMovieGenreCrossRef(
                     movieId = movieId,

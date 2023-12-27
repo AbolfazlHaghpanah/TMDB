@@ -31,8 +31,8 @@ class DetailLocalDataSourceImpl  @Inject constructor(
     override suspend fun insertDetailMoviesWithGenres(detailMovieWithGenreCrossRef: List<DetailMovieWithGenreCrossRef>) =
         detailDao.insertDetailMoviesWithGenres(detailMovieWithGenreCrossRef)
 
-    override suspend fun insertFavoriteMovieGenre(genres: List<FavoriteMovieGenreCrossRef>) =
-        detailDao.insertFavoriteMovieGenre(genres)
+    override suspend fun insertFavoriteMovieGenres(genres: List<FavoriteMovieGenreCrossRef>) =
+        detailDao.insertFavoriteMovieGenres(genres)
 
     override suspend fun insertDetailMoviesWithSimilarMovies(detailMovieWithSimilarMoviesCrossRef: List<DetailMovieWithSimilarMoviesCrossRef>) =
         detailDao.insertDetailMoviesWithSimilarMovies(detailMovieWithSimilarMoviesCrossRef)
