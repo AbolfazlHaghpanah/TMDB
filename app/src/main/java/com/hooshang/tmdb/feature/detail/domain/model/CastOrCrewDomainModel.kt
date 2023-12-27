@@ -4,5 +4,5 @@ data class CastOrCrewDomainModel(
     val id: Int,
     val name: String,
     val profilePath: String?,
-    val job: String? = null
+    val job: String
 )

@@ -1,5 +1,6 @@
 package com.hooshang.tmdb.feature.detail.ui
 
+import android.util.Log
 import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -13,7 +14,8 @@ import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
 import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import com.hooshang.tmdb.feature.detail.domain.usecase.AddFavoriteUseCase
 import com.hooshang.tmdb.feature.detail.domain.usecase.FetchDetailUseCase
-import com.hooshang.tmdb.feature.detail.domain.usecase.ObserveDetailUseCase
+import com.hooshang.tmdb.feature.detail.domain.usecase.GetDetailUseCase
+import com.hooshang.tmdb.feature.detail.domain.usecase.ObserveExistInFavoriteUseCase
 import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsAction
 import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsState
 import com.hooshang.tmdb.feature.favorite.domain.use_case.DeleteFromFavoriteUseCase
@@ -29,8 +31,9 @@ class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val addFavoriteUseCase: AddFavoriteUseCase,
     private val fetchDetailUseCase: FetchDetailUseCase,
-    private val observeDetailUseCase: ObserveDetailUseCase,
+    private val getDetailUseCase: GetDetailUseCase,
     private val deleteFromFavoriteUseCase: DeleteFromFavoriteUseCase,
+    private val observeExistInFavoriteUseCase: ObserveExistInFavoriteUseCase,
     private val snackBarManager: SnackBarManager
 ) : BaseViewModel<DetailsAction, DetailsState>() {
 
@@ -39,6 +42,7 @@ class DetailViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             fetchMovieDetail()
+            observeExistInFavorite()
         }
     }
 
@@ -52,8 +56,28 @@ class DetailViewModel @Inject constructor(
 
     override fun setInitialState(): DetailsState = DetailsState()
 
-    private suspend fun observeDetailMovieWithAllRelations() {
-        observeDetailUseCase(id)
+    private suspend fun getMovieDetails() {
+        try {
+            val movieDetails = getDetailUseCase(id)
+            setState { copy(movie = movieDetails) }
+        } catch (t: Throwable) {
+            snackBarManager.sendMessage(
+                snackBarMassage = SnackBarMassage(
+                    snackBarMessage = databaseErrorCatchMessage(t),
+                    snackBarActionLabel = StringResWrapper(R.string.try_again),
+                    snackBarAction = {
+                        viewModelScope.launch(Dispatchers.IO) {
+                            fetchMovieDetail()
+                        }
+                    },
+                    snackBarDuration = SnackbarDuration.Indefinite
+                )
+            )
+        }
+    }
+
+    private suspend fun observeExistInFavorite() {
+        observeExistInFavoriteUseCase(id)
             .catch {
                 snackBarManager.sendMessage(
                     snackBarMassage = SnackBarMassage(
@@ -69,9 +93,12 @@ class DetailViewModel @Inject constructor(
                 )
             }
             .distinctUntilChanged()
-            .collect { domainModel ->
-                setState { domainModel.toDetailState() }
+            .collect {
+                setState {
+                    copy(movie = state.value.movie.copy(isFavorite = it))
+                }
             }
+
     }
 
     private suspend fun fetchMovieDetail() {
@@ -86,7 +113,7 @@ class DetailViewModel @Inject constructor(
 
                 is Result.Success<*> -> {
                     setState { copy(isLoading = false) }
-                    observeDetailMovieWithAllRelations()
+                    getMovieDetails()
                 }
 
                 is Result.Error -> {
@@ -102,7 +129,7 @@ class DetailViewModel @Inject constructor(
                             snackBarActionLabel = StringResWrapper(R.string.try_again)
                         )
                     )
-                    observeDetailMovieWithAllRelations()
+                    getMovieDetails()
                 }
             }
         }
@@ -144,10 +171,4 @@ class DetailViewModel @Inject constructor(
             }
         }
     }
-
-    private fun MovieDetailDomainModel.toDetailState(): DetailsState =
-        DetailsState(
-            movie = this,
-            isLoading = false
-        )
 }

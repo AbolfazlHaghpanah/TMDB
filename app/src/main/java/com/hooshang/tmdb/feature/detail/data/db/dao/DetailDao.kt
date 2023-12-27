@@ -19,10 +19,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DetailDao {
     @Query("select * from detail_movies where detailMovieId = :detailMovieId")
-    fun observeMovieDetail(detailMovieId: Int): DetailMovieWithAllRelations?
+    fun getMovieDetail(detailMovieId: Int): DetailMovieWithAllRelations?
 
     @Query("select exists (select 1 from FAVORITE_MOVIE where movieId =:id)")
-    fun existInFavorite(id: Int): Flow<Boolean>
+    fun observeExistInFavorite(id: Int): Flow<Boolean>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovieDetails(detailEntity: DetailEntity)

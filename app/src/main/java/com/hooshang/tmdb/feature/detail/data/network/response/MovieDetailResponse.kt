@@ -45,7 +45,7 @@ data class MovieDetailResponse(
         )
 
     fun toCreditsEntity(): List<CreditEntity> =
-        credits.cast.map { it.toCreditEntity() } + credits.cast.map { it.toCreditEntity() }
+        credits.crew.map { it.toCreditEntity() } + credits.cast.map { it.toCreditEntity() }
 
     fun toMovieEntity(): MovieEntity =
         MovieEntity(

@@ -13,9 +13,9 @@ import com.hooshang.tmdb.feature.favorite.data.model.local.relation.FavoriteMovi
 import kotlinx.coroutines.flow.Flow
 
 interface DetailLocalDataSource {
-    fun observeMovieDetail(detailMovieId: Int): DetailMovieWithAllRelations?
+    fun getMovieDetail(detailMovieId: Int): DetailMovieWithAllRelations?
 
-    fun existInFavorite(id: Int): Flow<Boolean>
+    fun observeExistInFavorite(id: Int): Flow<Boolean>
 
     suspend fun insertMovieDetails(detailEntity: DetailEntity)
 

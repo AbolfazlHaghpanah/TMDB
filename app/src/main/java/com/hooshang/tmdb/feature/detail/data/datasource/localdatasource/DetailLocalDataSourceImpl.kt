@@ -19,11 +19,11 @@ class DetailLocalDataSourceImpl  @Inject constructor(
     private val detailDao: DetailDao,
     private val movieDao: MovieDao
 ) : DetailLocalDataSource {
-    override fun observeMovieDetail(detailMovieId: Int): DetailMovieWithAllRelations? =
-        detailDao.observeMovieDetail(detailMovieId)
+    override fun getMovieDetail(detailMovieId: Int): DetailMovieWithAllRelations? =
+        detailDao.getMovieDetail(detailMovieId)
 
-    override fun existInFavorite(id: Int): Flow<Boolean> =
-        detailDao.existInFavorite(id)
+    override fun observeExistInFavorite(id: Int): Flow<Boolean> =
+        detailDao.observeExistInFavorite(id)
 
     override suspend fun insertMovieDetails(detailEntity: DetailEntity) =
         detailDao.insertMovieDetails(detailEntity)

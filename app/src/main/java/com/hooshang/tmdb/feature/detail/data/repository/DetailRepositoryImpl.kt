@@ -12,37 +12,15 @@ import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import com.hooshang.tmdb.feature.detail.domain.repository.DetailRepository
 import com.hooshang.tmdb.feature.favorite.data.model.local.entity.FavoriteMovieEntity
 import com.hooshang.tmdb.feature.favorite.data.model.local.relation.FavoriteMovieGenreCrossRef
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class DetailRepositoryImpl @Inject constructor(
     private val localDataSource: DetailLocalDataSource,
     private val remoteDataSource: DetailRemoteDataSource
 ) : DetailRepository {
-    override suspend fun observeMovieDetails(id: Int): Flow<MovieDetailDomainModel> {
-        val dataFlow = localDataSource.observeMovieDetail(id)
-        val isFavoriteFlow = localDataSource.existInFavorite(id)
-
-        return flowOf(
-            dataFlow?.toDomainModel()
-        ).combine(isFavoriteFlow) { movie, isFavorite ->
-            movie?.copy(isFavorite = isFavorite) ?: throw NetworkErrorException.EmptyBodyError
-        }
-    }
-
-    override suspend fun addToFavorite(movieId: Int, genres: List<Int>) {
-        localDataSource.insertFavoriteMovieGenre(
-            genres.map {
-                FavoriteMovieGenreCrossRef(
-                    movieId = movieId,
-                    genreId = it
-                )
-            }
-        )
-        localDataSource.addToFavorite(FavoriteMovieEntity(movieId))
-    }
+    override suspend fun getMovieDetails(id: Int): MovieDetailDomainModel =
+        localDataSource.getMovieDetail(id)?.toDomainModel()
+            ?: throw NetworkErrorException.EmptyBodyError
 
     override suspend fun fetchMovieDetail(id: Int) {
         val movieDetailDto = remoteDataSource.getMovieDetail(id)
@@ -104,5 +82,19 @@ class DetailRepositoryImpl @Inject constructor(
                 )
             }
         )
+    }
+
+    override suspend fun observeExistInFavorite(id: Int) = localDataSource.observeExistInFavorite(id)
+
+    override suspend fun addToFavorite(movieId: Int, genres: List<Int>) {
+        localDataSource.insertFavoriteMovieGenre(
+            genres.map {
+                FavoriteMovieGenreCrossRef(
+                    movieId = movieId,
+                    genreId = it
+                )
+            }
+        )
+        localDataSource.addToFavorite(FavoriteMovieEntity(movieId))
     }
 }
