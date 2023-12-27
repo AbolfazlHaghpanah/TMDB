@@ -106,8 +106,7 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     Scaffold(
-                        modifier = Modifier
-                            .imePadding(),
+                        modifier = Modifier.imePadding(),
                         scaffoldState = scaffoldState,
                         bottomBar = {
                             AnimatedVisibility(

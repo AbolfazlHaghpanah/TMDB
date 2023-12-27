@@ -1,6 +1,7 @@
 package com.hooshang.tmdb.feature.search.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
@@ -77,6 +78,7 @@ private fun SearchScreen(
     Column(
         modifier = Modifier
             .statusBarsPadding()
+            .fillMaxSize()
             .padding(vertical = 8.dp, horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

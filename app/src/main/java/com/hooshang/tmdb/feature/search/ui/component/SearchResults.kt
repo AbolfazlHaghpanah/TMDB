@@ -16,14 +16,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -38,12 +42,23 @@ import com.hooshang.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainM
 import kotlinx.collections.immutable.PersistentList
 import java.util.Locale
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchResults(
     searchResult: PersistentList<SearchMovieWithGenreDomainModel>,
     onClick: (Int) -> Unit
 ) {
+    val lazyListState = rememberLazyListState()
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(lazyListState.isScrollInProgress){
+        if (lazyListState.isScrollInProgress){
+            keyboardController?.hide()
+        }
+    }
+
     LazyColumn(
+        state = lazyListState,
         contentPadding = PaddingValues(top = 32.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
