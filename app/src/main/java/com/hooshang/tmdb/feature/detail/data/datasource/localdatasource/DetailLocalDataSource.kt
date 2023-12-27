@@ -31,7 +31,7 @@ interface DetailLocalDataSource {
 
     suspend fun insertDetailMoviesWithCredits(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>)
 
-    suspend fun addToFavorite(movieEntity: FavoriteMovieEntity)
+    suspend fun insertToFavorite(movieEntity: FavoriteMovieEntity)
 
     suspend fun insertMovies(movie: List<MovieEntity>)
 }

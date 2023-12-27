@@ -46,8 +46,8 @@ class DetailLocalDataSourceImpl  @Inject constructor(
     override suspend fun insertDetailMoviesWithCredits(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>) =
         detailDao.insertDetailMoviesWithCredits(detailMovieWithCreditCrossRef)
 
-    override suspend fun addToFavorite(movieEntity: FavoriteMovieEntity) =
-        detailDao.addToFavorite(movieEntity)
+    override suspend fun insertToFavorite(movieEntity: FavoriteMovieEntity) =
+        detailDao.insertToFavorite(movieEntity)
 
     override suspend fun insertMovies(movie: List<MovieEntity>) =
         movieDao.insertMovies(movie)

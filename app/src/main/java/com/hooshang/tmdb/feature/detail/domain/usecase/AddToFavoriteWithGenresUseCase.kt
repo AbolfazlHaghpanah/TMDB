@@ -5,11 +5,11 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class AddFavoriteUseCase @Inject constructor(
+class AddToFavoriteWithGenresUseCase @Inject constructor(
     private val repository: DetailRepository,
     private val coroutineContext : CoroutineContext
 ) {
     suspend operator fun invoke(movieId: Int, genres: List<Int>) = withContext(coroutineContext) {
-        repository.addToFavorite(movieId, genres)
+        repository.addToFavoriteWithGenre(movieId, genres)
     }
 }

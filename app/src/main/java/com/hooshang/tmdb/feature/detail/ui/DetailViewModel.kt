@@ -1,6 +1,5 @@
 package com.hooshang.tmdb.feature.detail.ui
 
-import android.util.Log
 import androidx.compose.material.SnackbarDuration
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -11,8 +10,7 @@ import com.hooshang.tmdb.core.utils.SnackBarManager
 import com.hooshang.tmdb.core.utils.SnackBarMassage
 import com.hooshang.tmdb.core.utils.StringResWrapper
 import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
-import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
-import com.hooshang.tmdb.feature.detail.domain.usecase.AddFavoriteUseCase
+import com.hooshang.tmdb.feature.detail.domain.usecase.AddToFavoriteWithGenresUseCase
 import com.hooshang.tmdb.feature.detail.domain.usecase.FetchDetailUseCase
 import com.hooshang.tmdb.feature.detail.domain.usecase.GetDetailUseCase
 import com.hooshang.tmdb.feature.detail.domain.usecase.ObserveExistInFavoriteUseCase
@@ -29,11 +27,11 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val addFavoriteUseCase: AddFavoriteUseCase,
-    private val fetchDetailUseCase: FetchDetailUseCase,
     private val getDetailUseCase: GetDetailUseCase,
-    private val deleteFromFavoriteUseCase: DeleteFromFavoriteUseCase,
+    private val fetchDetailUseCase: FetchDetailUseCase,
     private val observeExistInFavoriteUseCase: ObserveExistInFavoriteUseCase,
+    private val addToFavoriteWithGenresUseCase: AddToFavoriteWithGenresUseCase,
+    private val deleteFromFavoriteUseCase: DeleteFromFavoriteUseCase,
     private val snackBarManager: SnackBarManager
 ) : BaseViewModel<DetailsAction, DetailsState>() {
 
@@ -48,7 +46,7 @@ class DetailViewModel @Inject constructor(
 
     override fun onAction(action: DetailsAction) {
         when (action) {
-            is DetailsAction.AddToFavorite -> addToFavorite()
+            is DetailsAction.AddToFavorite -> addToFavoriteWithGenres()
             is DetailsAction.RemoveFromFavorite -> removeFromFavorite()
             else -> {}
         }
@@ -135,10 +133,10 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    private fun addToFavorite() {
+    private fun addToFavoriteWithGenres() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                addFavoriteUseCase(
+                addToFavoriteWithGenresUseCase(
                     state.value.movie.id,
                     state.value.movie.genres.map { it.first }
                 )
@@ -147,7 +145,7 @@ class DetailViewModel @Inject constructor(
                     snackBarMassage = SnackBarMassage(
                         snackBarMessage = databaseErrorCatchMessage(t),
                         snackBarActionLabel = StringResWrapper(R.string.try_again),
-                        snackBarAction = { addToFavorite() },
+                        snackBarAction = { addToFavoriteWithGenres() },
                         snackBarDuration = SnackbarDuration.Short
                     )
                 )

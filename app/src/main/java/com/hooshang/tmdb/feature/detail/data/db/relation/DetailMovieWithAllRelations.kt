@@ -51,6 +51,6 @@ data class DetailMovieWithAllRelations(
         runtime = detailEntity.runtime,
         externalIds = detailEntity.externalIds,
         similar = similar.orEmpty().map { it.toDomainModel() },
-        isFavorite = detailEntity.isFavorite
+        isFavorite = false
     )
 }

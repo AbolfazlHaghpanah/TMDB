@@ -43,7 +43,7 @@ interface DetailDao {
     suspend fun insertMoviesWithGenres(movieWithGenre: List<MovieWithGenreCrossRef>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addToFavorite(movie: FavoriteMovieEntity)
+    suspend fun insertToFavorite(movie: FavoriteMovieEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoriteMovieGenre(genres: List<FavoriteMovieGenreCrossRef>)
