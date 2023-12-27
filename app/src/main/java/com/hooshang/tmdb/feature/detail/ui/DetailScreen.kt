@@ -82,7 +82,7 @@ private fun DetailScreen(
         LinearProgressIndicator(
             modifier = Modifier.fillMaxWidth()
         )
-    } else if (detailsState.movie.id != -1 && detailsState.movie.genres.isNotEmpty()) {
+    } else if (detailsState.movie.id != -1) {
         Column(
             modifier = Modifier
                 .navigationBarsPadding()
@@ -123,7 +123,11 @@ private fun DetailScreen(
                     MovieInfo(
                         releaseDate = detailsState.movie.releaseDate.split("-")[0],
                         runtime = detailsState.movie.runtime,
-                        genre = detailsState.movie.genres[0].second,
+                        genre = if (detailsState.movie.genres.isNotEmpty()) {
+                            detailsState.movie.genres[0].second
+                        } else {
+                            ""
+                        },
                         voteAverage = detailsState.movie.voteAverage.toString()
                     )
                 }

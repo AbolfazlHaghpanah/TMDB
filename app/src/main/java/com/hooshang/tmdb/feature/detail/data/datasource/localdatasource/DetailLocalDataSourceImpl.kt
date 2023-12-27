@@ -5,8 +5,7 @@ import com.hooshang.tmdb.core.data.source.local.MovieDao
 import com.hooshang.tmdb.feature.detail.data.db.dao.DetailDao
 import com.hooshang.tmdb.feature.detail.data.db.entity.CreditEntity
 import com.hooshang.tmdb.feature.detail.data.db.entity.DetailEntity
-import com.hooshang.tmdb.feature.detail.data.db.relation.DetailMovieWithMovieAndGenre
-import com.hooshang.tmdb.feature.detail.data.db.relation.SimilarMovieWithGenre
+import com.hooshang.tmdb.feature.detail.data.db.relation.DetailMovieWithAllRelations
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithCreditCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithGenreCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
@@ -20,14 +19,8 @@ class DetailLocalDataSourceImpl  @Inject constructor(
     private val detailDao: DetailDao,
     private val movieDao: MovieDao
 ) : DetailLocalDataSource {
-    override fun observeMovieDetail(detailMovieId: Int): Flow<DetailMovieWithMovieAndGenre?> =
+    override fun observeMovieDetail(detailMovieId: Int): DetailMovieWithAllRelations? =
         detailDao.observeMovieDetail(detailMovieId)
-
-    override fun observeCredits(id: Int): Flow<List<CreditEntity>> =
-        detailDao.observeCredits(id)
-
-    override fun observeSimilar(id: Int): Flow<List<SimilarMovieWithGenre>> =
-        detailDao.observeSimilarMovie(id)
 
     override fun existInFavorite(id: Int): Flow<Boolean> =
         detailDao.existInFavorite(id)

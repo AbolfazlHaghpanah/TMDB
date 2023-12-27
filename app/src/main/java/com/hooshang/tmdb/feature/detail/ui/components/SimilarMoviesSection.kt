@@ -46,7 +46,7 @@ fun SimilarMoviesSection(
                     onClick = { onClick(movie.id) },
                     title = movie.title,
                     image = movie.posterPath ?: "",
-                    genres = movie.genreIds,
+                    genres = movie.genres,
                     vote = String.format("%.1f", movie.voteAverage),
                     isShimmer = movies.isEmpty()
                 )

@@ -7,8 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.hooshang.tmdb.feature.detail.data.db.entity.CreditEntity
 import com.hooshang.tmdb.feature.detail.data.db.entity.DetailEntity
-import com.hooshang.tmdb.feature.detail.data.db.relation.DetailMovieWithMovieAndGenre
-import com.hooshang.tmdb.feature.detail.data.db.relation.SimilarMovieWithGenre
+import com.hooshang.tmdb.feature.detail.data.db.relation.DetailMovieWithAllRelations
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithCreditCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithGenreCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
@@ -20,25 +19,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DetailDao {
     @Query("select * from detail_movies where detailMovieId = :detailMovieId")
-    fun observeMovieDetail(detailMovieId: Int): Flow<DetailMovieWithMovieAndGenre>
-
-    @Query(
-        """
-            select credits.* from credits
-            left join detailmoviewithcreditcrossref on credits.creditId = detailmoviewithcreditcrossref.creditId
-            where detailmoviewithcreditcrossref.detailMovieId = :id
-        """
-    )
-    fun observeCredits(id: Int): Flow<List<CreditEntity>>
-
-    @Query(
-        """
-            select movies.* from movies
-            left join detailmoviewithsimilarmoviescrossref on movies.id = detailmoviewithsimilarmoviescrossref.id 
-            where detailmoviewithsimilarmoviescrossref.detailMovieId = :id
-        """
-    )
-    fun observeSimilarMovie(id: Int): Flow<List<SimilarMovieWithGenre>>
+    fun observeMovieDetail(detailMovieId: Int): DetailMovieWithAllRelations?
 
     @Query("select exists (select 1 from FAVORITE_MOVIE where movieId =:id)")
     fun existInFavorite(id: Int): Flow<Boolean>

@@ -3,8 +3,7 @@ package com.hooshang.tmdb.feature.detail.data.datasource.localdatasource
 import com.hooshang.tmdb.core.data.model.local.MovieEntity
 import com.hooshang.tmdb.feature.detail.data.db.entity.CreditEntity
 import com.hooshang.tmdb.feature.detail.data.db.entity.DetailEntity
-import com.hooshang.tmdb.feature.detail.data.db.relation.DetailMovieWithMovieAndGenre
-import com.hooshang.tmdb.feature.detail.data.db.relation.SimilarMovieWithGenre
+import com.hooshang.tmdb.feature.detail.data.db.relation.DetailMovieWithAllRelations
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithCreditCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithGenreCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
@@ -14,11 +13,7 @@ import com.hooshang.tmdb.feature.favorite.data.model.local.relation.FavoriteMovi
 import kotlinx.coroutines.flow.Flow
 
 interface DetailLocalDataSource {
-    fun observeMovieDetail(detailMovieId: Int): Flow<DetailMovieWithMovieAndGenre?>
-
-    fun observeCredits(id: Int): Flow<List<CreditEntity>>
-
-    fun observeSimilar(id: Int): Flow<List<SimilarMovieWithGenre>>
+    fun observeMovieDetail(detailMovieId: Int): DetailMovieWithAllRelations?
 
     fun existInFavorite(id: Int): Flow<Boolean>
 

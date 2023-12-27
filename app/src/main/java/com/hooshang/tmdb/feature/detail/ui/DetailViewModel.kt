@@ -37,8 +37,9 @@ class DetailViewModel @Inject constructor(
     private val id: Int = savedStateHandle.get<String>("id")?.toInt() ?: 0
 
     init {
-        observeDetailMovieWithAllRelations()
-        fetchMovieDetail()
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchMovieDetail()
+        }
     }
 
     override fun onAction(action: DetailsAction) {
@@ -51,51 +52,57 @@ class DetailViewModel @Inject constructor(
 
     override fun setInitialState(): DetailsState = DetailsState()
 
-    private fun observeDetailMovieWithAllRelations() {
-        viewModelScope.launch(Dispatchers.IO) {
-            observeDetailUseCase(id)
-                .catch {
-                    snackBarManager.sendMessage(
-                        snackBarMassage = SnackBarMassage(
-                            snackBarMessage = databaseErrorCatchMessage(it),
-                            snackBarActionLabel = StringResWrapper(R.string.label_try_again),
-                            snackBarAction = { observeDetailMovieWithAllRelations() },
-                            snackBarDuration = SnackbarDuration.Short
-                        )
+    private suspend fun observeDetailMovieWithAllRelations() {
+        observeDetailUseCase(id)
+            .catch {
+                snackBarManager.sendMessage(
+                    snackBarMassage = SnackBarMassage(
+                        snackBarMessage = databaseErrorCatchMessage(it),
+                        snackBarActionLabel = StringResWrapper(R.string.try_again),
+                        snackBarAction = {
+                            viewModelScope.launch(Dispatchers.IO) {
+                                fetchMovieDetail()
+                            }
+                        },
+                        snackBarDuration = SnackbarDuration.Short
                     )
-                }
-                .distinctUntilChanged()
-                .collect { domainModel ->
-                    setState { domainModel.toDetailState() }
-                }
-        }
+                )
+            }
+            .distinctUntilChanged()
+            .collect { domainModel ->
+                setState { domainModel.toDetailState() }
+            }
     }
 
-    private fun fetchMovieDetail() {
-        viewModelScope.launch {
-            snackBarManager.dismissSnackBar()
-            resultWrapper {
-                fetchDetailUseCase(id)
-            }.collect { result ->
-                when (result) {
-                    is Result.Loading -> {
-                        setState { copy(isLoading = true) }
-                    }
+    private suspend fun fetchMovieDetail() {
+        snackBarManager.dismissSnackBar()
+        resultWrapper {
+            fetchDetailUseCase(id)
+        }.collect { result ->
+            when (result) {
+                is Result.Loading -> {
+                    setState { copy(isLoading = true) }
+                }
 
-                    is Result.Success<*> -> {
-                        setState { copy(isLoading = false) }
-                    }
+                is Result.Success<*> -> {
+                    setState { copy(isLoading = false) }
+                    observeDetailMovieWithAllRelations()
+                }
 
-                    is Result.Error -> {
-                        setState { copy(isLoading = false) }
-                        snackBarManager.sendMessage(
-                            SnackBarMassage(
-                                snackBarMessage = result.message,
-                                snackBarAction = { fetchMovieDetail() },
-                                snackBarActionLabel = StringResWrapper(R.string.label_try_again)
-                            )
+                is Result.Error -> {
+                    setState { copy(isLoading = false) }
+                    snackBarManager.sendMessage(
+                        SnackBarMassage(
+                            snackBarMessage = result.message,
+                            snackBarAction = {
+                                viewModelScope.launch(Dispatchers.IO) {
+                                    fetchMovieDetail()
+                                }
+                            },
+                            snackBarActionLabel = StringResWrapper(R.string.try_again)
                         )
-                    }
+                    )
+                    observeDetailMovieWithAllRelations()
                 }
             }
         }
@@ -112,7 +119,7 @@ class DetailViewModel @Inject constructor(
                 snackBarManager.sendMessage(
                     snackBarMassage = SnackBarMassage(
                         snackBarMessage = databaseErrorCatchMessage(t),
-                        snackBarActionLabel = StringResWrapper(R.string.label_try_again),
+                        snackBarActionLabel = StringResWrapper(R.string.try_again),
                         snackBarAction = { addToFavorite() },
                         snackBarDuration = SnackbarDuration.Short
                     )
@@ -129,7 +136,7 @@ class DetailViewModel @Inject constructor(
                 snackBarManager.sendMessage(
                     snackBarMassage = SnackBarMassage(
                         snackBarMessage = databaseErrorCatchMessage(t),
-                        snackBarActionLabel = StringResWrapper(R.string.label_try_again),
+                        snackBarActionLabel = StringResWrapper(R.string.try_again),
                         snackBarAction = { removeFromFavorite() },
                         snackBarDuration = SnackbarDuration.Short
                     )

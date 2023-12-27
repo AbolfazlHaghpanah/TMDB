@@ -23,6 +23,6 @@ data class SimilarMovieWithGenre(
         posterPath = similarMovie.posterPath,
         voteAverage = similarMovie.voteAverage.toFloat(),
         title = similarMovie.title,
-        genreIds = genres.joinToString(separator = "|") { it.genreName }
+        genres = genres.joinToString(separator = "|") { it.genreName }
     )
 }
