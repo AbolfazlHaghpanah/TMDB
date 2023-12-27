@@ -17,44 +17,36 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
-import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class HomeModule {
-    @Singleton
     @Binds
     abstract fun bindHomeRepository(impl: HomeRepositoryImpl): HomeRepository
 
-    @Singleton
     @Binds
     abstract fun bindHomeLocalDataSource(impl: HomeLocalDataSourceImpl): HomeLocalDataSource
 
-    @Singleton
     @Binds
     abstract fun bindHomeRemoteDataSource(impl: HomeRemoteDataSourceImpl): HomeRemoteDataSource
 
     companion object {
-        @Singleton
         @Provides
         fun provideMovieDao(appDatabase: AppDatabase): MovieDao {
             return appDatabase.MovieDao()
         }
 
-        @Singleton
         @Provides
         fun provideHomeApi(retrofit: Retrofit): HomeApi {
             return retrofit.create(HomeApi::class.java)
         }
 
-        @Singleton
         @Provides
         fun provideHomeDao(appDatabase: AppDatabase): HomeDao {
             return appDatabase.HomeDao()
         }
 
-        @Singleton
         @Provides
         fun provideDispatcher(): CoroutineContext {
             return Dispatchers.IO
