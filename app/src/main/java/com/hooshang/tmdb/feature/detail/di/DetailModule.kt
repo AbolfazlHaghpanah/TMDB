@@ -6,7 +6,7 @@ import com.hooshang.tmdb.feature.detail.data.datasource.localdatasource.DetailLo
 import com.hooshang.tmdb.feature.detail.data.datasource.remotedatasource.DetailRemoteDataSource
 import com.hooshang.tmdb.feature.detail.data.datasource.remotedatasource.DetailRemoteDataSourceImpl
 import com.hooshang.tmdb.feature.detail.data.db.dao.DetailDao
-import com.hooshang.tmdb.feature.detail.data.network.DetailApi
+import com.hooshang.tmdb.feature.detail.data.network.api.DetailApi
 import com.hooshang.tmdb.feature.detail.data.repository.DetailRepositoryImpl
 import com.hooshang.tmdb.feature.detail.domain.repository.DetailRepository
 import dagger.Binds
@@ -14,8 +14,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
-import javax.inject.Singleton
+import kotlin.coroutines.CoroutineContext
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -36,16 +37,17 @@ abstract class DetailModule {
     ): DetailRemoteDataSource
 
     companion object {
-        @Singleton
         @Provides
         fun provideDetailApi(retrofit: Retrofit): DetailApi {
             return retrofit.create(DetailApi::class.java)
         }
 
-        @Singleton
         @Provides
         fun provideDetailDao(appDatabase: AppDatabase): DetailDao {
             return appDatabase.DetailDao()
         }
+
+        @Provides
+        fun coroutineContextProvider(): CoroutineContext = Dispatchers.IO
     }
 }

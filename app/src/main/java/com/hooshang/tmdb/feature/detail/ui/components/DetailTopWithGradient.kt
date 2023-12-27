@@ -80,12 +80,15 @@ fun MovieInfo(
         modifier = Modifier
             .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
-        TextIcon(
-            iconId = TMDBTheme.icons.calendar,
-            text = releaseDate
-        )
 
-        if (runtime != 0) {
+        if (releaseDate.isNotEmpty()) {
+            TextIcon(
+                iconId = TMDBTheme.icons.calendar,
+                text = releaseDate
+            )
+        }
+
+        if (releaseDate.isNotEmpty() || runtime != 0) {
             Divider(
                 color = TMDBTheme.colors.gray,
                 modifier = Modifier
@@ -93,7 +96,9 @@ fun MovieInfo(
                     .height(16.dp)
                     .align(Alignment.CenterVertically)
             )
+        }
 
+        if (runtime != 0) {
             TextIcon(
                 iconId = TMDBTheme.icons.clock,
                 text = "$runtime " + stringResource(R.string.minutes)
