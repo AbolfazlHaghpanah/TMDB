@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hooshang.tmdb.core.ui.component.TextIcon
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.hooshang.tmdb.core.utils.imageUrl
+import com.hooshang.tmdb.core.utils.image_url
 import com.hooshang.tmdb.feature.favorite.domain.model.FavoriteMovieDomainModel
 
 @Composable
@@ -52,7 +52,7 @@ fun MovieItems(
                 .clip(TMDBTheme.shapes.small)
                 .fillMaxHeight()
                 .width(130.dp),
-            model = imageUrl + movie.backdropPath,
+            model = image_url + movie.backdropPath,
             contentDescription = null,
             contentScale = ContentScale.Crop
         )

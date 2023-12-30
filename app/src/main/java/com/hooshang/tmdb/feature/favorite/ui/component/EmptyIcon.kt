@@ -27,7 +27,7 @@ fun EmptyIcon() {
         )
 
         Text(
-            text = stringResource(R.string.there_is_no_movie_yet),
+            text = stringResource(R.string.desc_there_is_no_movie_yet),
             style = TMDBTheme.typography.subtitle1
         )
     }

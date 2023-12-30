@@ -11,8 +11,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.Dispatchers
-import kotlin.coroutines.CoroutineContext
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -27,11 +25,6 @@ abstract class FavoriteModule {
         @Provides
         fun provideFavoriteMovieDao(appDatabase: AppDatabase): FavoriteMovieDao {
             return appDatabase.favoriteMovieDao()
-        }
-
-        @Provides
-        fun provideDispatcher(): CoroutineContext {
-            return Dispatchers.IO
         }
     }
 }
