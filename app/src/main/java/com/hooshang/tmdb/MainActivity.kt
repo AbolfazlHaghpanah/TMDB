@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
@@ -54,7 +55,8 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var snackBarManager: SnackBarManager
 
-    @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalMaterialApi::class,
+    @OptIn(
+        ExperimentalMaterialNavigationApi::class,
         ExperimentalMaterialApi::class
     )
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,20 +72,19 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
-            val scaffoldState = rememberScaffoldState()
-            val bottomSheetNavigatorState =
-                rememberModalBottomSheetState(
-                    initialValue = ModalBottomSheetValue.Expanded,
-                    skipHalfExpanded = true
-                )
+            val bottomSheetNavigatorState = rememberModalBottomSheetState(
+                initialValue = ModalBottomSheetValue.Expanded,
+                skipHalfExpanded = true
+            )
             val bottomSheetNavigator = remember {
                 BottomSheetNavigator(bottomSheetNavigatorState)
             }
-            val navController = rememberNavController(bottomSheetNavigator)
             val snackBarHostState = remember {
                 SnackbarHostState()
             }
+            val navController = rememberNavController(bottomSheetNavigator)
             val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val scaffoldState = rememberScaffoldState()
             val context = LocalContext.current
 
             navController.addOnDestinationChangedListener(
@@ -108,13 +109,14 @@ class MainActivity : ComponentActivity() {
             }
 
             TMDBTheme {
-
                 ModalBottomSheetLayout(
                     bottomSheetNavigator = bottomSheetNavigator,
-                    sheetShape = TMDBTheme.shapes.veryLarge,
+                    sheetShape = TMDBTheme.shapes.veryLarge.copy(
+                        bottomStart = CornerSize(0),
+                        bottomEnd = CornerSize(0)
+                    ),
                     scrimColor = Color.Transparent
                 ) {
-
                     Scaffold(
                         modifier = Modifier.imePadding(),
                         scaffoldState = scaffoldState,

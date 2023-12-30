@@ -3,7 +3,6 @@ package com.hooshang.tmdb.feature.favorite.ui.deletebottomsheet
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -57,8 +56,7 @@ private fun TMDBModalBottomSheet(
     Column(
         modifier = Modifier
             .navigationBarsPadding()
-            .padding(bottom = 64.dp)
-            .fillMaxHeight(),
+            .padding(bottom = 64.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
