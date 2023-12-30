@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.feature.home.data.model.remote
+package com.hooshang.tmdb.feature.home.data.network.model
 
 import androidx.annotation.Keep
 import com.hooshang.tmdb.core.data.model.local.GenreEntity
@@ -16,10 +16,8 @@ data class GenresResponse(
     val id: Int,
     val name: String
 ) {
-    fun toGenreEntity(): GenreEntity {
-        return GenreEntity(
-            genreId = id,
-            genreName = name
-        )
-    }
+    fun toGenreEntity(): GenreEntity = GenreEntity(
+        genreId = id,
+        genreName = name
+    )
 }

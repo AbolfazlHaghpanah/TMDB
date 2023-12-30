@@ -9,7 +9,13 @@ import com.hooshang.tmdb.core.utils.Result.Success
 import com.hooshang.tmdb.core.utils.SnackBarManager
 import com.hooshang.tmdb.core.utils.SnackBarMassage
 import com.hooshang.tmdb.core.utils.databaseErrorCatchMessage
-import com.hooshang.tmdb.feature.home.domain.use_case.HomeUseCase
+import com.hooshang.tmdb.feature.home.domain.use_case.FetchGenresUseCase
+import com.hooshang.tmdb.feature.home.domain.use_case.FetchNowPlayingUseCase
+import com.hooshang.tmdb.feature.home.domain.use_case.FetchPopularMovieUseCase
+import com.hooshang.tmdb.feature.home.domain.use_case.FetchTopMovieUseCase
+import com.hooshang.tmdb.feature.home.domain.use_case.ObserveNowPlayingUseCase
+import com.hooshang.tmdb.feature.home.domain.use_case.ObservePopularUseCase
+import com.hooshang.tmdb.feature.home.domain.use_case.ObserveTopUseCase
 import com.hooshang.tmdb.feature.home.ui.contracts.HomeAction
 import com.hooshang.tmdb.feature.home.ui.contracts.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +28,13 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val snackBarManager: SnackBarManager,
-    private val homeUseCase: HomeUseCase
+    private val fetchGenresUseCase: FetchGenresUseCase,
+    private val fetchNowPlayingUseCase: FetchNowPlayingUseCase,
+    private val fetchPopularMovieUseCase: FetchPopularMovieUseCase,
+    private val fetchTopMovieUseCase: FetchTopMovieUseCase,
+    private val observeNowPlayingUseCase: ObserveNowPlayingUseCase,
+    private val observePopularUseCase: ObservePopularUseCase,
+    private val observeTopUseCase: ObserveTopUseCase
 ) : BaseViewModel<HomeAction, HomeState>() {
     init {
         getGenre()
@@ -36,7 +48,10 @@ class HomeViewModel @Inject constructor(
 
     override fun onAction(action: HomeAction) {
         when (action) {
-            is HomeAction.Refresh -> tryAgainApi()
+            is HomeAction.Refresh -> {
+                tryAgainApi()
+            }
+
             else -> {}
         }
     }
@@ -47,7 +62,7 @@ class HomeViewModel @Inject constructor(
 
     private fun observeNowPlaying() {
         viewModelScope.launch(Dispatchers.IO) {
-            homeUseCase.observeNowPlayingUseCase()
+            observeNowPlayingUseCase()
                 .distinctUntilChanged()
                 .catch {
                     sendDataBaseError(it)
@@ -59,7 +74,7 @@ class HomeViewModel @Inject constructor(
 
     private fun observePopularMovies() {
         viewModelScope.launch(Dispatchers.IO) {
-            homeUseCase.observePopularUseCase()
+            observePopularUseCase()
                 .distinctUntilChanged()
                 .catch {
                     sendDataBaseError(it)
@@ -72,7 +87,7 @@ class HomeViewModel @Inject constructor(
 
     private fun observeTopMovies() {
         viewModelScope.launch(Dispatchers.IO) {
-            homeUseCase.observeTopUseCase()
+            observeTopUseCase()
                 .distinctUntilChanged()
                 .catch {
                     sendDataBaseError(it)
@@ -86,7 +101,7 @@ class HomeViewModel @Inject constructor(
     private fun fetchNowPlaying() {
         viewModelScope.launch(Dispatchers.IO) {
             resultWrapper {
-                homeUseCase.fetchNowPlayingUseCase()
+                fetchNowPlayingUseCase()
             }.collect { result ->
                 when (result) {
                     is Result.Loading -> {
@@ -109,7 +124,7 @@ class HomeViewModel @Inject constructor(
     private fun fetchPopular() {
         viewModelScope.launch(Dispatchers.IO) {
             resultWrapper {
-                homeUseCase.fetchPopularMovieUseCase()
+                fetchPopularMovieUseCase()
             }.collect { result ->
                 when (result) {
                     is Result.Loading -> {
@@ -132,7 +147,7 @@ class HomeViewModel @Inject constructor(
     private fun fetchTopMovies() {
         viewModelScope.launch(Dispatchers.IO) {
             resultWrapper {
-                homeUseCase.fetchTopMovieUseCase()
+                fetchTopMovieUseCase()
             }.collect { result ->
                 when (result) {
                     is Result.Loading -> {
@@ -155,7 +170,7 @@ class HomeViewModel @Inject constructor(
     private fun getGenre() {
         viewModelScope.launch(Dispatchers.IO) {
             resultWrapper {
-                homeUseCase.fetchGenresUseCase()
+                fetchGenresUseCase()
             }.collect { result ->
                 when (result) {
                     is Result.Loading -> {

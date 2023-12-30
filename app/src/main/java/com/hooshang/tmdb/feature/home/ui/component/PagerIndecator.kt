@@ -14,48 +14,46 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 
 @Composable
 fun TMDBPagerIndicator(
-    modifier: Modifier = Modifier,
     pageCount: Int,
-    selectedPage: Int
+    selectedPage: Int,
+    isLoading: Boolean,
+    modifier: Modifier = Modifier
 ) {
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 14.dp)
+            .padding(vertical = 14.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .then(modifier),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            for (page in 0 until  pageCount ) {
+        repeat(pageCount) { page ->
+            val activeSize by animateDpAsState(
+                targetValue = if (page == selectedPage) 24.dp else 10.dp,
+                label = ""
+            )
+            val color by animateFloatAsState(
+                targetValue = if (page == selectedPage) 1f else 0.5f,
+                label = ""
+            )
 
-                val activeSize by animateDpAsState(
-                    targetValue = if (page == selectedPage) 24.dp else 10.dp,
-                    label = ""
-                )
-                val color by animateFloatAsState(
-                    targetValue = if (page == selectedPage) 1f else 0.5f,
-                    label = ""
-                )
-
-                Box(
-                    modifier = Modifier
-                        .background(
-                            TMDBTheme.colors.primary.copy(alpha = color),
-                            TMDBTheme.shapes.rounded
-                        )
-                        .width(activeSize)
-                        .height(10.dp),
-                )
-            }
+            Box(
+                modifier = Modifier
+                    .background(
+                        color = if (isLoading) Color.DarkGray.copy(alpha = color) else TMDBTheme.colors.primary.copy(
+                            alpha = color
+                        ),
+                        TMDBTheme.shapes.rounded
+                    )
+                    .width(activeSize)
+                    .height(10.dp)
+                    .then(modifier),
+            )
         }
     }
 }

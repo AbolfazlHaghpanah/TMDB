@@ -24,9 +24,12 @@ import kotlinx.collections.immutable.PersistentList
 fun MovieRow(
     title: String,
     movies: PersistentList<HomeMovieDomainModel>,
+    modifier: Modifier = Modifier,
     onClick: (Int) -> Unit
 ) {
-    Column {
+    Column(
+        modifier = modifier
+    ) {
         Text(
             modifier = Modifier
                 .padding(start = 24.dp, top = 16.dp)
@@ -43,7 +46,7 @@ fun MovieRow(
         ) {
             items(
                 items = movies.ifEmpty { fakeMovie },
-                key = { it.movieId }
+                key = { if (movies.isNotEmpty()) it.movieId else it.title }
             ) { movieWithGenreDatabaseWrapper ->
                 MovieCard(
                     modifier = Modifier.animateItemPlacement(),

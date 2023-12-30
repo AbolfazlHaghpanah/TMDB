@@ -26,8 +26,8 @@ import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 
 @Composable
 fun PagerMovieItem(
-    modifier: Modifier = Modifier,
     movie: HomeMovieDomainModel,
+    modifier: Modifier = Modifier,
     isLoading: Boolean = false
 ) {
     Card(
