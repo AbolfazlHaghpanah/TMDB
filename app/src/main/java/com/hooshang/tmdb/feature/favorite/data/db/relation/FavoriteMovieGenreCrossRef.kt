@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.feature.favorite.data.model.local.relation
+package com.hooshang.tmdb.feature.favorite.data.db.relation
 
 import androidx.room.Entity
 

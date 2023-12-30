@@ -14,8 +14,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -32,6 +32,7 @@ import com.hooshang.tmdb.feature.favorite.ui.contracts.FavoriteState
 import com.hooshang.tmdb.navigation.AppScreens
 
 @Composable
+@NonRestartableComposable
 fun FavoriteScreen(
     navController: NavController
 ) {
@@ -48,16 +49,14 @@ private fun FavoriteScreen(
 ) {
     val favoriteState by viewModel.state.collectAsStateWithLifecycle()
 
-    val onAction: (FavoriteActions) -> Unit = remember {
-        { actions ->
-            when (actions) {
-                is FavoriteActions.OpenBottomSheet -> {
-                    navController.navigate(AppScreens.BottomSheet.createRoute(actions.id))
-                }
+    val onAction: (FavoriteActions) -> Unit = { actions ->
+        when (actions) {
+            is FavoriteActions.OpenBottomSheet -> {
+                navController.navigate(AppScreens.BottomSheet.createRoute(actions.id))
+            }
 
-                is FavoriteActions.NavigateToDetails -> {
-                    navController.navigate(AppScreens.Detail.createRoute(actions.id))
-                }
+            is FavoriteActions.NavigateToDetails -> {
+                navController.navigate(AppScreens.Detail.createRoute(actions.id))
             }
         }
     }

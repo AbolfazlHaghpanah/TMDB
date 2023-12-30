@@ -1,9 +1,9 @@
 package com.hooshang.tmdb.feature.favorite.ui.component
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,8 +47,15 @@ fun MovieItems(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
-        ImageSection(image = movie.backdropPath)
+        AsyncImage(
+            modifier = Modifier
+                .clip(TMDBTheme.shapes.small)
+                .fillMaxHeight()
+                .width(130.dp),
+            model = image_url + movie.backdropPath,
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
 
         InfoSection(
             title = movie.title,
@@ -59,21 +66,7 @@ fun MovieItems(
     }
 }
 
-@Composable
-private fun ImageSection(
-    image: String
-) {
-    AsyncImage(
-        modifier = Modifier
-            .clip(TMDBTheme.shapes.small)
-            .fillMaxHeight()
-            .width(130.dp),
-        model = image_url + image,
-        contentDescription = null,
-        contentScale = ContentScale.Crop
-    )
-}
-
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun InfoSection(
     title: String,
@@ -81,64 +74,58 @@ private fun InfoSection(
     vote: String,
     onDelete: () -> Unit
 ) {
-    Box(
+    Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically)
     ) {
-        Column(
-            modifier = Modifier
-                .padding(bottom = 6.dp)
-                .fillMaxSize()
-                .align(Alignment.CenterStart),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(
-                text = title,
-                style = TMDBTheme.typography.body1,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Text(
-                modifier = Modifier
-                    .padding(end = 48.dp),
-                text = genres,
-                style = TMDBTheme.typography.caption,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            TextIcon(
-                text = vote,
-                iconId = TMDBTheme.icons.star,
-                iconColor = TMDBTheme.colors.secondary,
-                textColor = TMDBTheme.colors.secondary
-            )
-        }
-
-        FavoriteIcon(onDelete = onDelete)
-    }
-}
-
-@Composable
-private fun BoxScope.FavoriteIcon(
-    onDelete: () -> Unit
-) {
-    IconButton(
-        modifier = Modifier
-            .clip(TMDBTheme.shapes.rounded)
-            .align(Alignment.BottomEnd),
-        onClick = onDelete
-    ) {
-        Icon(
-            modifier = Modifier
-                .size(26.dp),
-            painter = painterResource(id = TMDBTheme.icons.heart),
-            contentDescription = null,
-            tint = TMDBTheme.colors.error
+        Text(
+            modifier = Modifier.basicMarquee(),
+            text = title,
+            style = TMDBTheme.typography.body1,
+            maxLines = 1
         )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Row {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.weight(0.75f)
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(end = 48.dp)
+                        .fillMaxWidth(),
+                    text = genres,
+                    style = TMDBTheme.typography.caption,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                TextIcon(
+                    text = vote,
+                    iconId = TMDBTheme.icons.star,
+                    iconColor = TMDBTheme.colors.secondary,
+                    textColor = TMDBTheme.colors.secondary
+                )
+            }
+
+            IconButton(
+                modifier = Modifier
+                    .clip(TMDBTheme.shapes.rounded)
+                    .weight(0.25f),
+                onClick = onDelete
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .size(26.dp),
+                    painter = painterResource(id = TMDBTheme.icons.heart),
+                    contentDescription = null,
+                    tint = TMDBTheme.colors.error
+                )
+            }
+        }
     }
 }

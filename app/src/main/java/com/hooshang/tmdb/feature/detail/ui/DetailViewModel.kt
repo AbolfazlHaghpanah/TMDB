@@ -16,7 +16,7 @@ import com.hooshang.tmdb.feature.detail.domain.usecase.GetDetailUseCase
 import com.hooshang.tmdb.feature.detail.domain.usecase.ObserveExistInFavoriteUseCase
 import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsAction
 import com.hooshang.tmdb.feature.detail.ui.contracts.DetailsState
-import com.hooshang.tmdb.feature.favorite.domain.use_case.DeleteFromFavoriteUseCase
+import com.hooshang.tmdb.feature.favorite.domain.use_case.RemoveFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -31,7 +31,7 @@ class DetailViewModel @Inject constructor(
     private val fetchDetailUseCase: FetchDetailUseCase,
     private val observeExistInFavoriteUseCase: ObserveExistInFavoriteUseCase,
     private val addToFavoriteWithGenresUseCase: AddToFavoriteWithGenresUseCase,
-    private val deleteFromFavoriteUseCase: DeleteFromFavoriteUseCase,
+    private val removeFavoriteUseCase: RemoveFavoriteUseCase,
     private val snackBarManager: SnackBarManager
 ) : BaseViewModel<DetailsAction, DetailsState>() {
 
@@ -156,7 +156,7 @@ class DetailViewModel @Inject constructor(
     private fun removeFromFavorite() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                deleteFromFavoriteUseCase(id)
+                removeFavoriteUseCase(id)
             } catch (t: Throwable) {
                 snackBarManager.sendMessage(
                     snackBarMassage = SnackBarMassage(
