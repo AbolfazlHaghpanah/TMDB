@@ -133,9 +133,7 @@ private fun DetailScreen(
                 }
             }
 
-            if (detailsState.movie.overview.isNotEmpty()) {
-                OverviewSection(detailsState.movie.overview)
-            }
+            OverviewSection(detailsState.movie.overview)
 
             if (detailsState.movie.credits.isNotEmpty()) {
                 CastOrCrewSection(detailsState.movie.credits.toPersistentList())
@@ -143,7 +141,7 @@ private fun DetailScreen(
 
             if (detailsState.movie.similar.isNotEmpty()) {
                 SimilarMoviesSection(
-                    title = stringResource(R.string.similar_movies),
+                    title = stringResource(R.string.label_similar_movies),
                     movies = detailsState.movie.similar.toPersistentList(),
                     onClick = { onAction(DetailsAction.NavigateToDetails(it)) }
                 )

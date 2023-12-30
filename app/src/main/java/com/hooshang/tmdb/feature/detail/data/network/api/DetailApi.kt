@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.feature.detail.data.network
+package com.hooshang.tmdb.feature.detail.data.network.api
 
 import com.hooshang.tmdb.feature.detail.data.network.response.MovieDetailResponse
 import retrofit2.Response

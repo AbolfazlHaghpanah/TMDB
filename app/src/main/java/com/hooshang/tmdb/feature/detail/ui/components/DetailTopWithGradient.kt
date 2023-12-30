@@ -23,7 +23,7 @@ import coil.compose.AsyncImage
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.component.TextIcon
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.hooshang.tmdb.core.utils.imageUrl
+import com.hooshang.tmdb.core.utils.image_url
 
 @Composable
 fun ForegroundImage(
@@ -36,10 +36,10 @@ fun ForegroundImage(
             .aspectRatio(1.1f)
             .padding(start = 85.dp, end = 85.dp)
             .clip(TMDBTheme.shapes.medium),
-        model = "$imageUrl${movieDetailPosterPath}",
+        model = "$image_url${movieDetailPosterPath}",
         contentDescription = null,
         contentScale = ContentScale.Crop,
-        error = painterResource(id = R.drawable.videoimageerror)
+        error = painterResource(id = R.drawable.img_video_image_error)
     )
 }
 
@@ -61,10 +61,10 @@ fun BackgroundImage(movieDetailPosterPath: String) {
                     drawRect(gradient)
                 }
             },
-        model = "$imageUrl${movieDetailPosterPath}",
+        model = "$image_url${movieDetailPosterPath}",
         contentDescription = null,
         contentScale = ContentScale.Crop,
-        error = painterResource(id = R.drawable.videoimageerror)
+        error = painterResource(id = R.drawable.img_video_image_error)
     )
 }
 
@@ -106,7 +106,7 @@ fun MovieInfo(
 
             TextIcon(
                 iconId = TMDBTheme.icons.clock,
-                text = "$runtime " + stringResource(R.string.minutes)
+                text = "$runtime " + stringResource(R.string.label_minutes)
             )
         }
 

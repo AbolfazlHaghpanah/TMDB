@@ -49,6 +49,14 @@ fun MovieCard(
                 .fillMaxWidth()
                 .height(178.dp)
         ) {
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxSize(),
+                model = image_url + image,
+                contentScale = ContentScale.Crop,
+                contentDescription = null,
+                error = if (isShimmer) null else painterResource(id = R.drawable.img_video_image_error)
+            )
 
             TextIcon(
                 modifier = Modifier
@@ -62,15 +70,6 @@ fun MovieCard(
                 iconId = TMDBTheme.icons.star,
                 iconColor = TMDBTheme.colors.secondary,
                 textColor = TMDBTheme.colors.secondary
-            )
-
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxSize(),
-                model = image_url + image,
-                contentScale = ContentScale.Crop,
-                contentDescription = null,
-                error = if (isShimmer) null else painterResource(id = R.drawable.img_video_image_error)
             )
         }
 

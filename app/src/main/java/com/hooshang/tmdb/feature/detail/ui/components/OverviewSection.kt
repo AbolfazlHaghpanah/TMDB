@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hooshang.tmdb.R
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
-import com.hooshang.tmdb.core.utils.imageUrl
+import com.hooshang.tmdb.core.utils.image_url
 import com.hooshang.tmdb.feature.detail.domain.model.CastOrCrewDomainModel
 import kotlinx.collections.immutable.PersistentList
 
@@ -35,7 +35,7 @@ fun OverviewSection(
     Text(
         modifier = Modifier
             .padding(bottom = 8.dp, top = 24.dp, start = 24.dp),
-        text = stringResource(R.string.overview),
+        text = stringResource(R.string.label_overview),
         color = TMDBTheme.colors.white,
         style = TMDBTheme.typography.subtitle1
     )
@@ -59,7 +59,7 @@ fun CastOrCrewSection(
                 top = 24.dp,
                 start = 24.dp
             ),
-        text = stringResource(R.string.cast_and_crew),
+        text = stringResource(R.string.label_cast_and_crew),
         style = TMDBTheme.typography.subtitle1,
         color = TMDBTheme.colors.white,
     )
@@ -104,12 +104,12 @@ fun CastOrCrewSection(
 @Composable
 private fun CastOrCrowImageWrapper(castOrCrewProfilePath: String?) {
     AsyncImage(
-        model = "$imageUrl${castOrCrewProfilePath}",
+        model = "$image_url${castOrCrewProfilePath}",
         contentDescription = null,
         contentScale = ContentScale.FillBounds,
         modifier = Modifier
             .size(40.dp)
             .clip(TMDBTheme.shapes.rounded),
-        error = painterResource(id = R.drawable.profileerror)
+        error = painterResource(id = R.drawable.img_profile_error)
     )
 }
