@@ -3,8 +3,7 @@ package com.hooshang.tmdb.feature.detail.data.datasource.localdatasource
 import com.hooshang.tmdb.core.data.model.local.MovieEntity
 import com.hooshang.tmdb.feature.detail.data.db.entity.CreditEntity
 import com.hooshang.tmdb.feature.detail.data.db.entity.DetailEntity
-import com.hooshang.tmdb.feature.detail.data.db.relation.DetailMovieWithMovieAndGenre
-import com.hooshang.tmdb.feature.detail.data.db.relation.SimilarMovieWithGenre
+import com.hooshang.tmdb.feature.detail.data.db.relation.DetailMovieWithAllRelations
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithCreditCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithGenreCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
@@ -14,19 +13,15 @@ import com.hooshang.tmdb.feature.favorite.data.model.local.relation.FavoriteMovi
 import kotlinx.coroutines.flow.Flow
 
 interface DetailLocalDataSource {
-    fun observeMovieDetail(detailMovieId: Int): Flow<DetailMovieWithMovieAndGenre?>
+    fun getMovieDetail(detailMovieId: Int): DetailMovieWithAllRelations?
 
-    fun observeCredits(id: Int): Flow<List<CreditEntity>>
-
-    fun observeSimilar(id: Int): Flow<List<SimilarMovieWithGenre>>
-
-    fun isExistInFavorite(id: Int): Flow<Boolean>
+    fun observeExistInFavorite(id: Int): Flow<Boolean>
 
     suspend fun insertMovieDetails(detailEntity: DetailEntity)
 
     suspend fun insertDetailMoviesWithGenres(detailMovieWithGenreCrossRef: List<DetailMovieWithGenreCrossRef>)
 
-    suspend fun insertFavoriteMovieGenre(genres: List<FavoriteMovieGenreCrossRef>)
+    suspend fun insertFavoriteMovieGenres(genres: List<FavoriteMovieGenreCrossRef>)
 
     suspend fun insertDetailMoviesWithSimilarMovies(detailMovieWithSimilarMoviesCrossRef: List<DetailMovieWithSimilarMoviesCrossRef>)
 
@@ -36,7 +31,7 @@ interface DetailLocalDataSource {
 
     suspend fun insertDetailMoviesWithCredits(detailMovieWithCreditCrossRef: List<DetailMovieWithCreditCrossRef>)
 
-    suspend fun addToFavorite(movieEntity: FavoriteMovieEntity)
+    suspend fun insertToFavorite(movieEntity: FavoriteMovieEntity)
 
     suspend fun insertMovies(movie: List<MovieEntity>)
 }

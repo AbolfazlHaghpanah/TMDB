@@ -9,7 +9,7 @@ data class CreditEntity(
     @PrimaryKey val creditId: Int,
     val name: String,
     val profilePath: String?,
-    val job: String? = null
+    val job: String
 ) {
     fun toDomainModel(): CastOrCrewDomainModel = CastOrCrewDomainModel(
         id = creditId,

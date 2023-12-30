@@ -10,5 +10,4 @@ data class DetailEntity(
     val releaseDate: String,
     val runtime: Int,
     val externalIds: List<String>,
-    val isFavorite : Boolean
 )

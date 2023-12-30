@@ -40,12 +40,11 @@ data class MovieDetailResponse(
                 "${externalIdsResponse?.imdbId}",
                 "${externalIdsResponse?.instagramId}",
                 "${externalIdsResponse?.twitterId}"
-            ),
-            isFavorite = false
+            )
         )
 
     fun toCreditsEntity(): List<CreditEntity> =
-        credits.cast.map { it.toCreditEntity() } + credits.cast.map { it.toCreditEntity() }
+        credits.crew.map { it.toCreditEntity() } + credits.cast.map { it.toCreditEntity() }
 
     fun toMovieEntity(): MovieEntity =
         MovieEntity(

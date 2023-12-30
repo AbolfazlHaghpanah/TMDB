@@ -17,7 +17,7 @@ data class CastOrCrewResponse(
     fun toCreditEntity(): CreditEntity = CreditEntity(
         creditId = id,
         name = name,
-        job = job,
+        job = job ?: "Actor",
         profilePath = profilePath
     )
 }

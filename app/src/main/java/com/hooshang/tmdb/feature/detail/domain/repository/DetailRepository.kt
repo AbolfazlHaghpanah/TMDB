@@ -4,7 +4,8 @@ import com.hooshang.tmdb.feature.detail.domain.model.MovieDetailDomainModel
 import kotlinx.coroutines.flow.Flow
 
 interface DetailRepository {
-    suspend fun addToFavorite(movieId: Int, genres: List<Int>)
-    suspend fun observeMovieDetails(id: Int): Flow<MovieDetailDomainModel>
+    suspend fun getMovieDetails(id: Int): MovieDetailDomainModel
     suspend fun fetchMovieDetail(id: Int)
+    suspend fun addToFavoriteWithGenres(movieId: Int, genres: List<Int>)
+    suspend fun observeExistInFavorite(id: Int): Flow<Boolean>
 }
