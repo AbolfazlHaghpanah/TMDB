@@ -4,8 +4,8 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.hooshang.tmdb.core.data.model.local.GenreEntity
-import com.hooshang.tmdb.core.data.source.local.MovieDao
 import com.hooshang.tmdb.core.data.model.local.MovieEntity
+import com.hooshang.tmdb.core.data.source.local.MovieDao
 import com.hooshang.tmdb.feature.detail.data.db.converter.ListStringToStringConverter
 import com.hooshang.tmdb.feature.detail.data.db.dao.DetailDao
 import com.hooshang.tmdb.feature.detail.data.db.entity.CreditEntity
@@ -14,16 +14,16 @@ import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMov
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithGenreCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.DetailMovieWithSimilarMoviesCrossRef
 import com.hooshang.tmdb.feature.detail.data.db.relation.crossrefrence.MovieWithGenreCrossRef
-import com.hooshang.tmdb.feature.favorite.data.source.local.dao.FavoriteMovieDao
 import com.hooshang.tmdb.feature.favorite.data.model.local.entity.FavoriteMovieEntity
 import com.hooshang.tmdb.feature.favorite.data.model.local.relation.FavoriteMovieGenreCrossRef
+import com.hooshang.tmdb.feature.favorite.data.source.local.dao.FavoriteMovieDao
 import com.hooshang.tmdb.feature.home.data.db.dao.HomeDao
 import com.hooshang.tmdb.feature.home.data.db.entity.NowPlayingEntity
 import com.hooshang.tmdb.feature.home.data.db.entity.PopularMovieEntity
 import com.hooshang.tmdb.feature.home.data.db.entity.TopMovieEntity
 import com.hooshang.tmdb.feature.home.data.db.relation.crossref.PopularMovieGenreCrossRef
 import com.hooshang.tmdb.feature.home.data.db.relation.crossref.TopMovieGenreCrossRef
-import com.hooshang.tmdb.feature.search.data.source.local.dao.SearchDao
+import com.hooshang.tmdb.feature.search.data.db.dao.SearchDao
 
 @TypeConverters(ListStringToStringConverter::class)
 @Database(

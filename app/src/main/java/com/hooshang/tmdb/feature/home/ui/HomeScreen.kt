@@ -19,7 +19,6 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -128,7 +127,7 @@ private fun HomeScreen(
                 ) {
                     PagerMovieItem(
                         modifier = Modifier
-                            .clip(Theme.shapes.large)
+                            .clip(TMDBTheme.shapes.large)
                             .clickable {
                                 if (homeState.nowPlayingMovies.isNotEmpty()) onAction(
                                     HomeAction.NavigateToDetail(id = homeState.nowPlayingMovies[page].movieId)

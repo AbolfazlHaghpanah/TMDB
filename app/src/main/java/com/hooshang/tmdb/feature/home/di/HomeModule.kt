@@ -15,9 +15,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
-import kotlin.coroutines.CoroutineContext
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -45,11 +43,6 @@ abstract class HomeModule {
         @Provides
         fun provideHomeDao(appDatabase: AppDatabase): HomeDao {
             return appDatabase.HomeDao()
-        }
-
-        @Provides
-        fun provideDispatcher(): CoroutineContext {
-            return Dispatchers.IO
         }
     }
 }
