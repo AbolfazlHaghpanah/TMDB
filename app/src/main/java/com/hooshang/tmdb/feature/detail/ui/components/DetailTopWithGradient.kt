@@ -96,17 +96,17 @@ fun MovieInfo(
         }
 
         if (runtime != 0) {
+            TextIcon(
+                iconId = TMDBTheme.icons.clock,
+                text = "$runtime " + stringResource(R.string.label_minutes)
+            )
+
             Divider(
                 modifier = Modifier
                     .width(1.dp)
                     .height(16.dp)
                     .align(Alignment.CenterVertically),
                 color = TMDBTheme.colors.gray
-            )
-
-            TextIcon(
-                iconId = TMDBTheme.icons.clock,
-                text = "$runtime " + stringResource(R.string.label_minutes)
             )
         }
 

@@ -15,12 +15,13 @@ import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 
 @Composable
 fun TMDBSnackBar(
+    modifier: Modifier = Modifier,
     message: String,
     actionLabel: String? = null,
     performAction: (() -> Unit)? = null
 ) {
     Snackbar(
-        modifier = Modifier
+        modifier = modifier
             .padding(16.dp),
         backgroundColor = TMDBTheme.colors.surface,
         shape = TMDBTheme.shapes.large,
