@@ -1,6 +1,5 @@
 package com.hooshang.tmdb
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -65,7 +64,6 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var snackBarManager: SnackBarManager
 
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @OptIn(
         ExperimentalMaterialNavigationApi::class,
         ExperimentalMaterialApi::class
