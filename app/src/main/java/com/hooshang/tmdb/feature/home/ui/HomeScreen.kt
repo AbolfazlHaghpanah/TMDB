@@ -2,7 +2,6 @@ package com.hooshang.tmdb.feature.home.ui
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -54,7 +53,6 @@ fun HomeScreen(
 }
 
 @NonRestartableComposable
-@OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
 private fun HomeScreen(
     navController: NavController,
@@ -121,27 +119,24 @@ private fun HomeScreen(
                     label = ""
                 )
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    PagerMovieItem(
-                        modifier = Modifier
-                            .clip(TMDBTheme.shapes.large)
-                            .clickable {
-                                if (homeState.nowPlayingMovies.isNotEmpty()) onAction(
-                                    HomeAction.NavigateToDetail(id = homeState.nowPlayingMovies[page].movieId)
-                                )
-                            }
-                            .height(pagerSize.value),
-                        isLoading = homeState.nowPlayingMovies.isEmpty(),
-                        movie = if (homeState.nowPlayingMovies.size > page) {
-                            homeState.nowPlayingMovies[page]
-                        } else {
-                            fakeMovie[0]
+                PagerMovieItem(
+                    modifier = Modifier
+                        .clip(TMDBTheme.shapes.large)
+                        .clickable {
+                            if (homeState.nowPlayingMovies.isNotEmpty()) onAction(
+                                HomeAction.NavigateToDetail(id = homeState.nowPlayingMovies[page].movieId)
+                            )
                         }
-                    )
-                }
+                        .height(pagerSize.value),
+                    isLoading = homeState.nowPlayingMovies.isEmpty(),
+                    movie = if (homeState.nowPlayingMovies.size > page) {
+                        homeState.nowPlayingMovies[page]
+                    } else {
+                        fakeMovie[0]
+                    },
+                    isSelected = page == pagerState.currentPage
+                )
+
             }
 
             TMDBPagerIndicator(

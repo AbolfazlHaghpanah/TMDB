@@ -1,5 +1,6 @@
 package com.hooshang.tmdb.feature.home.ui.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +28,7 @@ import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel
 @Composable
 fun PagerMovieItem(
     movie: HomeMovieDomainModel,
+    isSelected: Boolean,
     modifier: Modifier = Modifier,
     isLoading: Boolean = false
 ) {
@@ -46,7 +48,7 @@ fun PagerMovieItem(
                     .zIndex(-1f)
                     .fillMaxSize(),
                 model = image_url + movie.backdropPath,
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.Crop,
                 contentDescription = null,
             )
             Box(
@@ -69,26 +71,32 @@ fun PagerMovieItem(
                         }
                     )
             )
-            Column(
+
+            AnimatedVisibility(
                 modifier = Modifier
                     .zIndex(1f)
                     .align(Alignment.BottomStart)
                     .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                visible = isSelected
             ) {
-                Text(
-                    modifier = Modifier.ifShimmerActive(isLoading),
-                    text = movie.title,
-                    style = TMDBTheme.typography.subtitle1,
-                    color = TMDBTheme.colors.white
-                )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
 
-                Text(
-                    modifier = Modifier.ifShimmerActive(isLoading),
-                    text = movie.releaseDate,
-                    style = TMDBTheme.typography.caption,
-                    color = TMDBTheme.colors.white
-                )
+                    Text(
+                        modifier = Modifier.ifShimmerActive(isLoading),
+                        text = movie.title,
+                        style = TMDBTheme.typography.subtitle1,
+                        color = TMDBTheme.colors.white
+                    )
+
+                    Text(
+                        modifier = Modifier.ifShimmerActive(isLoading),
+                        text = movie.releaseDate,
+                        style = TMDBTheme.typography.caption,
+                        color = TMDBTheme.colors.white
+                    )
+                }
             }
         }
     }
