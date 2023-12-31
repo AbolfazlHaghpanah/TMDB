@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.LinearProgressIndicator
@@ -79,23 +80,25 @@ private fun DetailScreen(
     val scrollState = rememberScrollState()
 
     if (detailsState.isLoading) {
-        LinearProgressIndicator(
-            modifier = Modifier.fillMaxWidth()
-        )
+        Box(modifier = Modifier.fillMaxSize()) {
+            LinearProgressIndicator(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth()
+            )
+        }
     } else if (detailsState.movie.id != -1) {
         Column(
             modifier = Modifier
-                .navigationBarsPadding()
                 .fillMaxSize()
+                .navigationBarsPadding()
                 .verticalScroll(scrollState)
         ) {
-            Box(
-                modifier = Modifier.fillMaxSize()
-            ) {
+            Box {
                 BackgroundImage(detailsState.movie.posterPath)
 
                 Column(
-                    modifier = Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     TopBar(
@@ -147,5 +150,8 @@ private fun DetailScreen(
                 )
             }
         }
+    } else {
+        Box(modifier = Modifier.fillMaxSize())
     }
+
 }

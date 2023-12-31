@@ -6,9 +6,11 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Box
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideOut
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -21,14 +23,21 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -82,16 +91,33 @@ class MainActivity : ComponentActivity() {
             val snackBarHostState = remember {
                 SnackbarHostState()
             }
+            var shouldShowBottomBar by remember {
+                mutableStateOf(true)
+            }
             val navController = rememberNavController(bottomSheetNavigator)
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val scaffoldState = rememberScaffoldState()
             val context = LocalContext.current
 
-            navController.addOnDestinationChangedListener(
-                listener = { _, _, _ ->
-                    snackBarHostState.currentSnackbarData?.dismiss()
+            DisposableEffect(navController) {
+                val onDesChangeCheckBottomBarShow =
+                    NavController.OnDestinationChangedListener { _, destination, _ ->
+                        shouldShowBottomBar = destination.route != AppScreens.Detail.route
+                    }
+                val onDesChangeDismissSnackBar =
+                    NavController.OnDestinationChangedListener { _, _, _ ->
+                        snackBarHostState.currentSnackbarData?.dismiss()
+
+                    }
+
+                navController.addOnDestinationChangedListener(onDesChangeCheckBottomBarShow)
+                navController.addOnDestinationChangedListener(onDesChangeDismissSnackBar)
+
+                onDispose {
+                    navController.removeOnDestinationChangedListener(onDesChangeDismissSnackBar)
+                    navController.removeOnDestinationChangedListener(onDesChangeCheckBottomBarShow)
                 }
-            )
+            }
 
             LaunchedEffect(Unit) {
                 snackBarManager.snackBarMessage.collectLatest { snackBarMessage ->
@@ -122,10 +148,9 @@ class MainActivity : ComponentActivity() {
                         scaffoldState = scaffoldState,
                         bottomBar = {
                             AnimatedVisibility(
-                                visible = navController.currentBackStackEntryAsState()
-                                    .value?.destination?.route != AppScreens.Detail.route,
-                                enter = fadeIn(),
-                                exit = fadeOut()
+                                visible = shouldShowBottomBar,
+                                enter = slideIn(tween(100)) { IntOffset(0, it.height) },
+                                exit = slideOut(tween(100)) { IntOffset(0, it.height) }
                             ) {
                                 TMDBBottomNavigation(
                                     items = listOf(
@@ -164,17 +189,23 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     ) {
-                        Box(
+                        NavHost(
                             modifier = Modifier
-                                .padding(it)
-                                .fillMaxSize()
+                                .padding(
+                                    top = it.calculateTopPadding(),
+                                    bottom = if (shouldShowBottomBar) {
+                                        it.calculateBottomPadding()
+                                    } else {
+                                        0.dp
+                                    },
+                                    start = it.calculateStartPadding(LayoutDirection.Ltr),
+                                    end = it.calculateEndPadding(LayoutDirection.Ltr)
+                                )
+                                .fillMaxSize(),
+                            navController = navController,
+                            startDestination = AppScreens.Home.route,
                         ) {
-                            NavHost(
-                                navController = navController,
-                                startDestination = AppScreens.Home.route
-                            ) {
-                                mainNavGraph(navController)
-                            }
+                            mainNavGraph(navController)
                         }
                     }
                 }

@@ -18,10 +18,11 @@ import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 fun TMDBBottomNavigation(
     items: List<BottomNavigationItems>,
     isSelected: (String) -> Boolean,
-    onNavItemClick: (String) -> Unit
+    onNavItemClick: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     BottomNavigation(
-        modifier = Modifier
+        modifier = modifier
             .navigationBarsPadding(),
         backgroundColor = TMDBTheme.colors.background,
         elevation = 24.dp
