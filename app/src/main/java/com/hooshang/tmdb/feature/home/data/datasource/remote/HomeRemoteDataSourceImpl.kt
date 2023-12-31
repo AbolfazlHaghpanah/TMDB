@@ -16,8 +16,8 @@ class HomeRemoteDataSourceImpl @Inject constructor(
         bodyOrThrow { homeApi.getNowPlayingMovies() }
 
     override suspend fun getMostPopularMovies(): MovieResponse =
-        bodyOrThrow { homeApi.getTopMovies() }
+        bodyOrThrow { homeApi.getMostPopularMovies() }
 
     override suspend fun getTopMovies(): MovieResponse =
-        bodyOrThrow { homeApi.getMostPopularMovies() }
+        bodyOrThrow { homeApi.getTopMovies() }
 }
