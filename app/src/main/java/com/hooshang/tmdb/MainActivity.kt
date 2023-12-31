@@ -107,7 +107,6 @@ class MainActivity : ComponentActivity() {
                 val onDesChangeDismissSnackBar =
                     NavController.OnDestinationChangedListener { _, _, _ ->
                         snackBarHostState.currentSnackbarData?.dismiss()
-
                     }
 
                 navController.addOnDestinationChangedListener(onDesChangeCheckBottomBarShow)
@@ -149,8 +148,12 @@ class MainActivity : ComponentActivity() {
                         bottomBar = {
                             AnimatedVisibility(
                                 visible = shouldShowBottomBar,
-                                enter = slideIn(tween(100)) { IntOffset(0, it.height) },
-                                exit = slideOut(tween(100)) { IntOffset(0, it.height) }
+                                enter = slideIn(tween(100)) {
+                                    IntOffset(0, it.height)
+                                },
+                                exit = slideOut(tween(100)) {
+                                    IntOffset(0, it.height)
+                                }
                             ) {
                                 TMDBBottomNavigation(
                                     items = listOf(
