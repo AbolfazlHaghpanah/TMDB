@@ -1,5 +1,11 @@
 package com.hooshang.tmdb.feature.detail.ui.components
 
+import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
@@ -27,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.hooshang.tmdb.core.ui.theme.designsystem.TMDBTheme
 
+@SuppressLint("UnusedContentLambdaTargetStateParameter")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TopBar(
@@ -94,17 +101,27 @@ fun TopBar(
                     .background(TMDBTheme.colors.surface),
                 onClick = onFavoriteIconClick
             ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(
-                        if (!isFavorite) {
-                            TMDBTheme.icons.heartBorder
-                        } else {
-                            TMDBTheme.icons.heart
-                        }
-                    ),
-                    contentDescription = null,
-                    tint = TMDBTheme.colors.error
-                )
+                AnimatedContent(
+                    targetState = isFavorite,
+                    label = "is_favorite",
+                    transitionSpec = {
+                        scaleIn(tween(200))
+                            .togetherWith(scaleOut(tween(200)))
+                    }
+                ) { isFavorite ->
+                    Icon(
+                        imageVector = ImageVector.vectorResource(
+                            if (!isFavorite) {
+                                TMDBTheme.icons.heartBorder
+                            } else {
+                                TMDBTheme.icons.heart
+                            }
+                        ),
+                        contentDescription = null,
+                        tint = TMDBTheme.colors.error
+                    )
+
+                }
             }
 
             TMDBIconButton(

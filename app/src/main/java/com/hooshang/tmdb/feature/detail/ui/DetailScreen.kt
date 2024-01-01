@@ -1,5 +1,10 @@
 package com.hooshang.tmdb.feature.detail.ui
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -79,79 +84,85 @@ private fun DetailScreen(
 ) {
     val scrollState = rememberScrollState()
 
-    if (detailsState.isLoading) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .align(Alignment.TopCenter)
-                    .fillMaxWidth()
-            )
-        }
-    } else if (detailsState.movie.id != -1) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
-                .verticalScroll(scrollState)
-        ) {
-            Box {
-                BackgroundImage(detailsState.movie.posterPath)
-
+    Box(modifier = Modifier.fillMaxSize()) {
+        AnimatedContent(
+            targetState = detailsState.isLoading,
+            label = "loading_or_content_detail_screen",
+            transitionSpec = {
+                fadeIn(tween(300))
+                    .togetherWith(fadeOut(tween(300)))
+            }
+        ) { isLoading ->
+            if (isLoading) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .align(Alignment.TopCenter)
+                        .fillMaxWidth()
+                )
+            } else if (detailsState.movie.id != -1) {
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .navigationBarsPadding()
+                        .verticalScroll(scrollState)
                 ) {
-                    TopBar(
-                        title = detailsState.movie.title,
-                        movieId = detailsState.movie.id,
-                        externalIds = detailsState.movie.externalIds,
-                        isFavorite = detailsState.movie.isFavorite,
-                        onBackArrowClick = { onAction(DetailsAction.Back) },
-                        onFavoriteIconClick = {
-                            onAction(
-                                if (detailsState.movie.isFavorite) {
-                                    DetailsAction.RemoveFromFavorite
-                                } else {
-                                    DetailsAction.AddToFavorite
+                    Box {
+                        BackgroundImage(detailsState.movie.posterPath)
+
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            TopBar(
+                                title = detailsState.movie.title,
+                                movieId = detailsState.movie.id,
+                                externalIds = detailsState.movie.externalIds,
+                                isFavorite = detailsState.movie.isFavorite,
+                                onBackArrowClick = { onAction(DetailsAction.Back) },
+                                onFavoriteIconClick = {
+                                    onAction(
+                                        if (detailsState.movie.isFavorite) {
+                                            DetailsAction.RemoveFromFavorite
+                                        } else {
+                                            DetailsAction.AddToFavorite
+                                        }
+                                    )
                                 }
                             )
+
+                            ForegroundImage(
+                                modifier = Modifier.padding(top = 30.dp, bottom = 50.dp),
+                                movieDetailPosterPath = detailsState.movie.posterPath
+                            )
+
+                            MovieInfo(
+                                releaseDate = detailsState.movie.releaseDate.split("-")[0],
+                                runtime = detailsState.movie.runtime,
+                                genre = if (detailsState.movie.genres.isNotEmpty()) {
+                                    detailsState.movie.genres[0].second
+                                } else {
+                                    ""
+                                },
+                                voteAverage = detailsState.movie.voteAverage.toString()
+                            )
                         }
-                    )
+                    }
 
-                    ForegroundImage(
-                        modifier = Modifier.padding(top = 30.dp, bottom = 50.dp),
-                        movieDetailPosterPath = detailsState.movie.posterPath
-                    )
+                    OverviewSection(detailsState.movie.overview)
 
-                    MovieInfo(
-                        releaseDate = detailsState.movie.releaseDate.split("-")[0],
-                        runtime = detailsState.movie.runtime,
-                        genre = if (detailsState.movie.genres.isNotEmpty()) {
-                            detailsState.movie.genres[0].second
-                        } else {
-                            ""
-                        },
-                        voteAverage = detailsState.movie.voteAverage.toString()
-                    )
+                    if (detailsState.movie.credits.isNotEmpty()) {
+                        CastOrCrewSection(detailsState.movie.credits.toPersistentList())
+                    }
+
+                    if (detailsState.movie.similar.isNotEmpty()) {
+                        SimilarMoviesSection(
+                            title = stringResource(R.string.label_similar_movies),
+                            movies = detailsState.movie.similar.toPersistentList(),
+                            onClick = { onAction(DetailsAction.NavigateToDetails(it)) }
+                        )
+                    }
                 }
             }
-
-            OverviewSection(detailsState.movie.overview)
-
-            if (detailsState.movie.credits.isNotEmpty()) {
-                CastOrCrewSection(detailsState.movie.credits.toPersistentList())
-            }
-
-            if (detailsState.movie.similar.isNotEmpty()) {
-                SimilarMoviesSection(
-                    title = stringResource(R.string.label_similar_movies),
-                    movies = detailsState.movie.similar.toPersistentList(),
-                    onClick = { onAction(DetailsAction.NavigateToDetails(it)) }
-                )
-            }
         }
-    } else {
-        Box(modifier = Modifier.fillMaxSize())
     }
-
 }
