@@ -1,5 +1,6 @@
 package com.hooshang.tmdb.feature.detail.ui.components
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
@@ -10,13 +11,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -53,6 +60,8 @@ fun OverviewSection(
 fun CastOrCrewSection(
     castOrCrew: PersistentList<CastOrCrewDomainModel>
 ) {
+    val lazyListState = rememberLazyListState()
+
     Text(
         modifier = Modifier
             .padding(
@@ -65,13 +74,32 @@ fun CastOrCrewSection(
     )
 
     LazyRow(
+        state = lazyListState,
         contentPadding = PaddingValues(
             start = 24.dp,
             top = 16.dp
         )
     ) {
-        items(castOrCrew) { castOrCrew ->
+        itemsIndexed(castOrCrew) { index, castOrCrew ->
+            val firstVisibleItem by remember {
+                derivedStateOf {
+                    lazyListState.firstVisibleItemIndex
+                }
+            }
+            val lastVisibleItem by remember {
+                derivedStateOf {
+                    lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+                }
+            }
+            val animatedScale by animateFloatAsState(
+                if (index in firstVisibleItem..lastVisibleItem) 1f else 0.6f,
+                label = "animated_scale"
+            )
+
             Row(
+                modifier = Modifier
+                    .scale(animatedScale)
+                    .alpha(animatedScale),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
