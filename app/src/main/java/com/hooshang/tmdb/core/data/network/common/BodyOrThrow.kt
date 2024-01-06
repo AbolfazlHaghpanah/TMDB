@@ -1,6 +1,6 @@
-package com.hooshang.tmdb.core.data.source.remote
+package com.hooshang.tmdb.core.data.network.common
 
-import com.hooshang.tmdb.core.data.model.remote.ErrorResponse
+import com.hooshang.tmdb.core.data.network.response.ErrorResponse
 import com.hooshang.tmdb.core.utils.NetworkErrorException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.isActive

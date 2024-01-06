@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.hooshang.tmdb.core.data.model.local.GenreEntity
+import com.hooshang.tmdb.core.data.db.entity.GenreEntity
 import com.hooshang.tmdb.feature.home.data.db.entity.NowPlayingEntity
 import com.hooshang.tmdb.feature.home.data.db.entity.PopularMovieEntity
 import com.hooshang.tmdb.feature.home.data.db.entity.TopMovieEntity

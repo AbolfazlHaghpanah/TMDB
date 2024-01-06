@@ -1,6 +1,6 @@
 package com.hooshang.tmdb.feature.detail.data.datasource.remotedatasource
 
-import com.hooshang.tmdb.core.data.source.remote.bodyOrThrow
+import com.hooshang.tmdb.core.data.network.common.bodyOrThrow
 import com.hooshang.tmdb.feature.detail.data.network.api.DetailApi
 import com.hooshang.tmdb.feature.detail.data.network.response.MovieDetailResponse
 import javax.inject.Inject

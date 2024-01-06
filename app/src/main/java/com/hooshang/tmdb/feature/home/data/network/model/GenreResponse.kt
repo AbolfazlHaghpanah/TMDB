@@ -1,7 +1,7 @@
 package com.hooshang.tmdb.feature.home.data.network.model
 
 import androidx.annotation.Keep
-import com.hooshang.tmdb.core.data.model.local.GenreEntity
+import com.hooshang.tmdb.core.data.db.entity.GenreEntity
 import kotlinx.serialization.Serializable
 
 @Keep

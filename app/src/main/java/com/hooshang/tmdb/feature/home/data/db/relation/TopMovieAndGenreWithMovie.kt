@@ -3,8 +3,8 @@ package com.hooshang.tmdb.feature.home.data.db.relation
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
-import com.hooshang.tmdb.core.data.model.local.GenreEntity
-import com.hooshang.tmdb.core.data.model.local.MovieEntity
+import com.hooshang.tmdb.core.data.db.entity.GenreEntity
+import com.hooshang.tmdb.core.data.db.entity.MovieEntity
 import com.hooshang.tmdb.feature.home.data.db.entity.TopMovieEntity
 import com.hooshang.tmdb.feature.home.data.db.relation.crossref.TopMovieGenreCrossRef
 import com.hooshang.tmdb.feature.home.domain.model.HomeMovieDomainModel

@@ -1,11 +1,11 @@
-package com.hooshang.tmdb.core.data
+package com.hooshang.tmdb.core.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.hooshang.tmdb.core.data.model.local.GenreEntity
-import com.hooshang.tmdb.core.data.model.local.MovieEntity
-import com.hooshang.tmdb.core.data.source.local.MovieDao
+import com.hooshang.tmdb.core.data.db.entity.GenreEntity
+import com.hooshang.tmdb.core.data.db.entity.MovieEntity
+import com.hooshang.tmdb.core.data.db.dao.MovieDao
 import com.hooshang.tmdb.feature.detail.data.db.converter.ListStringToStringConverter
 import com.hooshang.tmdb.feature.detail.data.db.dao.DetailDao
 import com.hooshang.tmdb.feature.detail.data.db.entity.CreditEntity

@@ -1,7 +1,7 @@
 package com.hooshang.tmdb.feature.detail.data.datasource.localdatasource
 
-import com.hooshang.tmdb.core.data.model.local.MovieEntity
-import com.hooshang.tmdb.core.data.source.local.MovieDao
+import com.hooshang.tmdb.core.data.db.entity.MovieEntity
+import com.hooshang.tmdb.core.data.db.dao.MovieDao
 import com.hooshang.tmdb.feature.detail.data.db.dao.DetailDao
 import com.hooshang.tmdb.feature.detail.data.db.entity.CreditEntity
 import com.hooshang.tmdb.feature.detail.data.db.entity.DetailEntity

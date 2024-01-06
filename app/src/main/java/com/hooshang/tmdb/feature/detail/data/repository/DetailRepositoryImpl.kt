@@ -1,6 +1,6 @@
 package com.hooshang.tmdb.feature.detail.data.repository
 
-import com.hooshang.tmdb.core.data.model.local.MovieEntity
+import com.hooshang.tmdb.core.data.db.entity.MovieEntity
 import com.hooshang.tmdb.core.utils.NetworkErrorException
 import com.hooshang.tmdb.feature.detail.data.datasource.localdatasource.DetailLocalDataSource
 import com.hooshang.tmdb.feature.detail.data.datasource.remotedatasource.DetailRemoteDataSource

@@ -1,6 +1,6 @@
 package com.hooshang.tmdb.feature.search.data.datasource.remotedatasource
 
-import com.hooshang.tmdb.core.data.source.remote.bodyOrThrow
+import com.hooshang.tmdb.core.data.network.common.bodyOrThrow
 import com.hooshang.tmdb.feature.search.data.network.api.SearchApi
 import javax.inject.Inject
 
