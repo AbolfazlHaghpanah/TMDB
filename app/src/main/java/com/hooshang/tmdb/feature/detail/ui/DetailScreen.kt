@@ -148,7 +148,9 @@ private fun DetailScreen(
                         }
                     }
 
-                    OverviewSection(detailsState.movie.overview)
+                    if (detailsState.movie.overview.isNotEmpty()) {
+                        OverviewSection(detailsState.movie.overview)
+                    }
 
                     if (detailsState.movie.credits.isNotEmpty()) {
                         CastOrCrewSection(detailsState.movie.credits.toPersistentList())

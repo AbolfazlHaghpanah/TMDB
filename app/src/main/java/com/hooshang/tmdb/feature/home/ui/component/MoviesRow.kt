@@ -35,6 +35,16 @@ fun MovieRow(
     onClick: (Int) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
+    val firstVisibleItem by remember {
+        derivedStateOf {
+            lazyListState.firstVisibleItemIndex
+        }
+    }
+    val lastVisibleItem by remember {
+        derivedStateOf {
+            lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+        }
+    }
 
     Column(
         modifier = modifier
@@ -60,16 +70,6 @@ fun MovieRow(
                     if (movies.isNotEmpty()) movie.movieId else movie.title
                 }
             ) { index, movieWithGenreDatabaseWrapper ->
-                val firstVisibleItem by remember {
-                    derivedStateOf {
-                        lazyListState.firstVisibleItemIndex
-                    }
-                }
-                val lastVisibleItem by remember {
-                    derivedStateOf {
-                        lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-                    }
-                }
                 val animatedScale by animateFloatAsState(
                     if (index in firstVisibleItem..lastVisibleItem) 1f else 0.7f,
                     label = "animated_scale"
