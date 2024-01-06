@@ -1,8 +1,8 @@
 package com.hooshang.tmdb.feature.home.data.datasource.local
 
-import com.hooshang.tmdb.core.data.model.local.GenreEntity
-import com.hooshang.tmdb.core.data.model.local.MovieEntity
-import com.hooshang.tmdb.core.data.source.local.MovieDao
+import com.hooshang.tmdb.core.data.db.entity.GenreEntity
+import com.hooshang.tmdb.core.data.db.entity.MovieEntity
+import com.hooshang.tmdb.core.data.db.dao.MovieDao
 import com.hooshang.tmdb.feature.home.data.db.dao.HomeDao
 import com.hooshang.tmdb.feature.home.data.db.entity.NowPlayingEntity
 import com.hooshang.tmdb.feature.home.data.db.entity.PopularMovieEntity

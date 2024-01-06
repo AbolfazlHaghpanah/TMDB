@@ -1,6 +1,6 @@
 package com.hooshang.tmdb.feature.favorite.di
 
-import com.hooshang.tmdb.core.data.AppDatabase
+import com.hooshang.tmdb.core.data.db.AppDatabase
 import com.hooshang.tmdb.feature.favorite.data.datasource.local.FavoriteLocalDataSource
 import com.hooshang.tmdb.feature.favorite.data.datasource.local.FavoriteLocalDataSourceImpl
 import com.hooshang.tmdb.feature.favorite.data.db.dao.FavoriteMovieDao

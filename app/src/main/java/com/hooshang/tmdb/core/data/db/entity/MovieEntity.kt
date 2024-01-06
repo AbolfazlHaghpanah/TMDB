@@ -1,4 +1,4 @@
-package com.hooshang.tmdb.core.data.model.local
+package com.hooshang.tmdb.core.data.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

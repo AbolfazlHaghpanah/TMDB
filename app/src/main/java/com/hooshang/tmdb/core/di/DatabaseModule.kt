@@ -1,6 +1,6 @@
 package com.hooshang.tmdb.core.di
 
-import com.hooshang.tmdb.core.data.AppDatabase
+import com.hooshang.tmdb.core.data.db.AppDatabase
 import android.content.Context
 import android.util.Log
 import androidx.room.Room

@@ -1,6 +1,6 @@
 package com.hooshang.tmdb.feature.search.data.repository
 
-import com.hooshang.tmdb.core.data.model.local.GenreEntity
+import com.hooshang.tmdb.core.data.db.entity.GenreEntity
 import com.hooshang.tmdb.feature.search.data.datasource.localdatasource.SearchLocalDataSource
 import com.hooshang.tmdb.feature.search.data.datasource.remotedatasource.SearchRemoteDataSource
 import com.hooshang.tmdb.feature.search.domain.model.SearchMovieWithGenreDomainModel

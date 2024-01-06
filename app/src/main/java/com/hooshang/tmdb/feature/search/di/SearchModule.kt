@@ -1,6 +1,6 @@
 package com.hooshang.tmdb.feature.search.di
 
-import com.hooshang.tmdb.core.data.AppDatabase
+import com.hooshang.tmdb.core.data.db.AppDatabase
 import com.hooshang.tmdb.feature.search.data.datasource.localdatasource.SearchLocalDataSource
 import com.hooshang.tmdb.feature.search.data.datasource.localdatasource.SearchLocalDataSourceImpl
 import com.hooshang.tmdb.feature.search.data.datasource.remotedatasource.SearchRemoteDataSource

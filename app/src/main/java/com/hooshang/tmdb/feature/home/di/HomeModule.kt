@@ -1,7 +1,7 @@
 package com.hooshang.tmdb.feature.home.di
 
-import com.hooshang.tmdb.core.data.AppDatabase
-import com.hooshang.tmdb.core.data.source.local.MovieDao
+import com.hooshang.tmdb.core.data.db.AppDatabase
+import com.hooshang.tmdb.core.data.db.dao.MovieDao
 import com.hooshang.tmdb.feature.home.data.datasource.local.HomeLocalDataSource
 import com.hooshang.tmdb.feature.home.data.datasource.local.HomeLocalDataSourceImpl
 import com.hooshang.tmdb.feature.home.data.datasource.remote.HomeRemoteDataSource

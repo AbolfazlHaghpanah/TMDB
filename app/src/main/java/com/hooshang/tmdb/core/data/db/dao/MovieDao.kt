@@ -1,9 +1,9 @@
-package com.hooshang.tmdb.core.data.source.local
+package com.hooshang.tmdb.core.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
-import com.hooshang.tmdb.core.data.model.local.MovieEntity
+import com.hooshang.tmdb.core.data.db.entity.MovieEntity
 
 @Dao
 interface MovieDao {

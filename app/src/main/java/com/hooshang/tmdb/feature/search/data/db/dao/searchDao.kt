@@ -2,7 +2,7 @@ package com.hooshang.tmdb.feature.search.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.hooshang.tmdb.core.data.model.local.GenreEntity
+import com.hooshang.tmdb.core.data.db.entity.GenreEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
