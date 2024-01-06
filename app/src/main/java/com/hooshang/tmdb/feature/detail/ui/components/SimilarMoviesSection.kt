@@ -33,6 +33,16 @@ fun SimilarMoviesSection(
     onClick: (Int) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
+    val firstVisibleItem by remember {
+        derivedStateOf {
+            lazyListState.firstVisibleItemIndex
+        }
+    }
+    val lastVisibleItem by remember {
+        derivedStateOf {
+            lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+        }
+    }
 
     Column {
         Text(
@@ -51,16 +61,6 @@ fun SimilarMoviesSection(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             itemsIndexed(movies) { index, movie ->
-                val firstVisibleItem by remember {
-                    derivedStateOf {
-                        lazyListState.firstVisibleItemIndex
-                    }
-                }
-                val lastVisibleItem by remember {
-                    derivedStateOf {
-                        lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-                    }
-                }
                 val animatedScale by animateFloatAsState(
                     if (index in firstVisibleItem..lastVisibleItem) 1f else 0.7f,
                     label = "animated_scale"
